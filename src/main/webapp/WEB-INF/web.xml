@@ -3,10 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
   <context-param>
-    <param-name>contextConfigLocation</param-name>
+    <param-name>contextClass</param-name>
     <param-value>
-      /WEB-INF/springconfig/root-context.xml
+      org.springframework.web.context.support.AnnotationConfigWebApplicationContext
     </param-value>
+  </context-param>
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>site.lemongproject.common.config.ApplicationConfig</param-value>
   </context-param>
 
   <!-- Creates the Spring Container shared by all Servlets and Filters -->

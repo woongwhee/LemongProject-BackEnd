@@ -21,7 +21,7 @@ public class MailUtil {
     private String fromMail;
     public MailUtil(){
         prop=new Properties();
-        String filePath="classpath:/security/mail.properties";
+        String filePath=MailUtil.class.getResource("/security/mail.properties").getPath();
         try {
             prop.load(new FileInputStream(filePath));
             userName=prop.getProperty("username");

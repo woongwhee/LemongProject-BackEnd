@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <setting name="jdbcTypeForNull" value="NULL"/>
+    </settings>
+    <typeAliases>
+        <typeAlias type="site.lemongproject.web.template.model.vo.Template" alias="Template"/>
+        <typeAlias type="site.lemongproject.web.template.model.vo.TemplateCategory" alias="TemplateCategory"/>
+        <typeAlias type="site.lemongproject.web.template.model.vo.TemplateTodo" alias="TemplateTodo"/>
+        <typeAlias type="site.lemongproject.web.member.model.vo.Profile" alias="Profile"/>
+        <typeAlias type="site.lemongproject.web.member.model.vo.Member" alias="Member"/>
+        <typeAlias type="site.lemongproject.common.scheduler.model.dto.OfficialHoliday" alias="Holiday"/>
+    </typeAliases>
+    <mappers>
+        <mapper resource="mybatis/mappers/member-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template-mapper.xml"/>
+        <mapper resource="mybatis/mappers/templatetodo-mapper.xml"/>
+
+    </mappers>
+</configuration>
