@@ -34,6 +34,7 @@ CREATE TABLE TEMPLATE (
 	SAVE_STATUS	number(1)	DEFAULT 0	CHECK(SAVE_STATUS IN(0,1)),
 	TODO_COUNT	number		NOT NULL
 );
+
 COMMENT ON COLUMN TEMPLATE.TEMPLATE_NO IS '템플릿번호';
 COMMENT ON COLUMN TEMPLATE.TP_CREATER IS '작성자';
 COMMENT ON COLUMN TEMPLATE.CATEGORY_NO IS '카테고리번호';
@@ -399,7 +400,17 @@ ALTER TABLE REPORT ADD CONSTRAINT "FK_REFERENCE_TO_REPORT_1" FOREIGN KEY (REF_TY
 REFERENCES REFERENCE (REF_TYPE);
 
 ------------------------시퀀스
-
+create sequence SEQ_TEMPLATE;
+create sequence SEQ_CHAT;
+create sequence SEQ_REVIEW;
+create sequence SEQ_PHOTO;
+create sequence SEQ_FEED;
+create sequence SEQ_REPLY;
+create sequence SEQ_REPORT;
+create sequence SEQ_TODO;
+create sequence SEQ_HOLIDAY;
+create sequence SEQ_TODO;
+create sequence SEQ_TODO;
 
 
 ------------------------인덱스
