@@ -13,6 +13,11 @@ public class MybatisHolidayDao implements HolidayDao {
     final private SqlSession session;
     @Override
     public int insertMany(List<OfficialHoliday> holidays) {
-        return session.insert( "holidayMapper.insertMany",holidays);
+        int result=0;
+        for (OfficialHoliday holiday : holidays) {
+        result+=session.insert( "holidayMapper.insertMany",holiday);
+        }
+        System.out.println(result);
+        return  result;
     }
 }
