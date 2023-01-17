@@ -1,4 +1,4 @@
-package site.lemongproject.common.domain;
+package site.lemongproject.common.domain.dto;
 
 import lombok.Data;
 
