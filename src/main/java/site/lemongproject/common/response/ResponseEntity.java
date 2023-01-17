@@ -10,8 +10,12 @@ import lombok.ToString;
 /**
  * 일반적인 responsebody형식
  */
-public class ResponseBody <T>{
+public class ResponseEntity<T>{
     private String code;
     private String message;
     private T result;
+    public ResponseEntity(){}
+    public ResponseEntity(T result){
+        this.result=result;
+    }
 }
