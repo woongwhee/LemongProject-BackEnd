@@ -5,7 +5,7 @@
 <mapper namespace="memberMapper">
 
 <!--    <resultMap id="member" type="memberResultSet">-->
-<!--&lt;!&ndash;        <result column="" property="" />&ndash;&gt;-->
+<!--        <result column="" property="" />-->
 <!--    </resultMap>-->
 
 
