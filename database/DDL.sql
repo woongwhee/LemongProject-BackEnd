@@ -194,6 +194,22 @@ COMMENT ON COLUMN REVIEW.USER_NO IS '작성자';
 COMMENT ON COLUMN REVIEW.REVIEW_DETAIL IS '후기내용';
 
 
+
+
+CREATE TABLE CONFIG (
+                  CONIG_NO	number	NOT NULL,
+                  EMAIL	varchar2(30)	NOT NULL,
+                  CONFIG_CODE varchar2(30)		NOT NULL,
+                  CONFIG_AT	date	DEFAULT sysdate	NOT NULL
+);
+COMMENT ON COLUMN FEED.FEED_NO IS '피드번호';
+COMMENT ON COLUMN FEED.USER_NO IS '작성자';
+COMMENT ON COLUMN FEED.FEED_CONTENT IS '피드내용';
+COMMENT ON COLUMN FEED.FEED_AT IS '순서 가중치';
+
+
+
+
 CREATE TABLE FEED (
 	FEED_NO	number	NOT NULL,
 	USER_NO	number	NOT NULL,
@@ -410,7 +426,7 @@ create sequence SEQ_HOLIDAY;
 create sequence SEQ_MEMBER;
 create sequence SEQ_TEMPLATE_TODO;
 create sequence SEQ_CHALLENGE_TODO;
-
+create sequence SEQ_CONFIG;
 
 ------------------------인덱스
 
