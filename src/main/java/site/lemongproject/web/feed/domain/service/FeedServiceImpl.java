@@ -1,4 +1,8 @@
 package site.lemongproject.web.feed.domain.service;
 
-public class FeedServiceImpl {
+import org.springframework.stereotype.Service;
+
+@Service
+public class FeedServiceImpl implements FeedService{
+
 }
