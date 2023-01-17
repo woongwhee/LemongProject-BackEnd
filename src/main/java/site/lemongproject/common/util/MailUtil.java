@@ -5,7 +5,7 @@ import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 import org.springframework.stereotype.Component;
-import site.lemongproject.common.domain.MailMessage;
+import site.lemongproject.common.domain.dto.MailMessage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class MailUtil {
         }
     }
     public void send(MailMessage mail){
-
+        //google메일 정책 변경으로 어려워짐
         try {
         Email email = new SimpleEmail();
         email.setHostName(host);
