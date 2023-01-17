@@ -1,4 +1,8 @@
 package site.lemongproject.web.feed.domain.service;
 
-public class FeedService {
+import org.springframework.transaction.annotation.Transactional;
+
+@Transactional
+public interface FeedService  {
+
 }
