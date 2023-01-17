@@ -12,20 +12,18 @@ import java.util.ArrayList;
 public class FeedController {
 
 
-    private FeedService feedService;
+//    private FeedService feedService;
+//
+//    public FeedController(FeedService feedService){
+//        this.feedService = feedService;
+//    }
 
-    public FeedController(FeedService feedService){
-        this.feedService = feedService;
-    }
-
-
-
-    @RequestMapping("feed/main")
-    public String feedMain(Model model){
-        ArrayList<Feed> list = feedService.selectFeed();
-        model.addAttribute("list",list);
-        return "feed/feedListView";
-    }
+//    @RequestMapping("feed/main")
+//    public String feedMain(Model model){
+//        ArrayList<Feed> list = feedService.selectFeed();
+//        model.addAttribute("list",list);
+//        return list;
+//    }
 
 
 
