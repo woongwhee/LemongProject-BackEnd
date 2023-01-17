@@ -27,8 +27,6 @@ public class FeedController {
         return "feed/feedListView";
     }
 
-    @RequestMapping("feed/insert")
-    public
 
 
 
