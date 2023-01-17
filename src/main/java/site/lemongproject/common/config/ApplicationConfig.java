@@ -47,14 +47,17 @@ public class ApplicationConfig {
     public SqlSession sqlSession() throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory());
     }
+
     @Bean
     public ObjectMapper objectMapper(){
         return new ObjectMapper();
     }
+
     @Bean
     public Gson gson(){
         return new Gson();
     }
+
     @Bean
     public DataSource dataSource(){
         Properties properties=new Properties();
