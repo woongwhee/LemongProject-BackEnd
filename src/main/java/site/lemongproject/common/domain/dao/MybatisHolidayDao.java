@@ -1,9 +1,9 @@
-package site.lemongproject.common.scheduler.model.dao;
+package site.lemongproject.common.domain.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import site.lemongproject.common.scheduler.model.dto.OfficialHoliday;
+import site.lemongproject.common.domain.dto.OfficialHoliday;
 
 import java.util.List;
 

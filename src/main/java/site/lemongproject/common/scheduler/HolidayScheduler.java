@@ -1,18 +1,14 @@
 package site.lemongproject.common.scheduler;
 
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import site.lemongproject.common.request.HolidayRequestURLBuilder;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,14 +20,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
 import java.util.*;
-
-import site.lemongproject.common.scheduler.model.dao.HolidayDao;
-import site.lemongproject.common.scheduler.model.dto.OfficialHoliday;
-
+import site.lemongproject.common.domain.dao.HolidayDao;
+import site.lemongproject.common.domain.dto.OfficialHoliday;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor

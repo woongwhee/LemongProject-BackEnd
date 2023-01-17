@@ -1,4 +1,4 @@
-package site.lemongproject.common.scheduler.model.dto;
+package site.lemongproject.common.domain.dto;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;
