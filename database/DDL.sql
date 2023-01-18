@@ -107,13 +107,11 @@ COMMENT ON COLUMN ALARM.READ IS '읽음여부';
 
 CREATE TABLE MEMBER (
 	USER_NO	number,
-	EMAIL	varchar2(100)	NOT NULL,
-	USER_PWD	varchar2(30)	NOT NULL NULL,
-	SOCAIL_TYPE	varchar2(20) NOT NULL,
-	ACCESS_TOKEN	varchar2(100)	NOT NULL,
+	EMAIL	varchar2(100) ,
+	USER_PWD	varchar2(30),
+	SOCAIL_TYPE	varchar2(20),
+	ACCESS_TOKEN	varchar2(100),
 	STATUS	number(1)	DEFAULT 0	check ( STATUS IN(0,1))
-
-
 );
 
 COMMENT ON COLUMN MEMBER.USER_NO IS '유저번호';
@@ -194,6 +192,22 @@ COMMENT ON COLUMN REVIEW.TP_REVIEW_NO IS '리뷰번호';
 COMMENT ON COLUMN REVIEW.TEMPLATE_NO  IS '템플릿번호';
 COMMENT ON COLUMN REVIEW.USER_NO IS '작성자';
 COMMENT ON COLUMN REVIEW.REVIEW_DETAIL IS '후기내용';
+
+
+
+
+CREATE TABLE CONFIG (
+                  CONIG_NO	number	NOT NULL,
+                  EMAIL	varchar2(30)	NOT NULL,
+                  CONFIG_CODE varchar2(30)		NOT NULL,
+                  CONFIG_AT	date	DEFAULT sysdate	NOT NULL
+);
+COMMENT ON COLUMN FEED.FEED_NO IS '피드번호';
+COMMENT ON COLUMN FEED.USER_NO IS '작성자';
+COMMENT ON COLUMN FEED.FEED_CONTENT IS '피드내용';
+COMMENT ON COLUMN FEED.FEED_AT IS '순서 가중치';
+
+
 
 
 CREATE TABLE FEED (
@@ -409,12 +423,14 @@ create sequence SEQ_REPLY;
 create sequence SEQ_REPORT;
 create sequence SEQ_TODO;
 create sequence SEQ_HOLIDAY;
-create sequence SEQ_TODO;
-create sequence SEQ_TODO;
-
+create sequence SEQ_MEMBER;
+create sequence SEQ_TEMPLATE_TODO;
+create sequence SEQ_CHALLENGE_TODO;
+create sequence SEQ_CONFIG;
 
 ------------------------인덱스
 
 
 CREATE INDEX TODO_ix01 on TODO(TODO_DATE);
+
 CREATE INDEX CHALLENGE_TODO_ix01 on CHALLENGE_TODOLIST(TODO_DATE);
