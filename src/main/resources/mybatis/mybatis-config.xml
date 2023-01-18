@@ -13,6 +13,7 @@
         <typeAlias type="site.lemongproject.web.template.model.vo.TemplateTodo" alias="TemplateTodo"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Profile" alias="Profile"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Member" alias="Member"/>
+        <typeAlias type="site.lemongproject.web.feed.domain.vo.Feed" alias="Feed"/>
         <typeAlias type="site.lemongproject.common.domain.dto.OfficialHoliday" alias="Holiday"/>
     </typeAliases>
     <mappers>
@@ -20,5 +21,6 @@
         <mapper resource="mybatis/mappers/template-mapper.xml"/>
         <mapper resource="mybatis/mappers/templatetodo-mapper.xml"/>
         <mapper resource="mybatis/mappers/holiday-mapper.xml"/>
+        <mapper resource="mybatis/mappers/feed-mapper.xml"/>
     </mappers>
 </configuration>
