@@ -1,4 +1,30 @@
 package site.lemongproject.web.feed.domain.service;
 
-public class FeedServiceImpl {
+import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import site.lemongproject.web.feed.domain.dao.FeedDao;
+import site.lemongproject.web.feed.domain.vo.Feed;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+@Transactional // 트래직션 처리해줌
+@RequiredArgsConstructor // final붙은거 생성자로
+public class FeedServiceImpl implements FeedService{
+
+    final private FeedDao feedDao;
+
+    @Override
+    public List selectFeed() {
+        return feedDao.selectFeed();
+    }
+    @Override
+    public int insertFeed(Feed f){
+        return feedDao.insertFeed(f);
+    }
 }
