@@ -22,10 +22,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     public Member loginMember(Member m) {
-
         Member loginUser = memberDao.loginMember(m);
-
-
+        System.out.println("서비스 : " + loginUser);
         return loginUser;
     }
 

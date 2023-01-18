@@ -4,18 +4,24 @@
 
 <mapper namespace="memberMapper">
 
-<!--    <resultMap id="member" type="memberResultSet">-->
-<!--        <result column="" property="" />-->
-<!--    </resultMap>-->
+    <resultMap type="member" id="memberResultSet">
+        <result column="USER_NO" property="userNo" />
+        <result column="EMAIL" property="email" />
+        <result column="USER_PWD" property="userPwd" />
+        <result column="SOCIAL_TYPE" property="socialType" />
+        <result column="ACCESS_TOKEN" property="accessToken" />
+        <result column="STATUS" property="status" />
+    </resultMap>
 
 
-<!--    &lt;!&ndash;  로그인  &ndash;&gt;-->
-<!--    <select id="loginMember" resultMap="memberResultSet">-->
-<!--        SELECT *-->
-<!--        FROM MEMBER-->
-<!--        WHERE USER_ID = #{userId}-->
-<!--        AND STATUS = 'Y'-->
-<!--    </select>-->
+    <!--  로그인  -->
+    <select id="loginMember" parameterType="Member" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE EMAIL = #{email}
+        AND USER_PWD = #{userPwd}
+        AND STATUS = '1'
+    </select>
 
 
 </mapper>
