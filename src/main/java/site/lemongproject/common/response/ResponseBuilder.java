@@ -11,5 +11,13 @@ public class ResponseBuilder{
         return response;
     }
 
+    public static ResponseBody fail(Object o){
+        ResponseBody response=new ResponseBody();
+        response.setCode("4000");
+        response.setMessage("fail");
+        response.setResult(o);
+        return response;
+    }
+
 
 }
