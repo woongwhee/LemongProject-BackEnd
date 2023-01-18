@@ -11,6 +11,7 @@ import site.lemongproject.web.feed.domain.vo.Feed;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional // 트래직션 처리해줌
@@ -23,8 +24,9 @@ public class FeedServiceImpl implements FeedService{
     public List selectFeed() {
         return feedDao.selectFeed();
     }
+
     @Override
-    public int insertFeed(Feed f){
-        return feedDao.insertFeed(f);
+    public int insertFeed(Map<String, Object> paramMap){
+        return feedDao.insertFeed(paramMap);
     }
 }

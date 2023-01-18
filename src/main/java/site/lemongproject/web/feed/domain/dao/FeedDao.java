@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import site.lemongproject.web.feed.domain.vo.Feed;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 @RequiredArgsConstructor
@@ -18,8 +19,9 @@ public class FeedDao {
         return  sqlSession.selectList("feedMapper.selectFeed");
     }
 
-    public int insertFeed(Feed f){
-        int result = sqlSession.insert("feedMapper.insertFeed", f);
-        return result;
+    public int insertFeed(Map<String,Object> paramMap){
+        return sqlSession.insert("feedMapper.insertFeed", paramMap);
+
+
     }
 }

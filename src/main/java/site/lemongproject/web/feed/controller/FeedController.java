@@ -7,8 +7,11 @@ import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.feed.domain.service.FeedService;
 import site.lemongproject.web.feed.domain.vo.Feed;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @RequestMapping("/feed")
@@ -32,14 +35,20 @@ public class FeedController {
     }
 
     // 피드 넣기
-    @GetMapping("/insert")
-    public ResponseBody<Feed> feedInsert(@RequestBody Feed f){
+    @RequestMapping(value = "/insert",method = RequestMethod.POST)
+    public Map<String, Object> feedInsert(@RequestBody Map<String, Object> paramMap)throws SQLException, Exception {
+        System.out.println(paramMap);
 
-        int result = feedService.insertFeed(f);
+        int check = feedService.insertFeed(paramMap);
 
-        if(result>0){
-            return ResponseBuilder.success(result);
+        Map<String, Object> result = new HashMap<>();
+        if(check > 0){
+            result.put("Java","success");
+        }else{
+            result.put("Java","fail");
         }
+        return result;
+
     }
 
 
