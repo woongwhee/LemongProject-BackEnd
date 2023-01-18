@@ -4,4 +4,18 @@
 
 <mapper namespace="memberMapper">
 
+    <resultMap id="member" type="memberResultSet">
+        <result column="" property="" />
+    </resultMap>
+
+
+    <!--  로그인  -->
+    <select id="loginMember" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE USER_ID = #{userId}
+        AND STATUS = 'Y'
+    </select>
+
+
 </mapper>
