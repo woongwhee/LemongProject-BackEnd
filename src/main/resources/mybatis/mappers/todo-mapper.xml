@@ -1,0 +1,36 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="todoMapper">
+
+    <resultMap type="todo" id="todoResultSet">
+        <result column="TODO_NO" property="todoNo" />
+        <result column="TODO_DATE" property="todoDate" />
+        <result column="USER_NO" property="userNo" />
+        <result column="TODO_CONTENT" property="todoContent" />
+        <result column="CLEAR" property="todoClear" />
+        <result column="VALUE" property="todoValue" />
+    </resultMap>
+
+    <select id="selectTodo" resultMap="todoResultSet">
+        SELECT TODO_NO,
+               TODO_DATE,
+               TODO_CONTENT
+        FROM TODO
+        WHERE TODO_NO = 1
+    </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
