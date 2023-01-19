@@ -1,6 +1,6 @@
 package site.lemongproject.web.template.model.dao;
 
-import site.lemongproject.web.template.model.vo.TemplateTodo;
+import site.lemongproject.web.template.model.dto.TemplateTodo;
 
 import java.util.List;
 
