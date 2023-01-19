@@ -42,6 +42,7 @@ public class FeedController {
         int check = feedService.insertFeed(paramMap);
 
         Map<String, Object> result = new HashMap<>();
+
         if(check > 0){
             result.put("Java","success");
         }else{
@@ -50,6 +51,20 @@ public class FeedController {
         return result;
 
     }
+
+    // 피드 사진 넣기
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public String feedUploadPicture(@RequestBody String formData){
+        if(formData != null){
+            System.out.println("컨트롤러까지옴");
+        }
+//        System.out.println(formData);
+        return formData;
+    }
+
+
+
+
 
 
 
