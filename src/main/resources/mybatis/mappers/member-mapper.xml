@@ -4,6 +4,69 @@
 
 <mapper namespace="memberMapper">
 
+    <!-- MEMBER 테이블  -->
+    <resultMap type="Member" id="memberResultSet">
+        <result column="USER_NO" property="userNo"></result>
+        <result column="EMAIL" property="email"></result>
+        <result column="USER_PWD" property="userPwd"></result>
+        <result column="SOCIAL_TYPE" property="socialType"></result>
+        <result column="ACCESS_TOKEN" property="accessToken"></result>
+        <result column="STATUS" property="status"></result>
+    </resultMap>
+
+    <!-- PROFILE 테이블  -->
+    <resultMap type="Profile" id="profileResultSet">
+        <result column="USER_NO" property="userNo"></result>
+        <result column="NICK_NAME" property="nickName"></result>
+        <result column="PHOTO_NO" property="photoNo"></result>
+        <result column="PROFILE_COMMENT" property="profileComment"></result>
+    </resultMap>
+
+    <resultMap id="potoResultSet" type="Photo">
+        <result column="PHOTO_NO" property="photoNo"></result>
+        <result column="USER_NO" property="userNo"></result>
+        <result column="ORIGIN_NAME" property="originName"></result>
+        <result column="CHANGE_NAME" property="changeName"></result>
+        <result column="FILE_PATH" property="filePath"></result>
+    </resultMap>
+
+    <!-- 마이페이지 회원정보 List -->
+    <select id="selectMyProList" resultMap="profileResultSet">
+        SELECT *
+        FROM USER_PROFILE
+        WHERE USER_NO = 2
+    </select>
+
+    <!-- USER(회원가입)정보 가져오기  -->
+    <select id="selectUser" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE USER_NO = 2
+    </select>
+
+    <!-- USER정보(프로필)정보 => 닉네임 변경 -->
+    <update id="updateUser" parameterType="string">
+        UPDATE USER_PROFILE
+            SET NICK_NAME = #{nickName}
+        WHERE USER_NO = 2
+    </update>
+
+    <!-- USER정보(프로필)정보 => 자기소개 변경 -->
+    <update id="updateComment" parameterType="string">
+        UPDATE USER_PROFILE
+            SET PROFILE_COMMENT = #{comment}
+        WHERE USER_NO = 2
+    </update>
+
+    <insert id="insertUserProfile" parameterType="photo">
+        INSERT INTO PHOTO(
+            PHOTO_NO ,
+            USER_NO ,
+            ORIGIN_NAME
+        )
+    </insert>
+>
+
 <!--    <resultMap id="member" type="memberResultSet">-->
 <!--        <result column="" property="" />-->
 <!--    </resultMap>-->

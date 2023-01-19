@@ -13,6 +13,7 @@
         <typeAlias type="site.lemongproject.web.template.model.vo.TemplateTodo" alias="TemplateTodo"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Profile" alias="Profile"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Member" alias="Member"/>
+        <typeAlias type="site.lemongproject.web.member.model.vo.Member" alias="Photo"/>
         <typeAlias type="site.lemongproject.common.domain.dto.OfficialHoliday" alias="Holiday"/>
     </typeAliases>
     <mappers>
