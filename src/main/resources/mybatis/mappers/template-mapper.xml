@@ -2,11 +2,41 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="templateMapper">
-    <select id="findUnSave" parameterType="Integer" resultMap="template">
-        SELECT * FROM TEMPLATE WHERE TP_CREATE = #{userNo} AND SAVE_STATUS = 0
+
+    <resultMap id="templateList" type="Template">
+        <result column="TEMPLATE_NO" property="templateNo"/>
+        <result column="CATEGORY_NO" property="categoryNo"/>
+        <result column="RANGE" property="range"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+        <association property="profile" column="TP_CREATER" resultMap="profileMapper"/>
+        <association property="clearCount" column="TEMPLATE_NO" select="countClear"/>
+        <association property="playCount" column="TEMPLATE_NO" select="countClear"/>
+    </resultMap>
+
+
+    <select id="findUnSave" parameterType="Integer" resultType="Template">
+        SELECT * (),() FROM TEMPLATE WHERE TP_CREATE = #{userNo} AND SAVE_STATUS = 0
     </select>
-    <select id="findOne" parameterType="Integer" resultMap="template">
-        SELECT * FROM TEMPLATE WHERE TEMPLATE_NO =#{templateNo}
+    <select id="findOne" parameterType="Integer" resultType="Template">
+        SELECT TEMPLATE_NO ,()FROM TEMPLATE T
+        WHERE TEMPLATE_NO =#{templateNo}
+        ORDER BY CREATE_AT DESC
+    </select>
+
+    <select id="countClear" resultType="int" parameterType="int">
+        SELECT CU.STATUS,COUNT(*) AS(ClearUser) FROM TEMPLATE T
+        WHERE TEMPLATE_NO =#{templateNo}
+        JOIN CHALLENGE C USING (TEMPLATE_NO)
+        JOIN CHALLENGE_USER CU USING(CHALLENGE_NO)
+        GROUP BY ROLLUP(TEMPLATE_NO,CU.STATUS)
+    </select>
+    <select id="countPlay" resultType="int" parameterType="int">
+        SELECT COUNT(*) AS(ClearUser) FROM TEMPLATE T
+        WHERE TEMPLATE_NO =#{templateNo}
+        JOIN CHALLENGE C USING (TEMPLATE_NO)
+        JOIN CHALLENGE_USER CU USING(CHELLENGE_NO)
+        WHERE CU.STATUS='PLAY'
     </select>
     <delete id="deleteTemp" parameterType="int">
         DELETE TEMPLATE WHERE TEMPLATE_NO=#{templateNo}
@@ -29,15 +59,13 @@
                 CREATE_AT=SYSDATE
         where save_status=0 and USER_NO=#{userNo}
     </update>
-    <update id="upload" parameterType="Template" >
+    <update id="updateUnsave" parameterType="Template" >
         update template
         <set>
             <if test="categoryNo != null">CATEGORY_NO=#{categoryNo} </if>
             <if test="range != null">RANGE = #{range} </if>
-            <if test="categoryNo != null"> </if>
-            <if test="categoryNo != null"> </if>
-            <if test="categoryNo != null"> </if>
-            <if test="categoryNo != null"> </if>
+            <if test="title != null">TITLE = #{title} </if>
+            <if test="content != null">CONTENT= #{content} </if>
         </set>
         where templateNo=0
     </update>
