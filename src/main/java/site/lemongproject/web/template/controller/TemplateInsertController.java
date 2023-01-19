@@ -27,6 +27,8 @@ public class TemplateInsertController {
     @GetMapping(value = "/save")
     public ResponseBody<Integer> save(@SessionAttribute("loginUser") Member loginUser){
         ResponseBody<Integer> response =new ResponseBody<>();
+        int result=templateService.upload(loginUser.getUserNo());
+
         return response;
     }
 
