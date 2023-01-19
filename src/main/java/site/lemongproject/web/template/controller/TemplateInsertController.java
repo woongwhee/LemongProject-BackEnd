@@ -10,12 +10,12 @@ import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.template.model.vo.Template;
 import site.lemongproject.web.template.service.TemplateService;
 
-@RequestMapping("/template/insert")
+@RequestMapping("/template/write")
 @RestController
 @RequiredArgsConstructor
 public class TemplateInsertController {
     final private TemplateService templateService;
-    @GetMapping("/")
+    @GetMapping("/load")
     public ResponseBody<Template> load( Member loginMember){
         Template cur=templateService.loadInsertPage(loginMember.getUserNo());
         ResponseBody<Template> responseBody=new ResponseBody<>();
@@ -25,7 +25,7 @@ public class TemplateInsertController {
         return response;
     }
     @GetMapping(value = "/save")
-    public @org.springframework.web.bind.annotation.ResponseBody ResponseBody<Integer> save(@SessionAttribute("loginUser") Member loginUser){
+    public ResponseBody<Integer> save(@SessionAttribute("loginUser") Member loginUser){
         ResponseBody<Integer> response =new ResponseBody<>();
         return response;
     }
