@@ -2,7 +2,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="feedMapper">
-    <resultMap id="feedResultSet" type="feed">
+    <resultMap id="feedResultSet" type="Feed">
         <result column="FEED_NO" property="feedNo"/>
         <result column="USER_NO" property="userNo"/>
         <result column="FEED_CONTENT" property="feedContent"/>
@@ -19,5 +19,7 @@
         INSERT INTO FEED (FEED_NO, USER_NO, FEED_CONTENT, FEED_AT) VALUES
         (SEQ_FEED.nextval,#{userNo},#{feedContent},sysdate)
     </insert>
+
+
 
 </mapper>

@@ -52,14 +52,31 @@ public class FeedController {
 
     }
 
-    // 피드 사진 넣기
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String feedUploadPicture(@RequestBody String formData){
-        if(formData != null){
-            System.out.println("컨트롤러까지옴");
+//    // 피드 사진 넣기
+//    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+//    public String feedUploadPicture(@RequestBody String formData){
+//        if(formData != null){
+//            System.out.println("컨트롤러까지옴");
+//        }
+////        System.out.println(formData);
+//        return formData;
+//    }
+
+    // 피드 댓글 달기
+    @RequestMapping(value = "/reply", method = RequestMethod.POST)
+    public Map<String, Object> feedReply(@RequestBody Map<String, Object> paramMap){
+        System.out.println(paramMap);
+        int check = feedService.insertFeedReply(paramMap);
+
+        Map<String, Object> result = new HashMap<>();
+
+        if(check > 0){
+            result.put("Java","success");
+        }else{
+            result.put("Java","fail");
         }
-//        System.out.println(formData);
-        return formData;
+        return result;
+
     }
 
 

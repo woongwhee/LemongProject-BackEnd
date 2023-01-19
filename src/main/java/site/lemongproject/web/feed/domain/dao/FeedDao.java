@@ -21,7 +21,9 @@ public class FeedDao {
 
     public int insertFeed(Map<String,Object> paramMap){
         return sqlSession.insert("feedMapper.insertFeed", paramMap);
+    }
 
-
+    public int insertFeedReply(Map<String,Object> paramMap){
+        return sqlSession.insert("replyMapper.insertFeedReply", paramMap);
     }
 }
