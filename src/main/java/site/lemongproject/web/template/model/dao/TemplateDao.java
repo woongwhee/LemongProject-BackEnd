@@ -1,6 +1,6 @@
 package site.lemongproject.web.template.model.dao;
 
-import site.lemongproject.web.template.model.vo.Template;
+import site.lemongproject.web.template.model.dto.Template;
 
 import java.util.Map;
 

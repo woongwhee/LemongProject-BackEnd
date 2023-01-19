@@ -5,9 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
-import site.lemongproject.web.template.model.vo.Template;
-
-import java.sql.Date;
+import site.lemongproject.web.template.model.dto.Template;
 
 @RestController
 @RequestMapping("/template/one")
