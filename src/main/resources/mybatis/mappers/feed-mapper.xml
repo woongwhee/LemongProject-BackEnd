@@ -15,7 +15,7 @@
     </select>
 
 <!-- 피드 작성  -->
-    <insert id="insertFeed" parameterType="feed">
+    <insert id="insertFeed" parameterType="Map">
         INSERT INTO FEED (FEED_NO, USER_NO, FEED_CONTENT, FEED_AT) VALUES
         (SEQ_FEED.nextval,#{userNo},#{feedContent},sysdate)
     </insert>
