@@ -14,11 +14,13 @@
         <typeAlias type="site.lemongproject.web.member.model.vo.Profile" alias="Profile"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Member" alias="Member"/>
         <typeAlias type="site.lemongproject.common.domain.dto.OfficialHoliday" alias="Holiday"/>
+        <typeAlias type="site.lemongproject.web.toDo.model.vo.ToDo" alias="ToDo"/>
     </typeAliases>
     <mappers>
         <mapper resource="mybatis/mappers/member-mapper.xml"/>
         <mapper resource="mybatis/mappers/template-mapper.xml"/>
         <mapper resource="mybatis/mappers/templatetodo-mapper.xml"/>
         <mapper resource="mybatis/mappers/holiday-mapper.xml"/>
+        <mapper resource="mybatis/mappers/todo-mapper.xml"/>
     </mappers>
 </configuration>
