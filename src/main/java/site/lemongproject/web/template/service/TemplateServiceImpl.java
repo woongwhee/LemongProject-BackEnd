@@ -25,4 +25,9 @@ public class TemplateServiceImpl implements TemplateService{
         }
         return template;
     }
+
+    @Override
+    public int upload(int userNo) {
+        return templateDao.uploadTemp(userNo);
+    }
 }

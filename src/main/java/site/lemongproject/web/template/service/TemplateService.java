@@ -4,4 +4,6 @@ import site.lemongproject.web.template.model.vo.Template;
 
 public interface TemplateService {
     Template loadInsertPage(int memberNo);
+
+    int upload(int userNo);
 }

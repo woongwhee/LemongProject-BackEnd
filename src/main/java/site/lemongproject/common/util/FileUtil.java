@@ -22,18 +22,10 @@ public class FileUtil {
 
     public Photo saveFile(MultipartFile m,Photo p){
         String creatPath=createFilePath();
-        String realPath = SAVE_PATH+ creatPath;
         String changeName=rename(m.getOriginalFilename());
-        String filePath = realPath +"/"+ changeName;
-        try(InputStream fis = m.getInputStream();
-            OutputStream fos = new FileOutputStream(filePath);)
-        {
-            byte[] buf = new byte[1024];
-            int len = 0;
-            while((len = fis.read(buf, 0, 1024)) != -1) {
-                fos.write(buf, 0, len);
-            }
-            fos.flush();
+        String filePath = SAVE_PATH+ creatPath +"/"+ changeName;
+        try{
+            m.transferTo(new File(filePath));
             p=new Photo();
             p.setOriginName(m.getOriginalFilename());
             p.setChangeName(changeName);

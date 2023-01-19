@@ -8,9 +8,9 @@
         <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
     <typeAliases>
-        <typeAlias type="site.lemongproject.web.template.model.vo.Template" alias="Template"/>
-        <typeAlias type="site.lemongproject.web.template.model.vo.TemplateCategory" alias="TemplateCategory"/>
-        <typeAlias type="site.lemongproject.web.template.model.vo.TemplateTodo" alias="TemplateTodo"/>
+        <typeAlias type="site.lemongproject.web.template.model.dto.Template" alias="Template"/>
+        <typeAlias type="site.lemongproject.web.template.model.dto.TemplateCategory" alias="TemplateCategory"/>
+        <typeAlias type="site.lemongproject.web.template.model.dto.TemplateTodo" alias="TemplateTodo"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Profile" alias="Profile"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Member" alias="Member"/>
         <typeAlias type="site.lemongproject.web.feed.domain.vo.Feed" alias="Feed"/>
