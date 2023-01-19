@@ -3,7 +3,7 @@ package site.lemongproject.web.template.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import site.lemongproject.web.template.model.vo.Template;
+import site.lemongproject.web.template.model.dto.Template;
 
 import java.util.Map;
 

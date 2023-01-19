@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
-import site.lemongproject.web.template.model.vo.Template;
-import site.lemongproject.web.template.model.vo.TemplateTodo;
+import site.lemongproject.web.template.model.dto.Template;
+import site.lemongproject.web.template.model.dto.TemplateTodo;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class TemplateServiceImpl implements TemplateService{
     }
 
     @Override
-    public int upload(int userNo) {
+    public int saveTemplate(int userNo) {
         return templateDao.uploadTemp(userNo);
     }
 }
