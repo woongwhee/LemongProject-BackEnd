@@ -6,6 +6,7 @@ import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.feed.domain.service.FeedService;
 import site.lemongproject.web.feed.domain.vo.Feed;
+import site.lemongproject.web.feed.domain.vo.Reply;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -63,7 +64,7 @@ public class FeedController {
 //    }
 
     // 피드 댓글 달기
-    @RequestMapping(value = "/reply", method = RequestMethod.POST)
+    @RequestMapping(value = "/insertReply", method = RequestMethod.POST)
     public Map<String, Object> feedReply(@RequestBody Map<String, Object> paramMap){
         System.out.println(paramMap);
         int check = feedService.insertFeedReply(paramMap);
@@ -76,10 +77,15 @@ public class FeedController {
             result.put("Java","fail");
         }
         return result;
-
     }
 
+    @RequestMapping("/replySelect")
+    public ResponseBody<List<Reply>>(@RequestBody int feedNo){
 
+        List<Reply> list = feedService.selectReply();
+
+        return ResponseBuilder.success(list);
+    }
 
 
 
