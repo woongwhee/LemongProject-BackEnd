@@ -10,7 +10,6 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class FeedDao {
     final SqlSession sqlSession;
-
     public ArrayList selectFeed(){
         return null;
     }
