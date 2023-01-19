@@ -1,4 +1,4 @@
-package site.lemongproject.web.template.model.vo;
+package site.lemongproject.web.template.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
