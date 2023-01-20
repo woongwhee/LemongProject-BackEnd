@@ -19,4 +19,13 @@ public class ResponseBuilder{
         return response;
     }
 
+    public static ResponseBody unJoin(int num) {
+        ResponseBody response = new ResponseBody();
+        response.setCode("400");
+        response.setMessage("UNJOIN");
+        response.setResult(num);
+        return response;
+    }
+
+
 }
