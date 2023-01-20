@@ -27,4 +27,11 @@ public class MemberServiceImpl implements MemberService {
         return loginUser;
     }
 
+
+    public int insertMember(Member m) {
+        int result = memberDao.insertMember(m);
+        System.out.println("dao 실행 : " + result);
+        return result;
+    }
+
 }
