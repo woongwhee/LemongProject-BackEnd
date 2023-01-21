@@ -79,13 +79,13 @@ public class FeedController {
         return result;
     }
 
-    @RequestMapping("/replySelect")
-    public ResponseBody<List<Reply>>(@RequestBody int feedNo){
-
-        List<Reply> list = feedService.selectReply();
-
-        return ResponseBuilder.success(list);
-    }
+//    @RequestMapping("/replySelect")
+//    public ResponseBody<List<Reply>>(@RequestBody int feedNo){
+//
+//        List<Reply> list = feedService.selectReply();
+//
+//        return ResponseBuilder.success(list);
+//    }
 
 
 
