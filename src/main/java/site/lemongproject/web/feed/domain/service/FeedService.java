@@ -14,8 +14,12 @@ public interface FeedService  {
     List selectFeed();
     // feed 게시글 쓰기
     int insertFeed(Map<String, Object> paramMap);
+
     // feed 게시글 댓글 쓰기
     int insertFeedReply(Map<String, Object> paramMap);
+
+    // feed 게시글 댓글 보기
+    List listReply(int feedNo);
 
 
 

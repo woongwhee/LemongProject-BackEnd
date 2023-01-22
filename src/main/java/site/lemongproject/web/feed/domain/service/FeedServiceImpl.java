@@ -34,4 +34,7 @@ public class FeedServiceImpl implements FeedService{
     public int insertFeedReply(Map<String, Object> paramMap){
         return feedDao.insertFeedReply(paramMap);
     }
+
+    @Override
+    public List listReply(int feedNo) {return feedDao.listReply(feedNo);}
 }
