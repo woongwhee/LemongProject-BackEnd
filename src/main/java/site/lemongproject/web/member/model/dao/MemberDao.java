@@ -10,7 +10,12 @@ import site.lemongproject.web.member.model.vo.Member;
 public class MemberDao {
     final private SqlSession sqlSession;
     public Member loginMember(Member m) {
-        return sqlSession.selectOne("memberMapper.loginMember", m);
+       return sqlSession.selectOne("memberMapper.loginMember",m );
+    }
+
+
+    public int insertMember(Member m) {
+        return sqlSession.insert("memberMapper.insertMember", m);
     }
 
 }
