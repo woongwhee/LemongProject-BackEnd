@@ -9,6 +9,7 @@ import site.lemongproject.web.feed.domain.vo.Feed;
 import site.lemongproject.web.feed.domain.vo.Reply;
 
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -79,16 +80,11 @@ public class FeedController {
         return result;
     }
 
-//    @RequestMapping("/replySelect")
-//    public ResponseBody<List<Reply>>(@RequestBody int feedNo){
-//
-//        List<Reply> list = feedService.selectReply();
-//
-//        return ResponseBuilder.success(list);
-//    }
+    @RequestMapping("/listReply")
+    public ResponseBody<List<Reply>> listReply(@RequestParam int feedNo){
+        System.out.println(feedNo);
+        List<Reply> list = feedService.listReply(feedNo);
 
-
-
-
-
+        return ResponseBuilder.success(list);
+    }
 }
