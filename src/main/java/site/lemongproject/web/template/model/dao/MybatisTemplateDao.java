@@ -34,7 +34,6 @@ public class MybatisTemplateDao implements TemplateDao {
     @Override
     public int uploadTemp(int userNo) {
         return sqlSession.update("templateMapper.upload",userNo);
-
     }
     @Override
     public int updateUnSave(Template template){

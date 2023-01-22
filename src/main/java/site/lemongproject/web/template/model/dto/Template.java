@@ -9,7 +9,7 @@ import java.util.List;
 public class Template {
     private int templateNo;
     private Profile profile;
-    private int range;
+    private Integer range;
     private String title;
     private String content;
     private Date creatAt;
