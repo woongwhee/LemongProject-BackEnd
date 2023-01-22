@@ -12,5 +12,7 @@ public interface MemberService {
 
     public int insertMember(Member m);
 
+    public int checkNick(Member m);
+
 
 }
