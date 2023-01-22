@@ -9,34 +9,60 @@
         <result column="RANGE" property="range"/>
         <result column="TITLE" property="title"/>
         <result column="CONTENT" property="content"/>
-        <association property="profile" column="TP_CREATER" resultMap="profileMapper"/>
-        <association property="clearCount" column="TEMPLATE_NO" select="countClear"/>
-        <association property="playCount" column="TEMPLATE_NO" select="countClear"/>
+        <result property="clearCount" column="CLEAR_COUNT" />
+        <result property="playCount" column="PLAY_COUNT" />
+        <association property="profile" resultMap="profileMapper.profileDetail"/>
     </resultMap>
 
-
     <select id="findUnSave" parameterType="Integer" resultType="Template">
-        SELECT * (),() FROM TEMPLATE WHERE TP_CREATE = #{userNo} AND SAVE_STATUS = 0
+        SELECT * (select count from template j),() FROM TEMPLATE WHERE TP_CREATE = #{userNo} AND SAVE_STATUS = 0
     </select>
     <select id="findOne" parameterType="Integer" resultType="Template">
-        SELECT TEMPLATE_NO ,()FROM TEMPLATE T
-        WHERE TEMPLATE_NO =#{templateNo}
-        ORDER BY CREATE_AT DESC
-    </select>
-
-    <select id="countClear" resultType="int" parameterType="int">
-        SELECT CU.STATUS,COUNT(*) AS(ClearUser) FROM TEMPLATE T
-        WHERE TEMPLATE_NO =#{templateNo}
-        JOIN CHALLENGE C USING (TEMPLATE_NO)
+        SELECT
+        T.* ,
+        (SELECT COUNT(*) FROM TEMPLATE T1
+        JOIN CHALLENGE C ON C.TEMPLATE_NO=T1.TEMPLATE_NO
         JOIN CHALLENGE_USER CU USING(CHALLENGE_NO)
-        GROUP BY ROLLUP(TEMPLATE_NO,CU.STATUS)
-    </select>
-    <select id="countPlay" resultType="int" parameterType="int">
-        SELECT COUNT(*) AS(ClearUser) FROM TEMPLATE T
-        WHERE TEMPLATE_NO =#{templateNo}
-        JOIN CHALLENGE C USING (TEMPLATE_NO)
-        JOIN CHALLENGE_USER CU USING(CHELLENGE_NO)
         WHERE CU.STATUS='PLAY'
+        AND T.TEMPLATE_NO=T1.TEMPLATE_NO)as PLAY_COUNT,
+        --진행중인 사람수
+        (SELECT COUNT(*)
+        FROM TEMPLATE T2
+        JOIN CHALLENGE C ON C.TEMPLATE_NO=T2.TEMPLATE_NO
+        JOIN CHALLENGE_USER CU USING(CHALLENGE_NO)
+        WHERE CU.STATUS='CLEAR'
+        AND T.TEMPLATE_NO=T2.TEMPLATE_NO)as CLEAR_COUNT ,
+        --완료수
+        P.*,up.*
+        FROM TEMPLATE T
+        JOIN USER_PROFILE up ON T.TP_CREATER = up.USER_NO
+        JOIN PHOTO P ON UP.PHOTO_NO = P.PHOTO_NO
+        WHERE T.SAVE_STATUS=1
+        ORDER BY T.CREATED_AT DESC
+    </select>
+    <select id="findMany" parameterType="Map" resultMap="templateList">
+        SELECT
+        T.* ,
+        (SELECT COUNT(*) FROM TEMPLATE T1
+        JOIN CHALLENGE C ON C.TEMPLATE_NO=T1.TEMPLATE_NO
+        JOIN CHALLENGE_USER CU USING(CHALLENGE_NO)
+        WHERE CU.STATUS='PLAY'
+        AND T.TEMPLATE_NO=T1.TEMPLATE_NO)as PLAY_COUNT,
+        --진행중인 사람수
+        (SELECT COUNT(*)
+        FROM TEMPLATE T2
+        JOIN CHALLENGE C ON C.TEMPLATE_NO=T2.TEMPLATE_NO
+        JOIN CHALLENGE_USER CU USING(CHALLENGE_NO)
+        WHERE CU.STATUS='CLEAR'
+        AND T.TEMPLATE_NO=T2.TEMPLATE_NO)as CLEAR_COUNT ,
+        --완료수
+        P.*,up.*
+        FROM TEMPLATE T
+        JOIN USER_PROFILE up ON T.TP_CREATER = up.USER_NO
+        JOIN PHOTO P ON UP.PHOTO_NO = P.PHOTO_NO
+        WHERE T.SAVE_STATUS=1
+        <if test="categoryNo!=null">, CATEGORT_NO=#{categoryNo}</if>
+        ORDER BY T.CREATED_AT DESC
     </select>
     <delete id="deleteTemp" parameterType="int">
         DELETE TEMPLATE WHERE TEMPLATE_NO=#{templateNo}
@@ -59,7 +85,7 @@
                 CREATE_AT=SYSDATE
         where save_status=0 and USER_NO=#{userNo}
     </update>
-    <update id="updateUnsave" parameterType="Template" >
+    <update id="updateUnSave" parameterType="Template" >
         update template
         <set>
             <if test="categoryNo != null">CATEGORY_NO=#{categoryNo} </if>
@@ -67,6 +93,6 @@
             <if test="title != null">TITLE = #{title} </if>
             <if test="content != null">CONTENT= #{content} </if>
         </set>
-        where templateNo=0
+        where templateNo=#{templateNo}
     </update>
 </mapper>
