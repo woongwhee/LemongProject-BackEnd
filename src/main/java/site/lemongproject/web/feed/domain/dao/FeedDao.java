@@ -31,4 +31,8 @@ public class FeedDao {
     public List<Reply> listReply(int feedNo){
         return sqlSession.selectList("replyMapper.listReply", feedNo);
     }
+
+    public int updateFeed(Map<String, Object> updatefeed){
+        return sqlSession.update("feedMapper.updateFeed", updatefeed);
+    }
 }

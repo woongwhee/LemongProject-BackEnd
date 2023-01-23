@@ -80,6 +80,7 @@ public class FeedController {
         return result;
     }
 
+    // 피드 댓글 불러오기
     @RequestMapping("/listReply")
     public ResponseBody<List<Reply>> listReply(@RequestParam int feedNo){
         System.out.println(feedNo);
@@ -87,4 +88,33 @@ public class FeedController {
 
         return ResponseBuilder.success(list);
     }
+
+    // 피드 수정
+    @RequestMapping(value = "/updateFeed", method = RequestMethod.POST)
+    public Map<String, Object> feedUpdate(@RequestBody Map<String, Object> updatefeed ){
+        System.out.println(updatefeed);
+
+        int check = feedService.updateFeed(updatefeed);
+
+        Map<String, Object> result = new HashMap<>();
+
+        if(check > 0){
+            result.put("Java","success");
+        }else{
+            result.put("Java","fail");
+        }
+        return result;
+    }
+//    -- 좋아요 수
+//    SELECT COUNT(*) FROM HEART WHERE REF_NO=3;
+//
+//-- 좋아요 누름
+//    INSERT INTO HEART (USER_NO, REF_TYPE, REF_NO) VALUES (USER_NO,1,FEED_NO);
+//
+//-- 좋아요 취소
+//    DELETE FROM HEART WHERE USER_NO = USER_NO AND REF_NO=FEED_NO;
+
+
+
+
 }

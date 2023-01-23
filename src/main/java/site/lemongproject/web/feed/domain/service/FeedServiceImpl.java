@@ -37,4 +37,9 @@ public class FeedServiceImpl implements FeedService{
 
     @Override
     public List listReply(int feedNo) {return feedDao.listReply(feedNo);}
+
+    @Override
+    public int updateFeed(Map<String,Object> updatefeed){
+        return feedDao.updateFeed(updatefeed);
+    };
 }
