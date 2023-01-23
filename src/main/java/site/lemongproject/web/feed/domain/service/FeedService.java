@@ -21,6 +21,9 @@ public interface FeedService  {
     // feed 게시글 댓글 보기
     List listReply(int feedNo);
 
+    // feed 게시글 업데이트
+    int updateFeed(Map<String,Object> updatefeed);
+
 
 
 }
