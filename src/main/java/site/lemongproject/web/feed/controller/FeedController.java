@@ -36,6 +36,7 @@ public class FeedController {
         return ResponseBuilder.success(list);
     }
 
+
     // 피드 넣기
     @RequestMapping(value = "/insert",method = RequestMethod.POST)
     public Map<String, Object> feedInsert(@RequestBody Map<String, Object> paramMap)throws SQLException, Exception {
