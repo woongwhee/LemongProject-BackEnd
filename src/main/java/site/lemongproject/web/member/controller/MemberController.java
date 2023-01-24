@@ -1,11 +1,12 @@
 package site.lemongproject.web.member.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import site.lemongproject.web.common.file.Utils;
+import site.lemongproject.common.response.ResponseBody;
+import site.lemongproject.common.response.ResponseBuilder;
+import site.lemongproject.common.util.FileUtil;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
@@ -14,23 +15,17 @@ import site.lemongproject.web.photo.model.vo.Photo;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @RequestMapping("/member")
-@Transactional
+@RequiredArgsConstructor
 public class MemberController {
 
-    private MemberService memberService;
-    public MemberController(MemberService memberService) {
-        this.memberService = memberService;
-    }
-
-    @Autowired
-    public void setMemberService(MemberService memberService) {
-        this.memberService = memberService;
-    }
+    final private MemberService memberService;
+    final private FileUtil fileUtil;
 
     @PostMapping("login")
     public ModelAndView loginMember(Member m, HttpSession session, ModelAndView mv) {
@@ -65,14 +60,13 @@ public class MemberController {
     @GetMapping("/selectUser")
     public List<Member> selectUser(){
         List<Member> mList = memberService.selectUser();
-
+        ResponseBody<List<Member>> r= ResponseBuilder.success(mList);
         return mList;
     }
 
     // USER_PROFILE테이블 유저 닉네임 업데이트.
-    @GetMapping("/updateUser")
+    @GetMapping("/checkNickName")
     public int updateUser(@RequestParam(value="modifyNickname" , required=false) String nickName){
-
         int upList = memberService.updateUser(nickName);
 
         System.out.println(nickName);
@@ -91,35 +85,141 @@ public class MemberController {
         return upList2;
     }
 
-    // USER_PROFILE테이블 유저 프로필 INSERT.
-    @GetMapping("/insertUserProfile")
-    public int insertUserProfile(
-            @RequestParam(value="img" , required = false) String userProImg ,
-            MultipartFile upfile ,
-            HttpSession session){
-
-        String webPath = "/resources/images/userProfile/";
-        String serverFolderPath = session.getServletContext().getRealPath(webPath);
-
-        Photo p = new Photo();
-
-        if(!upfile.getOriginalFilename().equals("")){
-                String savePath = session.getServletContext().getRealPath("/resources/images/uploadFiles/");
-                String changeName = Utils.saveFile(upfile , savePath);
-
-            try {
-                upfile.transferTo(new File(savePath + changeName));
-            } catch (IllegalStateException | IOException e) {
-                System.out.println("오류남");
-            }
-            p.setChangeName("resources/uploadFiles/" + changeName);
-            p.setOriginName(upfile.getOriginalFilename());
-        }
-
-        int result = memberService.insertUserProfile(p , webPath , serverFolderPath);
-
+    @GetMapping("/myPwdUpdate")
+    public int myupdatePwd(@RequestParam(value="upPwd" , required = false)String upPwd){
+        int result = memberService.myupdatePwd(upPwd);
         return result;
     }
 
+    // 유저 프로필 INSERT. => 웅휘형이 만든 FileUtil로 빼기 => rename(m.getOriginalFilename()) 오류 고치기.
+    @RequestMapping(value="/insertUserProfile")
+//    @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
+    public int insertUserProfile(
+            @RequestParam(value="file", required=false) MultipartFile[] files){
+
+        String webPath = "/resources/images/userProfile/";
+
+        int result = 0;
+
+        Photo p = new Photo();
+
+        for (MultipartFile mf : files) {
+
+            String originFileName = mf.getOriginalFilename(); // 원본 파일 명
+            long fileSize = mf.getSize(); // 파일 사이즈
+            System.out.println("originFileName : " + originFileName);
+            System.out.println("fileSize : " + fileSize);
+
+            // 1. 원본 파일명 뽑기.
+            String originName= mf.getOriginalFilename();
+
+            // 2. 시간 형식을 문자열로 뽑아오기.
+            // 년월일시분초
+            String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+
+            // 3. 뒤에 붙을 5자리 랜덤값 뽑기.
+            int random = (int)(Math.random() * 90000 + 10000); // 5자리 랜덤값
+
+            // 4. 원본파일명으로부터 확장자명 뽑기.
+            // .jpg
+            String ext = originName.substring(originName.lastIndexOf("."));
+
+            // 5. 다 이어붙이기.
+            String changeName = currentTime + random + ext;
+
+            // 폴더에 이미지 저장.
+            String savePath = "C:/LemongProject/src/main/webapp/resources/images/userProfile/";
+
+            if (!mf.getOriginalFilename().equals("")) { // 파일명이 비어있지 않은 경우
+                try {
+                    mf.transferTo(new File(savePath + changeName));
+                } catch (IllegalStateException | IOException e) {
+                    System.out.println(e.getMessage() + "오류 발생");
+                }
+            }
+
+            p.setFilePath(webPath+mf.getOriginalFilename());
+            p.setUserNo(2);
+            p.setChangeName(changeName);
+            p.setOriginName(mf.getOriginalFilename());
+
+            result = memberService.insertUserProfile(p);
+
+        }
+        return result;
+    }
+
+    // 유저 프로필 UPDATE. => 웅휘형이 만든 FileUtil로 빼기 => rename(m.getOriginalFilename()) 오류 고치기.
+    @RequestMapping(value = "/updateUserProfile")
+    public int updateUserProfile(
+            @RequestParam(value = "file" , required = false) MultipartFile[] ufiles){
+
+        String webPath = "/resources/images/userProfile/";
+
+        int result = 0;
+
+        Photo p = new Photo();
+
+        for (MultipartFile mf : ufiles) {
+
+            String originFileName = mf.getOriginalFilename(); // 원본 파일 명
+            long fileSize = mf.getSize(); // 파일 사이즈
+            System.out.println("originFileName : " + originFileName);
+            System.out.println("fileSize : " + fileSize);
+
+            // 1. 원본 파일명 뽑기.
+            String originName= mf.getOriginalFilename();
+
+            // 2. 시간 형식을 문자열로 뽑아오기.
+            // 년월일시분초
+            String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+
+            // 3. 뒤에 붙을 5자리 랜덤값 뽑기.
+            int random = (int)(Math.random() * 90000 + 10000); // 5자리 랜덤값
+
+            // 4. 원본파일명으로부터 확장자명 뽑기.
+            // .jpg
+            String ext = originName.substring(originName.lastIndexOf("."));
+
+            // 5. 다 이어붙이기.
+            String changeName = currentTime + random + ext;
+
+            // 폴더에 이미지 저장.
+            String savePath = "C:/LemongProject/src/main/webapp/resources/images/userProfile/";
+
+            if (!mf.getOriginalFilename().equals("")) { // 파일명이 비어있지 않은 경우
+                try {
+                    mf.transferTo(new File(savePath + changeName));
+                } catch (IllegalStateException | IOException e) {
+                    System.out.println(e.getMessage() + "오류 발생");
+                }
+            }
+
+            p.setFilePath(webPath+mf.getOriginalFilename());
+            p.setUserNo(2);
+            p.setChangeName(changeName);
+            p.setOriginName(mf.getOriginalFilename());
+
+            result = memberService.updateUserProfile(p);
+
+        }
+        return result;
+
+    }
+
+    @GetMapping("/selectMyProfileImg")
+    // 프로필 사진 뽑아서 리액트로 보내기
+    public List<Photo> selectMyProfile(){
+
+        List<Photo> pList = memberService.selectMyProfile();
+
+        return pList;
+    }
+
+    @GetMapping("/deleteUser")
+    public int deleteUser(){
+        int result = memberService.deleteUser();
+        return result;
+    }
 
 }

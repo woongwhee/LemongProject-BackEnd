@@ -1,8 +1,10 @@
-package site.lemongproject.web.feed.domain.service;
+package site.lemongproject.web.feed.model.service;
 
 import org.springframework.transaction.annotation.Transactional;
+import site.lemongproject.web.feed.model.vo.Feed;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Transactional
 public interface FeedService  {
@@ -11,5 +13,5 @@ public interface FeedService  {
     public ArrayList selectFeed();
 
 
-
+    public List<Feed> selectMyFeed();
 }

@@ -1,14 +1,14 @@
-package site.lemongproject.web.feed.domain.vo;
+package site.lemongproject.web.feed.model.vo;
 
 
 import lombok.Data;
 
-import java.util.Date;
+import java.sql.Date;
 
 @Data
 public class Feed {
     private int feedNo;
     private int userNo;
-    private int feedContent;
+    private String feedContent;
     private Date feedAt;
 }

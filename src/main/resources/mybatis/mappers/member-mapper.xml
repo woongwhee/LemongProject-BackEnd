@@ -47,14 +47,14 @@
     <!-- USER정보(프로필)정보 => 닉네임 변경 -->
     <update id="updateUser" parameterType="string">
         UPDATE USER_PROFILE
-            SET NICK_NAME = #{nickName}
+        SET NICK_NAME = #{nickName}
         WHERE USER_NO = 2
     </update>
 
     <!-- USER정보(프로필)정보 => 자기소개 변경 -->
     <update id="updateComment" parameterType="string">
         UPDATE USER_PROFILE
-            SET PROFILE_COMMENT = #{comment}
+        SET PROFILE_COMMENT = #{comment}
         WHERE USER_NO = 2
     </update>
 
@@ -62,23 +62,53 @@
         INSERT INTO PHOTO(
             PHOTO_NO ,
             USER_NO ,
-            ORIGIN_NAME
+            ORIGIN_NAME ,
+            CHANGE_NAME ,
+            FILE_PATH
+        )
+        VALUES(
+            SEQ_PHOTO.NEXTVAL , #{userNo} , #{originName} , #{changeName} , #{filePath}
         )
     </insert>
->
 
-<!--    <resultMap id="member" type="memberResultSet">-->
-<!--        <result column="" property="" />-->
-<!--    </resultMap>-->
+    <update id="updateUserProfile" parameterType="photo">
+        UPDATE PHOTO
+            SET ORIGIN_NAME = #{originName} ,
+                CHANGE_NAME = #{changeName} ,
+                FILE_PATH = #{filePath}
+        WHERE USER_NO = 2
+    </update>
+
+    <update id="myupdatePwd" parameterType="string">
+        UPDATE MEMBER
+            SET USER_PWD = #{upPwd}
+        WHERE USER_NO = 2
+    </update>
+
+    <select id="selectMyProfile" resultMap="potoResultSet">
+        SELECT *
+        FROM PHOTO
+        WHERE USER_NO = 2
+    </select>
+
+    <update id="deleteUser" parameterType="int">
+        UPDATE MEMBER
+            SET STATUS = 0
+        WHERE USER_NO = 3
+    </update>
+
+    <!--    <resultMap id="member" type="memberResultSet">-->
+    <!--        <result column="" property="" />-->
+    <!--    </resultMap>-->
 
 
-<!--    &lt;!&ndash;  로그인  &ndash;&gt;-->
-<!--    <select id="loginMember" resultMap="memberResultSet">-->
-<!--        SELECT *-->
-<!--        FROM MEMBER-->
-<!--        WHERE USER_ID = #{userId}-->
-<!--        AND STATUS = 'Y'-->
-<!--    </select>-->
+    <!--    &lt;!&ndash;  로그인  &ndash;&gt;-->
+    <!--    <select id="loginMember" resultMap="memberResultSet">-->
+    <!--        SELECT *-->
+    <!--        FROM MEMBER-->
+    <!--        WHERE USER_ID = #{userId}-->
+    <!--        AND STATUS = 'Y'-->
+    <!--    </select>-->
 
 
 </mapper>

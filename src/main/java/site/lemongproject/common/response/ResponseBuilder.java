@@ -10,6 +10,12 @@ public class ResponseBuilder{
         response.setResult(o);
         return response;
     }
-
+    public static ResponseBody hasSameNick(){
+        ResponseBody response=new ResponseBody();
+        response.setCode("2000");
+        response.setMessage("SUCCESS");
+        response.setResult(2);
+        return response;
+    }
 
 }
