@@ -25,6 +25,11 @@
         UPDATE FEED SET FEED_CONTENT = #{feedContent} where FEED_NO = #{feedNo}
     </update>
 
+<!--  피드 삭제  -->
+    <delete id="deleteFeed" parameterType="Map">
+        DELETE FROM FEED WHERE FEED_NO = #{feedNo}
+    </delete>
+
 
 
 </mapper>

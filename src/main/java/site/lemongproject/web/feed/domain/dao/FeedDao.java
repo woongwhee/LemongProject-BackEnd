@@ -35,4 +35,8 @@ public class FeedDao {
     public int updateFeed(Map<String, Object> updatefeed){
         return sqlSession.update("feedMapper.updateFeed", updatefeed);
     }
+
+    public int deleteFeed(Map<String,Object> deleteFeedNo){
+        return sqlSession.delete("feedMapper.deleteFeed",deleteFeedNo);
+    }
 }

@@ -42,4 +42,9 @@ public class FeedServiceImpl implements FeedService{
     public int updateFeed(Map<String,Object> updatefeed){
         return feedDao.updateFeed(updatefeed);
     };
+
+    @Override
+    public int deleteFeed(Map<String,Object> deleteFeedNo){
+        return feedDao.deleteFeed(deleteFeedNo);
+    }
 }
