@@ -16,4 +16,16 @@
         <beans:property name="prefix" value="/WEB-INF/views/" />
         <beans:property name="suffix" value=".jsp" />
     </beans:bean>
+
+    <!-- 파일 업로드를 위한 multipartResolver 빈 등록 -->
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <beans:property name="maxUploadSize" value="2000000000" />
+        <beans:property name="defaultEncoding" value="UTF-8" />
+    </beans:bean>
+
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <!-- http://localhost:8081/api/images/이미지명.jpg 로 이미지를 불러와서 사용할것이다.-->
+    <!-- IMAGE VIEW -->
+    <mvc:resources mapping="/images/**" location="file:///C:/LemongProject/src/main/webapp/resources/images/userProfile/" />
+
 </beans>

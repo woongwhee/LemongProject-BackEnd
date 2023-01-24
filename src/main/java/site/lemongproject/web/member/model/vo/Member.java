@@ -11,4 +11,5 @@ public class Member {
     private SocialType socialType; // 소셜 로그인 타입
     private String accessToken; // 소셜 로그인 접근
     private int status; // 회원 상태
+
 }
