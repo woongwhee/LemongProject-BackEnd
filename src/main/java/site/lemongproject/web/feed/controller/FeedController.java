@@ -105,6 +105,22 @@ public class FeedController {
         }
         return result;
     }
+    // 피드 삭제
+    @RequestMapping(value = "/deleteFeed", method = RequestMethod.POST)
+    public Map<String,Object> feedDelete(@RequestBody Map<String,Object> deleteFeedNo){
+        System.out.println(deleteFeedNo);
+
+        int check = feedService.deleteFeed(deleteFeedNo);
+
+        Map<String, Object> result = new HashMap<>();
+
+//        if(check > 0){
+//            result.put("Java","success");
+//        }else{
+//            result.put("Java","fail");
+//        }
+        return result;
+    }
 //    -- 좋아요 수
 //    SELECT COUNT(*) FROM HEART WHERE REF_NO=3;
 //

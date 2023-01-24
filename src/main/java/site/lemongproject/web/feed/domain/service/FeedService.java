@@ -24,6 +24,8 @@ public interface FeedService  {
     // feed 게시글 업데이트
     int updateFeed(Map<String,Object> updatefeed);
 
+    // feed 게시글 삭제
+    int deleteFeed(Map<String,Object> deleteFeedNo);
 
 
 }
