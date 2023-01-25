@@ -11,7 +11,7 @@
         <result column="CONTENT" property="content"/>
         <result property="clearCount" column="CLEAR_COUNT" />
         <result property="playCount" column="PLAY_COUNT" />
-        <association property="category" resultMap="templateCategoryMapper.categoryMap"/>
+        <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
         <association property="profile" resultMap="profileMapper.profileDetail"/>
     </resultMap>
     <resultMap id="templateUnSave" type="Template">
