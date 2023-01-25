@@ -3,18 +3,27 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="replyMapper">
 
-    <resultMap id="replyResultSet" type="Reply">
-        <result column="REPLY_NO" property="replyNo"/>
-        <result column="USER_NO" property="userNo"/>
-        <result column="FEED_NO" property="feedNo"/>
-        <result column="REPLY_CONTENT" property="replyContent"/>
-        <result column="REPLY_AT" property="replyAt"/>
+    <!-- REPLY 테이블  -->
+    <resultMap type="Reply" id="replyResultSet">
+        <result column="REPLY_NO" property="replyNo"></result>
+        <result column="USER_NO" property="userNo"></result>
+        <result column="FEED_NO" property="feedNo"></result>
+        <result column="REPLY_CONTENT" property="replyContent"></result>
+        <result column="REPLY_AT" property="replyAt"></result>
     </resultMap>
+
+    <select id="selectFeedReply" resultMap="replyResultSet">
+        SELECT *
+        FROM REPLY
+        WHERE USER_NO = 2
+        AND FEED_NO = 11
+        AND REPLY_NO = 31
+    </select>
 
     <!--  피드 댓글 작성  -->
     <insert id="insertFeedReply" parameterType="Map">
         INSERT INTO REPLY (REPLY_NO, USER_NO, FEED_NO, REPLY_CONTENT,REPLY_AT) VALUES
-        (SEQ_REPLY.nextval, #{userNo}, #{feedNo},#{replyContent},SYSDATE)
+        (SEQ_REPLY.nextval, #{userNo}. #{feedNo},#{replyContent},SYSDATE)
     </insert>
 
     <select id="listReply" resultMap="replyResultSet" parameterType="int">

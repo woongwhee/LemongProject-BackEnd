@@ -1,17 +1,16 @@
-package site.lemongproject.web.feed.domain.vo;
-
+package site.lemongproject.web.feed.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.sql.Date;
 
-
 @Data
-public class Feed {
-    private int feedNo;
+public class Reply {
+    private int replyNo;
     private int userNo;
-    private String feedContent;
+    private int feedNo;
+    private String replyContent;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date feedAt;
+    private Date replyAt;
 }

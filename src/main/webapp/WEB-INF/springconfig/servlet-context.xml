@@ -8,6 +8,7 @@
        xmlns:beans="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
 
+    <context:component-scan base-package="site.lemongproject"/>
     <mvc:annotation-driven />
     <task:annotation-driven />
     <context:component-scan base-package="site.lemongproject"/>
@@ -15,9 +16,16 @@
         <beans:property name="prefix" value="/WEB-INF/views/" />
         <beans:property name="suffix" value=".jsp" />
     </beans:bean>
+
+    <!-- 파일 업로드를 위한 multipartResolver 빈 등록 -->
     <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <!-- max upload size in bytes -->
-        <beans:property name="maxUploadSize" value="20242880" /> <!-- 20MB -->
-        <beans:property name="maxInMemorySize" value="1048576" /> <!-- 1MB -->
+        <beans:property name="maxUploadSize" value="2000000000" />
+        <beans:property name="defaultEncoding" value="UTF-8" />
     </beans:bean>
+
+    <mvc:resources mapping="/resources/**" location="/resources/" />
+    <!-- http://localhost:8081/api/images/이미지명.jpg 로 이미지를 불러와서 사용할것이다.-->
+    <!-- IMAGE VIEW -->
+    <mvc:resources mapping="/images/**" location="file:///C:/LemongProject/src/main/webapp/resources/images/userProfile/" />
+
 </beans>
