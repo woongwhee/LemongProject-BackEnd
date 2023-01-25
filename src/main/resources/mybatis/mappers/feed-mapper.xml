@@ -2,13 +2,25 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="feedMapper">
-    <resultMap id="feedResultSet" type="Feed">
-        <result column="FEED_NO" property="feedNo"/>
-        <result column="USER_NO" property="userNo"/>
-        <result column="FEED_CONTENT" property="feedContent"/>
-        <result column="FEED_AT" property="feedAt"/>
+
+    <!-- FEED 테이블  -->
+    <resultMap type="Feed" id="feedResultSet">
+        <result column="FEED_NO" property="feedNo"></result>
+        <result column="USER_NO" property="userNo"></result>
+        <result column="FEED_CONTENT" property="feedContent"></result>
+        <result column="FEED_AT" property="feedAt"></result>
     </resultMap>
 
+
+    <select id="selectMyFeed" resultMap="feedResultSet">
+        SELECT
+            FEED_NO ,
+            USER_NO ,
+            FEED_CONTENT ,
+            FEED_AT
+        FROM FEED
+        WHERE USER_NO = 2
+    </select>
 <!-- 피드 게시물  -->
     <select id="selectFeed" resultMap="feedResultSet">
         SELECT * FROM FEED
