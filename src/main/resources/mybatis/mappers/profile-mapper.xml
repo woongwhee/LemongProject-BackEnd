@@ -8,9 +8,7 @@
         <result column="PHOTO_NO" property="photoNo"/>
         <result column="PROFILE_COMMENT" property="profileComment"/>
     </resultMap>
-
     <select id="selectOne" parameterType="int" resultType="Profile">
         select * from user_profile where user_no=#{userNo}
     </select>
-
 </mapper>

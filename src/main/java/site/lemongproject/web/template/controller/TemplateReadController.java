@@ -8,11 +8,10 @@ import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.template.model.dto.Template;
 
 @RestController
-@RequestMapping("/template/one")
-public class TemplateController {
+@RequestMapping("/template/read")
+public class TemplateReadController {
     @GetMapping(value="/login", produces = "application/json;charset=UTF8")
     public ResponseBody<Template> test(){
-
         Template t=new Template();
         t.setContent("안녕");
         t.setTitle("안녕");
