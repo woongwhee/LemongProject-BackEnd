@@ -1,0 +1,24 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="replyMapper">
+
+    <!-- REPLY 테이블  -->
+    <resultMap type="Reply" id="replyResultSet">
+        <result column="REPLY_NO" property="replyNo"></result>
+        <result column="USER_NO" property="userNo"></result>
+        <result column="FEED_NO" property="feedNo"></result>
+        <result column="REPLY_CONTENT" property="replyContent"></result>
+        <result column="REPLY_AT" property="replyAt"></result>
+    </resultMap>
+
+    <select id="selectFeedReply" resultMap="replyResultSet">
+        SELECT *
+        FROM REPLY
+        WHERE USER_NO = 2
+        AND FEED_NO = 11
+        AND REPLY_NO = 31
+    </select>
+
+
+</mapper>
