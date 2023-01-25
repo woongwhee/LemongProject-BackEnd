@@ -112,16 +112,16 @@ public class MemberController {
 
 
     // 이메일 전송
-    @PostMapping("join/chEmail")
-    public ResponseBody<Member> chEmail(@RequestBody Member m) {
-        int result = memberService.checkEmail(m);
-        System.out.print(result);
-        if(result > 0) {
-            return ResponseBuilder.success(result);
-        } else {
-            return ResponseBuilder.errorChEmail(result);
-        }
-    }
+//    @PostMapping("join/chEmail")
+//    public ResponseBody<Member> chEmail(@RequestBody Member m) {
+//        int result = memberService.checkEmail(m);
+//        System.out.print(result);
+//        if(result > 0) {
+//            return ResponseBuilder.success(result);
+//        } else {
+//            return ResponseBuilder.errorChEmail(result);
+//        }
+//    }
 
 
 
