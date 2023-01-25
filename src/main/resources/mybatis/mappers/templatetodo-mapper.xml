@@ -2,5 +2,51 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="templateTodoMapper">
+    <resultMap id="templateTodoMap" type="TemplateTodo">
+        <id property="tpTodoNo" column="TP_TODO_NO"/>
+        <result property="templateNo" column="TEMPLATE_NO"/>
+        <result property="value" column="VALUE"/>
+        <result property="day" column="DAY"/>
+        <result property="content" column="CONTENT"/>
 
+    </resultMap>
+    <insert id="insertOne" parameterType="TemplateTodo">
+        <selectKey resultType="long" keyProperty="tpTodoNo" order="BEFORE">
+            SELECT SEQ_TEMPLATE_TODO.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TEMPLATE_TODO (TP_TODO_NO,TEMPLATE_NO,DAY,CONTENT,VALUE)
+        VALUES(#{tpTodoNo},#{templateNo},#{day},#{content},(SELECT NVL(Max(value),0) + 1
+        FROM TEMPLATE_TODO
+        WHERE DAY=#{day} AND TEMPLATE_NO=#{templateNo}))
+    </insert>
+    <select id="findByTemplate" parameterType="Integer" resultMap="templateTodoMap">
+        SELECT * FROM TEMPLATE_TODO WHERE TEMPLATE_NO = #{templateNo}
+        ORDER BY DAY,VALUE
+    </select>
+    <select id="findOne" parameterType="long" resultMap="templateTodoMap">
+        SELECT * FROM TEMPLATE_TODO WHERE TP_TODO_NO = #{tpTodoNo}
+    </select>
+    <update id="updateOne" parameterType="TemplateTodo">
+        UPDATE TEMPLATE_TODO
+            SET CONTENT = #{content}
+        WHERE TP_TODO_NO=#{tpTodoNo}
+    </update>
+    <delete id="deleteOne" parameterType="TemplateTodo">
+        DELETE TEMPLATE_TODO WHERE TP_TODO_NO=#{tpTodoNo}
+    </delete>
+    <update id="afterDelete" parameterType="TemplateTodo">
+        UPDATE TEMPLATE_TODO
+        SET VALUE = VALUE-1
+        WHERE TEMPLATE_NO=#{templateNo} AND VALUE>#{value} AND DAY=#{day}
+    </update>
+    <delete id="deleteTemplate" parameterType="Integer">
+        DELETE TEMPLATE_TODO
+        WHERE TEMPLATE_NO=#{templateNo}
+    </delete>
+    <delete id="deleteUnSave" parameterType="Integer">
+        DELETE TEMPLATE_TODO
+        WHERE TEMPLATE_NO=
+        (SELECT TEMPLATE_NO FROM TEMPLATE
+        WHERE TP_CREATER=#{userNo} AND SAVE_STATUS=0)
+    </delete>
 </mapper>
