@@ -2,7 +2,6 @@ package site.lemongproject.common.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -11,13 +10,12 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,6 +25,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableScheduling
 @Configuration
+@ComponentScan(basePackages = "site.lemongproject")
 public class ApplicationConfig {
     @Autowired private ApplicationContext applicationContext;
 
@@ -50,6 +49,7 @@ public class ApplicationConfig {
 
     @Bean
     public ObjectMapper objectMapper(){
+
         return new ObjectMapper();
     }
 

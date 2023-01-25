@@ -21,4 +21,17 @@
         FROM FEED
         WHERE USER_NO = 2
     </select>
+<!-- 피드 게시물  -->
+    <select id="selectFeed" resultMap="feedResultSet">
+        SELECT * FROM FEED
+    </select>
+
+<!-- 피드 작성  -->
+    <insert id="insertFeed" parameterType="Map">
+        INSERT INTO FEED (FEED_NO, USER_NO, FEED_CONTENT, FEED_AT) VALUES
+        (SEQ_FEED.nextval,#{userNo},#{feedContent},sysdate)
+    </insert>
+
+
+
 </mapper>
