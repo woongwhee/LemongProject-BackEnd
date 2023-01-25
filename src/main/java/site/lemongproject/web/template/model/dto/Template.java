@@ -15,8 +15,10 @@ public class Template {
     private boolean saveStatus;//true: 작성완료 false : 임시저장
     private int todoCount;
     private int clearCount;
-    private int challengeCount;
+    private int playCount;
     private TemplateCategory templateCategory;
     private Profile profile;
     private List<TemplateTodo> todoList;
+    private int categoryNo;
+
 }
