@@ -18,9 +18,9 @@ public class TodoServiceImpl implements TodoService {
         return todoDao.selectToDo();
     }
 
-    public int insertTodo(Todo t){
+    public int insertTodo(Todo t, List<Todo> tdl){
 
-        return todoDao.insertTodo(t);
+        return todoDao.insertTodo(t, tdl);
     }
 
     public int updateTodo(){

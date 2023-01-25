@@ -8,7 +8,7 @@ public interface TodoService {
 
     List<Todo> selectToDo();
 
-    int insertTodo(Todo t);
+    int insertTodo(Todo t, List<Todo> tdl);
 
     int updateTodo();
 }
