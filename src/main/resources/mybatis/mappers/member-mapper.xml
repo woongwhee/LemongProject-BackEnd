@@ -4,18 +4,43 @@
 
 <mapper namespace="memberMapper">
 
-<!--    <resultMap id="member" type="memberResultSet">-->
-<!--        <result column="" property="" />-->
-<!--    </resultMap>-->
+    <resultMap type="member" id="memberResultSet">
+        <result column="USER_NO" property="userNo" />
+        <result column="EMAIL" property="email" />
+        <result column="USER_PWD" property="userPwd" />
+        <result column="SOCIAL_TYPE" property="socialType" />
+        <result column="ACCESS_TOKEN" property="accessToken" />
+        <result column="STATUS" property="status" />
+        <result column="USER_NAME" property="userName" />
+        <result column="NICK_NAME" property="nickName" />
+    </resultMap>
 
 
-<!--    &lt;!&ndash;  로그인  &ndash;&gt;-->
-<!--    <select id="loginMember" resultMap="memberResultSet">-->
-<!--        SELECT *-->
-<!--        FROM MEMBER-->
-<!--        WHERE USER_ID = #{userId}-->
-<!--        AND STATUS = 'Y'-->
-<!--    </select>-->
+    <!--  로그인  -->
+    <select id="loginMember" parameterType="Member" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE EMAIL = #{email}
+        AND USER_PWD = #{userPwd}
+        AND STATUS = '1'
+    </select>
+
+
+    <!--  회원가입  -->
+    <insert id="insertMember" parameterType="Member">
+        INSERT INTO MEMBER (USER_NO, EMAIL, USER_PWD, STATUS, USER_NAME, NICK_NAME)
+        VALUES (SEQ_MEMBER.NEXTVAL, #{email}, #{userPwd}, DEFAULT, #{userName}, #{nickName})
+    </insert>
+
+
+    <!--  닉네임 중복 체크  -->
+    <select id="checkNick" parameterType="Member" resultType="int">
+        SELECT COUNT(*)
+        FROM MEMBER
+        WHERE NICK_NAME = #{nickName}
+    </select>
+
+
 
 
 </mapper>
