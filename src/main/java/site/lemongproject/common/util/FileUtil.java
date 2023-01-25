@@ -1,5 +1,6 @@
 package site.lemongproject.common.util;
 
+import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.web.photo.model.vo.Photo;
@@ -7,6 +8,8 @@ import site.lemongproject.web.photo.model.vo.Photo;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 @Component
@@ -17,26 +20,19 @@ public class FileUtil {
         this.SAVE_PATH =System.getProperty("catalina.home")+"/webapps";;
     }
 
-    public Photo saveFile(MultipartFile m, Photo p){
+    public Photo saveFile(MultipartFile m,Photo p){
         String creatPath=createFilePath();
-        String realPath = SAVE_PATH+ creatPath;
-            String changeName = rename(m.getOriginalFilename());
-            String filePath = realPath + "/" + changeName;
-
-            try (InputStream fis = m.getInputStream();
-                 OutputStream fos = new FileOutputStream(filePath);) {
-                byte[] buf = new byte[1024];
-                int len = 0;
-                while ((len = fis.read(buf, 0, 1024)) != -1) {
-                    fos.write(buf, 0, len);
-                }
-                p = new Photo();
-                p.setOriginName(m.getOriginalFilename()); // ex) 원본파일명 ("스프링.jpg")
-                p.setChangeName(changeName); // ex) 2022101719265511111.jpg
-                p.setFilePath(creatPath); // ex) /resources/images/userProfile/스프링로고.jpg
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        String changeName=rename(m.getOriginalFilename());
+        String filePath = SAVE_PATH+ creatPath +"/"+ changeName;
+        try{
+            m.transferTo(new File(filePath));
+            p=new Photo();
+            p.setOriginName(m.getOriginalFilename());
+            p.setChangeName(changeName);
+            p.setFilePath(creatPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return p;
     }
 

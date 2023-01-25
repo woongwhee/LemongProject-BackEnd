@@ -16,14 +16,35 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     final private MemberDao memberDao;
+    public MemberServiceImpl(MemberDao memberDao) {
+        this.memberDao = memberDao;
+//      this.sqlSession = sqlSession;
+    }
 
     public Member loginMember(Member m) {
+
         Member loginUser = memberDao.loginMember(m);
+        System.out.println("서비스 : " + loginUser);
         return loginUser;
     }
+
+
+    public int insertMember(Member m) {
+        int result = memberDao.insertMember(m);
+        System.out.println("dao 실행 : " + result);
+        return result;
+    }
+
+
+    public int checkNick(Member m) {
+        int result = memberDao.checkNick(m);
+        System.out.println("dao 실행: "+result);
+        return result;
+    }
+
 
     @Override
     public List<Profile> selectMyProList() {
