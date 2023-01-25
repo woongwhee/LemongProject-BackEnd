@@ -3,10 +3,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.feed.model.service.FeedService;
 import site.lemongproject.web.feed.model.vo.Feed;
+import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.reply.model.vo.Reply;
 
 
@@ -46,7 +48,7 @@ public class FeedController {
         Map<String, Object> result = new HashMap<>();
 
         if(check > 0){
-            result.put("Java","success");
+            ResponseBuilder.success(result);
         }else{
             result.put("Java","fail");
         }
@@ -147,6 +149,19 @@ public class FeedController {
 //-- 좋아요 취소
 //    DELETE FROM HEART WHERE USER_NO = USER_NO AND REF_NO=FEED_NO;
 //
+//@RequestMapping(value="/insertUserProfile")
+////    @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
+//public ResponseBody<Photo> insertUserProfile(
+//        @RequestParam(value="file", required=false) MultipartFile[] files) {
+//
+//    Photo p = new Photo();
+//    p.setUserNo(2);
+//    fileUtil.saveFile(files[0], p);
+//    int result = memberService.insertUserProfile(p);
+////        if(result>0){
+////        }
+//    return ResponseBuilder.success(p);
+//}
 
 
 

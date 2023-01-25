@@ -188,9 +188,9 @@ public class MemberController {
         p.setUserNo(2);
         fileUtil.saveFile(files[0], p);
         int result = memberService.insertUserProfile(p);
-//        if(result>0){
+//        if (result > 0) {
+//
 //        }
         return ResponseBuilder.success(p);
     }
-
-    }
+}
