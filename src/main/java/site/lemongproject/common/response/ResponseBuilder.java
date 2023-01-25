@@ -23,7 +23,7 @@ public class ResponseBuilder{
     // 회원가입 실패
     public static ResponseBody unJoin(int num) {
         ResponseBody response = new ResponseBody();
-        response.setCode("400");
+        response.setCode("4001");
         response.setMessage("UNJOIN");
         response.setResult(num);
         return response;
@@ -32,8 +32,18 @@ public class ResponseBuilder{
     // 닉네임 중복
     public static ResponseBody unAbleNic(int num) {
         ResponseBody response = new ResponseBody();
-        response.setCode("403");
-        response.setMessage("UNJOIN");
+        response.setCode("4003");
+        response.setMessage("UNABLENIC");
+        response.setResult(num);
+        return response;
+    }
+
+
+    // 이메일 전송
+    public static ResponseBody errorChEmail(int num) {
+        ResponseBody response = new ResponseBody();
+        response.setCode("4005");
+        response.setMessage("ERRORCHEMAIL");
         response.setResult(num);
         return response;
     }
