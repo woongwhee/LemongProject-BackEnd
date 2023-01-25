@@ -10,7 +10,10 @@
   </context-param>
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>site.lemongproject.common.config.ApplicationConfig</param-value>
+    <param-value>
+      site.lemongproject.common.config.ApplicationConfig
+      /WEB-INF/springconfig/spring-security.xml
+    </param-value>
   </context-param>
 
   <!-- Creates the Spring Container shared by all Servlets and Filters -->

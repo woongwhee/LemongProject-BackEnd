@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.naming.NamingException;
@@ -77,6 +78,11 @@ public class ApplicationConfig {
         dataSource.setMinIdle(Integer.parseInt(properties.getProperty("minIdle")));
         dataSource.setMaxIdle(Integer.parseInt(properties.getProperty("maxIdle")));
         return dataSource;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }
