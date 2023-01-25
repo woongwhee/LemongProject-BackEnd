@@ -30,7 +30,6 @@ public class FeedController {
     // feed 전체 불러오기
     @RequestMapping("/main")
     public ResponseBody<List<Feed>> feedSelect(){
-
         List<Feed> list = feedService.selectFeed();
 
         return ResponseBuilder.success(list);
@@ -130,7 +129,7 @@ public class FeedController {
 //
 //-- 좋아요 취소
 //    DELETE FROM HEART WHERE USER_NO = USER_NO AND REF_NO=FEED_NO;
-
+//
 
 
 
