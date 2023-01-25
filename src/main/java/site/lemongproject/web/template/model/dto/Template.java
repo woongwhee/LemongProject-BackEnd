@@ -8,7 +8,6 @@ import java.util.List;
 @Data
 public class Template {
     private int templateNo;
-    private Profile profile;
     private Integer range;
     private String title;
     private String content;
@@ -17,5 +16,7 @@ public class Template {
     private int todoCount;
     private int clearCount;
     private int challengeCount;
+    private TemplateCategory templateCategory;
+    private Profile profile;
     private List<TemplateTodo> todoList;
 }
