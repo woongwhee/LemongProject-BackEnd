@@ -47,4 +47,9 @@ public class FeedServiceImpl implements FeedService{
     public int deleteFeed(Map<String,Object> deleteFeedNo){
         return feedDao.deleteFeed(deleteFeedNo);
     }
+
+    @Override
+    public int deleteReply(Map<String,Object> data){
+        return feedDao.deleteReply(data);
+    }
 }
