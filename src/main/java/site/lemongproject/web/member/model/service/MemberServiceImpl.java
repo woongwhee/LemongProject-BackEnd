@@ -34,4 +34,12 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
+
+    public int checkNick(Member m) {
+        int result = memberDao.checkNick(m);
+        System.out.println("dao 실행: "+result);
+        return result;
+    }
+
+
 }

@@ -11,6 +11,7 @@ public class ResponseBuilder{
         return response;
     }
 
+    // 로그인 실패
     public static ResponseBody unLogin(Object o){
         ResponseBody response=new ResponseBody();
         response.setCode("4000");
@@ -19,6 +20,7 @@ public class ResponseBuilder{
         return response;
     }
 
+    // 회원가입 실패
     public static ResponseBody unJoin(int num) {
         ResponseBody response = new ResponseBody();
         response.setCode("400");
@@ -26,6 +28,17 @@ public class ResponseBuilder{
         response.setResult(num);
         return response;
     }
+
+    // 닉네임 중복
+    public static ResponseBody unAbleNic(int num) {
+        ResponseBody response = new ResponseBody();
+        response.setCode("403");
+        response.setMessage("UNJOIN");
+        response.setResult(num);
+        return response;
+    }
+    
+    
 
 
 }
