@@ -1,0 +1,69 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="todoMapper">
+
+    <resultMap type="Todo" id="todoResultSet">
+        <result column="TODO_NO" property="todoNo" />
+        <result column="TODO_DATE" property="todoDate" />
+        <result column="USER_NO" property="userNo" />
+        <result column="TODO_CONTENT" property="todoContent" />
+        <result column="CLEAR" property="todoClear" />
+        <result column="VALUE" property="todoValue" />
+    </resultMap>
+
+    <select id="selectTodo" resultType="Todo">
+        SELECT TODO_NO,
+               TODO_DATE,
+               TODO_CONTENT
+        FROM TODO
+        WHERE USER_NO = 1
+    </select>
+
+    <insert id="insertTodo" parameterType="Todo">
+        <selectKey keyProperty="todoNo" resultType="int" order="BEFORE">
+            SELECT SEQ_TODO.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TODO(
+                        TODO_NO,
+                        USER_NO,
+                        TODO_CONTENT,
+                        CLEAR,
+                        VALUE,
+                        TODO_DATE
+                        )
+        VALUE (
+                #{todoNo},
+                #{userNo},
+                #{todoContent},
+                #{clear},
+                #{value},
+                #{todoDate}
+        )
+
+
+    </insert>
+    
+<!--    <update id="updateTodo" parameterType="int">-->
+<!--        UPDATE TODO_CONTENT-->
+<!--        FROM TODO-->
+<!--        WHERE USER_NO = {}-->
+<!--    </update>-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>
