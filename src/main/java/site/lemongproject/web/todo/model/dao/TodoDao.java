@@ -17,7 +17,7 @@ public class TodoDao {
         return sqlSession.selectList("todoMapper.selectTodo");
     }
 
-    public int insertTodo(Todo t){
+    public int insertTodo(Todo t, List<Todo> tdl){
         return  sqlSession.insert("todoMapper.insertTodo");
     }
 
