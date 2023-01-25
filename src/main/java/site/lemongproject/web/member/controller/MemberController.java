@@ -3,29 +3,26 @@ package site.lemongproject.web.member.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.RequestEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.FileUtil;
-import site.lemongproject.common.response.ResponseBody;
-import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.Member;
+import site.lemongproject.web.member.model.vo.Profile;
+import site.lemongproject.web.photo.model.vo.Photo;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
 
     final private MemberService memberService;
+    final private FileUtil fileUtil;
 
     // 로그인
     @PostMapping("login")
@@ -68,8 +65,7 @@ public class MemberController {
         if(result > 0) {
             return ResponseBuilder.success(result);
         } else {
-            session.setAttribute("loginUser", loginUser);
-            mv.setViewName("redirect:/");
+            return ResponseBuilder.unJoin(result);
         }
     }
 
@@ -140,36 +136,16 @@ public class MemberController {
     // 유저 프로필 INSERT. => 웅휘형이 만든 FileUtil로 빼기 => rename(m.getOriginalFilename()) 오류 고치기.
     @RequestMapping(value="/insertUserProfile")
 //    @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
-    public int insertUserProfile(
-            @RequestParam(value="file", required=false) MultipartFile[] files){
-
-        String webPath = "/resources/images/userProfile/";
-
-        int result = 0;
+    public ResponseBody<Photo> insertUserProfile(
+            @RequestParam(value="file", required=false) MultipartFile[] files) {
 
         Photo p = new Photo();
+        p.setUserNo(2);
+        fileUtil.saveFile(files[0], p);
+        int result = memberService.insertUserProfile(p);
+//        if(result>0){
+//        }
+        return ResponseBuilder.success(p);
+    }
 
-        for (MultipartFile mf : files) {
-
-            String originFileName = mf.getOriginalFilename(); // 원본 파일 명
-            long fileSize = mf.getSize(); // 파일 사이즈
-            System.out.println("originFileName : " + originFileName);
-            System.out.println("fileSize : " + fileSize);
-
-            // 1. 원본 파일명 뽑기.
-            String originName= mf.getOriginalFilename();
-
-            // 2. 시간 형식을 문자열로 뽑아오기.
-            // 년월일시분초
-            String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-
-            // 3. 뒤에 붙을 5자리 랜덤값 뽑기.
-            int random = (int)(Math.random() * 90000 + 10000); // 5자리 랜덤값
-
-            // 4. 원본파일명으로부터 확장자명 뽑기.
-            // .jpg
-            String ext = originName.substring(originName.lastIndexOf("."));
-
-
-
-}
+    }

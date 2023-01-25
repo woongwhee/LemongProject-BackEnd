@@ -8,6 +8,7 @@ import site.lemongproject.web.feed.model.vo.Feed;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -16,12 +17,18 @@ public class FeedServiceImpl implements FeedService{
     final private FeedDao feedDao;
 
     @Override
-    public ArrayList selectFeed() {
-        return null;
+    public List selectFeed() {
+        return feedDao.selectFeed();
     }
 
     @Override
-    public List<Feed> selectMyFeed(){
-        return feedDao.selectMyFeed();
+    public int insertFeed(Map<String, Object> paramMap){
+        return feedDao.insertFeed(paramMap);
     }
+
+    @Override
+    public int insertFeedReply(Map<String, Object> paramMap){
+        return feedDao.insertFeedReply(paramMap);
+    }
+
 }

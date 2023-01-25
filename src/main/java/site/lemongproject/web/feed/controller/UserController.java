@@ -1,7 +1,6 @@
 package site.lemongproject.web.feed.controller;
 
 import org.springframework.web.bind.annotation.*;
-import site.lemongproject.web.feed.domain.vo.User;
 
 @RestController
 public class UserController {

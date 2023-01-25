@@ -1,12 +1,13 @@
 package site.lemongproject.web.feed.controller;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
-import site.lemongproject.web.feed.domain.service.FeedService;
-import site.lemongproject.web.feed.domain.vo.Feed;
-import site.lemongproject.web.feed.domain.vo.Reply;
+import site.lemongproject.web.feed.model.service.FeedService;
+import site.lemongproject.web.feed.model.vo.Feed;
+
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,14 +18,12 @@ import java.util.logging.Logger;
 
 @RequestMapping("/feed")
 @RestController
+@RequiredArgsConstructor
 public class FeedController {
 
 
-    private FeedService feedService;
+    final private FeedService feedService;
 
-    public FeedController(FeedService feedService) {
-        this.feedService = feedService;
-    }
 
     // feed 전체 불러오기
     @RequestMapping("/main")

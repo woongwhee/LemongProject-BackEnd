@@ -1,4 +1,4 @@
-package site.lemongproject.web.feed.domain.vo;
+package site.lemongproject.web.feed.model.vo;
 
 import lombok.Data;
 

@@ -45,22 +45,19 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
-
     @Override
     public List<Profile> selectMyProList() {
-        return memberDao.selectMyProList();
+        return null;
     }
 
-//    public Profile selectMyProList(int userNo){
-//        return memberDao.selectProfile(userNo);
-//    }
-
-    public List<Member> selectUser(){
-        return memberDao.selectUser();
+    @Override
+    public List<Member> selectUser() {
+        return null;
     }
 
-    public int updateUser(String nickName){
-        return memberDao.updateUser(nickName);
+    @Override
+    public int updateUser(String nickName) {
+        return 0;
     }
 
     @Override
@@ -68,29 +65,35 @@ public class MemberServiceImpl implements MemberService {
         return 0;
     }
 
-    public int updateComment(String comment){
-        return memberDao.updateComment(comment);
+    @Override
+    public int updateComment(String comment) {
+        return 0;
     }
 
     @Override
     public int insertUserProfile(Photo p) {
-        return memberDao.insertUserProfile(p);
+        return 0;
     }
 
-    public int myupdatePwd(String upPwd){
-        return memberDao.myupdatePwd(upPwd);
+    @Override
+    public int myupdatePwd(String upPwd) {
+        return 0;
     }
 
-    public List<Photo> selectMyProfile(){
-        return memberDao.selectMyProfile();
+    @Override
+    public List<Photo> selectMyProfile() {
+        return null;
     }
 
-    public int updateUserProfile(Photo p){
-        return memberDao.updateUserProfile(p);
+    @Override
+    public int updateUserProfile(Photo p) {
+        return 0;
     }
 
-    public int deleteUser(){
-        return memberDao.deleteUser();
+    @Override
+    public int deleteUser() {
+        return 0;
     }
+
 
 }

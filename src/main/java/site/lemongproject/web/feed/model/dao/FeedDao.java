@@ -1,10 +1,9 @@
-package site.lemongproject.web.feed.domain.dao;
+package site.lemongproject.web.feed.model.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import site.lemongproject.web.feed.domain.vo.Feed;
+import site.lemongproject.web.feed.model.vo.Feed;
 
 import java.util.List;
 import java.util.Map;
