@@ -116,7 +116,6 @@
         SELECT *
         FROM MEMBER
         WHERE EMAIL = #{email}
-        AND USER_PWD = #{userPwd}
         AND STATUS = '1'
     </select>
 
