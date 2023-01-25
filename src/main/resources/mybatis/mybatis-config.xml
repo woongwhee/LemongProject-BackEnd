@@ -23,7 +23,6 @@
 
     <mappers>
         <mapper resource="mybatis/mappers/member-mapper.xml"/>
-        <mapper resource="mybatis/mappers/reply-mapper.xml"/>
         <mapper resource="mybatis/mappers/template-mapper.xml"/>
         <mapper resource="mybatis/mappers/templatetodo-mapper.xml"/>
         <mapper resource="mybatis/mappers/templatecategory-mapper.xml"/>
