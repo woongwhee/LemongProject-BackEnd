@@ -12,6 +12,7 @@ public interface TemplateDao {
     int uploadTemp(int userNo);
 
     List<Template> findList(int categoryNo, int page, int limit);
+    Template findOne(int templateNo);
 
     int countTemplate(int categoryNo);
 
