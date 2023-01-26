@@ -68,6 +68,13 @@ public class PublicController {
         String originPwd = String.valueOf(m.get("userPwd"));
         System.out.println("암호화 전 비밀번호 : " + originPwd);
 
+        // 비밀번호 암호화
+        String encPwd = bCryptPasswordEncoder.encode(originPwd);
+
+        // 암호화된 비밀번호 setting 해주기
+        m.put("userPwd", encPwd);
+        System.out.println(m.get("userPwd"));
+
         int result = memberService.insertMember(m);
         System.out.println(result);
 
