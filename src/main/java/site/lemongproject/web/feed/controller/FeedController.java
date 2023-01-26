@@ -1,11 +1,13 @@
 package site.lemongproject.web.feed.controller;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
+import site.lemongproject.common.util.FileUtil;
 import site.lemongproject.web.feed.model.service.FeedService;
 import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
@@ -148,20 +150,22 @@ public class FeedController {
 //
 //-- 좋아요 취소
 //    DELETE FROM HEART WHERE USER_NO = USER_NO AND REF_NO=FEED_NO;
-//
-//@RequestMapping(value="/insertUserProfile")
-////    @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
-//public ResponseBody<Photo> insertUserProfile(
-//        @RequestParam(value="file", required=false) MultipartFile[] files) {
-//
-//    Photo p = new Photo();
-//    p.setUserNo(2);
-//    fileUtil.saveFile(files[0], p);
-//    int result = memberService.insertUserProfile(p);
-////        if(result>0){
-////        }
-//    return ResponseBuilder.success(p);
-//}
+    @RequestMapping(value = "/feedPhoto", method = RequestMethod.POST)
+    public ResponseBody<Photo> feedPhoto(@RequestBody MultipartFile[] files){
+        System.out.println(files) ;
+
+        Photo p = new Photo();
+        FileUtil fileUtil = new FileUtil();
+
+        p.setUserNo(3);
+        fileUtil.saveFile(files[0], p);
+
+        int result = feedService.insertFeedPhoto(p);
+        System.out.println(result);
+
+        return ResponseBuilder.success(p);
+
+    }
 
 
 

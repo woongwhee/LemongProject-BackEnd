@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.feed.model.vo.Feed;
+import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.reply.model.vo.Reply;
 
 
@@ -44,4 +45,9 @@ public class FeedDao {
     public int insertFeedReply(Map<String,Object> paramMap){
         return sqlSession.insert("replyMapper.insertFeedReply", paramMap);
     }
+
+    public int insertFeedPhoto(Photo p){
+        return sqlSession.insert("feedMapper.insertFeedPhoto", p);
+    }
+
 }
