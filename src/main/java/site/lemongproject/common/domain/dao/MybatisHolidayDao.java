@@ -5,7 +5,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.common.domain.dto.OfficialHoliday;
 
+import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
@@ -17,7 +19,16 @@ public class MybatisHolidayDao implements HolidayDao {
         for (OfficialHoliday holiday : holidays) {
         result+=session.insert( "holidayMapper.insertMany",holiday);
         }
-        System.out.println(result);
         return  result;
+    }
+    @Override
+    public List<OfficialHoliday> findByMonth(Date month){
+        return session.selectList("holidayMapper.findByMonth",month);
+
+    }
+
+    @Override
+    public List<OfficialHoliday> findByPeriod(Map<String, Date> periodMap){
+        return session.selectList("holidayMapper.findByMonth",periodMap);
     }
 }
