@@ -8,22 +8,29 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import site.lemongproject.common.domain.dto.MailMessage;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
+import site.lemongproject.common.util.MailUtil;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.Member;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 @RestController
+@RequestMapping("member")
 @RequiredArgsConstructor
 public class MemberController {
 
     final private MemberService memberService;
 
     final private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    final private MailUtil mailUtil;
 
     // 로그인
     @PostMapping("login")
@@ -44,20 +51,7 @@ public class MemberController {
 
             참고 사이트) https://annajin.tistory.com/107
         */
-//        System.out.println(request.getParameterNames());
-
-        // 암호화 전
         Member loginUser = memberService.loginMember(m);
-//        if(loginUser!=null){
-//            System.out.println("컨트롤러 넘어옴");
-//            System.out.println(ResponseBuilder.success(loginUser));
-//            return ResponseBuilder.success(loginUser);
-//        }else{
-//            System.out.println("컨트롤러 못 넘어옴");
-//            return ResponseBuilder.unLogin(null);
-//        }
-//        System.out.println(loginUser);
-
 
         // 암호화 후
         if(loginUser != null && bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())) {
@@ -73,55 +67,100 @@ public class MemberController {
 
 
     // 회원가입
+    // 테스팅
     @PostMapping("join")
-    public ResponseBody<Member> insertMember(@RequestBody Member m, HttpSession session) {
-
-        System.out.println("암호화 전 비밀번호 : " + m.getUserPwd());
-
-        // 암호화 작업
-        String encPwd = bCryptPasswordEncoder.encode(m.getUserPwd());
-
-        // 암호화된 비밀번호를 Member m에 담아주기
-        m.setUserPwd(encPwd);
-        System.out.println("암호화 후 비밀번호 : " + m.getUserPwd());
+    public ResponseBody<Map<String, Object>> insertMember(@RequestBody Map<String, Object> m) {
+        System.out.println(m);
+        String originPwd = String.valueOf(m.get("userPwd"));
+        System.out.println("암호화 전 비밀번호 : " + originPwd);
 
         int result = memberService.insertMember(m);
-        System.out.println(m);
-        System.out.println(result);
 
         if(result > 0) {
             return ResponseBuilder.success(result);
         } else {
             return ResponseBuilder.unJoin(result);
         }
+
+        // 암호화 작업
+//        String encPwd = bCryptPasswordEncoder.encode(originPwd);
+
+
     }
+
+
+
+//    @PostMapping("join")
+//    public ResponseBody<Member> insertMember(@RequestBody Member m,
+//                                             @RequestBody String nick,
+//                                             HttpSession session) {
+//
+//        System.out.println("암호화 전 비밀번호 : " + m.getUserPwd());
+//
+//        // 암호화 작업
+//        String encPwd = bCryptPasswordEncoder.encode(m.getUserPwd());
+//
+//        // 암호화된 비밀번호를 Member m에 담아주기
+//        m.setUserPwd(encPwd);
+//        System.out.println("암호화 후 비밀번호 : " + m.getUserPwd());
+//
+//        int result = memberService.insertMember(m);
+//        System.out.println(m);
+//        System.out.println(result);
+//
+//        if(result > 0) {
+//            return ResponseBuilder.success(result);
+//        } else {
+//            return ResponseBuilder.unJoin(result);
+//        }
+//    }
 
 
     // 닉네임 체크
-    @PostMapping("join/chNick")
-    public ResponseBody<Member> checkNick(@RequestBody Member m) {
-        int result = memberService.checkNick(m);
-        System.out.println(m.getNickName());
-        System.out.println(result);
-        if(result > 0) {
-            return ResponseBuilder.unAbleNic(result);
-        } else {
-            return ResponseBuilder.success(result);
-        }
-    }
+//    @PostMapping("join/chNick")
+//    public ResponseBody<Member> checkNick(@RequestBody Member m) {
+//        int result = memberService.checkNick(m);
+//        System.out.println(m.getNickName());
+//        System.out.println(result);
+//        if(result > 0) {
+//            return ResponseBuilder.unAbleNic(result);
+//        } else {
+//            return ResponseBuilder.success(result);
+//        }
+//    }
 
 
     // 이메일 전송
 //    @PostMapping("join/chEmail")
-//    public ResponseBody<Member> chEmail(@RequestBody Member m) {
-//        int result = memberService.checkEmail(m);
-//        System.out.print(result);
-//        if(result > 0) {
-//            return ResponseBuilder.success(result);
-//        } else {
-//            return ResponseBuilder.errorChEmail(result);
+//    public ResponseBody<Member> checkEmail(@RequestBody Member m) {
+//
+//        Random random = new Random();
+//        int createNum = 0; // 1자리 난수
+//        String ranNum = ""; // 1자리 난수 형변환 변수
+//        int letter = 6; // 6자리 난수
+//        String resultNum = "";
+//
+//        for(int i=0; i<letter; i++) {
+//            createNum = random.nextInt(9);
+//            ranNum = Integer.toString(createNum);
+//            resultNum += ranNum;
 //        }
+//
+//        String email = m.getEmail();
+//        String subject = "[LEMONG] 회원가입 인증번호 입니다.";
+//        String message = "회원가입을 위하여 아래의 인증 번호를 입력해주세요. \n\n" + resultNum;
+//
+//        MailMessage mail = new MailMessage();
+//        mail.setEmail(email);
+//        mail.setSubject(subject);
+//        mail.setMessage(message);
+//
+//        mailUtil.send(mail);
+//        // send가 됐는지... 어떻게 체크해...? ? ? ? ? ? ? ?
+//        // ?-?
+//        return ResponseBuilder.success(m);
 //    }
+
 
 
 
