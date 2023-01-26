@@ -34,6 +34,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+
     public int insertMember(Map<String, Object> m) {
         int result1 = memberDao.insertMember(m);
         int result2 = profileDao.insertNick(m);

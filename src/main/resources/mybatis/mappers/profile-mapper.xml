@@ -11,4 +11,5 @@
     <select id="selectOne" parameterType="int" resultType="Profile">
         select * from user_profile where user_no=#{userNo}
     </select>
+
 </mapper>
