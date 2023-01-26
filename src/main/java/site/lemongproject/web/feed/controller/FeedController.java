@@ -15,12 +15,11 @@ import site.lemongproject.web.reply.model.vo.Reply;
 
 
 import java.sql.SQLException;
-import java.sql.SQLOutput;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
+
 
 @RequestMapping("/feed")
 @RestController
@@ -169,9 +168,10 @@ public class FeedController {
     }
 
     @RequestMapping(value = "deleteFeedPhoto", method = RequestMethod.POST)
-    public ResponseBody<Photo> feedDeletePhoto(@RequestBody int photoNo){
+    public Map<String,Object> feedDeletePhoto(@RequestBody int photoNo){
         System.out.println(photoNo);
-        return ResponseBuilder.success(photoNo);
+        Map result = new HashMap();
+        return result;
     }
 
 

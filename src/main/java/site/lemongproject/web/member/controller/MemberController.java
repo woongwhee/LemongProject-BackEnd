@@ -80,42 +80,42 @@ public class MemberController {
 
 
     // 회원가입
-    @PostMapping("join")
-    public ResponseBody<Member> insertMember(@RequestBody Member m, HttpSession session) {
-
-        System.out.println("암호화 전 비밀번호 : " + m.getUserPwd());
-
-        // 암호화 작업
-        String encPwd = bCryptPasswordEncoder.encode(m.getUserPwd());
-
-        // 암호화된 비밀번호를 Member m에 담아주기
-        m.setUserPwd(encPwd);
-        System.out.println("암호화 후 비밀번호 : " + m.getUserPwd());
-
-        int result = memberService.insertMember(m);
-        System.out.println(m);
-        System.out.println(result);
-
-        if(result > 0) {
-            return ResponseBuilder.success(result);
-        } else {
-            return ResponseBuilder.unJoin(result);
-        }
-    }
+//    @PostMapping("join")
+//    public ResponseBody<Member> insertMember(@RequestBody Member m, HttpSession session) {
+//
+//        System.out.println("암호화 전 비밀번호 : " + m.getUserPwd());
+//
+//        // 암호화 작업
+//        String encPwd = bCryptPasswordEncoder.encode(m.getUserPwd());
+//
+//        // 암호화된 비밀번호를 Member m에 담아주기
+//        m.setUserPwd(encPwd);
+//        System.out.println("암호화 후 비밀번호 : " + m.getUserPwd());
+//
+//        int result = memberService.insertMember(m);
+//        System.out.println(m);
+//        System.out.println(result);
+//
+//        if(result > 0) {
+//            return ResponseBuilder.success(result);
+//        } else {
+//            return ResponseBuilder.unJoin(result);
+//        }
+//    }
 
 
     // 닉네임 체크
-    @PostMapping("join/chNick")
-    public ResponseBody<Member> checkNick(@RequestBody Member m) {
-        int result = memberService.checkNick(m);
-        System.out.println(m.getNickName());
-        System.out.println(result);
-        if(result > 0) {
-            return ResponseBuilder.unAbleNic(result);
-        } else {
-            return ResponseBuilder.success(result);
-        }
-    }
+//    @PostMapping("join/chNick")
+//    public ResponseBody<Member> checkNick(@RequestBody Member m) {
+//        int result = memberService.checkNick(m);
+//        System.out.println(m.getNickName());
+//        System.out.println(result);
+//        if(result > 0) {
+//            return ResponseBuilder.unAbleNic(result);
+//        } else {
+//            return ResponseBuilder.success(result);
+//        }
+//    }
 
     // 리액트 <-> 스프링 연동 TEST(성공)
     @GetMapping("/hello")
@@ -189,9 +189,6 @@ public class MemberController {
         p.setUserNo(2);
         fileUtil.saveFile(files[0], p);
         int result = memberService.insertUserProfile(p);
-//        if (result > 0) {
-//
-//        }
         return ResponseBuilder.success(p);
     }
 }
