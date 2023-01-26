@@ -12,7 +12,19 @@
         <result property="clearCount" column="CLEAR_COUNT" />
         <result property="playCount" column="PLAY_COUNT" />
         <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
+        <association property="create" javaType="site.lemongproject.web.member.model.vo.Profile" resultMap="profileMapper.profileDetail"/>
+    </resultMap>
+    <resultMap id="templateOne" type="Template">
+        <id column="TEMPLATE_NO" property="templateNo"/>
+        <result column="CATEGORY_NO" property="categoryNo"/>
+        <result column="RANGE" property="range"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+        <result property="clearCount" column="CLEAR_COUNT" />
+        <result property="playCount" column="PLAY_COUNT" />
+        <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
         <association property="profile" resultMap="profileMapper.profileDetail"/>
+        <collection property="todoList" select="reviewMapper.selectOne" javaType="List" column="templateNo"/>
     </resultMap>
     <resultMap id="templateUnSave" type="Template">
         <id column="TEMPLATE_NO" property="templateNo"/>
@@ -69,7 +81,7 @@
         JOIN USER_PROFILE up ON T.TP_CREATER = up.USER_NO
         JOIN PHOTO P ON UP.PHOTO_NO = P.PHOTO_NO
         WHERE T.SAVE_STATUS=1
-        <if test="categoryNo!=null">, CATEGORT_NO=#{categoryNo}</if>
+        <if test="categoryNo>0">, CATEGORT_NO=#{categoryNo}</if>
         ORDER BY T.CREATED_AT DESC
     </select>
     <delete id="deleteTemp" parameterType="int">
