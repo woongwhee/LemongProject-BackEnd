@@ -150,10 +150,10 @@ public class FeedController {
 //
 //-- 좋아요 취소
 //    DELETE FROM HEART WHERE USER_NO = USER_NO AND REF_NO=FEED_NO;
+
+
     @RequestMapping(value = "/feedPhoto", method = RequestMethod.POST)
     public ResponseBody<Photo> feedPhoto(@RequestBody MultipartFile[] files){
-        System.out.println(files) ;
-
         Photo p = new Photo();
         FileUtil fileUtil = new FileUtil();
 
@@ -161,10 +161,17 @@ public class FeedController {
         fileUtil.saveFile(files[0], p);
 
         int result = feedService.insertFeedPhoto(p);
-        System.out.println(result);
+        if(result>0){
+            return ResponseBuilder.success(p);
+        }else {
+            return ResponseBuilder.success(result);
+        }
+    }
 
-        return ResponseBuilder.success(p);
-
+    @RequestMapping(value = "deleteFeedPhoto", method = RequestMethod.POST)
+    public ResponseBody<Photo> feedDeletePhoto(@RequestBody int photoNo){
+        System.out.println(photoNo);
+        return ResponseBuilder.success(photoNo);
     }
 
 
