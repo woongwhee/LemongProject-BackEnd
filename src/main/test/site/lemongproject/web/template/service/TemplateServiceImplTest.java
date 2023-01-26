@@ -5,14 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import site.lemongproject.anotaion.TestRunner;
 import site.lemongproject.common.config.ApplicationConfig;
-import site.lemongproject.test.Configure;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
 import site.lemongproject.web.template.model.dto.Template;
@@ -27,7 +26,10 @@ import static org.assertj.core.api.Assertions.*;
 
 
 @Transactional
-public class TemplateServiceImplTest extends Configure {
+//@TestRunner
+
+@TestRunner
+public class TemplateServiceImplTest {
     @Autowired private TemplateWriteService templateService;
     @Autowired private TemplateDao templateDao;
     @Autowired private TemplateTodoDao templateTodoDao;

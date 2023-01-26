@@ -26,6 +26,7 @@ import java.util.Properties;
 
 @EnableTransactionManagement
 @EnableScheduling
+@EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = "site.lemongproject")
 public class ApplicationConfig {
