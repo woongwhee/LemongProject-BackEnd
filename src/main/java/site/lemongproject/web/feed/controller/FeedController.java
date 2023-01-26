@@ -168,10 +168,12 @@ public class FeedController {
         }
     }
 
-    @RequestMapping(value = "deleteFeedPhoto", method = RequestMethod.POST)
-    public ResponseBody<Photo> feedDeletePhoto(@RequestBody int photoNo){
+//    @RequestMapping(value = "/deleteFeedPhoto", method = RequestMethod.POST)
+    @GetMapping("/deleteFeedPhoto")
+    public Map<String,Object> feedDeletePhoto(@RequestParam int photoNo){
         System.out.println(photoNo);
-        return ResponseBuilder.success(photoNo);
+        Map<String,Object> result = new HashMap<>();
+        return result;
     }
 
 
