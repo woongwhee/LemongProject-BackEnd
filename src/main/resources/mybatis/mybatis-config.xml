@@ -11,6 +11,7 @@
         <typeAlias type="site.lemongproject.web.template.model.dto.Template" alias="Template"/>
         <typeAlias type="site.lemongproject.web.template.model.dto.TemplateCategory" alias="TemplateCategory"/>
         <typeAlias type="site.lemongproject.web.template.model.dto.TemplateTodo" alias="TemplateTodo"/>
+        <typeAlias type="site.lemongproject.web.template.model.dto.Review" alias="Review"/>
         <typeAlias type="site.lemongproject.web.template.model.vo.TemplateUpdateVo" alias="TemplateUpdateVo"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Profile" alias="Profile"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Member" alias="Member"/>
@@ -23,10 +24,11 @@
     <mappers>
         <mapper resource="mybatis/mappers/member-mapper.xml"/>
         <mapper resource="mybatis/mappers/reply-mapper.xml"/>
-        <mapper resource="mybatis/mappers/template-mapper.xml"/>
-        <mapper resource="mybatis/mappers/templatetodo-mapper.xml"/>
-        <mapper resource="mybatis/mappers/templatecategory-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/template-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/templatetodo-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/templatecategory-mapper.xml"/>
         <mapper resource="mybatis/mappers/holiday-mapper.xml"/>
         <mapper resource="mybatis/mappers/feed-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/review-mapper.xml"/>
     </mappers>
 </configuration>

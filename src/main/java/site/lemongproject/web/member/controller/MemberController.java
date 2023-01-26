@@ -25,10 +25,8 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class MemberController {
-
     final private MemberService memberService;
     final private FileUtil fileUtil;
-
     final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 로그인

@@ -12,7 +12,6 @@ import java.util.Map;
 @Repository
 @RequiredArgsConstructor
 public class FeedDao {
-
     final private SqlSession sqlSession;
 
     public List<Feed> selectFeed(){
