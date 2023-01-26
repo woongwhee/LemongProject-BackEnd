@@ -10,6 +10,8 @@ import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.List;
 
+import java.util.Map;
+
 @Repository
 @RequiredArgsConstructor
 public class MemberDao {
@@ -18,13 +20,18 @@ public class MemberDao {
        return sqlSession.selectOne("memberMapper.loginMember",m );
     }
 
-    public int insertMember(Member m) {
+
+    public int insertMember(Map<String, Object> m) {
         return sqlSession.insert("memberMapper.insertMember", m);
     }
 
 
     public int checkNick(Member m) {
         return sqlSession.selectOne("memberMapper.checkNick", m);
+    }
+
+    public int checkEmail(Member m) {
+        return 1;
     }
 
     public Profile selectProfile(int userNo) {

@@ -8,40 +8,53 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.web.member.model.dao.MemberDao;
+import site.lemongproject.web.member.model.dao.MybatisProfileDao;
+import site.lemongproject.web.member.model.dao.ProfileDao;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
+import site.lemongproject.web.member.model.vo.Profile;
 
 import java.util.List;
+import java.sql.Connection;
+import java.util.Map;
 
 @Service
 @Transactional
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     final private MemberDao memberDao;
-    public MemberServiceImpl(MemberDao memberDao) {
-        this.memberDao = memberDao;
-//      this.sqlSession = sqlSession;
-    }
+    final private ProfileDao profileDao;
+
 
     public Member loginMember(Member m) {
-
         Member loginUser = memberDao.loginMember(m);
         System.out.println("서비스 : " + loginUser);
         return loginUser;
     }
 
 
-    public int insertMember(Member m) {
-        int result = memberDao.insertMember(m);
-        System.out.println("dao 실행 : " + result);
+    public int insertMember(Map<String, Object> m) {
+        int result1 = memberDao.insertMember(m);
+        int result2 = profileDao.insertNick(m);
+        System.out.println(result1);
+        System.out.println(result2);
+        int result = result1 * result2;
+        System.out.println("회원가입 dao 실행 : " + result);
         return result;
     }
 
 
     public int checkNick(Member m) {
         int result = memberDao.checkNick(m);
-        System.out.println("dao 실행: "+result);
+        System.out.println("중복 체크 dao 실행: "+result);
+        return result;
+    }
+
+
+    public int checkEmail(Member m) {
+        int result = memberDao.checkEmail(m);
+        System.out.println("인증 번호 dao 실행: "+result);
         return result;
     }
 
