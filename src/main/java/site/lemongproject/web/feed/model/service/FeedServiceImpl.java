@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.vo.Feed;
+import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,5 +48,10 @@ public class FeedServiceImpl implements FeedService{
     @Override
     public int deleteReply(Map<String,Object> data){
         return feedDao.deleteReply(data);
+    }
+
+    @Override
+    public int insertFeedPhoto(Photo p){
+        return feedDao.insertFeedPhoto(p);
     }
 }

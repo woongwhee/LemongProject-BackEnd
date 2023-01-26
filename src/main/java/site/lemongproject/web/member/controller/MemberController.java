@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @RestController
+@RequestMapping("member")
 @RequiredArgsConstructor
 public class MemberController {
 
