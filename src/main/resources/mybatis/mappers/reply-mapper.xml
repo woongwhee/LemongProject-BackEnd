@@ -25,10 +25,14 @@
         INSERT INTO REPLY (REPLY_NO, USER_NO, FEED_NO, REPLY_CONTENT,REPLY_AT) VALUES
         (SEQ_REPLY.nextval, #{userNo}. #{feedNo},#{replyContent},SYSDATE)
     </insert>
-
+<!-- 피드 댓글 달기 -->
     <select id="listReply" resultMap="replyResultSet" parameterType="int">
-        SELECT USER_NO, REPLY_CONTENT, REPLY_AT FROM REPLY
+        SELECT REPLY_NO, USER_NO, REPLY_CONTENT, REPLY_AT FROM REPLY
         WHERE FEED_NO = #{feedNo}
     </select>
+<!-- 피드 댓글 삭제 -->
+    <delete id="deleteReply" parameterType="Map">
+        DELETE FROM REPLY WHERE FEED_NO = #{feedNo} AND REPLY_NO=#{replyNo}
+    </delete>
 
 </mapper>
