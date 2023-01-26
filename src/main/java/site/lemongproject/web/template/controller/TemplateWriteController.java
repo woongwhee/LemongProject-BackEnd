@@ -8,8 +8,8 @@ import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.service.TemplateWriteService;
 
-@RequestMapping("/template/write")
 @RestController
+@RequestMapping("/template/write")
 @RequiredArgsConstructor
 public class TemplateWriteController {
     final private TemplateWriteService templateService;

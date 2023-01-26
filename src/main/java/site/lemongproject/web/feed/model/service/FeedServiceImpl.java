@@ -27,6 +27,16 @@ public class FeedServiceImpl implements FeedService{
     }
 
     @Override
+    public int updateFeed(Map<String,Object> updatefeed){
+        return feedDao.updateFeed(updatefeed);
+    };
+
+    @Override
+    public int deleteFeed(Map<String,Object> deleteFeedNo){
+        return feedDao.deleteFeed(deleteFeedNo);
+    }
+
+    @Override
     public int insertFeedReply(Map<String, Object> paramMap){
         return feedDao.insertFeedReply(paramMap);
     }
@@ -35,12 +45,7 @@ public class FeedServiceImpl implements FeedService{
     public List listReply(int feedNo) {return feedDao.listReply(feedNo);}
 
     @Override
-    public int updateFeed(Map<String,Object> updatefeed){
-        return feedDao.updateFeed(updatefeed);
-    };
-
-    @Override
-    public int deleteFeed(Map<String,Object> deleteFeedNo){
-        return feedDao.deleteFeed(deleteFeedNo);
+    public int deleteReply(Map<String,Object> data){
+        return feedDao.deleteReply(data);
     }
 }
