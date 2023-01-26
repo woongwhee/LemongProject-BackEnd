@@ -28,5 +28,6 @@
         <mapper resource="mybatis/mappers/templatecategory-mapper.xml"/>
         <mapper resource="mybatis/mappers/holiday-mapper.xml"/>
         <mapper resource="mybatis/mappers/feed-mapper.xml"/>
+        <mapper resource="mybatis/mappers/photo-mapper.xml"/>
     </mappers>
 </configuration>

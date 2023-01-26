@@ -1,6 +1,6 @@
 package site.lemongproject.web.member.model.service;
 
-import org.springframework.web.multipart.MultipartFile;
+import site.lemongproject.web.member.model.dto.MyProfileVo;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
@@ -15,22 +15,13 @@ public interface MemberService {
 
      int checkNick(Member m);
 
-
     // 유저 프로필 테이블에서 가져오기
-     List<Profile> selectMyProList();
+    public int insertUserProfile(Photo p);
 
-    // 멤버 테이블에서 가져오기
-     List<Member> selectUser();
+    public List<Photo> selectMyProfile();
 
-    int updateUser(String nickName);
-    int checkNickName(String nickName);
-     int updateComment(String comment);
+    public int updateUserProfile(Photo p);
 
-     int insertUserProfile(Photo p);
 
-     int myupdatePwd(String upPwd);
-
-     List<Photo> selectMyProfile();
-     int updateUserProfile(Photo p);
-     int deleteUser();
+    MyProfileVo getMyProfile(int userNo);
 }

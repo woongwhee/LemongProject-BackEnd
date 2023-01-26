@@ -7,8 +7,13 @@
         <result column="NICK_NAME" property="nickName"/>
         <result column="PHOTO_NO" property="photoNo"/>
         <result column="PROFILE_COMMENT" property="profileComment"/>
+        <association property="profile" resultMap="photoMapper.potoResultSet"/>
     </resultMap>
     <select id="selectOne" parameterType="int" resultType="Profile">
         select * from user_profile where user_no=#{userNo}
+    </select>
+
+    <select id="findOne" parameterType="int" resultType="Profile">
+        select * from user_profile join photo using (photo_NO) photo where user_no=#{userNo}
     </select>
 </mapper>

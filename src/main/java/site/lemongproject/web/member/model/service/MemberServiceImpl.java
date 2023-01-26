@@ -1,13 +1,11 @@
 package site.lemongproject.web.member.model.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.session.SqlSession;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.web.member.model.dao.MemberDao;
+import site.lemongproject.web.member.model.dao.ProfileDao;
+import site.lemongproject.web.member.model.dto.MyProfileVo;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
@@ -16,13 +14,11 @@ import java.util.List;
 
 @Service
 @Transactional
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     final private MemberDao memberDao;
-    public MemberServiceImpl(MemberDao memberDao) {
-        this.memberDao = memberDao;
-//      this.sqlSession = sqlSession;
-    }
+    final private ProfileDao profileDao;
+
 
     public Member loginMember(Member m) {
 
@@ -31,13 +27,11 @@ public class MemberServiceImpl implements MemberService {
         return loginUser;
     }
 
-
     public int insertMember(Member m) {
         int result = memberDao.insertMember(m);
         System.out.println("dao 실행 : " + result);
         return result;
     }
-
 
     public int checkNick(Member m) {
         int result = memberDao.checkNick(m);
@@ -46,54 +40,21 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Profile> selectMyProList() {
-        return null;
-    }
-
-    @Override
-    public List<Member> selectUser() {
-        return null;
-    }
-
-    @Override
-    public int updateUser(String nickName) {
-        return 0;
-    }
-
-    @Override
-    public int checkNickName(String nickName) {
-        return 0;
-    }
-
-    @Override
-    public int updateComment(String comment) {
-        return 0;
-    }
-
-    @Override
     public int insertUserProfile(Photo p) {
-        return 0;
+        return memberDao.insertUserProfile(p);
     }
 
-    @Override
-    public int myupdatePwd(String upPwd) {
-        return 0;
+    public List<Photo> selectMyProfile(){
+        return memberDao.selectMyProfile();
     }
 
-    @Override
-    public List<Photo> selectMyProfile() {
-        return null;
+    public int updateUserProfile(Photo p){
+        return memberDao.updateUserProfile(p);
     }
 
-    @Override
-    public int updateUserProfile(Photo p) {
-        return 0;
+    public MyProfileVo getMyProfile(int userNo){
+        Member m=memberDao.findPublic(userNo);
+        Profile p=profileDao.selectProfile(userNo);
+        return new MyProfileVo(m,p);
     }
-
-    @Override
-    public int deleteUser() {
-        return 0;
-    }
-
-
 }

@@ -15,6 +15,12 @@
         <result column="USER_NAME" property="userName" />
         <result column="NICK_NAME" property="nickName" />
     </resultMap>
+    <resultMap type="member" id="publicResultSet">
+        <result column="USER_NO" property="userNo" />
+        <result column="EMAIL" property="email" />
+        <result column="USER_NAME" property="userName" />
+        <result column="NICK_NAME" property="nickName" />
+    </resultMap>
     <!-- PROFILE 테이블  -->
     <resultMap type="Profile" id="profileResultSet">
         <result column="USER_NO" property="userNo"></result>
@@ -22,7 +28,6 @@
         <result column="PHOTO_NO" property="photoNo"></result>
         <result column="PROFILE_COMMENT" property="profileComment"></result>
     </resultMap>
-
     <resultMap id="potoResultSet" type="Photo">
         <result column="PHOTO_NO" property="photoNo"></result>
         <result column="USER_NO" property="userNo"></result>
@@ -30,7 +35,6 @@
         <result column="CHANGE_NAME" property="changeName"></result>
         <result column="FILE_PATH" property="filePath"></result>
     </resultMap>
-
     <!-- 마이페이지 회원정보 List -->
     <select id="selectMyProList" resultMap="profileResultSet">
         SELECT *
@@ -59,6 +63,10 @@
         WHERE USER_NO = 2
     </update>
 
+    <select id="findPublic" parameterType="Integer" resultMap="publicResultSet">
+        SELECT * FROM MEMBER WHERE USER_NO = #{userNo}
+    </select>
+
     <insert id="insertUserProfile" parameterType="photo">
         INSERT INTO PHOTO(
             PHOTO_NO ,
@@ -86,11 +94,11 @@
         WHERE USER_NO = 2
     </update>
 
-    <select id="selectMyProfile" resultMap="potoResultSet">
-        SELECT *
-        FROM PHOTO
-        WHERE USER_NO = 2
-    </select>
+<!--    <select id="selectMyProfile" resultMap="potoResultSet">-->
+<!--        SELECT *-->
+<!--        FROM PHOTO-->
+<!--        WHERE USER_NO =2-->
+<!--    </select>-->
 
     <update id="deleteUser" parameterType="int">
         UPDATE MEMBER
