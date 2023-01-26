@@ -26,8 +26,8 @@ public class MemberDao {
     }
 
 
-    public int checkNick(Member m) {
-        return sqlSession.selectOne("memberMapper.checkNick", m);
+    public int checkNick(Map<String, Object> nick) {
+        return sqlSession.selectOne("memberMapper.checkNick", nick);
     }
 
     public int checkEmail(Member m) {

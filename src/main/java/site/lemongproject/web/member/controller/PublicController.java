@@ -88,17 +88,18 @@ public class PublicController {
 
 
     // 닉네임 체크
-//    @PostMapping("join/chNick")
-//    public ResponseBody<Member> checkNick(@RequestBody Member m) {
-//        int result = memberService.checkNick(m);
-//        System.out.println(m.getNickName());
-//        System.out.println(result);
-//        if(result > 0) {
-//            return ResponseBuilder.unAbleNic(result);
-//        } else {
-//            return ResponseBuilder.success(result);
-//        }
-//    }
+    @PostMapping("join/chNick")
+    public ResponseBody<Map<String, Object>> checkNick(@RequestBody Map<String, Object> nick) {
+
+        int result = memberService.checkNick(nick);
+        System.out.println(result);
+
+        if(result > 0) {
+            return ResponseBuilder.unAbleNic(result);
+        } else {
+            return ResponseBuilder.success(result);
+        }
+    }
 
 
 
