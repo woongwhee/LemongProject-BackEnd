@@ -13,11 +13,10 @@ public interface MemberService {
 
      Member loginMember(Member m);
 
-     int insertMember(Member m);
+     int insertMember(Map<String,Object> m);
 
      int checkNick(Member m);
 //    public int insertMember(Member m);
-    public int insertMember(Map<String, Object> m);
 
     // 유저 프로필 테이블에서 가져오기
      List<Profile> selectMyProList();
