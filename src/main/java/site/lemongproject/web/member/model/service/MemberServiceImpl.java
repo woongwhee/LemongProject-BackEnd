@@ -24,8 +24,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     final private MemberDao memberDao;
-    final private ProfileDao profileDao;
-
 
     public Member loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
@@ -36,11 +34,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     public int insertMember(Map<String, Object> m) {
-        int result1 = memberDao.insertMember(m);
-        int result2 = profileDao.insertNick(m);
-        System.out.println(result1);
-        System.out.println(result2);
-        int result = result1 * result2;
+        int result = memberDao.insertMember(m);
         System.out.println("회원가입 dao 실행 : " + result);
         return result;
     }
