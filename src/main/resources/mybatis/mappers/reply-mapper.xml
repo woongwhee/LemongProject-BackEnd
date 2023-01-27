@@ -22,8 +22,8 @@
 
     <!--  피드 댓글 작성  -->
     <insert id="insertFeedReply" parameterType="Map">
-        INSERT INTO REPLY (REPLY_NO, USER_NO, FEED_NO, REPLY_CONTENT,REPLY_AT) VALUES
-        (SEQ_REPLY.nextval, #{userNo}. #{feedNo},#{replyContent},SYSDATE)
+        INSERT INTO REPLY (REPLY_NO, USER_NO, FEED_NO, REPLY_CONTENT, REPLY_AT) VALUES
+        (SEQ_REPLY.nextval, #{userNo}, #{feedNo}, #{replyContent},SYSDATE)
     </insert>
 <!-- 피드 댓글 달기 -->
     <select id="listReply" resultMap="replyResultSet" parameterType="int">
