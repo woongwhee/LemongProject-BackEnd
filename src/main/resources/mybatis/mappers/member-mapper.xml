@@ -136,25 +136,4 @@
     </select>
 
 
-    <!-- 이메일 체크 -->
-    <select id="checkEmail" parameterType="Map" resultType="int">
-        SELECT COUNT(*) AS COUNT
-        FROM EMAIL_CONFIRM
-        WHERE EMAIL = #{email}
-    </select>
-
-
-
-    <!--  이메일 체크 삽입  -->
-    <insert id="insertEmail" parameterType="Map">
-        INSERT INTO EMAIL_CONFIRM (CONFIRM_NO, CODE, EMAIL, STATUS)
-            VALUES(SEQ_CONFIRM.NEXTVAL, #{code}, #{email}, DEFAULT)
-    </insert>
-
-    <!-- 이메일 체크 삭제 -->
-    <delete id="deleteEmail">
-
-    </delete>
-
-
 </mapper>

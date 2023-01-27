@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.web.member.model.dao.MemberDao;
 import site.lemongproject.web.member.model.dao.MybatisProfileDao;
 import site.lemongproject.web.member.model.dao.ProfileDao;
+import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
@@ -47,8 +48,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    public int checkEmail(Map<String, Object> e, String ranNum) {
-        int result = memberDao.checkEmail(e, ranNum);
+    public int checkEmail(EmailConfirm confirm) {
+        int result = memberDao.checkEmail(confirm);
         System.out.println("인증 번호 dao 실행: "+result);
         return result;
     }
