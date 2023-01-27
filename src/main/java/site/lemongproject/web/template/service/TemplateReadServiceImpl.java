@@ -2,6 +2,7 @@ package site.lemongproject.web.template.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.lemongproject.common.domain.dao.HolidayDao;
 import site.lemongproject.web.template.model.dao.ReviewDao;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
@@ -17,6 +18,7 @@ public class TemplateReadServiceImpl implements TemplateReadService{
 
     final private TemplateDao templateDao;
     final private TemplateTodoDao templateTodoDao;
+    final private HolidayDao holidayDao;
     final private ReviewDao reviewDao;
     @Override
     public List<Template> getTemplateList(int categoryNo, int page) {
@@ -45,11 +47,22 @@ public class TemplateReadServiceImpl implements TemplateReadService{
     }
     @Override
     public int SingleStart(String option, Date StartAt, int userNo) {
+
+
+
+
         return 0;
     }
 
     @Override
     public int MultiStart(String option, Date StartAt, int userNo) {
+
+
+
+
         return 0;
     }
+
+
+
 }

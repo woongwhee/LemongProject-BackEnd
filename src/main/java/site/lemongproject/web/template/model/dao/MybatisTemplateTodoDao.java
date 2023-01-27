@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
+import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
+import site.lemongproject.web.template.model.vo.WriterCheckVo;
 
 import java.util.List;
 
@@ -26,8 +28,8 @@ public class MybatisTemplateTodoDao implements TemplateTodoDao{
         return session.selectOne("templateTodoMapper.findOne",tpTodoNo);
     }
     @Override
-    public int deleteOne(long tpTodoNo) {
-        return session.delete("templateTodoMapper.deleteOne",tpTodoNo);
+    public int deleteOne(TPTodoDeleteVo tdv) {
+        return session.delete("templateTodoMapper.deleteOne",tdv);
     }
 
     @Override
@@ -39,6 +41,12 @@ public class MybatisTemplateTodoDao implements TemplateTodoDao{
     public int deleteTemplate(long templateNo){
         return session.delete("templateTodoMapper.deleteTemplate",templateNo);
     }
+
+    @Override
+    public boolean isWriter(WriterCheckVo writerCheckVo) {
+        return session.selectOne("templateTodoMapper.isWriter",writerCheckVo);
+    }
+
     @Override
     public int updateOne(TemplateTodo templateTodo){
         return session.update("templateTodoMapper.updateOne",templateTodo);

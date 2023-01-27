@@ -3,19 +3,17 @@ package site.lemongproject.web.template.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
+import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
 import site.lemongproject.web.template.model.vo.TempalteTodoInsertVo;
-import site.lemongproject.web.template.model.vo.TemplateCreateVo;
 import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
+import site.lemongproject.web.template.model.vo.WriterCheckVo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -40,15 +38,19 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
         return templateDao.updateUnSave(templateVo);
     }
 
-    @Override
-    public int saveTemplate(int userNo) {
-        return templateDao.uploadTemp(userNo);
-    }
-
+    /**
+     * 투두를 입력함
+     * @param tiv
+     * @return
+     */
     @Override
     public List<TemplateTodo> insertTodo(TempalteTodoInsertVo tiv) {
+        int result=0;
+        boolean isWriter=templateDao.isWriter(new WriterCheckVo(tiv.getUserNo(),tiv.getTemplateNo() ));
+        if(!isWriter){
+            return null;
+        }
         List<TemplateTodo> todoList = new ArrayList<>();
-        int result=1;
         for (int day : tiv.getDayList()) {
             TemplateTodo t = new TemplateTodo();
             t.setTemplateNo(tiv.getTemplateNo());
@@ -60,24 +62,66 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
         return todoList;
     }
 
-
-
+    /**
+     * 임시저장된 템플릿을 초기화함(삭제후 재생성)
+     * @param userNo
+     * @return
+     */
     @Override
     public Template resetUnSave(int userNo) {
         int result=templateTodoDao.deleteUnSave(userNo);
-        System.out.println(result);
-        templateDao.deleteUnSave(userNo);
-        templateDao.createTemp(userNo);
-        return templateDao.findUnSave(userNo);
+        result*=templateDao.deleteUnSave(userNo);
+        result*=templateDao.createTemp(userNo);
+        if(result>0){
+            return templateDao.findUnSave(userNo);
+        }else{
+            return null;
+        }
+    }
+
+    /**
+     * 요청이 작성자인경우 삭제하고 가중치를 제조정함
+     * @param tdv
+     * @return
+     */
+    @Override
+    public int deleteTodo(TPTodoDeleteVo tdv) {
+        boolean isWriter=templateTodoDao.isWriter(new WriterCheckVo(tdv.getUserNo(), (int) tdv.getTpTodoNo()));
+        TemplateTodo todo=templateTodoDao.findOne(tdv.getTpTodoNo());
+        int result=templateTodoDao.deleteOne(tdv);
+        if(result>0){
+            result=templateTodoDao.afterDelete(todo);
+        }
+        return result;
     }
 
 
+    /**
+     * 요청이 작성자일경우 템플릿을 삭제함
+     *
+     * @param userNo
+     * @param templateNo
+     * @return
+     */
     @Override
-    public int deleteTemplateTodo(long tpTodoNo) {
-        TemplateTodo td=templateTodoDao.findOne(tpTodoNo);
-        int result=templateTodoDao.deleteOne(tpTodoNo);
-        result*=templateTodoDao.afterDelete(td);
+    public int deleteTemplate(int userNo,int templateNo) {
+        boolean isWriter=templateDao.isWriter(new WriterCheckVo(userNo,templateNo));
+        if(!isWriter){
+            return 0;
+        }
+        int result=templateTodoDao.deleteTemplate(templateNo);
+        result*=templateDao.deleteTemp(templateNo);
         return result;
+    }
+
+    /**
+     * 임시저장된 템플릿을저장
+     * @param userNo
+     * @return
+     */
+    @Override
+    public int uploadUnSave(int userNo) {
+        return templateDao.uploadUnSave(userNo);
     }
 
 
