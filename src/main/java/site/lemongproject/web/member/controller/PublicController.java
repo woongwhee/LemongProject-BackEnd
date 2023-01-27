@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import site.lemongproject.common.domain.dto.MailMessage;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.MailUtil;
@@ -68,6 +69,13 @@ public class PublicController {
         String originPwd = String.valueOf(m.get("userPwd"));
         System.out.println("암호화 전 비밀번호 : " + originPwd);
 
+        // 비밀번호 암호화
+        String encPwd = bCryptPasswordEncoder.encode(originPwd);
+
+        // 암호화된 비밀번호 setting 해주기
+        m.put("userPwd", encPwd);
+        System.out.println(m.get("userPwd"));
+
         int result = memberService.insertMember(m);
         System.out.println(result);
 
@@ -81,50 +89,47 @@ public class PublicController {
 
 
     // 닉네임 체크
-//    @PostMapping("join/chNick")
-//    public ResponseBody<Member> checkNick(@RequestBody Member m) {
-//        int result = memberService.checkNick(m);
-//        System.out.println(m.getNickName());
-//        System.out.println(result);
-//        if(result > 0) {
-//            return ResponseBuilder.unAbleNic(result);
-//        } else {
-//            return ResponseBuilder.success(result);
-//        }
-//    }
+    @PostMapping("join/chNick")
+    public ResponseBody<Map<String, Object>> checkNick(@RequestBody Map<String, Object> nick) {
+
+        int result = memberService.checkNick(nick);
+        System.out.println(result);
+
+        if(result > 0) {
+            return ResponseBuilder.unAbleNic(result);
+        } else {
+            return ResponseBuilder.success(result);
+        }
+    }
 
 
 
     // 이메일 전송
-//    @PostMapping("join/chEmail")
-//    public ResponseBody<Member> checkEmail(@RequestBody Member m) {
-//
-//        Random random = new Random();
-//        int createNum = 0; // 1자리 난수
-//        String ranNum = ""; // 1자리 난수 형변환 변수
-//        int letter = 6; // 6자리 난수
-//        String resultNum = "";
-//
-//        for(int i=0; i<letter; i++) {
-//            createNum = random.nextInt(9);
-//            ranNum = Integer.toString(createNum);
-//            resultNum += ranNum;
-//        }
-//
-//        String email = m.getEmail();
-//        String subject = "[LEMONG] 회원가입 인증번호 입니다.";
-//        String message = "회원가입을 위하여 아래의 인증 번호를 입력해주세요. \n\n" + resultNum;
-//
-//        MailMessage mail = new MailMessage();
-//        mail.setEmail(email);
-//        mail.setSubject(subject);
-//        mail.setMessage(message);
-//
-//        mailUtil.send(mail);
-//        // send가 됐는지... 어떻게 체크해...? ? ? ? ? ? ? ?
-//        // ?-?
-//        return ResponseBuilder.success(m);
-//    }
+    @PostMapping("join/chEmail")
+    public ResponseBody<Map<String, Object>> checkEmail(@RequestBody Map<String, Object> e) {
+
+        // 랜덤 값 생성
+        EmailController ec = new EmailController();
+        String ranNum = ec.ranNum();
+
+        // 보낼 값 기본값 셋팅
+        MailMessage mail = ec.setMail(e, ranNum);
+
+        // MaillUtil 초기화
+        MailUtil mu = new MailUtil();
+        mu.send(mail);
+        // 여기까지는 반드시 실행됨
+
+        int authCode = memberService.checkEmail(e, ranNum);
+
+        System.out.println("이게 뜬다면 error는 안났다. 두둥.");
+
+        if(authCode > 0) {
+            return ResponseBuilder.success(authCode);
+        } else {
+            return ResponseBuilder.failEmail(authCode);
+        }
+    }
 
 
 }

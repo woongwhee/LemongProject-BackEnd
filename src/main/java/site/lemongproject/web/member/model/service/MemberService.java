@@ -15,12 +15,13 @@ public interface MemberService {
 
      int insertMember(Map<String,Object> m);
 
-     int checkNick(Member m);
-//    public int insertMember(Member m);
+     int checkNick(Map<String, Object> nick);
+
+     int checkEmail(Map<String, Object> e, String ranNum);
 
     // 유저 프로필 테이블에서 가져오기
      List<Profile> selectMyProList();
-    public int checkEmail(Member m);
+
 
     // 멤버 테이블에서 가져오기
      List<Member> selectUser();

@@ -26,12 +26,13 @@ public class MemberDao {
     }
 
 
-    public int checkNick(Member m) {
-        return sqlSession.selectOne("memberMapper.checkNick", m);
+    public int checkNick(Map<String, Object> nick) {
+        return sqlSession.selectOne("memberMapper.checkNick", nick);
     }
 
-    public int checkEmail(Member m) {
-        return 1;
+    public int checkEmail(Map<String, Object> e, String ranNum) {
+        e.put("code", ranNum);
+        return sqlSession.insert("memberMapper.checkEmail", e);
     }
 
     public Profile selectProfile(int userNo) {
