@@ -1,12 +1,16 @@
 package site.lemongproject.web.feed.controller;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
+import site.lemongproject.common.util.FileUtil;
 import site.lemongproject.web.feed.model.service.FeedService;
 import site.lemongproject.web.feed.model.vo.Feed;
+import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.reply.model.vo.Reply;
 
 
@@ -46,7 +50,7 @@ public class FeedController {
         Map<String, Object> result = new HashMap<>();
 
         if(check > 0){
-            result.put("Java","success");
+            ResponseBuilder.success(result);
         }else{
             result.put("Java","fail");
         }
@@ -146,7 +150,31 @@ public class FeedController {
 //
 //-- 좋아요 취소
 //    DELETE FROM HEART WHERE USER_NO = USER_NO AND REF_NO=FEED_NO;
-//
+
+
+    @RequestMapping(value = "/feedPhoto", method = RequestMethod.POST)
+    public ResponseBody<Photo> feedPhoto(@RequestBody MultipartFile[] files){
+        Photo p = new Photo();
+        FileUtil fileUtil = new FileUtil();
+
+        p.setUserNo(3);
+        fileUtil.saveFile(files[0], p);
+
+        int result = feedService.insertFeedPhoto(p);
+        if(result>0){
+            return ResponseBuilder.success(p);
+        }else {
+            return ResponseBuilder.success(result);
+        }
+    }
+
+//    @RequestMapping(value = "/deleteFeedPhoto", method = RequestMethod.POST)
+    @GetMapping("/deleteFeedPhoto")
+    public Map<String,Object> feedDeletePhoto(@RequestParam int photoNo){
+        System.out.println(photoNo);
+        Map<String,Object> result = new HashMap<>();
+        return result;
+    }
 
 
 
