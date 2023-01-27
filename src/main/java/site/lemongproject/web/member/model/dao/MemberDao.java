@@ -30,8 +30,9 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.checkNick", nick);
     }
 
-    public int checkEmail(Member m) {
-        return 1;
+    public int checkEmail(Map<String, Object> e, String ranNum) {
+        e.put("code", ranNum);
+        return sqlSession.insert("memberMapper.checkEmail", e);
     }
 
     public Profile selectProfile(int userNo) {
