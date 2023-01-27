@@ -1,6 +1,7 @@
 package site.lemongproject.web.feed.model.service;
 
 import org.springframework.transaction.annotation.Transactional;
+import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,5 +30,7 @@ public interface FeedService  {
     // feed 게시글 댓글 삭제
     int deleteReply(Map<String,Object> data);
 
+    // feed 게시글 사진 넣기
+    int insertFeedPhoto(Photo p);
 
 }
