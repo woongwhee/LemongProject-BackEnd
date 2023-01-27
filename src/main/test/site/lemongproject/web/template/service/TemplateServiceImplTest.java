@@ -16,6 +16,7 @@ import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
+import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
 import site.lemongproject.web.template.model.vo.TempalteTodoInsertVo;
 import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
 
@@ -28,7 +29,10 @@ import static org.assertj.core.api.Assertions.*;
 @Transactional
 //@TestRunner
 
-@TestRunner
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(loader = AnnotationConfigWebContextLoader.class,classes = ApplicationConfig.class)
+
 public class TemplateServiceImplTest {
     @Autowired private TemplateWriteService templateService;
     @Autowired private TemplateDao templateDao;
@@ -49,7 +53,7 @@ public class TemplateServiceImplTest {
     }
     @Test
     @DisplayName("템플릿 투두리스트 삽입테스트")
-    public void insertTodo() {
+    public void 삽입() {
         Template t=templateService.loadInsertPage(1);
         TempalteTodoInsertVo ttiv=new TempalteTodoInsertVo();
         ttiv.setTemplateNo(t.getTemplateNo());
@@ -69,11 +73,11 @@ public class TemplateServiceImplTest {
         int templateNo=30;
         List<TemplateTodo> tdList=templateTodoDao.findByTemplate(templateNo);
         TemplateTodo ttd=tdList.stream().filter(e->e.getValue()==1&&e.getDay()==1).findAny().orElseThrow();
-        int result=templateService.deleteTemplateTodo(ttd.getTpTodoNo());
+        int result=templateService.deleteTodo(new TPTodoDeleteVo(1,ttd.getTpTodoNo()));
         assertThat(result).isNotZero();
         ttd=tdList.stream().filter(e->e.getValue()==2&&e.getDay()==1).findAny().orElseThrow();
         tdList=templateTodoDao.findByTemplate(templateNo);
-        TemplateTodo ttd2=tdList.stream().filter(e->e.getValue()==1&&e.getDay()==1).findAny().orElseThrow();
+        TemplateTodo ttd2=tdList.stream().filter(e->e.getValue()==1&&e.getDay()==1).findAny().orElse(null);
         assertThat(ttd2.getTpTodoNo()).isEqualTo(ttd.getTpTodoNo());
     }
     @Test

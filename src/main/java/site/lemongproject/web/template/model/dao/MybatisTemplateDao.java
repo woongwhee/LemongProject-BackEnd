@@ -1,13 +1,12 @@
 package site.lemongproject.web.template.model.dao;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.template.model.dto.Template;
-import site.lemongproject.web.template.model.vo.TemplateCreateVo;
 import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
+import site.lemongproject.web.template.model.vo.WriterCheckVo;
 
 import java.util.List;
 
@@ -21,7 +20,10 @@ public class MybatisTemplateDao implements TemplateDao {
     }
     @Override
     public List<Template> findList(int categoryNo, int page, int limit) {
-        RowBounds rowBounds=new RowBounds(limit,page*limit+1);
+        int offSet=page*limit;
+        System.out.println(offSet);
+        System.out.println(limit);
+        RowBounds rowBounds=new RowBounds(offSet,limit);
         return sqlSession.selectList("templateMapper.findMany",categoryNo,rowBounds);
     }
 
@@ -31,12 +33,7 @@ public class MybatisTemplateDao implements TemplateDao {
     }
 
     @Override
-    public int countTemplate(int categoryNo) {
-        if(categoryNo==0){
-            return sqlSession.selectOne("templateMapper.countTemplate");
-        }
-        return sqlSession.selectOne("templateMapper.countTemplate",categoryNo);
-    }
+    public int countTemplate(int categoryNo) {return sqlSession.selectOne("templateMapper.countTemplate",categoryNo);}
     @Override
     public int deleteUnSave(int userNo){
         return sqlSession.delete("templateMapper.deleteUnSave",userNo);
@@ -51,13 +48,16 @@ public class MybatisTemplateDao implements TemplateDao {
     }
 
     @Override
-    public int uploadTemp(int userNo) {
-        return sqlSession.update("templateMapper.upload",userNo);
+    public int uploadUnSave(int userNo) {
+        return sqlSession.update("templateMapper.uploadUnSave",userNo);
     }
     @Override
     public int updateUnSave(TemplateUpdateVo templateVo){
         return sqlSession.update("templateMapper.updateUnSave",templateVo);
     }
-
+    @Override
+    public boolean isWriter(WriterCheckVo writerCheckVo){
+        return sqlSession.selectOne("templateMapper.isWriter",writerCheckVo);
+    }
 
 }

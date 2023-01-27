@@ -2,6 +2,9 @@ package site.lemongproject.common.util;
 
 import org.junit.Test;
 import site.lemongproject.common.domain.dto.MailMessage;
+
+import java.util.*;
+
 import static org.junit.Assert.*;
 
 public class MailUtilTest {

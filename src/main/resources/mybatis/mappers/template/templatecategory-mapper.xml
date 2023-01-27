@@ -1,11 +1,10 @@
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="templateCategoryMapper">
     <resultMap id="categoryMap" type="TemplateCategory">
         <id property="categoryNo" column="CATEGORY_NO"/>
         <result column="CATEGORY_NAME" property="categoryName"/>
-        <result column="imagePath" property="imagePath"/>
+        <result column="IMAGE_PATH" property="imagePath"/>
     </resultMap>
     <select id="findList" resultMap="categoryMap">
         SELECT * FROM TEMPLATE_CATEGORY

@@ -1,7 +1,5 @@
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="memberMapper">
 
     <!-- MEMBER 테이블  -->
@@ -134,7 +132,7 @@
     <!--  닉네임 중복 체크  -->
     <select id="checkNick" parameterType="Member" resultType="int">
         SELECT COUNT(*)
-        FROM MEMBER
+        FROM USER_PROFILE
         WHERE NICK_NAME = #{nickName}
     </select>
 
