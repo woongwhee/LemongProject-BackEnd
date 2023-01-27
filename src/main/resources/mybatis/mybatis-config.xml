@@ -19,6 +19,7 @@
         <typeAlias type="site.lemongproject.common.domain.dto.OfficialHoliday" alias="Holiday"/>
         <typeAlias type="site.lemongproject.web.feed.model.vo.Feed" alias="Feed"/>
         <typeAlias type="site.lemongproject.web.todo.model.vo.Todo" alias="Todo"/>
+        <typeAlias type="site.lemongproject.web.member.model.vo.EmailConfirm" alias="EmailConfirm" />
     </typeAliases>
 
     <mappers>

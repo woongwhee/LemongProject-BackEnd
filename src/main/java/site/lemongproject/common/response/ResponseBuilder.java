@@ -38,14 +38,16 @@ public class ResponseBuilder{
     }
 
 
-    // 이메일 전송
-    public static ResponseBody errorChEmail(int num) {
+    // 이메일 인증번호 전송
+    public static ResponseBody failEmail(int num) {
         ResponseBody response = new ResponseBody();
         response.setCode("4005");
-        response.setMessage("ERRORCHEMAIL");
+        response.setMessage("FAILEMAIL");
         response.setResult(num);
         return response;
     }
+
+
     
     
 
