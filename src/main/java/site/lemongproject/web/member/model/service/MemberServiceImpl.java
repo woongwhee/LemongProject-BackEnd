@@ -40,15 +40,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    public int checkNick(Member m) {
-        int result = memberDao.checkNick(m);
+    public int checkNick(Map<String, Object> nick) {
+        int result = memberDao.checkNick(nick);
         System.out.println("중복 체크 dao 실행: "+result);
         return result;
     }
 
 
-    public int checkEmail(Member m) {
-        int result = memberDao.checkEmail(m);
+    public int checkEmail(Map<String, Object> e, String ranNum) {
+        int result = memberDao.checkEmail(e, ranNum);
         System.out.println("인증 번호 dao 실행: "+result);
         return result;
     }
