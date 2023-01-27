@@ -441,7 +441,6 @@ create sequence SEQ_HOLIDAY;
 create sequence SEQ_MEMBER;
 create sequence SEQ_TEMPLATE_TODO;
 create sequence SEQ_CHALLENGE_TODO;
-create sequence SEQ_CONFIG;
 CREATE SEQUENCE SEQ_CONFIRM;
 
 

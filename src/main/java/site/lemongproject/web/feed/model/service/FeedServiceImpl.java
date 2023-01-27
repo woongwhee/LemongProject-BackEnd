@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.vo.Feed;
+import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class FeedServiceImpl implements FeedService{
     final private FeedDao feedDao;
+    final private PhotoDao photoDao;
 
     @Override
     public List selectFeed() {
@@ -52,6 +54,6 @@ public class FeedServiceImpl implements FeedService{
 
     @Override
     public int insertFeedPhoto(Photo p){
-        return feedDao.insertFeedPhoto(p);
+        return photoDao.insertPhoto(p);
     }
 }

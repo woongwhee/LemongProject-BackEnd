@@ -8,8 +8,40 @@
       <result column="FILE_PATH" property="filePath"/>
   </resultMap>
 
-
-
-
-
+    <insert id="insertPhoto" parameterType="Photo">
+        <selectKey keyProperty="photoNo" resultType="int" order="BEFORE">
+            SELECT SEQ_PHOTO.nextval from dual
+        </selectKey>
+        INSERT INTO PHOTO (PHOTO_NO, USER_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH) VALUES
+        (#{photoNo},#{userNo}, #{originName},#{changeName},#{filePath})
+    </insert>
+    <delete id="deletePhoto" parameterType="_int">
+        DELETE PHOTO WHERE PHOTO_NO=#{photoNo}
+    </delete>
+    <delete id="deleteByUser" parameterType="_int">
+        DELETE PHOTO WHERE PHOTO_NO=(select PHOTO_NO from PHOTO join USER_PROFILE USING(PHOTO_NO) where USER_NO=#{userNo})
+    </delete>
+    <delete id="deleteByFeed" parameterType="_int">
+        DELETE PHOTO WHERE PHOTO_NO=(select PHOTO_NO from PHOTO join FEED_PHOTO USING(PHOTO_NO) where FEED_NO=#{feedNo})
+    </delete>
+    <select id="findByFeed" parameterType="_int" resultMap="photoMap">
+        SELECT
+            P.*
+        FROM PHOTO P
+        JOIN FEED_PHOTO USING (PHOTO_NO)
+        WHERE FEED_NO=#{feedNo}
+    </select>
+    <select id="findByUser" parameterType="_int" resultMap="photoMap">
+        SELECT
+            P.*
+        FROM PHOTO P
+            JOIN USER_PROFILE USING (PHOTO_NO)
+        WHERE USER_NO=#{userNo}
+    </select>
+    <select id="findOne" parameterType="_int" resultMap="photoMap">
+        SELECT
+            P.*
+        FROM PHOTO P
+        WHERE PHOTO_NO=#{photoNo}
+    </select>
 </mapper>

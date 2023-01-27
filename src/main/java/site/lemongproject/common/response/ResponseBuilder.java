@@ -67,6 +67,13 @@ public class ResponseBuilder{
         response.setResult(null);
         return response;
     }
+    public static ResponseBody timeOut() {
+        ResponseBody response = new ResponseBody();
+        response.setCode("4000");
+        response.setMessage("TIME_OUT");
+        response.setResult(null);
+        return response;
+    }
     //조회된결과없음
     public static ResponseBody<List<Template>> findNothing() {
         ResponseBody response = new ResponseBody();

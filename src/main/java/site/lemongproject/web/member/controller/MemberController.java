@@ -1,25 +1,19 @@
 package site.lemongproject.web.member.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.RequestEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.FileUtil;
+import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import javax.servlet.http.HttpSession;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -86,8 +80,12 @@ public class MemberController {
 
     // USER_PROFILE테이블 유저 닉네임 업데이트.
     @GetMapping("/checkNickName")
-    public int updateUser(@RequestParam(value="modifyNickname" , required=false) String nickName){
-        int upList = memberService.updateUser(nickName);
+    public int updateUser(@SessionAttribute("loginUser")Member loginUser,@RequestParam(value="modifyNickname" , required=false) String nickName){
+
+        Profile p=new Profile();
+        p.setUserNo(loginUser.getUserNo());
+        p.setNickName(nickName);
+        int upList = memberService.updateProfile(p);
 
         System.out.println(nickName);
 
@@ -96,43 +94,33 @@ public class MemberController {
 
     // USER_PROFILE테이블 유저 자기소개 업데이트.
     @GetMapping("/updateComment")
-    public int updateComment(@RequestParam(value="modifyComment" , required = false) String comment){
-    // 이메일 전송
-//    @PostMapping("join/chEmail")
-//    public ResponseBody<Member> chEmail(@RequestBody Member m) {
-//        int result = memberService.checkEmail(m);
-//        System.out.print(result);
-//        if(result > 0) {
-//            return ResponseBuilder.success(result);
-//        } else {
-//            return ResponseBuilder.errorChEmail(result);
-//        }
-//    }
-
-
-        int upList2 = memberService.updateComment(comment);
-
-        System.out.println(comment);
-
+    public int updateComment(@SessionAttribute("loginUser")Member loginUser,@RequestParam(value="modifyComment" , required = false) String comment){
+        Profile p=new Profile();
+        p.setUserNo(loginUser.getUserNo());
+        p.setProfileComment(comment);
+        int upList2 = memberService.updateProfile(p);
         return upList2;
     }
 
     @GetMapping("/myPwdUpdate")
-    public int myupdatePwd(@RequestParam(value="upPwd" , required = false)String upPwd){
-        int result = memberService.myupdatePwd(upPwd);
+    public int myupdatePwd(@SessionAttribute("loginUser") Member loginUser,@RequestParam(value = "upPwd" , required = false)String upPwd){
+        String pwd=bCryptPasswordEncoder.encode(upPwd);
+        int userNo=loginUser.getUserNo();
+        ChangePwdVo cpw=new ChangePwdVo(userNo,pwd);
+        int result = memberService.updatePassword(cpw);
         return result;
     }
 
     // 유저 프로필 INSERT. => 웅휘형이 만든 FileUtil로 빼기 => rename(m.getOriginalFilename()) 오류 고치기.
     @PostMapping("/insertUserProfile")
 //    @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
-    public ResponseBody<Photo> insertUserProfile(
-            @RequestParam(value="file", required=false) MultipartFile[] files) {
-
+    public ResponseBody<Photo> insertProfilePhoto(
+            @RequestParam(value="file", required=false) MultipartFile[] files,
+            @SessionAttribute("loginUser")Member loginUser) {
         Photo p = new Photo();
-        p.setUserNo(2);
+        p.setUserNo(loginUser.getUserNo());
         fileUtil.saveFile(files[0], p);
-        int result = memberService.insertUserProfile(p);
+        int result = memberService.insertUserPhoto(p);
         return ResponseBuilder.success(p);
     }
 
