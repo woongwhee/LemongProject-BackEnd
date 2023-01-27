@@ -3,24 +3,21 @@
 <mapper namespace="emailConfirmMapper">
 
     <!-- 이메일 체크 -->
-    <select id="checkEmail" parameterType="Map" resultType="int">
-        SELECT COUNT(*) AS COUNT
+    <select id="checkConfirm" parameterType="EmailConfirm" resultType="_int">
+        SELECT
+            CASE WHEN ROUND((SYSDATE-CONFIRM_AT) * 24 * 60,2)&lt;3 THEN '1' ELSE '-1' END AS "result"
         FROM EMAIL_CONFIRM
-        WHERE EMAIL = #{email}
+        WHERE EMAIL = #{email} AND CONFIRM_NO=#{confrimNo}
     </select>
-
-
-
     <!--  이메일 체크 삽입  -->
-    <insert id="insertEmail" parameterType="EmailConfirm">
+    <insert id="insertConfirm" parameterType="EmailConfirm">
         INSERT INTO EMAIL_CONFIRM (CONFIRM_NO, CODE, EMAIL, STATUS)
         VALUES(SEQ_CONFIRM.NEXTVAL, #{code}, #{email}, DEFAULT)
     </insert>
-
-    <!-- 이메일 체크 삭제 -->
+    <!-- 이전 인증코드 삭제 -->
     <delete id="deleteAnother" parameterType="EmailConfirm" >
         delete EMAIL_CONFIRM
-        where  EMAIl=#{email} and NOT CONFIRM_NO =#{confirmNo}
+        where  EMAIl=#{email} and NOT CONFIRM_NO = SEQ_CONFIRM.CURRVAL
     </delete>
 
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="challengeMapper">
+    <resultMap id="challengeMap" type="Challenge">
+        <id column="CHALLENGE_NO"  property="challengeNo" />
+        <result column="CREATE_USER" property="createUser" />
+        <result column="TEMPLATE_NO" property="templateNo" />
+        <result column="CHALLENGE_TITLE" property="challengeTitle" />
+        <result column="CHALLENGE_INFO"  property="challengeInfo" />
+        <result column="START_DATE"  property="startDate" />
+        <result column="END_DATE"  property="endDate" />
+        <result column="CREATE_AT"  property="createAt" />
+        <result column="CHALLENGE_OPTION"  property="challengeOption" />
+        <result column="STATUS" property="status" />
+    </resultMap>
+
+
+</mapper>

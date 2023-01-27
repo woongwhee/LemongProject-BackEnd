@@ -22,7 +22,8 @@
         <result property="playCount" column="PLAY_COUNT"/>
         <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
         <association property="profile" resultMap="profileMapper.profileDetail"/>
-        <collection property="todoList" select="templateTodoMapper.findByTemplate" javaType="List" column="TEMPLATE_NO"/>
+        <collection property="todoList" select="templateTodoMapper.findByTemplate" javaType="List"
+                    column="TEMPLATE_NO"/>
     </resultMap>
     <resultMap id="templateUnSave" type="Template">
         <id column="TEMPLATE_NO" property="templateNo"/>
@@ -53,14 +54,14 @@
                   AND T.TEMPLATE_NO = T2.TEMPLATE_NO) as CLEAR_COUNT,
                P.*,
                up.*,
-                tc.*
+               tc.*
         FROM TEMPLATE T
                  JOIN TEMPLATE_CATEGORY tc USING (CATEGORY_NO)
-                LEFT JOIN USER_PROFILE up ON T.TP_CREATER = up.USER_NO
-                LEFT JOIN PHOTO P ON UP.PHOTO_NO = P.PHOTO_NO
+                 LEFT JOIN USER_PROFILE up ON T.TP_CREATER = up.USER_NO
+                 LEFT JOIN PHOTO P ON UP.PHOTO_NO = P.PHOTO_NO
         WHERE T.SAVE_STATUS = 1
           AND T.TEMPLATE_NO = #{templateNo}
-        ORDER BY  T.CREATED_AT DESC
+        ORDER BY T.CREATED_AT DESC
     </select>
 
     <select id="findMany" parameterType="Map" resultMap="templateList">
@@ -88,7 +89,7 @@
         <if test="categoryNo>0">
             AND CATEGORY_NO=#{categoryNo}
         </if>
-        ORDER BY  T.CREATED_AT DESC
+        ORDER BY T.CREATED_AT DESC
     </select>
     <delete id="deleteTemp" parameterType="int">
         DELETE TEMPLATE
@@ -110,15 +111,14 @@
                            where save_status = 0
                              and TP_CREATER = #{userNo}),
             SAVE_STATUS = 1,
-            CREATED_AT   = SYSDATE
+            CREATED_AT  = SYSDATE
         where save_status = 0
           and TP_CREATER = #{userNo}
     </update>
     <update id="updateUnSave" parameterType="TemplateUpdateVo">
         update template
         <set>
-
-        <if test="categoryNo != null">
+            <if test="categoryNo != null">
                 CATEGORY_NO=#{categoryNo},
             </if>
             <if test="range != null">
@@ -144,8 +144,8 @@
     </select>
     <select id="isWriter" parameterType="WriterCheckVo" resultType="_boolean">
         SELECT COUNT(*)
-            FROM TEMPLATE
-        WHERE TP_CREATER=#{userNO}
-        AND TEMPLATE_NO=#{templateNo}
+        FROM TEMPLATE
+        WHERE TP_CREATER = #{userNO}
+          AND TEMPLATE_NO = #{templateNo}
     </select>
 </mapper>

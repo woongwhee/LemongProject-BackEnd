@@ -3,14 +3,12 @@ package site.lemongproject.web.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.domain.dto.MailMessage;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.MailUtil;
+import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.vo.Member;
@@ -65,20 +63,13 @@ public class PublicController {
     // 회원가입
     // 테스팅
     @PostMapping("join")
-    public ResponseBody<Map<String, Object>> insertMember(@RequestBody Map<String, Object> m) {
-        System.out.println(m);
-        String originPwd = String.valueOf(m.get("userPwd"));
-        System.out.println("암호화 전 비밀번호 : " + originPwd);
+    public ResponseBody<Map<String, Object>> insertMember(@RequestBody JoinVo joinVo) {
 
         // 비밀번호 암호화
-        String encPwd = bCryptPasswordEncoder.encode(originPwd);
-
+        String encPwd = bCryptPasswordEncoder.encode(joinVo.getUserPwd());
+        joinVo.setUserPwd(encPwd);
         // 암호화된 비밀번호 setting 해주기
-        m.put("userPwd", encPwd);
-        System.out.println(m.get("userPwd"));
-
-        int result = memberService.insertMember(m);
-        System.out.println(result);
+        int result = memberService.insertMember(joinVo);
 
         if(result > 0) {
             return ResponseBuilder.success(result);
@@ -91,11 +82,10 @@ public class PublicController {
 
     // 닉네임 체크
     @PostMapping("join/chNick")
-    public ResponseBody<Map<String, Object>> checkNick(@RequestBody Map<String, Object> nick) {
+    public ResponseBody<Integer> checkNick(@RequestBody String nickName) {
 
-        int result = memberService.checkNick(nick);
+        int result = memberService.checkNick(nickName);
         System.out.println(result);
-
         if(result > 0) {
             return ResponseBuilder.hasSameNick(result);
         } else {
@@ -106,12 +96,11 @@ public class PublicController {
 
 
     // 이메일 전송
-    @PostMapping("join/chEmail")
-    public ResponseBody<Map<String, Object>> checkEmail(@RequestBody String email) {
+    @PostMapping("join/confirm/send")
+    public ResponseBody<Map<String, Object>> sendEmail(@RequestBody String email) {
 
         // 랜덤 값 생성
         String ranNum = mailUtil.ranNum();
-
         // 보낼 값 기본값 셋팅
         MailMessage mailMessage = mailUtil.setConfirmMail(email, ranNum);
         // MaillUtil 초기화
@@ -121,8 +110,7 @@ public class PublicController {
         EmailConfirm confirm=new EmailConfirm();
         confirm.setEmail(email);
         confirm.setCode(ranNum);
-
-        int authCode = memberService.checkEmail(confirm);
+        int authCode = memberService.insertConfirm(confirm);
 
         System.out.println("이게 뜬다면 error는 안났다. 두둥.");
 
@@ -132,6 +120,17 @@ public class PublicController {
             return ResponseBuilder.failEmail(authCode);
         }
     }
+    @PostMapping("join/confirm/check")
+    public ResponseBody<String> checkEmail(@RequestBody EmailConfirm confirm) {
 
+        int result=memberService.checkConfirm(confirm);
+        switch (result){
+            case 1:
+                return ResponseBuilder.success("인증성공");
+            case -1:
+                return ResponseBuilder.timeOut();
+            default:return ResponseBuilder.failEmail(0);
+        }
 
+    }
 }

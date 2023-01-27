@@ -19,21 +19,23 @@
         <typeAlias type="site.lemongproject.web.todo.model.vo.Todo" alias="Todo"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.EmailConfirm" alias="EmailConfirm" />
         <package name="site.lemongproject.web.template.model.vo"/>
+        <package name="site.lemongproject.web.challenge.model.dto"/>
     </typeAliases>
 
     <typeHandlers>
         <typeHandler handler="site.lemongproject.common.type.handler.NameEnumTypeHandler"></typeHandler>
     </typeHandlers>
     <mappers>
-        <mapper resource="mybatis/mappers/member-mapper.xml"/>
         <mapper resource="mybatis/mappers/photo-mapper.xml"/>
         <mapper resource="mybatis/mappers/reply-mapper.xml"/>
-        <mapper resource="mybatis/mappers/profile-mapper.xml"/>
-        <mapper resource="mybatis/mappers/template/template-mapper.xml"/>
-        <mapper resource="mybatis/mappers/template/templatetodo-mapper.xml"/>
-        <mapper resource="mybatis/mappers/template/templatecategory-mapper.xml"/>
         <mapper resource="mybatis/mappers/holiday-mapper.xml"/>
         <mapper resource="mybatis/mappers/feed-mapper.xml"/>
         <mapper resource="mybatis/mappers/todo-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/template-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/templatetodo-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/templatecategory-mapper.xml"/>
+        <mapper resource="mybatis/mappers/member/member-mapper.xml"/>
+        <mapper resource="mybatis/mappers/member/profile-mapper.xml"/>
+        <mapper resource="mybatis/mappers/member/emailconfirm-mapper.xml"/>
     </mappers>
 </configuration>

@@ -9,14 +9,6 @@
         <result column="FEED_AT" property="feedAt"></result>
     </resultMap>
 
-    <resultMap  type="Photo" id="photoResultSet">
-        <result column="PHOTO_NO" property="photoNo"/>
-        <result column="USER_NO" property="userNo"/>
-        <result column="ORIGIN_NAME" property="originName"/>
-        <result column="CHANGE_NAME" property="changeName"/>
-        <result column="FILE_PATH" property="filePath"/>
-    </resultMap>
-
 
     <select id="selectMyFeed" resultMap="feedResultSet">
         SELECT
@@ -48,13 +40,7 @@
         DELETE FROM FEED WHERE FEED_NO = #{feedNo}
     </delete>
 <!-- 사진 등록 -->
-    <insert id="insertFeedPhoto" parameterType="Photo">
-        <selectKey keyProperty="photoNo" resultType="int" order="BEFORE">
-            SELECT SEQ_PHOTO.nextval from dual
-        </selectKey>
-        INSERT INTO PHOTO (PHOTO_NO, USER_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH) VALUES
-        (#{photoNo},#{userNo}, #{originName},#{changeName},#{filePath})
-    </insert>
+
 
 
 </mapper>
