@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
+import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
@@ -30,9 +31,8 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.checkNick", nick);
     }
 
-    public int checkEmail(Map<String, Object> e, String ranNum) {
-        e.put("code", ranNum);
-        return sqlSession.insert("memberMapper.checkEmail", e);
+    public int checkEmail(EmailConfirm confirm) {
+        return sqlSession.insert("memberMapper.checkEmail", confirm);
     }
 
     public Profile selectProfile(int userNo) {

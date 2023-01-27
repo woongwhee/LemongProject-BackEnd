@@ -9,7 +9,9 @@ import site.lemongproject.common.domain.dto.MailMessage;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 
 @Component
 public class MailUtil {
@@ -51,5 +53,28 @@ public class MailUtil {
         }
     }
 
+
+    public static String ranNum() {
+
+        Random random = new Random();
+        int createNum = 0; // 1자리 난수
+        String ranNum = ""; // 1자리 난수 형변환 변수
+        int letter = 6; // 6자리 난수
+        String resultNum = "";
+
+        for(int i=0; i<letter; i++) {
+            createNum = random.nextInt(9);
+            ranNum = Integer.toString(createNum);
+            resultNum += ranNum;
+        }
+        return resultNum;
+    }
+    // 보낼 값 셋팅
+    public MailMessage setConfirmMail(String email, String ranNum) {
+        String subject = "[LEMONG] 회원가입 인증번호 입니다.";
+        String message = "<h1> 회원가입을 위하여 아래의 인증 번호를 입력해주세요. \n\n" + ranNum+"</h1>";
+        MailMessage mail = new MailMessage(email,subject,message);
+        return mail;
+    }
 
 }

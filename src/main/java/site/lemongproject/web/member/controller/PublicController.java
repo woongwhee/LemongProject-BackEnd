@@ -12,6 +12,7 @@ import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.MailUtil;
 import site.lemongproject.web.member.model.service.MemberService;
+import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.vo.Member;
 
 import javax.servlet.http.HttpSession;
@@ -96,7 +97,7 @@ public class PublicController {
         System.out.println(result);
 
         if(result > 0) {
-            return ResponseBuilder.unAbleNic(result);
+            return ResponseBuilder.hasSameNick(result);
         } else {
             return ResponseBuilder.success(result);
         }
@@ -106,21 +107,22 @@ public class PublicController {
 
     // 이메일 전송
     @PostMapping("join/chEmail")
-    public ResponseBody<Map<String, Object>> checkEmail(@RequestBody Map<String, Object> e) {
+    public ResponseBody<Map<String, Object>> checkEmail(@RequestBody String email) {
 
         // 랜덤 값 생성
-        EmailController ec = new EmailController();
-        String ranNum = ec.ranNum();
+        String ranNum = mailUtil.ranNum();
 
         // 보낼 값 기본값 셋팅
-        MailMessage mail = ec.setMail(e, ranNum);
-
+        MailMessage mailMessage = mailUtil.setConfirmMail(email, ranNum);
         // MaillUtil 초기화
-        MailUtil mu = new MailUtil();
-        mu.send(mail);
+//        MailUtil mu = new MailUtil();//빈주입받아서 초기화할필요없음
+        mailUtil.send(mailMessage);
         // 여기까지는 반드시 실행됨
+        EmailConfirm confirm=new EmailConfirm();
+        confirm.setEmail(email);
+        confirm.setCode(ranNum);
 
-        int authCode = memberService.checkEmail(e, ranNum);
+        int authCode = memberService.checkEmail(confirm);
 
         System.out.println("이게 뜬다면 error는 안났다. 두둥.");
 

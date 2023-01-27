@@ -1,6 +1,7 @@
 package site.lemongproject.web.member.model.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
@@ -17,7 +18,7 @@ public interface MemberService {
 
      int checkNick(Map<String, Object> nick);
 
-     int checkEmail(Map<String, Object> e, String ranNum);
+     int checkEmail(EmailConfirm confirm);
 
     // 유저 프로필 테이블에서 가져오기
      List<Profile> selectMyProList();

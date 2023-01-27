@@ -7,4 +7,9 @@
       <result column="CHANGE_NAME" property="changeName"/>
       <result column="FILE_PATH" property="filePath"/>
   </resultMap>
+
+
+
+
+
 </mapper>

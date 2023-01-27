@@ -442,6 +442,8 @@ create sequence SEQ_MEMBER;
 create sequence SEQ_TEMPLATE_TODO;
 create sequence SEQ_CHALLENGE_TODO;
 create sequence SEQ_CONFIG;
+CREATE SEQUENCE SEQ_CONFIRM;
+
 
 ------------------------인덱스
 
@@ -450,7 +452,6 @@ CREATE INDEX TODO_ix01 on TODO(TODO_DATE);
 
 CREATE INDEX CHALLENGE_TODO_ix01 on CHALLENGE_TODO(TODO_DATE);
 
-CREATE SEQUENCE SEQ_CONFIRM;
 
 -- 비밀번호 사이즈 변경 쿼리문 추가하기
 
