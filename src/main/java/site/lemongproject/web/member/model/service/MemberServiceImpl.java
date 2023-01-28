@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import site.lemongproject.web.member.model.dao.EmailDao;
 import site.lemongproject.web.member.model.dao.MemberDao;
 import site.lemongproject.web.member.model.dao.MybatisProfileDao;
 import site.lemongproject.web.member.model.dao.ProfileDao;
+import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
@@ -24,6 +26,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     final private MemberDao memberDao;
+    final private EmailDao emailDao;
 
     public Member loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
@@ -47,8 +50,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    public int checkEmail(Map<String, Object> e, String ranNum) {
-        int result = memberDao.checkEmail(e, ranNum);
+    public int checkEmail(EmailConfirm confirm) {
+        int result = emailDao.checkEmail(confirm);
         System.out.println("인증 번호 dao 실행: "+result);
         return result;
     }

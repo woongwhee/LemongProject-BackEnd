@@ -12,6 +12,7 @@ import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.MailUtil;
 import site.lemongproject.web.member.model.service.MemberService;
+import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.vo.Member;
 
 import javax.servlet.http.HttpSession;
@@ -96,7 +97,7 @@ public class PublicController {
         System.out.println(result);
 
         if(result > 0) {
-            return ResponseBuilder.unAbleNic(result);
+            return ResponseBuilder.hasSameNick(result);
         } else {
             return ResponseBuilder.success(result);
         }
@@ -108,21 +109,24 @@ public class PublicController {
     @PostMapping("join/chEmail")
     public ResponseBody<Map<String, Object>> checkEmail(@RequestBody Map<String, Object> e) {
 
+        String email = String.valueOf(e.get("email"));
+        System.out.println(email);
+
         // 랜덤 값 생성
-        EmailController ec = new EmailController();
-        String ranNum = ec.ranNum();
-
+        String ranNum = mailUtil.ranNum();
         // 보낼 값 기본값 셋팅
-        MailMessage mail = ec.setMail(e, ranNum);
+        MailMessage mailMessage = mailUtil.setConfirmMail(email, ranNum);
+        // MaillUtil 초기화(메일전송)
+        mailUtil.send(mailMessage);
 
-        // MaillUtil 초기화
-        MailUtil mu = new MailUtil();
-        mu.send(mail);
-        // 여기까지는 반드시 실행됨
+        // 체크를 위한 코드
+        EmailConfirm confirm = new EmailConfirm();
+        confirm.setEmail(email);
+        confirm.setCode(ranNum);
 
-        int authCode = memberService.checkEmail(e, ranNum);
+        int authCode = memberService.checkEmail(confirm);
 
-        System.out.println("이게 뜬다면 error는 안났다. 두둥.");
+        System.out.println("이게 뜬다면 error는 안났다.");
 
         if(authCode > 0) {
             return ResponseBuilder.success(authCode);
@@ -130,6 +134,5 @@ public class PublicController {
             return ResponseBuilder.failEmail(authCode);
         }
     }
-
 
 }
