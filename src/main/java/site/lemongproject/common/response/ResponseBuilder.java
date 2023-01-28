@@ -29,7 +29,7 @@ public class ResponseBuilder{
     }
 
     // 닉네임 중복
-    public static ResponseBody unAbleNic(int num) {
+    public static ResponseBody hasSameNick(int num) {
         ResponseBody response = new ResponseBody();
         response.setCode("4003");
         response.setMessage("UNABLENIC");

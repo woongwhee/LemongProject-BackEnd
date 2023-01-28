@@ -30,10 +30,14 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.checkNick", nick);
     }
 
-    public int checkEmail(Map<String, Object> e, String ranNum) {
-        e.put("code", ranNum);
-        return sqlSession.insert("memberMapper.checkEmail", e);
-    }
+//    public int checkEmail(Map<String, Object> e, String ranNum) {
+//        e.put("code", ranNum);
+//        int eCount = sqlSession.selectOne("memberMapper.checkEmail", e);
+//        if(eCount > 0) {
+//            sqlSession.delete("memberMapper.deleteEmail", e);
+//        }
+//        return sqlSession.insert("memberMapper.insertEmail", e);
+//    }
 
     public Profile selectProfile(int userNo) {
         return sqlSession.selectOne("memberMapper.selectMyProList",userNo);

@@ -31,16 +31,6 @@
         <result column="FILE_PATH" property="filePath"></result>
     </resultMap>
 
-    <!--  이메일 인증  -->
-    <resultMap id="emailConfirmResultSet" type="EmailConfirm">
-        <result column="CONFIRM_NO" property="confirmNo" />
-        <result column="CODE" property="code" />
-        <result column="EMAIL" property="email" />
-        <result column="CONFIRM_AT" property="confirmDate" />
-        <result column="STATUS" property="status" />
-    </resultMap>
-
-
 
     <!-- 마이페이지 회원정보 List -->
     <select id="selectMyProList" resultMap="profileResultSet">
@@ -138,25 +128,7 @@
     </select>
 
 
-    <!-- 이메일 체크 -->
-    <select id="checkEmail" parameterType="Map" resultType="int">
-        SELECT COUNT(*) AS COUNT
-        FROM EMAIL_CONFIRM
-        WHERE EMAIL = #{email}
-    </select>
 
-
-
-    <!--  이메일 체크 삽입  -->
-    <insert id="insertEmail" parameterType="Map">
-        INSERT INTO EMAIL_CONFIRM (CONFIRM_NO, CODE, EMAIL, STATUS)
-            VALUES(SEQ_CONFIRM.NEXTVAL, #{code}, #{email}, DEFAULT)
-    </insert>
-
-    <!-- 이메일 체크 삭제 -->
-    <delete id="deleteEmail">
-
-    </delete>
 
 
 </mapper>

@@ -31,5 +31,6 @@
         <mapper resource="mybatis/mappers/holiday-mapper.xml"/>
         <mapper resource="mybatis/mappers/feed-mapper.xml"/>
         <mapper resource="mybatis/mappers/todo-mapper.xml"/>
+        <mapper resource="mybatis/mappers/emailconfirm-mapper.xml" />
     </mappers>
 </configuration>

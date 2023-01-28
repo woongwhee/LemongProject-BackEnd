@@ -1,7 +1,12 @@
 package site.lemongproject.web.member.model.vo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.sql.Date;
 
+@Getter
+@Setter
 public class EmailConfirm {
 
     private int confirmNo; // 인증번호
