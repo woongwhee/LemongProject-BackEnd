@@ -1,6 +1,7 @@
 package site.lemongproject.web.member.model.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.mail.Email;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
@@ -20,6 +21,11 @@ public class EmailDao {
             sqlSession.delete("emailConfirmMapper.deleteEmail", confirm);
         }
         return sqlSession.insert("emailConfirmMapper.insertEmail", confirm);
+    }
+
+
+    public int checkEmailNum(EmailConfirm confirm) {
+        return sqlSession.selectOne("emailConfirmMapper.checkEmailNum", confirm);
     }
 
 

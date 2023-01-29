@@ -117,7 +117,8 @@ public class PublicController {
         // 보낼 값 기본값 셋팅
         MailMessage mailMessage = mailUtil.setConfirmMail(email, ranNum);
         // MaillUtil 초기화(메일전송)
-        mailUtil.send(mailMessage);
+//        mailUtil.send(mailMessage); // 일반 텍스트(보내짐)
+        mailUtil.htmlSend(mailMessage); // html 형식으로(테스트 중)
 
         // 체크를 위한 코드
         EmailConfirm confirm = new EmailConfirm();
@@ -134,5 +135,30 @@ public class PublicController {
             return ResponseBuilder.failEmail(authCode);
         }
     }
+
+
+    // 인증번호 체크
+    @PostMapping("join/chEmailNum")
+    public ResponseBody<Map<String, Object>> checkEmailNum(@RequestBody Map<String, Object> auth) {
+
+        String email = String.valueOf(auth.get("email")); // 입력한 이메일
+        String code = String.valueOf(auth.get("emailNum")); // 사용자가 입력한 인증코드
+
+        EmailConfirm confirm = new EmailConfirm();
+        confirm.setEmail(email);
+        confirm.setCode(code);
+
+        int result = memberService.checkEmailNum(confirm);
+        System.out.println(result);
+
+        if(result > 0) {
+            return ResponseBuilder.success(result);
+        } else {
+            return ResponseBuilder.failAuthEmail(result);
+        }
+
+    }
+
+
 
 }

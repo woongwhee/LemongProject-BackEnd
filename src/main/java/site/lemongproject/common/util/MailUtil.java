@@ -4,6 +4,7 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail.HtmlEmail;
 import org.springframework.stereotype.Component;
 import site.lemongproject.common.domain.dto.MailMessage;
 
@@ -52,6 +53,24 @@ public class MailUtil {
         }
     }
 
+    public void htmlSend(MailMessage mail) {
+        try {
+            HtmlEmail email = new HtmlEmail();
+            email.setCharset("euc-kr");
+            email.setHostName(host);
+            email.setSmtpPort(port);
+            email.setAuthenticator(new DefaultAuthenticator(userName, password));
+            email.setSSLOnConnect(true);
+            email.setSubject(mail.getSubject());
+            email.setFrom(fromMail);
+            email.setHtmlMsg(mail.getMessage());
+            email.addTo(mail.getEmail());
+            email.send();
+        } catch (EmailException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // 랜덤 숫자 발생
     public static String ranNum() {
 
@@ -74,7 +93,9 @@ public class MailUtil {
     public MailMessage setConfirmMail(String email, String ranNum) {
 
         String subject = "[LEMONG] 회원가입 인증번호 입니다.";
-        String message = "<h1>회원가입을 위하여 아래의 인증 번호를 입력해주세요. \n\n" + ranNum + "</h1>";
+        String message = "<html><h3>회원가입을 위하여 아래의 인증 번호를 입력해주세요.</h3>" +
+                            "<br><br><h2>" + ranNum +
+                            "</h2></html>";
 
         MailMessage mail = new MailMessage(email, subject, message);
         return mail;
