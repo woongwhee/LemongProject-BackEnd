@@ -1,9 +1,9 @@
 package site.lemongproject.web.feed.model.service;
 
 import org.springframework.transaction.annotation.Transactional;
+import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.photo.model.vo.Photo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +11,9 @@ import java.util.Map;
 public interface FeedService  {
     // feed 게시글 가져오기
     List selectFeed();
+
     // feed 게시글 쓰기
-    int insertFeed(Map<String, Object> paramMap);
+    int insertFeed(FeedInsert paramMap);
 
     // feed 게시글 업데이트
     int updateFeed(Map<String,Object> updatefeed);
@@ -30,7 +31,10 @@ public interface FeedService  {
     // feed 게시글 댓글 삭제
     int deleteReply(Map<String,Object> data);
 
-    // feed 게시글 사진 넣기
-    int insertFeedPhoto(Photo p);
+    // 사진 폴더에 넣기
+    int insertPhoto(Photo p);
+
+    // 사진 폴더에서 삭제
+    int deletePhoto(int photoNo);
 
 }
