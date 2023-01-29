@@ -40,6 +40,6 @@ public interface FeedService  {
     int deletePhoto(int photoNo);
 
     // 사진 수정하기
-    int modifyPhoto(int filePath);
+    int modifyPhoto(Map<String,Object> photoNo);
 
 }

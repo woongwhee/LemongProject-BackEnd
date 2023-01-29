@@ -166,16 +166,16 @@ public class FeedController {
 
     // 사진 수정하기
     @PostMapping("modifyFeedPhoto")
-    public Map<String,Object> modifyPhoto(@RequestBody int filePath){
-        System.out.println(filePath);
-        int check = feedService.modifyPhoto(filePath);
+    public Map<String,Object> modifyPhoto(@RequestBody Map<String,Object> photoNo){
+        System.out.println(photoNo);
+        int check = feedService.modifyPhoto(photoNo);
         System.out.println(check);
         Map<String ,Object> result = new HashMap<>();
-//        if(check>0){
-//            result.put("Java","success");
-//        }else{
-//            result.put("Java","fail");
-//        }
+        if(check>0){
+            result.put("Java","success");
+        }else{
+            result.put("Java","fail");
+        }
         return result;
     }
 }
