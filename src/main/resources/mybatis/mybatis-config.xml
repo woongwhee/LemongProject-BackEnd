@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+
     <settings>
         <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
@@ -18,6 +19,8 @@
         <typeAlias type="site.lemongproject.web.feed.model.vo.Feed" alias="Feed"/>
         <typeAlias type="site.lemongproject.web.todo.model.vo.Todo" alias="Todo"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.EmailConfirm" alias="EmailConfirm" />
+        <typeAlias type="site.lemongproject.web.feed.model.dto.FeedInsert" alias="FeedInsert"/>
+        <typeAlias type="site.lemongproject.web.feed.model.dto.FeedList" alias="FeedList"/>
         <package name="site.lemongproject.web.template.model.vo"/>
         <package name="site.lemongproject.web.challenge.model.dto"/>
     </typeAliases>

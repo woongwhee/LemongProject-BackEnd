@@ -1,12 +1,22 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="feedMapper">
     <!-- FEED 테이블  -->
     <resultMap type="Feed" id="feedResultSet">
-        <result column="FEED_NO" property="feedNo"></result>
-        <result column="USER_NO" property="userNo"></result>
-        <result column="FEED_CONTENT" property="feedContent"></result>
-        <result column="FEED_AT" property="feedAt"></result>
+        <result column="FEED_NO" property="feedNo"/>
+        <result column="USER_NO" property="userNo"/>
+        <result column="FEED_CONTENT" property="feedContent"/>
+        <result column="FEED_AT" property="feedAt"/>
+    </resultMap>
+
+
+    <resultMap id="feedListResultSet" type="FeedList">
+        <result column="FEED_NO" property="feedNo"/>
+        <result column="USER_NO" property="userNo"/>
+        <result column="FEED_CONTENT" property="feedContent"/>
+        <result column="FEED_AT" property="feedAt"/>
+        <result column="FILEPATH" property="filePath"/>
     </resultMap>
 
 
@@ -20,14 +30,38 @@
         WHERE USER_NO = 2
     </select>
 <!-- 피드 게시물  -->
-    <select id="selectFeed" resultMap="feedResultSet">
-        SELECT * FROM FEED
+    <select id="selectFeed" resultMap="feedListResultSet">
+<!--        SELECT-->
+<!--        F.FEED_NO,-->
+<!--        F.USER_NO,-->
+<!--        F.FEED_CONTENT,-->
+<!--        F.FEED_AT,-->
+<!--        P.FILE_PATH,-->
+<!--        P.CHANGE_NAME-->
+<!--        FROM FEED F-->
+<!--        JOIN FEED_PHOTO FP on F.FEED_NO = FP.FEED_NO-->
+<!--        JOIN PHOTO P on FP.PHOTO_NO = P.PHOTO_NO-->
+<!--        order by F.FEED_AT DESC-->
+        SELECT
+        F.FEED_NO,
+        F.USER_NO,
+        F.FEED_CONTENT,
+        F.FEED_AT,
+        LISTAGG(P.FILE_PATH ||P.CHANGE_NAME,',')WITHIN GROUP(ORDER BY F.FEED_NO) AS filePath
+        FROM FEED F
+        JOIN FEED_PHOTO FP on F.FEED_NO = FP.FEED_NO
+        JOIN PHOTO P on FP.PHOTO_NO = P.PHOTO_NO
+        GROUP BY F.FEED_NO, F.USER_NO, F.FEED_CONTENT, F.FEED_AT
+        order by F.FEED_AT DESC
     </select>
 
 <!-- 피드 작성  -->
-    <insert id="insertFeed" parameterType="Map">
+    <insert id="insertFeed" parameterType="FeedInsert">
+        <selectKey keyProperty="feedNo" resultType="int" order="BEFORE">
+            SELECT SEQ_FEED.nextval from dual
+        </selectKey>
         INSERT INTO FEED (FEED_NO, USER_NO, FEED_CONTENT, FEED_AT) VALUES
-        (SEQ_FEED.nextval,#{userNo},#{feedContent},sysdate)
+        (#{feedNo}, #{userNo},#{feedContent},sysdate)
     </insert>
 
 <!--  피드 수정  -->
@@ -41,6 +75,22 @@
     </delete>
 <!-- 사진 등록 -->
 
+    <insert id="insertPhoto" parameterType="Photo">
+        <selectKey keyProperty="photoNo" resultType="int" order="BEFORE">
+            SELECT SEQ_PHOTO.nextval from dual
+        </selectKey>
+        INSERT INTO PHOTO (PHOTO_NO, USER_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH) VALUES
+        (#{photoNo},#{userNo}, #{originName},#{changeName},#{filePath})
+    </insert>
+<!--  사진 삭제  -->
+    <delete id="deletePhoto" parameterType="int">
+        DELETE FROM PHOTO WHERE PHOTO_NO=#{photoNo}
+    </delete>
+
+<!--  피드 사진 넣기  -->
+    <insert id="insertFeedPhoto" parameterType="site.lemongproject.web.feed.model.dto.FeedInsertPhoto">
+        INSERT INTO FEED_PHOTO (FEED_NO, PHOTO_NO, VALUE) VALUES (#{feedNo},#{photoNo},#{value})
+    </insert>
 
 
 </mapper>
