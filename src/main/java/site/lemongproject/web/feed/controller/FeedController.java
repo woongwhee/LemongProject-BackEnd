@@ -6,12 +6,14 @@ import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.FileUtil;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
+import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.service.FeedService;
 import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.reply.model.vo.Reply;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +26,10 @@ public class FeedController {
 
     // feed 전체 불러오기
     @RequestMapping("/main")
-    public ResponseBody<List<Feed>> feedSelect(){
-        List<Feed> list = feedService.selectFeed();
+    public ResponseBody<List<FeedList>> feedSelect(){
 
+        List<FeedList> list = feedService.selectFeed();
+//        System.out.println(list);
         return ResponseBuilder.success(list);
     }
 
@@ -161,6 +164,18 @@ public class FeedController {
         return result;
     }
 
-
-
+    // 사진 수정하기
+    @PostMapping("modifyFeedPhoto")
+    public Map<String,Object> modifyPhoto(@RequestBody int filePath){
+        System.out.println(filePath);
+        int check = feedService.modifyPhoto(filePath);
+        System.out.println(check);
+        Map<String ,Object> result = new HashMap<>();
+//        if(check>0){
+//            result.put("Java","success");
+//        }else{
+//            result.put("Java","fail");
+//        }
+        return result;
+    }
 }

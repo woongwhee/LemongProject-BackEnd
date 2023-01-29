@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
+import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.reply.model.vo.Reply;
@@ -19,7 +20,7 @@ public class FeedDao {
     final private SqlSession sqlSession;
 
     // 피드 메인
-    public List<Feed> selectFeed(){
+    public List<FeedList> selectFeed(){
         return  sqlSession.selectList("feedMapper.selectFeed");
     }
     // 피드 게시물 작성
@@ -59,6 +60,17 @@ public class FeedDao {
     // 사진 지우기
     public int deletePhoto(int photoNo){
         return sqlSession.delete("feedMapper.deletePhoto", photoNo);
+    }
+
+    // 사진 피드 삭제하기
+//    public int modifyPhoto(String filePath){
+//        return sqlSession.update("feedMapper.modifyPhoto", filePath);
+//    }
+    public int maxValue(int filePath){
+        return sqlSession.selectOne("feedMapper.maxValue",filePath);
+    }
+    public int nowValue(int filePath){
+        return sqlSession.selectOne("feedMapper.nowValue",filePath);
     }
 
 }

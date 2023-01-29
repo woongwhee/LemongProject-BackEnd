@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
+import site.lemongproject.web.feed.model.dto.FeedList;
+import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.List;
@@ -19,7 +21,7 @@ public class FeedServiceImpl implements FeedService{
     
     // 피드 게시물 
     @Override
-    public List selectFeed() {
+    public List<FeedList> selectFeed() {
         return feedDao.selectFeed();
     }
     
@@ -72,5 +74,24 @@ public class FeedServiceImpl implements FeedService{
     public int deletePhoto(int photoNo){
         return feedDao.deletePhoto(photoNo);
     }
+
+    // 사진 피드 수정하기
+    @Override
+    public int modifyPhoto(int filePath){
+        int maxValue = feedDao.maxValue(filePath);
+        int value = feedDao.nowValue(filePath);
+        int result = maxValue + value;
+        System.out.println(maxValue);
+        System.out.println(value);
+        return result;
+//        if(value == 1){
+//            feedDao.updateValueFilst(filePath);
+//        } else if (1<value<maxValue) {
+//            feedDao.updateValueMiddle(filePath);
+//        } else{
+//            feedDao.updateValueLast(filePath);
+//        }
+//        return feedDao.modifyPhoto(filePath);
+    };
 
 }

@@ -14,4 +14,5 @@ public class FeedList {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date feedAt;
     private String filePath;
+    private String photoNo;
 }
