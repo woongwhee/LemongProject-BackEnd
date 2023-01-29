@@ -20,6 +20,8 @@ public interface MemberService {
 
      int checkEmail(EmailConfirm confirm);
 
+     int checkEmailNum(EmailConfirm confirm);
+
     // 유저 프로필 테이블에서 가져오기
      List<Profile> selectMyProList();
 

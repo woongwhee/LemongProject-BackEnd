@@ -28,6 +28,7 @@ public class MemberServiceImpl implements MemberService {
     final private MemberDao memberDao;
     final private EmailDao emailDao;
 
+    @Override
     public Member loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
         System.out.println("서비스 : " + loginUser);
@@ -35,7 +36,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-
+    @Override
     public int insertMember(Map<String, Object> m) {
         int result = memberDao.insertMember(m);
         System.out.println("회원가입 dao 실행 : " + result);
@@ -43,16 +44,25 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+    @Override
     public int checkNick(Map<String, Object> nick) {
         int result = memberDao.checkNick(nick);
         System.out.println("중복 체크 dao 실행: "+result);
         return result;
     }
 
-
+    @Override
     public int checkEmail(EmailConfirm confirm) {
         int result = emailDao.checkEmail(confirm);
         System.out.println("인증 번호 dao 실행: "+result);
+        return result;
+    }
+
+
+    @Override
+    public int checkEmailNum(EmailConfirm confirm) {
+        int result = emailDao.checkEmailNum(confirm);
+        System.out.println("인증번호 인증 dao 실행: "+result);
         return result;
     }
 
