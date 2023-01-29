@@ -66,11 +66,28 @@ public class FeedDao {
 //    public int modifyPhoto(String filePath){
 //        return sqlSession.update("feedMapper.modifyPhoto", filePath);
 //    }
-    public int maxValue(int filePath){
-        return sqlSession.selectOne("feedMapper.maxValue",filePath);
+    public int maxValue(Map<String,Object> photoNo){
+        return sqlSession.selectOne("feedMapper.maxValue",photoNo);
     }
-    public int nowValue(int filePath){
-        return sqlSession.selectOne("feedMapper.nowValue",filePath);
+    public int nowValue(Map<String,Object> photoNo){
+        return sqlSession.selectOne("feedMapper.nowValue",photoNo);
     }
+
+    public int updateValueFirst(Map<String,Object>photoNo){
+        return sqlSession.update("feedMapper.updateValueFirst",photoNo);
+    }
+
+    public int updateValueMiddle(Map<String,Object>photoNo) {
+        return sqlSession.update("feedMapper.updateValueMiddle",photoNo);
+    }
+
+    public int updateValueLast(Map<String,Object>photoNo){
+        return sqlSession.update("feedMapper.updateValueLast",photoNo);
+
+    }
+    public int modifyPhoto(Map<String,Object>photoNo){
+        return sqlSession.delete("feedMapper.deleteFeedPhoto",photoNo);
+    }
+
 
 }
