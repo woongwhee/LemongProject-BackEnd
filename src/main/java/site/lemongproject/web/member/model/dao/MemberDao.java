@@ -17,8 +17,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberDao {
     final private SqlSession sqlSession;
+
     public Member loginMember(Member m) {
-       return sqlSession.selectOne("memberMapper.loginMember",m );
+        return sqlSession.selectOne("memberMapper.loginMember", m);
     }
 
 
@@ -27,13 +28,29 @@ public class MemberDao {
     }
 
     public int updatePassword(ChangePwdVo cpw) {
-        return sqlSession.update("memberMapper.updatePassword" , cpw);
+        return sqlSession.update("memberMapper.updatePassword", cpw);
     }
 
     public int deleteUser(int userNo) {
-        return sqlSession.update("memberMapper.deleteUser",userNo);
+        return sqlSession.update("memberMapper.deleteUser", userNo);
     }
 
+    public Member findPublic(int userNo) {
+        return sqlSession.selectOne("memberMapper.findPublic", userNo);
+    }
+
+    public Member selectMember(int userNo) {
+        return sqlSession.selectOne("memberMapper.selectMember", userNo);
+    }
+
+    public Profile selectMyProfile(int userNo) {
+        return sqlSession.selectOne("profileMapper.selectMyProfile", userNo);
+    }
+
+    public List<Profile> searchUser(String userNick) {
+        return sqlSession.selectList("profileMapper.searchUser", userNick);
+    }
+}
 
 //    public int checkEmail(Map<String, Object> e, String ranNum) {
 //        e.put("code", ranNum);
@@ -43,23 +60,4 @@ public class MemberDao {
 //        }
 //        return sqlSession.insert("memberMapper.insertEmail", e);
 //    }
-    public List<Member> selectUser() {
-        return sqlSession.selectList("memberMapper.selectUser");
-    }
-    public int updateUser(String nickName) {
-        return sqlSession.update("memberMapper.updateUser" , nickName);
-    }
-
-    public int updateComment(String comment) {
-        return sqlSession.update("memberMapper.updateComment" , comment);
-    }
-
-    public List<Profile> selectMyProList() {
-        return sqlSession.selectList("memberMapper.selectMyProList");
-    }
-
-    public int insertUserProfile(Photo p) {
-        return sqlSession.insert("memberMapper.insertUserProfile" , p);
-    }
-
 }

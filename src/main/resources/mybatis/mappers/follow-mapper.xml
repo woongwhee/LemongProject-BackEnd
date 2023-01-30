@@ -1,0 +1,104 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="followMapper">
+
+    <resultMap id="followResultSet" type="Follow">
+        <result column="FOLLOWER" property="follower"/>
+        <result column="FOLLOWING" property="following"/>
+        <result column="FOLLOW_AT" property="followAt"/>
+        <result column="ACCEPT" property="accept"/>
+        <association property="photo" resultMap="photoMapper.potoResultSet"/>
+        <association property="profile" resultMap="profileMapper.profileNick"/>
+    </resultMap>
+
+    <!-- 팔로우 신청  -->
+    <insert id="insertFollow" parameterType="Follow">
+        INSERT INTO FOLLOW(
+            FOLLOWER ,
+            FOLLOWING ,
+            FOLLOW_AT ,
+            ACCEPT
+        )
+        VALUES(#{follower} , #{following} , DEFAULT , DEFAULT)
+    </insert>
+
+    <!-- 나한테 온 팔로우 신청 리스트 -->
+    <select id="selectMyFollowerList" parameterType="Follow" resultMap="followResultSet">
+        SELECT
+            FOLLOWER ,
+            FOLLOWING ,
+            FOLLOW_AT ,
+            CHANGE_NAME ,
+            NICK_NAME
+        FROM FOLLOW F
+        LEFT JOIN PHOTO P ON(F.FOLLOWING = P.USER_NO)
+        LEFT JOIN USER_PROFILE U USING(PHOTO_NO)
+        WHERE P.USER_NO = #{following}
+        AND FOLLOWER = #{follower}
+    </select>
+
+    <!-- 팔로우 신청 수락 시 accept 'n'에서 'y'로 업데이트  -->
+    <update id="updateFollowOk" parameterType="Follow">
+        UPDATE FOLLOW
+            SET ACCEPT = 'Y'
+        WHERE FOLLOWING = #{following}
+        AND FOLLOWER = #{follower}
+    </update>
+
+    <!-- 팔로우 신청 취소 -->
+    <delete id="followDelete" parameterType="Follow">
+        DELETE
+        FROM FOLLOW
+        WHERE FOLLOWER = #{follower}
+        AND FOLLOWING = #{following}
+    </delete>
+
+    <!--
+        [로그인한 사용자]의 경우 다른 사용자에게 팔로워 신청을 걸면
+        팔로워를 신청한 상대방의 수락 여부에 상관없이 나의 팔로워의 숫자는 올라가야함.
+        ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+        [팔로워 신청을 받은 사용자]의 경우 나의 수락 여부에 상관없이 팔로잉의 숫자는
+        올라가야함. 팔로워 신청을 수락 할 경우 나의 팔로워의 숫자가 올라가야함.
+    -->
+    <!-- 팔로잉에 해당하는 팔로워 숫자 -->
+    <select id="myFollowCount" parameterType="Follow" resultType="Follow">
+        SELECT
+            FOLLOWING ,
+            COUNT(*) as count
+        FROM FOLLOW
+        GROUP BY FOLLOWING
+        HAVING FOLLOWING = #{following}
+    </select>
+
+    <!--
+        팔로우 신청을 받은 사용자 입장에서 팔로워 신청 수락 시 accept 가 'y'이면서,
+        follower가 팔로우 신청을 받은 사용자의 userNo여야함.
+     -->
+    <select id="acceptFollowCount" parameterType="Follow" resultType="Follow">
+        SELECT
+            FOLLOWING ,
+            COUNT(*) as count ,
+            ACCEPT
+        FROM FOLLOW
+        GROUP BY FOLLOWING , FOLLOWER , ACCEPT
+        HAVING FOLLOWING = #{following}
+        AND FOLLOWER = #{follower}
+        AND ACCEPT = 'Y'
+    </select>
+
+    <!--
+        팔로우 신청을 받은 사용자 입장에서 나의 수락여부에 상관없이
+        팔로잉 숫자가 증가되어야함.
+     -->
+    <select id="acceptFollowingCount" parameterType="Follow" resultType="Follow">
+        SELECT
+            FOLLOWING ,
+            COUNT(*) as count
+        FROM FOLLOW
+        GROUP BY FOLLOWING , FOLLOWER
+        HAVING FOLLOWER = #{follower}
+    </select>
+
+</mapper>
+
