@@ -78,8 +78,8 @@ public class FeedServiceImpl implements FeedService{
     // 사진 피드 수정하기
     @Override
     public int modifyPhoto(Map<String,Object> photoNo){
-        int maxValue = feedDao.maxValue(photoNo);
-        int nowValue = feedDao.nowValue(photoNo);
+        int maxValue = feedDao.maxValue(photoNo);  // 4
+        int nowValue = feedDao.nowValue(photoNo);  // 2
         System.out.println(maxValue);
         System.out.println(nowValue);
 

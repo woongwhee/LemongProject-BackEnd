@@ -8,7 +8,7 @@
         <result column="USER_NO" property="userNo"/>
         <result column="FEED_CONTENT" property="feedContent"/>
         <result column="FEED_AT" property="feedAt"/>
-        <result column="FILEPATH" property="filePath"/>
+<!--        <result column="FILEPATH" property="filePath"/>-->
     </resultMap>
 
     <resultMap  type="Photo" id="photoResultSet">
@@ -82,10 +82,16 @@
     </insert>
 <!--  피드 사진 수정  -->
     <select id="maxValue" parameterType="Map" resultType="int">
-        SELECT MAX(VALUE) FROM FEED_PHOTO WHERE FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
+        SELECT MAX(VALUE) FROM FEED_PHOTO
+        WHERE
+        FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
     </select>
     <select id="nowValue" parameterType="Map" resultType="int">
-        SELECT VALUE FROM FEED_PHOTO WHERE FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND PHOTO_NO= #{photoNo}
+        SELECT VALUE FROM FEED_PHOTO
+        WHERE
+        FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
+        AND
+        PHOTO_NO= #{photoNo}
     </select>
 
     <update id="updateValueFirst" parameterType="Map">
