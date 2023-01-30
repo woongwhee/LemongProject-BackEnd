@@ -1,0 +1,17 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="photoMapper">
+
+    <!-- REPLY 테이블  -->
+
+    <resultMap id="potoResultSet" type="Photo">
+        <result column="PHOTO_NO" property="photoNo"></result>
+        <result column="USER_NO" property="userNo"></result>
+        <result column="ORIGIN_NAME" property="originName"></result>
+        <result column="CHANGE_NAME" property="changeName"></result>
+        <result column="FILE_PATH" property="filePath"></result>
+    </resultMap>
+
+
+</mapper>
