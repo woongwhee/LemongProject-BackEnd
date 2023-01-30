@@ -82,8 +82,9 @@ public class PublicController {
 
     // 닉네임 체크
     @PostMapping("join/chNick")
-    public ResponseBody<Integer> checkNick(@RequestBody String nickName) {
+    public ResponseBody<Integer> checkNick(@RequestBody Map<String, Object> nick) {
 
+        String nickName = String.valueOf(nick.get("nickName"));
         int result = memberService.checkNick(nickName);
         System.out.println(result);
         if(result > 0) {

@@ -52,8 +52,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int insertConfirm(EmailConfirm confirm) {
-        int result = confirmDao.insertConfirm(confirm);
         confirmDao.deleteAnother(confirm);
+        int result = confirmDao.insertConfirm(confirm);
         return result;
     }
 
