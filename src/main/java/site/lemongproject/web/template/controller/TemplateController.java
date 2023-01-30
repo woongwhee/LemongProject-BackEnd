@@ -96,9 +96,9 @@ public class TemplateController {
 
     @PostMapping("/todo/insert")
     public ResponseBody<List<TemplateTodo>> insertTodo(Member loginUser, @RequestBody TempalteTodoInsertVo tiv) {
-        List<TemplateTodo> todoList = WriteService.insertTodo(tiv);
-        if (todoList != null) {
-            return ResponseBuilder.success(todoList);
+        int result = WriteService.insertTodo(tiv);
+        if (result>0) {
+            return ResponseBuilder.success(result);
         } else {
             return ResponseBuilder.upLoadFail();
         }

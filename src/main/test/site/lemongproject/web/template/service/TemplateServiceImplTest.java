@@ -55,6 +55,8 @@ public class TemplateServiceImplTest {
     @DisplayName("템플릿 투두리스트 삽입테스트")
     public void 삽입() {
         Template t=templateService.loadInsertPage(1);
+        System.out.println(t);
+
         TempalteTodoInsertVo ttiv=new TempalteTodoInsertVo();
         ttiv.setTemplateNo(t.getTemplateNo());
         ttiv.setContent("테스트투두");
@@ -63,8 +65,9 @@ public class TemplateServiceImplTest {
         day.add(1);
         day.add(3);
         ttiv.setDayList(day);
-        List<TemplateTodo> todoList=templateService.insertTodo(ttiv);
-        assertThat(todoList.size()).isEqualTo(3);
+        ttiv.setUserNo(1);
+        int result=templateService.insertTodo(ttiv);
+        assertThat(result).isEqualTo(3);
 
     }
     @Test

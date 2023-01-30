@@ -2,6 +2,7 @@ package site.lemongproject.web.member.model.service;
 
 import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.JoinVo;
+import site.lemongproject.web.member.model.dto.MyProfileVo;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
@@ -30,5 +31,14 @@ public interface MemberService {
      int deleteUser(int userNo);
 //     이메일인증
     int insertConfirm(EmailConfirm confirm);
+
+    List<Profile> searchUser(String userNick);
+
+    Profile selectMyProfile(int userNo);
+
+    Member selectMember(int userNo);
+
+    MyProfileVo getMyProfile(int userNo);
+
 //    int checkConfirm(EmailConfirm confirm);
 }

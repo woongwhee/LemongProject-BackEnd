@@ -60,9 +60,7 @@
         SELECT COUNT(*)
         FROM TEMPLATE_TODO
         JOIN TEMPLATE USING(TEMPLATE_NO)
-        WHERE TP_CREATER=#{userNO}
-          AND TP_TODO_NO=#{tpTodoNo}
-        AND
-
+        WHERE TP_CREATER=#{userNo}
+          AND TP_TODO_NO=#{refNo}
     </select>
 </mapper>
