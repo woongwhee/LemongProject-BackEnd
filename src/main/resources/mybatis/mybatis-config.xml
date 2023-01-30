@@ -10,6 +10,7 @@
         <typeAlias type="site.lemongproject.web.template.model.dto.Template" alias="Template"/>
         <typeAlias type="site.lemongproject.web.template.model.dto.TemplateCategory" alias="TemplateCategory"/>
         <typeAlias type="site.lemongproject.web.template.model.dto.TemplateTodo" alias="TemplateTodo"/>
+        <typeAlias type="site.lemongproject.web.template.model.vo.TemplateUpdateVo" alias="TemplateUpdateVo"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Profile" alias="Profile"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Member" alias="Member"/>
         <typeAlias type="site.lemongproject.web.photo.model.vo.Photo" alias="Photo"/>
@@ -29,6 +30,7 @@
     </typeHandlers>
     <mappers>
         <mapper resource="mybatis/mappers/photo-mapper.xml"/>
+        <mapper resource="mybatis/mappers/follow-mapper.xml"/>
         <mapper resource="mybatis/mappers/reply-mapper.xml"/>
         <mapper resource="mybatis/mappers/holiday-mapper.xml"/>
         <mapper resource="mybatis/mappers/feed-mapper.xml"/>

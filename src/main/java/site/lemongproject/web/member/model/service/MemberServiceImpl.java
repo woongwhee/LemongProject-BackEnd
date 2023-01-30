@@ -10,9 +10,10 @@ import site.lemongproject.web.member.model.dao.ProfileDao;
 import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
+import site.lemongproject.web.member.model.dao.ProfileDao;
+import site.lemongproject.web.member.model.dto.MyProfileVo;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
-import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.List;
@@ -60,6 +61,13 @@ public class MemberServiceImpl implements MemberService {
         return confirmDao.checkConfirm(confirm);
     }
 
+    public int insertMember(Member m) {
+        int result = memberDao.insertMember(m);
+        System.out.println("dao 실행 : " + result);
+        return result;
+    }
+
+
     @Override
     public int checkNick(String nickName) {
         int result = profileDao.checkNick(nickName);
@@ -73,6 +81,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+    public int updateUserProfile(Photo p){
+        return memberDao.updateUserProfile(p);
+    }
+
+    public MyProfileVo getMyProfile(int userNo){
+        Member m=memberDao.findPublic(userNo);
+        Profile p=profileDao.selectProfile(userNo);
+        return new MyProfileVo(m,p);
     @Override
     public int insertUserPhoto(Photo newP) {
         int result= photoDao.insertPhoto(newP);
@@ -87,6 +103,8 @@ public class MemberServiceImpl implements MemberService {
         return memberDao.updatePassword(cpw);
     }
 
+    public Member seletMember(int userNo){
+        return memberDao.selectMember(userNo);
     @Override
     public int deleteUser(int userNo) {
         int result=memberDao.deleteUser(userNo);
@@ -94,4 +112,11 @@ public class MemberServiceImpl implements MemberService {
         return  result;
     }
 
+    public Profile selectMyProfile(int userNo){
+        return memberDao.selectMyProfile(userNo);
+    }
+
+    public List<Profile> searchUser(String userNick){
+        return memberDao.searchUser(userNick);
+    }
 }

@@ -5,8 +5,6 @@ import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 public interface ProfileDao {
-
-
     int checkNick(String nick);
     int insertProfile(Profile profile);
 
