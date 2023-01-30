@@ -4,10 +4,13 @@ import site.lemongproject.web.photo.model.vo.Photo;
 
 public interface PhotoDao {
 
-    Photo selectByUser(int userNo);
-    Photo selectByPNO(int photoNo);
-//    List<Photo> selectByFeed(int feed);
-
+    Photo findByUser(int userNo);
+    Photo findByFeed(int feedNo);
+    Photo findOne(int photoNo);
+    int insertPhoto(Photo p);
+    int deletePhoto(int photoNo);
+    int deleteByUser(int userNo);
+    int deleteByFeed(int feedNo);
 
 
 }
