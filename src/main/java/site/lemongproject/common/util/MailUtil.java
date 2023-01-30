@@ -4,6 +4,7 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
+import org.apache.commons.mail.HtmlEmail;
 import org.springframework.stereotype.Component;
 import site.lemongproject.common.domain.dto.MailMessage;
 
@@ -53,7 +54,25 @@ public class MailUtil {
         }
     }
 
+    public void htmlSend(MailMessage mail) {
+        try {
+            HtmlEmail email = new HtmlEmail();
+            email.setCharset("euc-kr");
+            email.setHostName(host);
+            email.setSmtpPort(port);
+            email.setAuthenticator(new DefaultAuthenticator(userName, password));
+            email.setSSLOnConnect(true);
+            email.setSubject(mail.getSubject());
+            email.setFrom(fromMail);
+            email.setHtmlMsg(mail.getMessage());
+            email.addTo(mail.getEmail());
+            email.send();
+        } catch (EmailException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
+    // 랜덤 숫자 발생
     public static String ranNum() {
 
         Random random = new Random();
@@ -69,6 +88,9 @@ public class MailUtil {
         }
         return resultNum;
     }
+
+
+    // 보낼 값 셋팅
     // 보낼 값 셋팅
     public MailMessage setConfirmMail(String email, String ranNum) {
         String subject = "[LEMONG] 회원가입 인증번호 입니다.";

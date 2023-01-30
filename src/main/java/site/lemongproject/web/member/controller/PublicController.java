@@ -96,23 +96,27 @@ public class PublicController {
 
 
     // 이메일 전송
-    @PostMapping("join/confirm/send")
-    public ResponseBody<Map<String, Object>> sendEmail(@RequestBody String email) {
+    @PostMapping("join/chEmail")
+    public ResponseBody<Map<String, Object>> sendEmail(@RequestBody Map<String,Object> e) {
+        String email = String.valueOf(e.get("email"));
+        System.out.println(email);
 
         // 랜덤 값 생성
         String ranNum = mailUtil.ranNum();
         // 보낼 값 기본값 셋팅
         MailMessage mailMessage = mailUtil.setConfirmMail(email, ranNum);
-        // MaillUtil 초기화
-//        MailUtil mu = new MailUtil();//빈주입받아서 초기화할필요없음
-        mailUtil.send(mailMessage);
-        // 여기까지는 반드시 실행됨
-        EmailConfirm confirm=new EmailConfirm();
+        // MaillUtil 초기화(메일전송)
+//        mailUtil.send(mailMessage); // 일반 텍스트(보내짐)
+        mailUtil.htmlSend(mailMessage); // html 형식으로(테스트 중)
+
+        // 체크를 위한 코드
+        EmailConfirm confirm = new EmailConfirm();
         confirm.setEmail(email);
         confirm.setCode(ranNum);
+
         int authCode = memberService.insertConfirm(confirm);
 
-        System.out.println("이게 뜬다면 error는 안났다. 두둥.");
+        System.out.println("이게 뜬다면 error는 안났다.");
 
         if(authCode > 0) {
             return ResponseBuilder.success(authCode);
@@ -120,17 +124,28 @@ public class PublicController {
             return ResponseBuilder.failEmail(authCode);
         }
     }
-    @PostMapping("join/confirm/check")
-    public ResponseBody<String> checkEmail(@RequestBody EmailConfirm confirm) {
 
-        int result=memberService.checkConfirm(confirm);
-        switch (result){
-            case 1:
-                return ResponseBuilder.success("인증성공");
-            case -1:
-                return ResponseBuilder.timeOut();
-            default:return ResponseBuilder.failEmail(0);
+    // 인증번호 체크
+    @PostMapping("join/chEmailNum")
+    public ResponseBody<Map<String, Object>> checkEmailNum(@RequestBody Map<String, Object> auth){
+        String email = String.valueOf(auth.get("email")); // 입력한 이메일
+        String code = String.valueOf(auth.get("emailNum")); // 사용자가 입력한 인증코드
+
+        EmailConfirm confirm = new EmailConfirm();
+        confirm.setEmail(email);
+        confirm.setCode(code);
+
+        int result = memberService.checkEmail(confirm);
+        System.out.println(result);
+
+        if(result > 0) {
+            return ResponseBuilder.success(result);
+        } else {
+            return ResponseBuilder.failAuthEmail(result);
         }
 
     }
+
+
+
 }

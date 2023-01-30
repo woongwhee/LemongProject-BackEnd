@@ -84,8 +84,13 @@ public class ResponseBuilder{
     }
 
 
-
-
-
+    // 인증번호 체크
+    public static ResponseBody failAuthEmail(int num) {
+        ResponseBody response = new ResponseBody();
+        response.setCode("3005");
+        response.setMessage("FAILAUTHEMAIL");
+        response.setResult(num);
+        return response;
+    }
 
 }

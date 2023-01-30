@@ -8,6 +8,8 @@
         <result column="USER_NO" property="userNo"/>
         <result column="FEED_CONTENT" property="feedContent"/>
         <result column="FEED_AT" property="feedAt"/>
+        <collection property="feedList" column="FEED_NO" select="photoMapper.findByFeed"/>
+        <collection property="replayList" column="FEED_NO" select="photoMapper.findByFeed"/>
     </resultMap>
 
 

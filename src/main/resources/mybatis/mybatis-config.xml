@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE configuration
-        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
     <settings>
         <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
+
     <typeAliases>
         <typeAlias type="site.lemongproject.web.template.model.dto.Template" alias="Template"/>
         <typeAlias type="site.lemongproject.web.template.model.dto.TemplateCategory" alias="TemplateCategory"/>
@@ -26,7 +25,7 @@
     </typeAliases>
 
     <typeHandlers>
-        <typeHandler handler="site.lemongproject.common.type.handler.NameEnumTypeHandler"></typeHandler>
+        <typeHandler handler="site.lemongproject.common.type.handler.NameEnumTypeHandler"/>
     </typeHandlers>
     <mappers>
         <mapper resource="mybatis/mappers/photo-mapper.xml"/>
@@ -40,5 +39,6 @@
         <mapper resource="mybatis/mappers/member/member-mapper.xml"/>
         <mapper resource="mybatis/mappers/member/profile-mapper.xml"/>
         <mapper resource="mybatis/mappers/member/emailconfirm-mapper.xml"/>
+<!--        <mapper resource="mybatis/mappers/emailconfirm-mapper.xml" />-->
     </mappers>
 </configuration>

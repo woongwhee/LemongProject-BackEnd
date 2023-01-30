@@ -11,10 +11,7 @@ public class MailUtilTest {
     @Test
     public void mail(){
         MailUtil mu=new MailUtil();
-        MailMessage mm=new MailMessage();
-        mm.setSubject("제목입니다.");
-        mm.setMessage("내용입니다.");
-        mm.setEmail("dndgnlwls@gmail.com");
+        MailMessage mm=new MailMessage("제목입니다.","제목입니다.","dndgnlwls@gmail.com");
         mu.send(mm);
     }
 }
