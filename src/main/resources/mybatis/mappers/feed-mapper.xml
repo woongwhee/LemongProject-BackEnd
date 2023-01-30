@@ -8,10 +8,16 @@
         <result column="USER_NO" property="userNo"/>
         <result column="FEED_CONTENT" property="feedContent"/>
         <result column="FEED_AT" property="feedAt"/>
-        <collection property="feedList" column="FEED_NO" select="photoMapper.findByFeed"/>
-        <collection property="replayList" column="FEED_NO" select="photoMapper.findByFeed"/>
+        <result column="FILEPATH" property="filePath"/>
     </resultMap>
 
+    <resultMap  type="Photo" id="photoResultSet">
+        <result column="PHOTO_NO" property="photoNo"/>
+        <result column="USER_NO" property="userNo"/>
+        <result column="ORIGIN_NAME" property="originName"/>
+        <result column="CHANGE_NAME" property="changeName"/>
+        <result column="FILE_PATH" property="filePath"/>
+    </resultMap>
 
     <resultMap id="feedListResultSet" type="FeedList">
         <result column="FEED_NO" property="feedNo"/>
@@ -49,7 +55,8 @@
         F.USER_NO,
         F.FEED_CONTENT,
         F.FEED_AT,
-        LISTAGG(P.FILE_PATH ||P.CHANGE_NAME,',')WITHIN GROUP(ORDER BY F.FEED_NO) AS filePath
+        LISTAGG(P.FILE_PATH ||P.CHANGE_NAME,',')WITHIN GROUP(ORDER BY F.FEED_NO) AS filePath,
+        LISTAGG(FP.PHOTO_NO, ',') WITHIN GROUP ( ORDER BY F.FEED_NO) AS photoNo
         FROM FEED F
         JOIN FEED_PHOTO FP on F.FEED_NO = FP.FEED_NO
         JOIN PHOTO P on FP.PHOTO_NO = P.PHOTO_NO
@@ -93,6 +100,27 @@
     <insert id="insertFeedPhoto" parameterType="site.lemongproject.web.feed.model.dto.FeedInsertPhoto">
         INSERT INTO FEED_PHOTO (FEED_NO, PHOTO_NO, VALUE) VALUES (#{feedNo},#{photoNo},#{value})
     </insert>
+<!--  피드 사진 수정  -->
+    <select id="maxValue" parameterType="Map" resultType="int">
+        SELECT MAX(VALUE) FROM FEED_PHOTO WHERE FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
+    </select>
+    <select id="nowValue" parameterType="Map" resultType="int">
+        SELECT VALUE FROM FEED_PHOTO WHERE FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND PHOTO_NO= #{photoNo}
+    </select>
 
+    <update id="updateValueFirst" parameterType="Map">
+        UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) = 1
+    </update>
+    <update id="updateValueMiddle" parameterType="Map">
+        UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND
+        (SELECT Max(VALUE) from FEED_PHOTO where FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})) > (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) > 1
+    </update>
+    <update id="updateValueLast" parameterType="Map">
+        UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE  PHOTO_NO= #{photoNo}) AND
+        (SELECT Max(VALUE) from FEED_PHOTO where FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})) = (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
+    </update>
+    <delete id="deleteFeedPhoto" parameterType="Map">
+        DELETE FROM FEED_PHOTO where PHOTO_NO = #{photoNo}
+    </delete>
 
 </mapper>

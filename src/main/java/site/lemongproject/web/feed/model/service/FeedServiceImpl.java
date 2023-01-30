@@ -8,6 +8,8 @@ import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
+import site.lemongproject.web.feed.model.dto.FeedList;
+import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.ArrayList;
@@ -22,7 +24,7 @@ public class FeedServiceImpl implements FeedService{
     final private PhotoDao photoDao;
 
     @Override
-    public List selectFeed() {
+    public List<FeedList> selectFeed() {
         return feedDao.selectFeed();
     }
 
@@ -76,4 +78,27 @@ public class FeedServiceImpl implements FeedService{
         return photoDao.deletePhoto(photoNo);
     }
 
+    // 사진 피드 수정하기
+    @Override
+    public int modifyPhoto(Map<String,Object> photoNo){
+        int maxValue = feedDao.maxValue(photoNo);
+        int nowValue = feedDao.nowValue(photoNo);
+        System.out.println(maxValue);
+        System.out.println(nowValue);
+
+        int result = 1;
+
+        if(nowValue == 1){
+            result *= feedDao.updateValueFirst(photoNo);
+        } else if (1 < nowValue && nowValue < maxValue) {
+            result *= feedDao.updateValueMiddle(photoNo);
+        }else{
+            result *= feedDao.updateValueLast(photoNo);
+        }
+        if(result > 1){
+            return feedDao.modifyPhoto(photoNo);
+        }else{
+            return result*0;
+        }
+    };
 }
