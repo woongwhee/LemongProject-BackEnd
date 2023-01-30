@@ -5,18 +5,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
+import site.lemongproject.anotaion.TestRunner;
 import site.lemongproject.common.config.ApplicationConfig;
-import site.lemongproject.test.Configure;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
+import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
 import site.lemongproject.web.template.model.vo.TempalteTodoInsertVo;
 import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
 
@@ -27,7 +27,13 @@ import static org.assertj.core.api.Assertions.*;
 
 
 @Transactional
-public class TemplateServiceImplTest extends Configure {
+//@TestRunner
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@WebAppConfiguration
+@ContextConfiguration(loader = AnnotationConfigWebContextLoader.class,classes = ApplicationConfig.class)
+
+public class TemplateServiceImplTest {
     @Autowired private TemplateWriteService templateService;
     @Autowired private TemplateDao templateDao;
     @Autowired private TemplateTodoDao templateTodoDao;
@@ -47,8 +53,10 @@ public class TemplateServiceImplTest extends Configure {
     }
     @Test
     @DisplayName("템플릿 투두리스트 삽입테스트")
-    public void insertTodo() {
+    public void 삽입() {
         Template t=templateService.loadInsertPage(1);
+        System.out.println(t);
+
         TempalteTodoInsertVo ttiv=new TempalteTodoInsertVo();
         ttiv.setTemplateNo(t.getTemplateNo());
         ttiv.setContent("테스트투두");
@@ -57,8 +65,9 @@ public class TemplateServiceImplTest extends Configure {
         day.add(1);
         day.add(3);
         ttiv.setDayList(day);
-        List<TemplateTodo> todoList=templateService.insertTodo(ttiv);
-        assertThat(todoList.size()).isEqualTo(3);
+        ttiv.setUserNo(1);
+        int result=templateService.insertTodo(ttiv);
+        assertThat(result).isEqualTo(3);
 
     }
     @Test
@@ -67,11 +76,11 @@ public class TemplateServiceImplTest extends Configure {
         int templateNo=30;
         List<TemplateTodo> tdList=templateTodoDao.findByTemplate(templateNo);
         TemplateTodo ttd=tdList.stream().filter(e->e.getValue()==1&&e.getDay()==1).findAny().orElseThrow();
-        int result=templateService.deleteTemplateTodo(ttd.getTpTodoNo());
+        int result=templateService.deleteTodo(new TPTodoDeleteVo(1,ttd.getTpTodoNo()));
         assertThat(result).isNotZero();
         ttd=tdList.stream().filter(e->e.getValue()==2&&e.getDay()==1).findAny().orElseThrow();
         tdList=templateTodoDao.findByTemplate(templateNo);
-        TemplateTodo ttd2=tdList.stream().filter(e->e.getValue()==1&&e.getDay()==1).findAny().orElseThrow();
+        TemplateTodo ttd2=tdList.stream().filter(e->e.getValue()==1&&e.getDay()==1).findAny().orElse(null);
         assertThat(ttd2.getTpTodoNo()).isEqualTo(ttd.getTpTodoNo());
     }
     @Test

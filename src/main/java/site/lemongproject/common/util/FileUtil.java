@@ -26,7 +26,6 @@ public class FileUtil {
         String filePath = SAVE_PATH+ creatPath +"/"+ changeName;
         try{
             m.transferTo(new File(filePath));
-            p=new Photo();
             p.setOriginName(m.getOriginalFilename());
             p.setChangeName(changeName);
             p.setFilePath(creatPath);
