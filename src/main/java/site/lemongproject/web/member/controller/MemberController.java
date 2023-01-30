@@ -113,13 +113,12 @@ public class MemberController {
         }
     }
 
-
-
     // 유저 프로필 INSERT. => 웅휘형이 만든 FileUtil로 빼기 => rename(m.getOriginalFilename()) 오류 고치기.
     @RequestMapping(value="/insertUserProfile")
 //    @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
     public int insertUserProfile(
-            @RequestParam(value="file", required=false) MultipartFile[] files){
+            @RequestParam(value="file", required=false) MultipartFile[] files ,
+            @RequestParam(value="userNo" , required = false) int userNo){
 
         String webPath = "/resources/images/userProfile/";
 
@@ -163,7 +162,7 @@ public class MemberController {
             }
 
             p.setFilePath(webPath+mf.getOriginalFilename());
-            p.setUserNo(2);
+            p.setUserNo(userNo);
             p.setChangeName(changeName);
             p.setOriginName(mf.getOriginalFilename());
 
@@ -176,9 +175,8 @@ public class MemberController {
     // 유저 프로필 UPDATE. => 웅휘형이 만든 FileUtil로 빼기 => rename(m.getOriginalFilename()) 오류 고치기.
     @RequestMapping(value = "/updateUserProfile")
     public int updateUserProfile(
-            @RequestParam(value = "file" , required = false) MultipartFile[] ufiles) {
-
-        System.out.println(ufiles + "통과됨");
+            @RequestParam(value = "file" , required = false) MultipartFile[] ufiles ,
+            @RequestParam(value = "userNo" , required = false) int userNo) {
         
         String webPath = "/resources/images/userProfile/";
 
@@ -222,7 +220,7 @@ public class MemberController {
             }
                 
             p.setFilePath(webPath+mf.getOriginalFilename());
-            p.setUserNo(2);
+            p.setUserNo(userNo);
             p.setChangeName(changeName);
             p.setOriginName(mf.getOriginalFilename());
 
@@ -231,15 +229,6 @@ public class MemberController {
         }
         return result;
 
-    }
-
-    @GetMapping("/selectMyProfileImg")
-    // 프로필 사진 뽑아서 리액트로 보내기
-    public List<Photo> selectMyProfile(){
-
-        List<Photo> pList = memberService.selectMyProfile();
-
-        return pList;
     }
 
     @GetMapping("/myprofile")
@@ -255,6 +244,34 @@ public class MemberController {
         }
         }
 
+    // userNo에 해당하는 member 데이터 가져오기.
+    @GetMapping("/selectMember")
+    public ResponseBody<Member> selectMember(@RequestParam(value = "userNo" , required = false) int userNo){
 
+        System.out.println(userNo + " = = = ");
+        Member m = memberService.seletMember(userNo);
+        return ResponseBuilder.success(m);
+    }
+
+    // userNo에 해당하는 user 프로필 정보 가져오기(changeName 포함).
+    @GetMapping("/selectMyProfile")
+    public ResponseBody<Profile> selectMyProfile(@RequestParam(value="userNo" , required = false) int userNo){
+
+        Profile p = memberService.selectMyProfile(userNo);
+        return ResponseBuilder.success(p);
+    }
+
+    // 검색 기능(유저 아이디 검색)
+    @GetMapping("/searchUser")
+    public ResponseBody<Profile> searchUser(@RequestParam(value="userNick" , required = false) String userNick){
+
+        System.out.println(userNick + " : success");
+
+        List<Profile> p = memberService.searchUser(userNick);
+
+        System.out.println(p + " : success");
+
+        return ResponseBuilder.success(p);
+    }
 
 }

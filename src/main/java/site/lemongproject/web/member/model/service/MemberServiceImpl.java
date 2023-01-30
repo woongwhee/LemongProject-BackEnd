@@ -44,9 +44,9 @@ public class MemberServiceImpl implements MemberService {
         return memberDao.insertUserProfile(p);
     }
 
-    public List<Photo> selectMyProfile(){
-        return memberDao.selectMyProfile();
-    }
+//    public List<Photo> selectMyProfile(){
+//        return memberDao.selectMyProfile();
+//    }
 
     public int updateUserProfile(Photo p){
         return memberDao.updateUserProfile(p);
@@ -56,5 +56,17 @@ public class MemberServiceImpl implements MemberService {
         Member m=memberDao.findPublic(userNo);
         Profile p=profileDao.selectProfile(userNo);
         return new MyProfileVo(m,p);
+    }
+
+    public Member seletMember(int userNo){
+        return memberDao.selectMember(userNo);
+    }
+
+    public Profile selectMyProfile(int userNo){
+        return memberDao.selectMyProfile(userNo);
+    }
+
+    public List<Profile> searchUser(String userNick){
+        return memberDao.searchUser(userNick);
     }
 }

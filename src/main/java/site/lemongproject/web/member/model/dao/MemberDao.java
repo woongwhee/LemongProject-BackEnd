@@ -30,9 +30,9 @@ public class MemberDao {
         return sqlSession.insert("memberMapper.insertUserProfile" , p);
     }
 
-    public List<Photo> selectMyProfile() {
-        return sqlSession.selectList("memberMapper.selectMyProfile");
-    }
+//    public List<Photo> selectMyProfile() {
+//        return sqlSession.selectList("memberMapper.selectMyProfile");
+//    }
 
     public int updateUserProfile(Photo p) {
         return sqlSession.update("memberMapper.updateUserProfile" , p);
@@ -41,5 +41,17 @@ public class MemberDao {
 
     public Member findPublic(int userNo) {
         return sqlSession.selectOne("memberMapper.findPublic" , userNo);
+    }
+
+    public Member selectMember(int userNo) {
+        return sqlSession.selectOne("memberMapper.selectMember" , userNo);
+    }
+
+    public Profile selectMyProfile(int userNo) {
+        return sqlSession.selectOne("profileMapper.selectMyProfile" , userNo);
+    }
+
+    public List<Profile> searchUser(String userNick) {
+        return sqlSession.selectList("profileMapper.searchUser" , userNick);
     }
 }
