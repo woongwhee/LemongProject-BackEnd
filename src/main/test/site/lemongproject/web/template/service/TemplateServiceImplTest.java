@@ -89,6 +89,7 @@ public class TemplateServiceImplTest {
         Template t=templateService.resetUnSave(1);
         int tno=t.getTemplateNo();
         TemplateUpdateVo tuv=new TemplateUpdateVo();
+        tuv.setUserNo(1);
         tuv.setTemplateNo(tno);
         tuv.setTitle("하이");
         int result=templateService.updateUnSaveTemplate(tuv);

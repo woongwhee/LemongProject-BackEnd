@@ -35,7 +35,9 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
 
     @Override
     public int updateUnSaveTemplate(TemplateUpdateVo templateVo) {
-        return templateDao.updateUnSave(templateVo);
+        if(templateDao.isWriter(new WriterCheckVo(templateVo.getUserNo(),templateVo.getTemplateNo()))){
+            return templateDao.updateUnSave(templateVo);}
+        else return 0;
     }
 
     /**
