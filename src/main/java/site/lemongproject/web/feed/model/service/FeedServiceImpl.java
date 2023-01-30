@@ -80,10 +80,10 @@ public class FeedServiceImpl implements FeedService{
     public int modifyPhoto(Map<String,Object> photoNo){
         int maxValue = feedDao.maxValue(photoNo);  // 4
         int nowValue = feedDao.nowValue(photoNo);  // 2
-        System.out.println(maxValue);
-        System.out.println(nowValue);
+        System.out.println("maxValue : " + maxValue);
+        System.out.println("nowValue : "+nowValue);
 
-        int result = 1;
+        int result = 2;
 
         if(nowValue == 1){
             result *= feedDao.updateValueFirst(photoNo);

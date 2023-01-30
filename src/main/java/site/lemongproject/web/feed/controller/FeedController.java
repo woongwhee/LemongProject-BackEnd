@@ -70,15 +70,15 @@ public class FeedController {
     public Map<String,Object> feedDelete(@RequestBody Map<String,Object> deleteFeedNo){
         System.out.println(deleteFeedNo);
 
-        int check = feedService.deleteFeed(deleteFeedNo);
+//        int check = feedService.deleteFeed(deleteFeedNo);
 
         Map<String, Object> result = new HashMap<>();
 
-        if(check > 0){
-            result.put("Java","success");
-        }else{
-            result.put("Java","fail");
-        }
+//        if(check > 0){
+//            result.put("Java","success");
+//        }else{
+//            result.put("Java","fail");
+//        }
         return result;
     }
 
@@ -156,6 +156,7 @@ public class FeedController {
         System.out.println(photoNo);
         int check = feedService.deletePhoto(photoNo);
         Map<String,Object> result = new HashMap<>();
+        System.out.println("check : "+check);
         if(check > 0){
             result.put("Java","success");
         }else{
@@ -169,7 +170,7 @@ public class FeedController {
     public Map<String,Object> modifyPhoto(@RequestBody Map<String,Object> photoNo){
         System.out.println(photoNo);
         int check = feedService.modifyPhoto(photoNo);
-        System.out.println(check);
+        System.out.println("check : " + check);
         Map<String ,Object> result = new HashMap<>();
         if(check>0){
             result.put("Java","success");
