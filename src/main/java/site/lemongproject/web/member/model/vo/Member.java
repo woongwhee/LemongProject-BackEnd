@@ -13,4 +13,5 @@ public class Member {
     private int status; // 회원 상태
     private String userName; // 회원 이름
     private String nickName; // 닉네임
+
 }

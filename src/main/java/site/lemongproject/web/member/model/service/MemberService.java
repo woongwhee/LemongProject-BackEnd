@@ -18,10 +18,16 @@ public interface MemberService {
     // 유저 프로필 테이블에서 가져오기
     public int insertUserProfile(Photo p);
 
-    public List<Photo> selectMyProfile();
+//    public List<Photo> selectMyProfile();
 
     public int updateUserProfile(Photo p);
 
 
     MyProfileVo getMyProfile(int userNo);
+
+    Member seletMember(int userNo);
+
+    Profile selectMyProfile(int userNo);
+
+    List<Profile> searchUser(String userNick);
 }
