@@ -66,7 +66,7 @@ public class FeedServiceImpl implements FeedService{
 
     // 사진 넣기
     @Override
-    public int insertFeedPhoto(Photo p){
+    public int insertPhoto(Photo p){
         return photoDao.insertPhoto(p);
     }
 

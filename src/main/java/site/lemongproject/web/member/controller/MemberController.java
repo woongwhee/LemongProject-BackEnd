@@ -62,21 +62,21 @@ public class MemberController {
 
 
     // 마이페이지 회원정보 수정
-    @GetMapping("/selectPro")
-    public List<Profile> MyPageUpdate(){
-
-        List<Profile> mList = memberService.selectMyProList();
-
-        return mList;
-    }
-
-    // MEMBER테이블 유저 정보 조회.
-    @GetMapping("/selectUser")
-    public List<Member> selectUser(){
-        List<Member> mList = memberService.selectUser();
-        ResponseBody<List<Member>> r= ResponseBuilder.success(mList);
-        return mList;
-    }
+//    @GetMapping("/selectPro")
+//    public List<Profile> MyPageUpdate(@SessionAttribute()){
+//
+//        List<Profile> mList = memberService.mypage();
+//
+//        return mList;
+//    }
+//
+//    // MEMBER테이블 유저 정보 조회.
+//    @GetMapping("/selectUser")
+//    public List<Member> selectUser(){
+//        List<Member> mList = memberService.selectUser();
+//        ResponseBody<List<Member>> r= ResponseBuilder.success(mList);
+//        return mList;
+//    }
 
     // USER_PROFILE테이블 유저 닉네임 업데이트.
     @GetMapping("/checkNickName")

@@ -36,11 +36,6 @@
     <delete id="deleteOne" parameterType="TPTodoDeleteVo">
         DELETE TEMPLATE_TODO
         WHERE TP_TODO_NO = #{tpTodoNo}
-          AND TEMPLATE_NO = (SELECT TEMPLATE_NO
-                             FROM TEMPLATE
-                                      JOIN TEMPLATE_TODO USING (TEMPLATE_NO)
-                             WHERE TP_CREATER = #{userNo}
-                               AND TP_TODO_NO = #{tpTodoNo})
     </delete>
     <update id="afterDelete" parameterType="TemplateTodo">
         UPDATE TEMPLATE_TODO
@@ -66,6 +61,8 @@
         FROM TEMPLATE_TODO
         JOIN TEMPLATE USING(TEMPLATE_NO)
         WHERE TP_CREATER=#{userNO}
-          AND TEMPLATE_NO=#{templateNo}
+          AND TP_TODO_NO=#{tpTodoNo}
+        AND
+
     </select>
 </mapper>

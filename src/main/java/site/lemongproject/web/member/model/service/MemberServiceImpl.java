@@ -16,6 +16,7 @@ import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -24,8 +25,8 @@ public class MemberServiceImpl implements MemberService {
     final private MemberDao memberDao;
     final private ProfileDao profileDao;
     final private PhotoDao photoDao;
-    final private FileUtil fileUtil;
     final private EmailConfirmDao confirmDao;
+    final private FileUtil fileUtil;
 
     @Override
     public Member loginMember(Member m) {
@@ -36,32 +37,34 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
+//    public int insertMember(Map<String, Object> m) {
     public int insertMember(JoinVo joinVo) {
+//        int result = memberDao.insertMember(m);
         int result = memberDao.insertMember(joinVo);
         result*=profileDao.createProfile(joinVo.getNickName());
-        System.out.println("회원가입 dao 실행 : " + result);
+//        System.out.println("회원가입 dao 실행 : " + result);
+//        result*=profileDao.createProfile((String) m.get("nickName"));
         return result;
     }
 
+
+    @Override
+    public int insertConfirm(EmailConfirm confirm) {
+        int result= confirmDao.insertConfirm(confirm);
+        confirmDao.deleteAnother(confirm);
+        return result;
+    }
+
+    @Override
+    public int checkEmail(EmailConfirm confirm) {
+        return confirmDao.checkConfirm(confirm);
+    }
 
     @Override
     public int checkNick(String nickName) {
         int result = profileDao.checkNick(nickName);
         System.out.println("중복 체크 dao 실행: "+result);
         return result;
-    }
-
-
-
-
-    @Override
-    public List<Profile> selectMyProList() {
-        return null;
-    }
-
-    @Override
-    public List<Member> selectUser() {
-        return null;
     }
 
     @Override
@@ -85,28 +88,10 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Photo> selectMyProfile() {
-        return null;
-    }
-
-
-    @Override
     public int deleteUser(int userNo) {
         int result=memberDao.deleteUser(userNo);
         result=profileDao.deleteProfile(userNo);
         return  result;
-    }
-
-    @Override
-    public int insertConfirm(EmailConfirm confirm) {
-        int result= confirmDao.insertConfirm(confirm);
-        confirmDao.deleteAnother(confirm);
-        return result;
-    }
-
-    @Override
-    public int checkConfirm(EmailConfirm confirm) {
-        return confirmDao.checkConfirm(confirm);
     }
 
 }

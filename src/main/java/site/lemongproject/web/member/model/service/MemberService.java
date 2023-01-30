@@ -18,18 +18,17 @@ public interface MemberService {
      int checkNick(String nickName);
      int updateProfile(Profile profile);
 
+    int checkEmail(EmailConfirm confirm);
+
     // 유저 프로필 테이블에서 가져오기
-     List<Profile> selectMyProList();
     // 멤버 테이블에서 가져오기
-     List<Member> selectUser();
 
      int insertUserPhoto(Photo p);
 
      int updatePassword(ChangePwdVo cpw);
 
-     List<Photo> selectMyProfile();
      int deleteUser(int userNo);
 //     이메일인증
-     int insertConfirm(EmailConfirm confirm);
-    int checkConfirm(EmailConfirm confirm);
+    int insertConfirm(EmailConfirm confirm);
+//    int checkConfirm(EmailConfirm confirm);
 }
