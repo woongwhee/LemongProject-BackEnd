@@ -134,4 +134,17 @@ public class FollowController {
         return ResponseBuilder.success(fingCount);
     }
 
+    // 내가 팔로우 하고 있는 팔로우리스트 띄우기.
+    @GetMapping("/selectMyFollowerList")
+    public ResponseBody<Follow> selectMyFollowerList(
+            @RequestParam(value = "followerIng" , required = false) int followerIng){
+
+        Follow f = new Follow();
+        f.setFollowing(followerIng);
+
+        List<Follow> fmyList = followService.selectMyFollowersdList(f);
+
+        return ResponseBuilder.success(fmyList);
+    }
+
 }
