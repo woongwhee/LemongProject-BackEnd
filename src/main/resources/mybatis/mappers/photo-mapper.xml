@@ -35,8 +35,8 @@
         SELECT
             P.*
         FROM PHOTO P
-            JOIN USER_PROFILE USING (PHOTO_NO)
-        WHERE USER_NO=#{userNo}
+            JOIN USER_PROFILE U USING (PHOTO_NO)
+        WHERE U.USER_NO=#{userNo}
     </select>
     <select id="findOne" parameterType="_int" resultMap="photoMap">
         SELECT

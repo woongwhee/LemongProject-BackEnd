@@ -145,7 +145,7 @@
     <select id="isWriter" parameterType="WriterCheckVo" resultType="_boolean">
         SELECT COUNT(*)
         FROM TEMPLATE
-        WHERE TP_CREATER = #{userNO}
-          AND TEMPLATE_NO = #{templateNo}
+        WHERE TP_CREATER = #{userNo}
+          AND TEMPLATE_NO = #{refNo}
     </select>
 </mapper>

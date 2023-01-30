@@ -47,9 +47,7 @@ public class MemberDao {
         return sqlSession.selectOne("profileMapper.selectMyProfile", userNo);
     }
 
-    public List<Profile> searchUser(String userNick) {
-        return sqlSession.selectList("profileMapper.searchUser", userNick);
-    }
+
 }
 
 //    public int checkEmail(Map<String, Object> e, String ranNum) {
@@ -60,4 +58,3 @@ public class MemberDao {
 //        }
 //        return sqlSession.insert("memberMapper.insertEmail", e);
 //    }
-}

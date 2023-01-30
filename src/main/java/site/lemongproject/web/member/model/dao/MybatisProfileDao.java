@@ -4,9 +4,10 @@ package site.lemongproject.web.member.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
@@ -46,6 +47,9 @@ public class MybatisProfileDao implements ProfileDao {
     public int deleteProfile(int userNo) {
         return sqlSession.delete("profileMapper.deleteProfile",userNo);
     }
-
+    @Override
+    public List<Profile> searchUser(String userNick) {
+        return sqlSession.selectList("profileMapper.searchUser", userNick);
+    }
 
 }

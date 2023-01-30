@@ -4,6 +4,8 @@ package site.lemongproject.web.member.model.dao;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
 
+import java.util.List;
+
 public interface ProfileDao {
     int checkNick(String nick);
     int insertProfile(Profile profile);
@@ -18,4 +20,5 @@ public interface ProfileDao {
 
     int deleteProfile(int userNo);
 
+    List<Profile> searchUser(String userNick);
 }

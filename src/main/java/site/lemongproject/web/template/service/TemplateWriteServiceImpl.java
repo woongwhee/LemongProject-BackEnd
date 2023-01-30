@@ -44,11 +44,11 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
      * @return
      */
     @Override
-    public List<TemplateTodo> insertTodo(TempalteTodoInsertVo tiv) {
+    public int insertTodo(TempalteTodoInsertVo tiv) {
         int result=0;
-        boolean isWriter=templateDao.isWriter(new WriterCheckVo(tiv.getUserNo(),tiv.getTemplateNo() ));
+        boolean isWriter=templateDao.isWriter(new WriterCheckVo(tiv.getUserNo(),tiv.getTemplateNo()));
         if(!isWriter){
-            return null;
+            return 0;
         }
         List<TemplateTodo> todoList = new ArrayList<>();
         for (int day : tiv.getDayList()) {
@@ -57,9 +57,10 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
             t.setDay(day);
             t.setContent(tiv.getContent());
             todoList.add(t);
-            result*=templateTodoDao.insertOne(t);
+            result+=templateTodoDao.insertOne(t);
+            System.out.println(t);
         }
-        return todoList;
+        return result;
     }
 
     /**
@@ -69,14 +70,17 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
      */
     @Override
     public Template resetUnSave(int userNo) {
-        int result=templateTodoDao.deleteUnSave(userNo);
-        result*=templateDao.deleteUnSave(userNo);
-        result*=templateDao.createTemp(userNo);
-        if(result>0){
-            return templateDao.findUnSave(userNo);
-        }else{
-            return null;
+
+        Template t=templateDao.findUnSave(userNo);
+        if(t!=null){
+            int result=templateTodoDao.deleteUnSave(userNo);
+            result*=templateDao.deleteUnSave(userNo);
+            if(result==0){
+                return null;
+            }
         }
+        int result=templateDao.createTemp(userNo);
+        return templateDao.findUnSave(userNo);
     }
 
     /**

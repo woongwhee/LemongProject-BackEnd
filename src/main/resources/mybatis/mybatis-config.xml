@@ -21,6 +21,7 @@
         <typeAlias type="site.lemongproject.web.member.model.vo.EmailConfirm" alias="EmailConfirm" />
         <typeAlias type="site.lemongproject.web.feed.model.dto.FeedInsert" alias="FeedInsert"/>
         <typeAlias type="site.lemongproject.web.feed.model.dto.FeedList" alias="FeedList"/>
+        <typeAlias type="site.lemongproject.web.follow.model.vo.Follow" alias="Follow"/>
         <package name="site.lemongproject.web.template.model.vo"/>
         <package name="site.lemongproject.web.challenge.model.dto"/>
     </typeAliases>

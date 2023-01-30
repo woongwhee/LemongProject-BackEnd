@@ -114,57 +114,63 @@ public class MemberController {
     @RequestMapping(value = "/updateUserProfile")
     public int updateUserProfile(
             @RequestParam(value = "file" , required = false) MultipartFile[] ufiles ,
-            @RequestParam(value = "userNo" , required = false) int userNo) {
+            @SessionAttribute(value = "loginMember") Member loginMember) {
 
-        String webPath = "/resources/images/userProfile/";
+//        String webPath = "/resources/images/userProfile/";
+//
+//        int result = 0;
+//
+//        Photo p = new Photo();
+//
+//        for (MultipartFile mf : ufiles) {
+//
+//            String originFileName = mf.getOriginalFilename(); // 원본 파일 명
+//            long fileSize = mf.getSize(); // 파일 사이즈
+//            System.out.println("originFileName : " + originFileName);
+//            System.out.println("fileSize : " + fileSize);
+//
+//            // 1. 원본 파일명 뽑기.
+//            String originName= mf.getOriginalFilename();
+//
+//            // 2. 시간 형식을 문자열로 뽑아오기.
+//            // 년월일시분초
+//            String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+//
+//            // 3. 뒤에 붙을 5자리 랜덤값 뽑기.
+//            int random = (int)(Math.random() * 90000 + 10000); // 5자리 랜덤값
+//
+//            // 4. 원본파일명으로부터 확장자명 뽑기.
+//            // .jpg
+//            String ext = originName.substring(originName.lastIndexOf("."));
+//
+//            // 5. 다 이어붙이기.
+//            String changeName = currentTime + random + ext;
+//
+//            // 폴더에 이미지 저장.
+//            String savePath = "C:/LemongProject/src/main/webapp/resources/images/userProfile/";
+//
+//            if (!mf.getOriginalFilename().equals("")) { // 파일명이 비어있지 않은 경우
+//                try {
+//                    mf.transferTo(new File(savePath + changeName));
+//                } catch (IllegalStateException | IOException e) {
+//                    System.out.println(e.getMessage() + "오류 발생");
+//                }
+//            }
+//
+//            p.setFilePath(webPath+mf.getOriginalFilename());
+//            p.setUserNo(userNo);
+//            p.setChangeName(changeName);
+//            p.setOriginName(mf.getOriginalFilename());
+//
+//            result = memberService.updateUserProfile(p);
+//
+//        }
+        Photo p=new Photo();
+        p.setUserNo(loginMember.getUserNo());
+        fileUtil.saveFile(ufiles[0],p );
+        int result=memberService.insertUserPhoto(p);
 
-        int result = 0;
 
-        Photo p = new Photo();
-
-        for (MultipartFile mf : ufiles) {
-
-            String originFileName = mf.getOriginalFilename(); // 원본 파일 명
-            long fileSize = mf.getSize(); // 파일 사이즈
-            System.out.println("originFileName : " + originFileName);
-            System.out.println("fileSize : " + fileSize);
-
-            // 1. 원본 파일명 뽑기.
-            String originName= mf.getOriginalFilename();
-
-            // 2. 시간 형식을 문자열로 뽑아오기.
-            // 년월일시분초
-            String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-
-            // 3. 뒤에 붙을 5자리 랜덤값 뽑기.
-            int random = (int)(Math.random() * 90000 + 10000); // 5자리 랜덤값
-
-            // 4. 원본파일명으로부터 확장자명 뽑기.
-            // .jpg
-            String ext = originName.substring(originName.lastIndexOf("."));
-
-            // 5. 다 이어붙이기.
-            String changeName = currentTime + random + ext;
-
-            // 폴더에 이미지 저장.
-            String savePath = "C:/LemongProject/src/main/webapp/resources/images/userProfile/";
-
-            if (!mf.getOriginalFilename().equals("")) { // 파일명이 비어있지 않은 경우
-                try {
-                    mf.transferTo(new File(savePath + changeName));
-                } catch (IllegalStateException | IOException e) {
-                    System.out.println(e.getMessage() + "오류 발생");
-                }
-            }
-
-            p.setFilePath(webPath+mf.getOriginalFilename());
-            p.setUserNo(userNo);
-            p.setChangeName(changeName);
-            p.setOriginName(mf.getOriginalFilename());
-
-            result = memberService.updateUserProfile(p);
-
-        }
         return result;
 
     }
@@ -174,27 +180,26 @@ public class MemberController {
 
 //        List<Member> mList = memberService.userSelect(loginMember);
         MyProfileVo glv=memberService.getMyProfile(loginMember.getUserNo());
-        if(glv!=null) {
+        if (glv!=null) {
             return ResponseBuilder.success(glv);
         }else
         {
             return ResponseBuilder.success(glv);
         }
     }
+    //
 
     @GetMapping("/selectMember")
-    public ResponseBody<Member> selectMember(@RequestParam(value = "userNo" , required = false) int userNo){
+    public ResponseBody<Member> selectMember(@SessionAttribute("loginUser") Member loginUser){
 
-        System.out.println(userNo + " = = = ");
-        Member m = memberService.seletMember(userNo);
+        Member m = memberService.selectMember(loginUser.getUserNo());
         return ResponseBuilder.success(m);
     }
 
     // userNo에 해당하는 user 프로필 정보 가져오기(changeName 포함).
     @GetMapping("/selectMyProfile")
-    public ResponseBody<Profile> selectMyProfile(@RequestParam(value="userNo" , required = false) int userNo){
-
-        Profile p = memberService.selectMyProfile(userNo);
+    public ResponseBody<Profile> selectMyProfile(@SessionAttribute("loginUser") Member loginUser){
+        Profile p = memberService.selectMyProfile(loginUser.getUserNo());
         return ResponseBuilder.success(p);
     }
 
