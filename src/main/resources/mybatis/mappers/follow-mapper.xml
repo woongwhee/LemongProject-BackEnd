@@ -100,5 +100,17 @@
         HAVING FOLLOWER = #{follower}
     </select>
 
+    <!-- 내가 팔로우하고있는 사용자들 리스트 띄우기  -->
+    <select id="selectMyFollowersdList" parameterType="Follow" resultMap="followResultSet">
+        SELECT
+            U.USER_NO ,
+            NICK_NAME ,
+            CHANGE_NAME
+        FROM FOLLOW F
+        JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
+        LEFT JOIN PHOTO P USING(PHOTO_NO)
+        WHERE F.FOLLOWING = #{following}
+    </select>
+
 </mapper>
 

@@ -42,4 +42,8 @@ public class FollowServiceImpl implements FollowService{
     public Follow AcceptFollowingCount(Follow f){
         return followDao.AcceptFollowingCount(f);
     }
+
+    public List<Follow> selectMyFollowersdList(Follow f){
+        return followDao.selectMyFollowersdList(f);
+    }
 }

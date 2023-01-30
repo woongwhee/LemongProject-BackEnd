@@ -41,4 +41,8 @@ public class FollowDao {
     public Follow AcceptFollowingCount(Follow f) {
         return sqlSession.selectOne("followMapper.acceptFollowingCount" , f);
     }
+
+    public List<Follow> selectMyFollowersdList(Follow f) {
+        return sqlSession.selectList("followMapper.selectMyFollowersdList" , f);
+    }
 }
