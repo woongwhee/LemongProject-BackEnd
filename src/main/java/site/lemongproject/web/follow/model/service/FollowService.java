@@ -18,4 +18,6 @@ public interface FollowService {
     Follow AcceptFollowCount(Follow f);
 
     Follow AcceptFollowingCount(Follow f);
+
+    List<Follow> selectMyFollowersdList(Follow f);
 }
