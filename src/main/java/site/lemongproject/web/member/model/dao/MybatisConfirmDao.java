@@ -28,6 +28,6 @@ public class MybatisConfirmDao implements EmailConfirmDao{
 
     @Override
     public int deleteAnother(EmailConfirm confirm) {
-        return session.selectOne("emailConfirmMapper.deleteAnother",confirm);
+        return session.delete("emailConfirmMapper.deleteAnother",confirm);
     }
 }
