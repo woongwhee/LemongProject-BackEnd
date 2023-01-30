@@ -1,44 +1,97 @@
 package site.lemongproject.web.todo.controller;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import site.lemongproject.common.response.ResponseBody;
+import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.todo.model.vo.Todo;
 import site.lemongproject.web.todo.service.TodoService;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @RestController
-@RequestMapping("/todo")
+@RequestMapping(value = "/todo", method = {RequestMethod.GET, RequestMethod.POST})
 @RequiredArgsConstructor
 public class TodoController {
 
     final private TodoService todoService;
 
-    @GetMapping("/getTodo")
-    public List<Todo> selectToDo(Date date, Member loginUser){
-
+    @GetMapping ("/getTodo")
+    public List<Todo> selectTodo(@RequestParam(value = "todoDate" , required = false) String todoDate,
+                                 @RequestParam(value = "userNo", required = false) int userNo) throws ParseException {
 //        List<Todo> t = todoService.selectToDo(loginUser.getUserNo(),date);
-        List<Todo> t = todoService.selectToDo();
 
-        return t;
+//        System.out.println("넘겨준 userNo: "+userNo);
+//        System.out.println("넘겨준 todoDate: "+todoDate);
+
+        Todo t = new Todo();
+        t.setTodoDate(todoDate);
+        t.setUserNo(userNo);
+
+        List<Todo> todoList = todoService.selectTodo(t);
+
+        return todoList;
     }
 
-    @GetMapping("/insert")
-    public String todoCreate(Todo t, @RequestParam(value = "Todo",  required = false) List<Todo> tdl){
-        int result = 0;
-        result = todoService.insertTodo(t, tdl);
+    @PostMapping("/insertTodo")
+    public ResponseBody<Todo> insertTodo(@RequestBody Todo t){
 
-        return "redirect:/";
+        System.out.println("t : "+t);
+
+        todoService.insertTodo(t);
+
+        return ResponseBuilder.success(t);
+    }
+
+    @GetMapping("/deleteTodo")
+    public ResponseBody<Todo> deleteTodo(@RequestParam(value = "todoNo") int todoNo){
+
+        System.out.println("delete todoNo: "+todoNo);
+
+        Todo t = new Todo();
+        t.setTodoNo(todoNo);
+
+        todoService.deleteTodo(t);
+
+        return ResponseBuilder.success(t);
 
     }
 
-//    @GetMapping("/test")
-//    public String test(@RequestParam value="" required=""){
-//        int result = 0;
-//        result = todoService.updateTodo();
-//    }
+    @GetMapping("/clearTodo")
+    public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo" , required = false) int todoNo){
+
+        System.out.println("clear todoNo: "+todoNo);
+
+        Todo t = new Todo();
+        t.setTodoNo(todoNo);
+
+        todoService.clearTodo(t);
+
+        return ResponseBuilder.success(t);
+
+    }
+
+
+    @GetMapping("/updateTodo")
+    public ResponseBody<Todo> updateTodo(@RequestParam(value="todoNo" , required=false) int todoNo,
+                                         @RequestParam(value = "todoContent" , required = false)String todoContent){
+
+        System.out.println("update todoNo: "+todoNo);
+
+        Todo t = new Todo();
+        t.setTodoNo(todoNo);
+        t.setTodoContent(todoContent);
+
+        todoService.updateTodo(t);
+
+        return ResponseBuilder.success(t);
+    }
 
 
 }
