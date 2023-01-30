@@ -9,47 +9,65 @@
         <result column="TODO_DATE" property="todoDate" />
         <result column="USER_NO" property="userNo" />
         <result column="TODO_CONTENT" property="todoContent" />
-        <result column="CLEAR" property="todoClear" />
-        <result column="VALUE" property="todoValue" />
+        <result column="CLEAR" property="clear" />
+        <result column="VALUE" property="value" />
     </resultMap>
+    
 
-    <select id="selectTodo" resultType="Todo">
+
+    <select id="selectTodo" resultMap="todoResultSet" parameterType="Todo">
         SELECT TODO_NO,
                TODO_DATE,
-               TODO_CONTENT
+               TODO_CONTENT,
+                USER_NO,
+                CLEAR,
+                VALUE
         FROM TODO
-        WHERE USER_NO = 1
+        WHERE USER_NO = #{userNo}
+                AND TO_CHAR(TODO_DATE, 'yymmdd') = #{todoDate}
+                AND STATUS = 'N'
+        ORDER BY TODO_NO
     </select>
 
-    <insert id="insertTodo" parameterType="Todo">
-        <selectKey keyProperty="todoNo" resultType="int" order="BEFORE">
-            SELECT SEQ_TODO.NEXTVAL FROM DUAL
+    <insert id="insertTodo" parameterType="Todo" >
+        <selectKey order="BEFORE" resultType="Integer" keyProperty="value">
+            select NVL(max(value),1)+1 FROM TODO where user_no=#{userNo} and TO_CHAR(TODO_DATE,'YYMMDD') = #{todoDate}
         </selectKey>
         INSERT INTO TODO(
                         TODO_NO,
+                        TODO_DATE,
                         USER_NO,
                         TODO_CONTENT,
                         CLEAR,
-                        VALUE,
-                        TODO_DATE
+                        VALUE
                         )
-        VALUE (
-                #{todoNo},
+        VALUES (
+                SEQ_TODO.NEXTVAL,
+                #{todoDate},
                 #{userNo},
                 #{todoContent},
                 #{clear},
-                #{value},
-                #{todoDate}
+                #{value}
         )
-
-
     </insert>
+
+    <update id="deleteTodo" parameterType="Todo">
+        UPDATE TODO
+        SET STATUS = 'Y'
+        WHERE TODO_NO = #{todoNo}
+    </update>
+
+    <update id="clearTodo" parameterType="Todo">
+        UPDATE TODO
+        SET CLEAR = 1
+        WHERE TODO_NO = #{todoNo}
+    </update>
     
-<!--    <update id="updateTodo" parameterType="int">-->
-<!--        UPDATE TODO_CONTENT-->
-<!--        FROM TODO-->
-<!--        WHERE USER_NO = {}-->
-<!--    </update>-->
+    <update id="updateTodo" parameterType="Todo">
+        UPDATE TODO
+        SET TODO_CONTENT = #{todoContent}
+        WHERE TODO_NO = #{todoNo}
+    </update>
 
 
 
