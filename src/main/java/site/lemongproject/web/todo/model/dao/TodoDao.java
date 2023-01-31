@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.todo.model.vo.Todo;
+
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -12,16 +13,27 @@ public class TodoDao {
 
     final private SqlSession sqlSession;
 
-    public List<Todo> selectToDo() {
-
-        return sqlSession.selectList("todoMapper.selectTodo");
+    public List<Todo> selectTodo(Todo t) {
+        return sqlSession.selectList("todoMapper.selectTodo", t);
     }
 
-    public int insertTodo(Todo t, List<Todo> tdl){
-        return  sqlSession.insert("todoMapper.insertTodo");
+    public int insertTodo(Todo t){
+        return  sqlSession.insert("todoMapper.insertTodo",t);
     }
 
-    public int updateTodo(){
-        return sqlSession.update("todoMapper.updateTodo");
+    public int deleteTodo(Todo t) {
+        return sqlSession.update("todoMapper.deleteTodo", t);
     }
+
+    public int clearTodo(Todo t) {
+        return sqlSession.update("todoMapper.clearTodo", t);
+    }
+
+    public int updateTodo(Todo t){
+        return sqlSession.update("todoMapper.updateTodo", t);
+    }
+
+    public int delayTodo(Todo t){ return sqlSession.update("todoMapper.delayTodo", t);}
+
+
 }
