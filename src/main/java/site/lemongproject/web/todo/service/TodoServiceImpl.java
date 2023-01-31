@@ -29,12 +29,17 @@ public class TodoServiceImpl implements TodoService {
     }
 
     public int clearTodo(Todo t) {
+
         return todoDao.clearTodo(t);
     }
 
     public int updateTodo(Todo t){
 
         return todoDao.updateTodo(t);
+    }
+
+    public int delayTodo(Todo t){
+        return todoDao.delayTodo(t);
     }
 
 

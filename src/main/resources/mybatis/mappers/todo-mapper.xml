@@ -31,7 +31,9 @@
 
     <insert id="insertTodo" parameterType="Todo" >
         <selectKey order="BEFORE" resultType="Integer" keyProperty="value">
-            select NVL(max(value),1)+1 FROM TODO where user_no=#{userNo} and TO_CHAR(TODO_DATE,'YYMMDD') = #{todoDate}
+            SELECT NVL(MAX(VALUE), 0) +1
+            FROM TODO
+            WHERE USER_NO = #{userNo} AND TO_CHAR(TODO_DATE,'YYMMDD') = #{todoDate}
         </selectKey>
         INSERT INTO TODO(
                         TODO_NO,
@@ -59,7 +61,10 @@
 
     <update id="clearTodo" parameterType="Todo">
         UPDATE TODO
-        SET CLEAR = 1
+        SET CLEAR =
+        CASE WHEN CLEAR = 0 THEN 1
+             WHEN CLEAR = 1 THEN 0
+        END
         WHERE TODO_NO = #{todoNo}
     </update>
     
@@ -69,7 +74,20 @@
         WHERE TODO_NO = #{todoNo}
     </update>
 
-
+    <update id="delayTodo" parameterType="Todo">
+        UPDATE TODO
+        SET TODO_DATE = TODO_DATE + 1,
+            VALUE = ( SELECT
+                        MAX(VALUE) + 1
+                        FROM TODO
+                        WHERE USER_NO = 1 AND
+                        TODO_DATE = ( SELECT
+                                        TODO_DATE + 1
+                                        FROM TODO
+                                        WHERE TODO_NO = #{todoNo}
+        ))
+        WHERE TODO_NO = #{todoNo}
+    </update>
 
 
 

@@ -33,5 +33,7 @@ public class TodoDao {
         return sqlSession.update("todoMapper.updateTodo", t);
     }
 
+    public int delayTodo(Todo t){ return sqlSession.update("todoMapper.delayTodo", t);}
+
 
 }

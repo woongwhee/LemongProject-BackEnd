@@ -22,6 +22,7 @@ public class TodoController {
 
     final private TodoService todoService;
 
+    //투두 목록 가져오기
     @GetMapping ("/getTodo")
     public List<Todo> selectTodo(@RequestParam(value = "todoDate" , required = false) String todoDate,
                                  @RequestParam(value = "userNo", required = false) int userNo) throws ParseException {
@@ -39,6 +40,7 @@ public class TodoController {
         return todoList;
     }
 
+    //투두 작성
     @PostMapping("/insertTodo")
     public ResponseBody<Todo> insertTodo(@RequestBody Todo t){
 
@@ -49,6 +51,7 @@ public class TodoController {
         return ResponseBuilder.success(t);
     }
 
+    //투두 삭제
     @GetMapping("/deleteTodo")
     public ResponseBody<Todo> deleteTodo(@RequestParam(value = "todoNo") int todoNo){
 
@@ -63,6 +66,7 @@ public class TodoController {
 
     }
 
+    //투두 완료
     @GetMapping("/clearTodo")
     public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo" , required = false) int todoNo){
 
@@ -77,7 +81,7 @@ public class TodoController {
 
     }
 
-
+    //투두 수정하기
     @GetMapping("/updateTodo")
     public ResponseBody<Todo> updateTodo(@RequestParam(value="todoNo" , required=false) int todoNo,
                                          @RequestParam(value = "todoContent" , required = false)String todoContent){
@@ -92,6 +96,31 @@ public class TodoController {
 
         return ResponseBuilder.success(t);
     }
+    
+    
+    //투두 내일로 미루기
+    @GetMapping("/delayTodo")
+    public ResponseBody<Todo> delayTodo(@RequestParam(value = "todoNo", required = false) int todoNo){
+
+        System.out.println("delay todoNo: "+todoNo);
+        Todo t = new Todo();
+        t.setTodoNo(todoNo);
+
+        todoService.delayTodo(t);
+
+        return ResponseBuilder.success(t);
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 }
