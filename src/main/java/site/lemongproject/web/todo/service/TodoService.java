@@ -17,5 +17,5 @@ public interface TodoService {
 
     int updateTodo(Todo t);
 
-
+    int delayTodo(Todo t);
 }
