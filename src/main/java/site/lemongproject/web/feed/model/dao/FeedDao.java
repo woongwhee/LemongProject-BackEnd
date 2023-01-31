@@ -32,12 +32,21 @@ public class FeedDao {
         return sqlSession.insert("feedMapper.insertFeedPhoto",feedPhoto);
     }
     // 피드 게시물 수정
-    public int updateFeed(Map<String, Object> updatefeed){
+    public int updateFeed(FeedInsert updatefeed){
         return sqlSession.update("feedMapper.updateFeed", updatefeed);
     }
+
     // 피드 게시물 삭제
     public int deleteFeed(Map<String,Object> deleteFeedNo){
         return sqlSession.delete("feedMapper.deleteFeed",deleteFeedNo);
+    }
+    // 피드 게시물삭제
+    public int deleteFeedPhotoFeedNo(Map<String, Object> deleteFeedNo){
+        return sqlSession.delete("feedMapper.deleteFeedPhotoFeedNo", deleteFeedNo);
+    }
+    // 피드 업데이트 하기 전 삭제
+    public int deleteFeedPhotoFeedNo2(FeedInsert deleteFeedNo){
+        return sqlSession.delete("feedMapper.deleteFeedPhotoFeedNo", deleteFeedNo);
     }
 
     // 피드 댓글 삭제
