@@ -41,7 +41,6 @@ public class ResponseBuilder{
         return response;
     }
 
-
     // 이메일 인증번호 전송
     public static ResponseBody failEmail(int num) {
         ResponseBody response = new ResponseBody();
@@ -89,6 +88,16 @@ public class ResponseBuilder{
         ResponseBody response = new ResponseBody();
         response.setCode("3005");
         response.setMessage("FAILAUTHEMAIL");
+        response.setResult(num);
+        return response;
+    }
+
+
+    // 중복 이메일 체크
+    public static ResponseBody isExEmail(int num) {
+        ResponseBody response = new ResponseBody();
+        response.setCode("3006");
+        response.setMessage("ISEXEMAIL");
         response.setResult(num);
         return response;
     }

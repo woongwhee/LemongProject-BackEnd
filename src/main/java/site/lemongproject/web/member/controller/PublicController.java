@@ -61,7 +61,6 @@ public class PublicController {
 
 
     // 회원가입
-    // 테스팅
     @PostMapping("join")
     public ResponseBody<Map<String, Object>> insertMember(@RequestBody JoinVo joinVo) {
 
@@ -102,28 +101,38 @@ public class PublicController {
         String email = String.valueOf(e.get("email"));
         System.out.println(email);
 
-        // 랜덤 값 생성
-        String ranNum = mailUtil.ranNum();
-        // 보낼 값 기본값 셋팅
-        MailMessage mailMessage = mailUtil.setConfirmMail(email, ranNum);
-        // MaillUtil 초기화(메일전송)
-//        mailUtil.send(mailMessage); // 일반 텍스트(보내짐)
-        mailUtil.htmlSend(mailMessage); // html 형식으로(테스트 중)
+        // 이메일 중복 체크
+        int exEmail = memberService.isExEmail(email);
+        System.out.println(exEmail);
 
-        // 체크를 위한 코드
-        EmailConfirm confirm = new EmailConfirm();
-        confirm.setEmail(email);
-        confirm.setCode(ranNum);
+        if(exEmail > 0) { // 중복 이메일 존재
+            return ResponseBuilder.isExEmail(exEmail);
 
-        int authCode = memberService.insertConfirm(confirm);
+        } else { // 중복된 이메일 x
+            // 랜덤 값 생성
+            String ranNum = mailUtil.ranNum();
+            // 보낼 값 기본값 셋팅
+            MailMessage mailMessage = mailUtil.setConfirmMail(email, ranNum);
+            // MaillUtil 초기화(메일전송)
+            mailUtil.htmlSend(mailMessage); // html 형식으로(테스트 중)
 
-        System.out.println("이게 뜬다면 error는 안났다.");
+            // 체크를 위한 코드
+            EmailConfirm confirm = new EmailConfirm();
+            confirm.setEmail(email);
+            confirm.setCode(ranNum);
 
-        if(authCode > 0) {
-            return ResponseBuilder.success(authCode);
-        } else {
-            return ResponseBuilder.failEmail(authCode);
+            int authCode = memberService.insertConfirm(confirm);
+
+            System.out.println("이게 뜬다면 error는 안났다.");
+
+            if(authCode > 0) {
+                return ResponseBuilder.success(authCode);
+            } else {
+                return ResponseBuilder.failEmail(authCode);
+            }
+
         }
+
     }
 
     // 인증번호 체크

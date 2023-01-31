@@ -9,6 +9,13 @@ import site.lemongproject.web.member.model.vo.EmailConfirm;
 public class MybatisConfirmDao implements EmailConfirmDao{
     final private SqlSession session;
 
+    @Override
+    public int isExEmail(String email) {
+        return session.selectOne("emailConfirmMapper.isExEmail", email);
+    }
+
+
+
     /**
      *
      * @return 0: 일치하는 코드가 없음 -1:시간초과 1:코드 일치함

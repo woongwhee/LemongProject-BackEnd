@@ -73,8 +73,8 @@
 
     <!--  회원가입  -->
     <insert id="insertMember" parameterType="site.lemongproject.web.member.model.dto.JoinVo">
-        INSERT INTO MEMBER (USER_NO, EMAIL, USER_PWD, STATUS, USER_NAME)
-            VALUES (SEQ_MEMBER.NEXTVAL, #{email}, #{userPwd}, DEFAULT, #{userName})
+        INSERT INTO MEMBER (USER_NO, EMAIL, USER_PWD, STATUS, USER_NAME, SOCIAL_TYPE)
+            VALUES (SEQ_MEMBER.NEXTVAL, #{email}, #{userPwd}, DEFAULT, #{userName}, #{socialType})
     </insert>
 
 </mapper>

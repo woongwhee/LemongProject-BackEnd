@@ -29,7 +29,10 @@ public interface MemberService {
      int updatePassword(ChangePwdVo cpw);
 
      int deleteUser(int userNo);
-//     이메일인증
+
+     // 이메일인증
+    int isExEmail(String email);
+
     int insertConfirm(EmailConfirm confirm);
 
     List<Profile> searchUser(String userNick);
@@ -40,5 +43,5 @@ public interface MemberService {
 
     MyProfileVo getMyProfile(int userNo);
 
-//    int checkConfirm(EmailConfirm confirm);
+
 }
