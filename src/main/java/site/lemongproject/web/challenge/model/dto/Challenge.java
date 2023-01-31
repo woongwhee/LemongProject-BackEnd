@@ -9,6 +9,7 @@ import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.template.model.dto.Template;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -20,8 +21,8 @@ public class Challenge {
     Template templateNo;
     String ChallengeTitle;
     String ChallengeInfo;
-    Date StartDate;
-    Date endDate;
+    LocalDate StartDate;
+    LocalDate endDate;
     String ChallengeOption;
     ChallengeStatus status;
 }

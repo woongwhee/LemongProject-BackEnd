@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.domain.dto.MailMessage;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
+import site.lemongproject.common.type.SocialType;
 import site.lemongproject.common.util.MailUtil;
 import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.service.MemberService;
@@ -45,6 +46,8 @@ public class PublicController {
 
             참고 사이트) https://annajin.tistory.com/107
         */
+
+        m.setSocialType(SocialType.NONE);
         Member loginUser = memberService.loginMember(m);
 
         // 암호화 후

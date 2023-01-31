@@ -9,6 +9,6 @@ import site.lemongproject.web.member.model.vo.Profile;
 @Alias("ReviewInsertVo")
 public class ReviewInsertVo {
     int templateNo;
-    int reviewDetail;
     int userNo;
+    String reviewDetail;
 }

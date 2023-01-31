@@ -109,16 +109,7 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
      * @param templateNo
      * @return
      */
-    @Override
-    public int deleteTemplate(int userNo,int templateNo) {
-        boolean isWriter=templateDao.isWriter(new WriterCheckVo(userNo,templateNo));
-        if(!isWriter){
-            return 0;
-        }
-        int result=templateTodoDao.deleteTemplate(templateNo);
-        result*=templateDao.deleteTemp(templateNo);
-        return result;
-    }
+
 
     /**
      * 임시저장된 템플릿을저장

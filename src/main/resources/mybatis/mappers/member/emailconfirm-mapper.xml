@@ -21,7 +21,7 @@
     <!-- 이전 인증코드 삭제 -->
     <delete id="deleteAnother" parameterType="EmailConfirm" >
         delete EMAIL_CONFIRM
-        where  EMAIl=#{email} and NOT CONFIRM_NO = #{confirmNo}
+        where  EMAIl=#{email}
     </delete>
 
 

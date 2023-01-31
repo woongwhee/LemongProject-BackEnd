@@ -15,7 +15,6 @@ public interface TemplateWriteService {
     int insertTodo(TempalteTodoInsertVo tiv);
     Template resetUnSave(int i);
 
-    int deleteTemplate(int userNo,int templateNo);
     int deleteTodo(TPTodoDeleteVo tdv);
 
     int uploadUnSave(int userNo);

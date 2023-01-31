@@ -10,8 +10,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import site.lemongproject.anotaion.TestRunner;
 import site.lemongproject.common.config.ApplicationConfig;
+import site.lemongproject.config.Configure;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
 import site.lemongproject.web.template.model.dto.Template;
@@ -27,13 +27,7 @@ import static org.assertj.core.api.Assertions.*;
 
 
 @Transactional
-//@TestRunner
-
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(loader = AnnotationConfigWebContextLoader.class,classes = ApplicationConfig.class)
-
-public class TemplateServiceImplTest {
+public class TpWriteServiceTest extends Configure {
     @Autowired private TemplateWriteService templateService;
     @Autowired private TemplateDao templateDao;
     @Autowired private TemplateTodoDao templateTodoDao;

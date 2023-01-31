@@ -2,25 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="reviewMapper">
   <resultMap id="reviewMap" type="Review">
-    <id column="REVIEW_NO" jdbcType="DECIMAL" property="reviewNo" />
-    <result column="TEMPLATE_NO" jdbcType="DECIMAL" property="templateNo" />
-    <result column="REVIEW_DETAIL" jdbcType="VARCHAR" property="reviewDetail" />
-    <result column="REVIEW_AT" jdbcType="TIMESTAMP" property="reviewAt" />
+    <id column="REVIEW_NO"  property="reviewNo" />
+    <result column="TEMPLATE_NO"  property="templateNo" />
+    <result column="REVIEW_DETAIL"  property="reviewDetail" />
+    <result column="REVIEW_AT" property="reviewAt" />
     <association property="userProfile" resultMap="profileMapper.profileDetail"/>
   </resultMap>
-  <select id="selectOne" parameterType="Integer" resultMap="reviewMap">
+  <select id="findOne" parameterType="Integer" resultMap="reviewMap">
     select * from review r join USER_PROFILE  u using (USER_NO) join PHOTO p using (PHOTO_NO) where REVIEW_NO=#{reviewNo}
   </select>
-  <delete id="deleteOne" parameterType="Integer">
+  <select id="findByTp" parameterType="Integer" resultMap="reviewMap">
+        select * from review r
+        join USER_PROFILE  u using (USER_NO)
+        join PHOTO p using (PHOTO_NO)
+        where r.TEMPLATE_NO=#{templateNo}
+  </select>
+
+  <delete id="deleteOne" parameterType="ReviewDeleteVo">
     delete from REVIEW
     where REVIEW_NO = #{reviewNo}
+    AND USER_NO=#{userNo}
   </delete>
+
   <delete id="deleteByTemplate" parameterType="Integer">
     delete from REVIEW
     where TEMPLATE_NO = #{templateNo}
   </delete>
-  <insert id="insertOne" parameterType="site.lemongproject.web.template.model.vo.ReviewInsertVo">
-    insert into REVIEW (REVIEW_NO, TEMPLATE_NO, USER_NO,   REVIEW_DETAIL, REVIEW_AT)
+
+  <insert id="insertOne" parameterType="ReviewInsertVo">
+    insert into REVIEW (REVIEW_NO, TEMPLATE_NO, USER_NO, REVIEW_DETAIL, REVIEW_AT)
     values (SEQ_REVIEW.nextval, #{templateNo}, #{userNo}, #{reviewDetail}, SYSDATE)
   </insert>
 

@@ -2,7 +2,7 @@ package site.lemongproject.common.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import site.lemongproject.common.type.handler.NameEnum;
+
 @RequiredArgsConstructor
 @Getter
 public enum ChallengeUserStatus implements NameEnum {
