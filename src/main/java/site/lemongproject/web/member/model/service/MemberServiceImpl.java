@@ -51,6 +51,14 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
+    public int isExEmail(String email) {
+        int exEmail = confirmDao.isExEmail(email);
+        System.out.println("회원 이메일 중복체크 : "+exEmail);
+        return exEmail;
+    }
+
+
+    @Override
     public int insertConfirm(EmailConfirm confirm) {
         confirmDao.deleteAnother(confirm);
         int result = confirmDao.insertConfirm(confirm);
