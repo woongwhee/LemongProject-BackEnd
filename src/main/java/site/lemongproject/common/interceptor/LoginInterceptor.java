@@ -19,11 +19,11 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        HttpSession session = request.getSession();
-//        if(session.getAttribute("loginUser")==null){
-//            gson.toJson(ResponseBuilder.unLogin(null),response.getWriter());
-//            return false;
-//        }
+        HttpSession session = request.getSession();
+        if(session.getAttribute("loginUser")==null){
+            gson.toJson(ResponseBuilder.unLogin(null),response.getWriter());
+            return false;
+        }
         return true;
     }
 }

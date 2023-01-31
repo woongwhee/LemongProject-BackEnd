@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="challengeTodoMapper">
+
+    <resultMap type="ChallengeTodo" id="todoMap">
+        <result column="TODO_NO" property="todoNo" />
+        <result column="CHALLENGE_NO" property="challengeNo" />
+        <result column="TODO_DATE" property="todoDate" />
+        <result column="TODO_CONTENT" property="todoContent" />
+        <result column="CLEAR" property="todoClear" />
+        <result column="VALUE" property="todoValue" />
+    </resultMap>
+    <insert id="insertTodo" parameterType="ChallengeTodo">
+        INSERT INTO CHALLENGE_TODO VALUES (SEQ_CHALLENGE_TODO.nextval,#{challengeNo},#{userNo},#{todoDate},#{todoContent},#{value},false)
+    </insert>
+    <!-- 챌린지 시작   -->
+    <insert id="copyTodo" parameterType="MultiJoinVo">
+        INSERT INTO CHALLENGE_TODO
+        SELECT
+            SEQ_CHALLENGE_TODO.nextval as TODO_NO,
+            CHALLENGE_NO,
+            #{userNo} as USER_NO,
+            TODO_DATE,
+            TODO_CONTENT,
+            VALUE,
+            CLEAR
+        FROM CHALLENGE_TODO
+        WHERE CHALLENGE_NO=#{challengeNo}
+        AND USER_NO=-1
+    </insert>
+    <!-- 미리보기  -->
+    <select id="findPreview" parameterType="_int" resultMap="todoMap">
+        SELECT * FROM CHALLENGE_TODO WHERE CHALLENGE_NO=#{challenge_no} AND  USER_NO=-1
+    </select>
+    <!-- 미리보기  -->
+    <select id="findPreview" parameterType="_int" resultMap="todoMap">
+        SELECT * FROM CHALLENGE_TODO WHERE CHALLENGE_NO=#{challenge_no} AND  USER_NO=-1
+    </select>
+    <select id="findByDay" parameterType=""
+
+
+</mapper>

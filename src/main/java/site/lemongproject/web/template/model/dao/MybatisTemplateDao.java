@@ -21,14 +21,12 @@ public class MybatisTemplateDao implements TemplateDao {
     @Override
     public List<Template> findList(int categoryNo, int page, int limit) {
         int offSet=page*limit;
-        System.out.println(offSet);
-        System.out.println(limit);
         RowBounds rowBounds=new RowBounds(offSet,limit);
         return sqlSession.selectList("templateMapper.findMany",categoryNo,rowBounds);
     }
 
     @Override
-    public Template findOne(int templateNo) {
+    public Template findDetail(int templateNo) {
         return sqlSession.selectOne("templateMapper.findOne",templateNo);
     }
 
