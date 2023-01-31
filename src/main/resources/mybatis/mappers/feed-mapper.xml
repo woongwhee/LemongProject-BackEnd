@@ -58,10 +58,18 @@
     <update id="updateFeed" parameterType="Map">
         UPDATE FEED SET FEED_CONTENT = #{feedContent} where FEED_NO = #{feedNo}
     </update>
+<!--  피드 사진 수정  -->
+    <update id="updateFeedPhoto" parameterType="Map">
+
+    </update>
 
 <!--  피드 삭제  -->
     <delete id="deleteFeed" parameterType="Map">
         DELETE FROM FEED WHERE FEED_NO = #{feedNo}
+    </delete>
+<!-- 피드 사진 삭제   -->
+    <delete id="deleteFeedPhotoFeedNo">
+        DELETE FROM FEED_PHOTO WHERE FEED_NO = #{feedNo}
     </delete>
 <!-- 사진 등록 -->
     <insert id="insertPhoto" parameterType="Photo">
@@ -80,6 +88,8 @@
     <insert id="insertFeedPhoto" parameterType="site.lemongproject.web.feed.model.dto.FeedInsertPhoto">
         INSERT INTO FEED_PHOTO (FEED_NO, PHOTO_NO, VALUE) VALUES (#{feedNo},#{photoNo},#{value})
     </insert>
+
+
 <!--  피드 사진 수정  -->
     <select id="maxValue" parameterType="Map" resultType="int">
         SELECT MAX(VALUE) FROM FEED_PHOTO

@@ -18,7 +18,7 @@ public interface FeedService  {
     int insertFeed(FeedInsert paramMap);
 
     // feed 게시글 업데이트
-    int updateFeed(Map<String,Object> updatefeed);
+    int updateFeed(FeedInsert updatefeed);
 
     // feed 게시글 삭제
     int deleteFeed(Map<String,Object> deleteFeedNo);
