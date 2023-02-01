@@ -14,12 +14,12 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class SingleStartVo {
-    int userNo;
-    int templateNo;
-    int challengeNo;
-    LocalDate startDate;
-    ChallengeStatus status;
-    ChallengeOption option;
+    private int challengeNo;
+    private int userNo;
+    private int templateNo;
+    private LocalDate startDate;
+    private ChallengeStatus status;
+    private ChallengeOption option;
     @JsonSetter("option")
     public void setOption(String option) {
         this.option = ChallengeOption.getInstance(option);

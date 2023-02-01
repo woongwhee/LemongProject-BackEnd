@@ -8,11 +8,11 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class ChallengeTodo {
-    long todoNo;
-    int challengeNo;
-    int userNo;
-    LocalDate todoDate;
-    String todoContent;
-    int value;
-    boolean clear;
+    private long todoNo;
+    private int challengeNo;
+    private int userNo;
+    private LocalDate todoDate;
+    private String todoContent;
+    private int value;
+    private boolean clear;
 }

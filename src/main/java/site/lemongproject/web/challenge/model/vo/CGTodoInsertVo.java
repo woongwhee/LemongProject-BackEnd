@@ -1,16 +1,16 @@
 package site.lemongproject.web.challenge.model.vo;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
-import java.time.LocalDate;
-
+import java.util.List;
 @Getter
 @Setter
-@Alias("EndDateUpdateVo")
-public class EndDateUpdateVo {
+@Alias("CGTodoInsertVo")
+public class CGTodoInsertVo {
     private int challengeNo;
-    private LocalDate endDate;
+    private int userNo;
+    private List<CGTodoItemVo> todoList;
+
 }

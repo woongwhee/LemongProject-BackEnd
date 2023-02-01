@@ -39,7 +39,7 @@
           AND SAVE_STATUS = 0
     </select>
 
-    <select id="findDetail" parameterType="Integer" resultMap="templateOne">
+    <select id="findDetail" parameterType="Integer" resultMap="templateDetail">
         SELECT
             T.*,
             (SELECT COUNT(*)
@@ -147,5 +147,10 @@
         FROM TEMPLATE
         WHERE TP_CREATER = #{userNo}
           AND TEMPLATE_NO = #{refNo}
+    </select>
+    <select id="findRange" parameterType="int" resultType="int">
+        SELECT RANGE
+        FROM TEMPLATE
+        WHERE TEMPLATE_NO=#{templateNo}
     </select>
 </mapper>

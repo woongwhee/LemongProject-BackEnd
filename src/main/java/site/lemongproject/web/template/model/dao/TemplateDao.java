@@ -12,6 +12,7 @@ public interface TemplateDao {
     int uploadUnSave(int userNo);
 
     List<Template> findList(int categoryNo, int page, int limit);
+    Template findOne(int templateNo);
     Template findDetail(int templateNo);
 
     int countTemplate(int categoryNo);
@@ -25,4 +26,7 @@ public interface TemplateDao {
 
 
     boolean isWriter(WriterCheckVo writerCheckVo);
+
+    int findRange(int templateNo);
+
 }

@@ -10,12 +10,18 @@
         <result column="CLEAR" property="todoClear" />
         <result column="VALUE" property="todoValue" />
     </resultMap>
-    <insert id="insertTodo" parameterType="ChallengeTodo">
-        INSERT INTO CHALLENGE_TODO VALUES (SEQ_CHALLENGE_TODO.nextval,#{challengeNo},#{userNo},#{todoDate},#{todoContent},#{value},false)
+<!--    <insert id="insertTodo" parameterType="ChallengeTodo">-->
+<!--        INSERT INTO CHALLENGE_TODO (TODO_NO,CHALLENGE_NO,USER_NO,TODO_DATE,TODO_CONTENT,VALUE,CLEAR)VALUES (SEQ_CHALLENGE_TODO.nextval,#{challengeNo},#{userNo},#{todoDate},#{todoContent},#{value},0)-->
+<!--    </insert>-->
+    <insert id="insertTodo" parameterType="CGTodoInsertVo">
+            <foreach collection="todoList" item="todo" index="index" open="INSERT ALL" separator="" close="SELECT * FROM DUAL">
+                INTO CHALLENGE_TODO(TODO_NO,CHALLENGE_NO,USER_NO,TODO_DATE,TODO_CONTENT,VALUE,CLEAR)
+                    VALUES (GET_CH_TODO_SEQ(),#{challengeNo},#{userNo},#{todo.todoDate},#{todo.todoContent},#{todo.value},0)
+            </foreach>
     </insert>
     <!-- 챌린지 시작   -->
-    <insert id="copyTodo" parameterType="MultiJoinVo">
-        INSERT INTO CHALLENGE_TODO
+    <insert id="copyTodo" parameterType="ChallengeUserVo">
+        INSERT INTO CHALLENGE_TODO(TODO_NO, CHALLENGE_NO, USER_NO, TODO_DATE, TODO_CONTENT,VALUE,CLEAR)
         SELECT
             SEQ_CHALLENGE_TODO.nextval as TODO_NO,
             CHALLENGE_NO,
@@ -26,17 +32,13 @@
             CLEAR
         FROM CHALLENGE_TODO
         WHERE CHALLENGE_NO=#{challengeNo}
-        AND USER_NO=-1
+        AND USER_NO='-1'
     </insert>
     <!-- 미리보기  -->
     <select id="findPreview" parameterType="_int" resultMap="todoMap">
         SELECT * FROM CHALLENGE_TODO WHERE CHALLENGE_NO=#{challenge_no} AND  USER_NO=-1
     </select>
-    <!-- 미리보기  -->
-    <select id="findPreview" parameterType="_int" resultMap="todoMap">
-        SELECT * FROM CHALLENGE_TODO WHERE CHALLENGE_NO=#{challenge_no} AND  USER_NO=-1
-    </select>
-    <select id="findByDay" parameterType=""
+<!--    <select id="findByDay" parameterType=""-->
 
 
 </mapper>
