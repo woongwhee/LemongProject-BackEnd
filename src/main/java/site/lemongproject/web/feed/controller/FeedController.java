@@ -51,14 +51,25 @@ public class FeedController {
 
     // 피드 수정
     @RequestMapping(value = "/updateFeed", method = RequestMethod.POST)
-    public Map<String, Object> feedUpdate(@RequestBody Map<String, Object> updatefeed ){
+    public Map<String, Object> feedUpdate(@RequestBody FeedInsert updatefeed ){
         System.out.println(updatefeed);
-
         int check = feedService.updateFeed(updatefeed);
-
         Map<String, Object> result = new HashMap<>();
-
         if(check > 0){
+            result.put("Java","success");
+        }else{
+            result.put("Java","fail");
+        }
+        return result;
+    }
+    // 사진 수정하기
+    @PostMapping("modifyFeedPhoto")
+    public Map<String,Object> modifyPhoto(@RequestBody Map<String,Object> photoNo){
+        System.out.println(photoNo);
+        int check = feedService.modifyPhoto(photoNo);
+        System.out.println("check : " + check);
+        Map<String ,Object> result = new HashMap<>();
+        if(check>0){
             result.put("Java","success");
         }else{
             result.put("Java","fail");
@@ -71,7 +82,7 @@ public class FeedController {
         System.out.println(deleteFeedNo);
 
         int check = feedService.deleteFeed(deleteFeedNo);
-
+        System.out.println(check);
         Map<String, Object> result = new HashMap<>();
 
         if(check > 0){
@@ -134,7 +145,7 @@ public class FeedController {
 //    DELETE FROM HEART WHERE USER_NO = USER_NO AND REF_NO=FEED_NO;
 
     // 사진 넣기
-    @RequestMapping(value = "/feedPhoto", method = RequestMethod.POST)
+    @RequestMapping(value = "/insertPhoto", method = RequestMethod.POST)
     public ResponseBody<Photo> insertPhoto(@RequestBody MultipartFile[] files){
         Photo p = new Photo();
         FileUtil fileUtil = new FileUtil();
@@ -151,11 +162,12 @@ public class FeedController {
     }
 //     사진 지우기
 //    @RequestMapping(value = "/deleteFeedPhoto", method = RequestMethod.POST)
-    @GetMapping("/deleteFeedPhoto")
+    @GetMapping("/deletePhoto")
     public Map<String,Object> deletePhoto(@RequestParam int photoNo){
         System.out.println(photoNo);
         int check = feedService.deletePhoto(photoNo);
         Map<String,Object> result = new HashMap<>();
+        System.out.println("check : "+check);
         if(check > 0){
             result.put("Java","success");
         }else{
@@ -164,18 +176,5 @@ public class FeedController {
         return result;
     }
 
-    // 사진 수정하기
-    @PostMapping("modifyFeedPhoto")
-    public Map<String,Object> modifyPhoto(@RequestBody Map<String,Object> photoNo){
-        System.out.println(photoNo);
-        int check = feedService.modifyPhoto(photoNo);
-        System.out.println(check);
-        Map<String ,Object> result = new HashMap<>();
-        if(check>0){
-            result.put("Java","success");
-        }else{
-            result.put("Java","fail");
-        }
-        return result;
-    }
+
 }
