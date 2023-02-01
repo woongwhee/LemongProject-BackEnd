@@ -2,7 +2,6 @@ package site.lemongproject.web.challenge.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import site.lemongproject.common.exception.OptionLengthException;
 
 @Getter
 @Setter
@@ -34,7 +33,7 @@ public class ChallengeOption {
         return sb.toString();
     }
     public static ChallengeOption getInstance(String option){
-        if(option.length()!=8)throw new OptionLengthException();
+
         ChallengeOption co=new ChallengeOption();
         co.monday=option.charAt(0)=='1'?true:false;
         co.tuesday=option.charAt(1)=='1'?true:false;

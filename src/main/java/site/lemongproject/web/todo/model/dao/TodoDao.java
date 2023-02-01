@@ -3,6 +3,7 @@ package site.lemongproject.web.todo.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.web.todo.model.dto.DailyFindVO;
 import site.lemongproject.web.todo.model.vo.Todo;
 
 import java.util.List;
@@ -36,4 +37,7 @@ public class TodoDao {
     public int delayTodo(Todo t){ return sqlSession.update("todoMapper.delayTodo", t);}
 
 
+    public List<Todo> findDaily(DailyFindVO dailyFind) {
+        return sqlSession.selectList("todoMapper.findDaily",dailyFind);
+    }
 }

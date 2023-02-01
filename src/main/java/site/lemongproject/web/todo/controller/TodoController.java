@@ -1,18 +1,18 @@
 package site.lemongproject.web.todo.controller;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.member.model.vo.Member;
+import site.lemongproject.web.todo.model.dto.DailyFindVO;
+import site.lemongproject.web.todo.model.dto.DailyTodoVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 import site.lemongproject.web.todo.service.TodoService;
 
-import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -32,14 +32,29 @@ public class TodoController {
 //        System.out.println("넘겨준 todoDate: "+todoDate);
 
         Todo t = new Todo();
-        t.setTodoDate(todoDate);
         t.setUserNo(userNo);
-
+        t.setTodoDate(todoDate);
         List<Todo> todoList = todoService.selectTodo(t);
-
         return todoList;
     }
-
+    @GetMapping("/daily/{todoDate}")
+    public ResponseBody<DailyTodoVo> getDaily(
+            @PathVariable("todoDate")
+            @DateTimeFormat(pattern = "yyyy-MM-dd")
+            LocalDate todoDate,@SessionAttribute("loginUser")Member member){
+        DailyFindVO dailyFind=new DailyFindVO();
+        dailyFind.setTodoDate(todoDate);
+        dailyFind.setUserNo(member.getUserNo());
+        DailyTodoVo daily=todoService.getDaily(dailyFind);
+        if(daily.getNormalList().size()==0&&daily.getChallengeList().size()==0){
+            return ResponseBuilder.findNothing();
+        }
+        else if(daily.getChallengeList()!=null && daily.getNormalList()!=null){
+            return ResponseBuilder.success(daily);
+        }else{
+            return ResponseBuilder.serverError();
+        }
+    }
     //투두 작성
     @PostMapping("/insertTodo")
     public ResponseBody<Todo> insertTodo(@RequestBody Todo t){
@@ -71,14 +86,10 @@ public class TodoController {
     public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo" , required = false) int todoNo){
 
         System.out.println("clear todoNo: "+todoNo);
-
         Todo t = new Todo();
         t.setTodoNo(todoNo);
-
         todoService.clearTodo(t);
-
         return ResponseBuilder.success(t);
-
     }
 
     //투두 수정하기

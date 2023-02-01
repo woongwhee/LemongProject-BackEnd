@@ -16,13 +16,13 @@ import java.time.LocalDate;
 @ToString
 @Alias("Challenge")
 public class Challenge {
-    int challengeNo;
-    Profile createUser;
-    Template templateNo;
-    String ChallengeTitle;
-    String ChallengeInfo;
-    LocalDate StartDate;
-    LocalDate endDate;
-    String ChallengeOption;
-    ChallengeStatus status;
+    private int challengeNo;
+    private Profile createUser;
+    private int templateNo;
+    private String ChallengeTitle;
+    private String ChallengeInfo;
+    private LocalDate StartDate;
+    private LocalDate endDate;
+    private String ChallengeOption;
+    private ChallengeStatus status;
 }

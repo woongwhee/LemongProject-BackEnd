@@ -27,9 +27,12 @@ public class MybatisTemplateDao implements TemplateDao {
 
     @Override
     public Template findDetail(int templateNo) {
+        return sqlSession.selectOne("templateMapper.findDetail",templateNo);
+    }
+    @Override
+    public Template findOne(int templateNo) {
         return sqlSession.selectOne("templateMapper.findOne",templateNo);
     }
-
     @Override
     public int countTemplate(int categoryNo) {return sqlSession.selectOne("templateMapper.countTemplate",categoryNo);}
     @Override
@@ -56,6 +59,11 @@ public class MybatisTemplateDao implements TemplateDao {
     @Override
     public boolean isWriter(WriterCheckVo writerCheckVo){
         return sqlSession.selectOne("templateMapper.isWriter",writerCheckVo);
+    }
+
+    @Override
+    public int findRange(int templateNo) {
+        return sqlSession.selectOne("templateMapper.findRange",templateNo);
     }
 
 }

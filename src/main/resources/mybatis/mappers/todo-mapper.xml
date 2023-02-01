@@ -88,6 +88,19 @@
     </update>
 
 
+    <select id="findDaily" resultMap="todoResultSet" parameterType="DailyFindVo">
+        SELECT TODO_NO,
+               TODO_DATE,
+               TODO_CONTENT,
+               USER_NO,
+               CLEAR,
+               VALUE
+        FROM TODO
+        WHERE USER_NO = #{userNo}
+          AND TO_CHAR(TODO_DATE, 'yymmdd') = #{todoDate}
+          AND STATUS = 'N'
+        ORDER BY TODO_NO
+    </select>
 
 
 

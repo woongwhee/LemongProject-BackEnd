@@ -92,5 +92,10 @@ public class ResponseBuilder{
         response.setResult(num);
         return response;
     }
-
+    public static ResponseBody serverError() {
+        ResponseBody response = new ResponseBody();
+        response.setCode("5000");
+        response.setMessage("SERVER_ERROR");
+        return response;
+    }
 }

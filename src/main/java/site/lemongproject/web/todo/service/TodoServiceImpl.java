@@ -2,10 +2,13 @@ package site.lemongproject.web.todo.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.lemongproject.web.challenge.model.dao.ChallengeTodoDao;
+import site.lemongproject.web.challenge.model.vo.ChallengeTodoVo;
 import site.lemongproject.web.todo.model.dao.TodoDao;
+import site.lemongproject.web.todo.model.dto.DailyFindVO;
+import site.lemongproject.web.todo.model.dto.DailyTodoVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 
-import java.sql.Date;
 import java.util.List;
 
 @Service
@@ -13,6 +16,7 @@ import java.util.List;
 public class TodoServiceImpl implements TodoService {
 
     final private TodoDao todoDao;
+    final private ChallengeTodoDao challengeTodoDao;
 
     public List<Todo> selectTodo(Todo t){
         return todoDao.selectTodo(t);
@@ -42,6 +46,15 @@ public class TodoServiceImpl implements TodoService {
         return todoDao.delayTodo(t);
     }
 
+    @Override
+    public DailyTodoVo getDaily(DailyFindVO dailyFind) {
+        DailyTodoVo todoVo=new DailyTodoVo();
+        List<Todo> normalList=todoDao.findDaily(dailyFind);
+        List<ChallengeTodoVo>challengeList =challengeTodoDao.findDaily(dailyFind);
+        todoVo.setNormalList(normalList);
+        todoVo.setChallengeList(challengeList);
+        return todoVo;
+    }
 
 
 }
