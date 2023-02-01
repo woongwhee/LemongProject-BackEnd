@@ -162,7 +162,7 @@ public class FeedController {
     }
 //     사진 지우기
 //    @RequestMapping(value = "/deleteFeedPhoto", method = RequestMethod.POST)
-    @GetMapping("/deleteFeedPhoto")
+    @GetMapping("/deletePhoto")
     public Map<String,Object> deletePhoto(@RequestParam int photoNo){
         System.out.println(photoNo);
         int check = feedService.deletePhoto(photoNo);

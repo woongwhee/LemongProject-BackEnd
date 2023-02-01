@@ -39,8 +39,8 @@ public class FeedServiceImpl implements FeedService{
     @Override
     public int updateFeed(FeedInsert updatefeed){
         int result = 0;
-        result +=feedDao.updateFeed(updatefeed);
-        result += feedDao.deleteFeedPhotoFeedNo2(updatefeed);
+        result +=feedDao.updateFeed(updatefeed); // 내용 업데이트
+        result += feedDao.deleteFeedPhotoFeedNo2(updatefeed); // 피드 수정하기전 사진삭제
         for (int i =0; i<updatefeed.getPhotoNo().size(); i++){
             result += feedDao.insertFeedPhoto(new FeedInsertPhoto(updatefeed.getFeedNo(), updatefeed.getPhotoNo().get(i), i+1));
         }
@@ -102,10 +102,8 @@ public class FeedServiceImpl implements FeedService{
         } else if (1 < nowValue && nowValue < maxValue) {
             result += feedDao.updateValueMiddle(photoNo);
         }
-        if(result > 1){
-            return feedDao.modifyPhoto(photoNo);
-        }else{
-            return result*0;
-        }
-    };
+        result*=feedDao.modifyPhoto(photoNo);
+            return result;
+
+    }
 }
