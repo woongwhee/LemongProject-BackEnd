@@ -173,7 +173,12 @@
             <artifactId>mybatis-spring</artifactId>
             <version>2.0.7</version>
         </dependency>
-
+        <!-- 마이바티스에서 LocaleDate를 사용하기위한 라이브러리       -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-typehandlers-jsr310</artifactId>
+            <version>1.0.2</version>
+        </dependency>
         <!-- 커넥션 풀 라이브러리 -->
         <!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
         <dependency>
@@ -224,6 +229,14 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.14.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.13.3</version>
+        </dependency>
+
+
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>

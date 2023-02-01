@@ -19,6 +19,7 @@ import java.net.http.HttpResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.*;
 import site.lemongproject.common.domain.dao.HolidayDao;
 import site.lemongproject.common.domain.dto.OfficialHoliday;
@@ -71,7 +72,7 @@ public class HolidayScheduler {
                 String holidate=holiday.item(3).getTextContent();
                 String holidayName=holiday.item(1).getTextContent();
                 OfficialHoliday oholiday=new OfficialHoliday();
-                oholiday.setHoliday(new Date(sdf.parse(holidate).getTime()));
+                oholiday.setHoliday(LocalDate.parse(holidate));
                 oholiday.setHolidayName(holidayName);
                 officialHolidays.add(oholiday);
             }
@@ -82,8 +83,6 @@ public class HolidayScheduler {
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
         } catch (SAXException e) {
-            throw new RuntimeException(e);
-        } catch (ParseException e) {
             throw new RuntimeException(e);
         }
     }

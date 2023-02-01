@@ -52,14 +52,14 @@
 
     <update id="updatePassword" parameterType="site.lemongproject.web.member.model.dto.ChangePwdVo">
         UPDATE MEMBER
-        SET USER_PWD = #{password}
+            SET USER_PWD = #{password}
         WHERE USER_NO = #{userNo}
     </update>
 
 
     <update id="deleteUser" parameterType="int">
         UPDATE MEMBER
-        SET STATUS = 0
+            SET STATUS = 0
         WHERE USER_NO = #{userNo}
     </update>
 
@@ -68,21 +68,13 @@
         SELECT *
         FROM MEMBER
         WHERE EMAIL = #{email}
-        AND STATUS = '1'
+          AND STATUS = '1'
     </select>
 
     <!--  회원가입  -->
     <insert id="insertMember" parameterType="site.lemongproject.web.member.model.dto.JoinVo">
         INSERT INTO MEMBER (USER_NO, EMAIL, USER_PWD, STATUS, USER_NAME)
-        VALUES (SEQ_MEMBER.NEXTVAL, #{email}, #{userPwd}, DEFAULT, #{userName})
+            VALUES (SEQ_MEMBER.NEXTVAL, #{email}, #{userPwd}, DEFAULT, #{userName})
     </insert>
 
-    <select id="selectMember" parameterType="int" resultMap="memberResultSet">
-        SELECT *
-        FROM MEMBER
-        WHERE USER_NO = #{userNo}
-    </select>
-
 </mapper>
-
-

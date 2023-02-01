@@ -8,6 +8,7 @@
 
     <typeAliases>
         <typeAlias type="site.lemongproject.web.template.model.dto.Template" alias="Template"/>
+        <typeAlias type="site.lemongproject.web.template.model.dto.Review" alias="Review"/>
         <typeAlias type="site.lemongproject.web.template.model.dto.TemplateCategory" alias="TemplateCategory"/>
         <typeAlias type="site.lemongproject.web.template.model.dto.TemplateTodo" alias="TemplateTodo"/>
         <typeAlias type="site.lemongproject.web.template.model.vo.TemplateUpdateVo" alias="TemplateUpdateVo"/>
@@ -22,12 +23,17 @@
         <typeAlias type="site.lemongproject.web.feed.model.dto.FeedInsert" alias="FeedInsert"/>
         <typeAlias type="site.lemongproject.web.feed.model.dto.FeedList" alias="FeedList"/>
         <typeAlias type="site.lemongproject.web.follow.model.vo.Follow" alias="Follow"/>
+        <typeAlias type="site.lemongproject.common.domain.vo.PeriodVo" alias="PeriodVO"/>
+        <typeAlias type="site.lemongproject.web.todo.model.dto.DailyFindVO" alias="DailyFindVO"/>
         <package name="site.lemongproject.web.template.model.vo"/>
         <package name="site.lemongproject.web.challenge.model.dto"/>
+        <package name="site.lemongproject.web.challenge.model.vo"/>
     </typeAliases>
 
     <typeHandlers>
         <typeHandler handler="site.lemongproject.common.type.handler.NameEnumTypeHandler"/>
+        <typeHandler handler="site.lemongproject.common.type.handler.LocalDateTypeHandler"/>
+        <typeHandler handler="site.lemongproject.common.type.handler.ChallengeOptionTypeHandler"/>
     </typeHandlers>
     <mappers>
         <mapper resource="mybatis/mappers/photo-mapper.xml"/>
@@ -39,9 +45,12 @@
         <mapper resource="mybatis/mappers/template/template-mapper.xml"/>
         <mapper resource="mybatis/mappers/template/templatetodo-mapper.xml"/>
         <mapper resource="mybatis/mappers/template/templatecategory-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/review-mapper.xml"/>
         <mapper resource="mybatis/mappers/member/member-mapper.xml"/>
         <mapper resource="mybatis/mappers/member/profile-mapper.xml"/>
         <mapper resource="mybatis/mappers/member/emailconfirm-mapper.xml"/>
+        <mapper resource="mybatis/mappers/challenge/challenge-mapper.xml"/>
+        <mapper resource="mybatis/mappers/challenge/challengetodo-mapper.xml"/>
 <!--        <mapper resource="mybatis/mappers/emailconfirm-mapper.xml" />-->
     </mappers>
 </configuration>

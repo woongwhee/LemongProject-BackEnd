@@ -2,14 +2,172 @@ package site.lemongproject.web.challenge.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.lemongproject.common.domain.dao.HolidayDao;
+import site.lemongproject.common.domain.dto.OfficialHoliday;
+import site.lemongproject.common.domain.vo.PeriodVo;
+import site.lemongproject.common.type.ChallengeStatus;
+import site.lemongproject.common.type.ChallengeUserStatus;
+import site.lemongproject.web.challenge.model.dao.ChallengeChatDao;
 import site.lemongproject.web.challenge.model.dao.ChallengeDao;
-import site.lemongproject.web.challenge.model.dto.Challenge;
+import site.lemongproject.web.challenge.model.dao.ChallengeTodoDao;
+import site.lemongproject.web.challenge.model.dto.ChallengeOption;
+import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
+import site.lemongproject.web.challenge.model.vo.*;
+import site.lemongproject.web.template.model.dao.TemplateDao;
+import site.lemongproject.web.template.model.dao.TemplateTodoDao;
+import site.lemongproject.web.template.model.dto.Template;
+import site.lemongproject.web.template.model.dto.TemplateTodo;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ChallengeServiceImpl implements ChallengeService{
+public class ChallengeServiceImpl implements ChallengeService {
     final private ChallengeDao challengeDao;
+    final private HolidayDao holidayDao;
+    final private ChallengeChatDao chatDao;
+    final private ChallengeTodoDao todoDao;
+    final private TemplateDao templateDao;
+    final private TemplateTodoDao templateTodoDao;
 
+    /**
+     * 멀티 챌린지를 참여
+     *
+     * @param joinVo
+     * @return
+     */
+    @Override
+    public int joinMulti(ChallengeUserVo joinVo) {
+        joinVo.setStatus(ChallengeUserStatus.READY);
+        int result = challengeDao.joinUser(joinVo);
+        result*=todoDao.copyTodoList(joinVo);
+        return result;
+    }
+
+    /**
+     * 시작한 첼린지를 중도포기
+     *
+     * @param
+     * @return
+     */
+    @Override
+    public int leaveMulti(ChallengeUserVo userVo) {
+        int result = challengeDao.deleteUser(userVo);
+//        result*=todoDao.copyTodoList(userVo);
+        return result;
+    }
+
+
+    @Override
+    public int createMulti(MultiCreateVo createVo) {
+        createVo.setStatus(ChallengeStatus.READY);
+        int result = challengeDao.insertMulti(createVo);
+        if(result==0){return 0;}
+        EndDateUpdateVo updateVo = new EndDateUpdateVo();
+        //방장도 challengeUser에 넣는다.
+        ChallengeUserVo userVo=new ChallengeUserVo(createVo.getUserNo(),createVo.getChallengeNo(),ChallengeUserStatus.READY);
+        result *= challengeDao.joinUser(userVo);
+        System.out.println(userVo);
+        updateVo.setChallengeNo(createVo.getChallengeNo());
+        CGTodoInsertVo insertVo = makeTodo(createVo,updateVo);
+        insertVo.setUserNo(-1);
+        result *= todoDao.insertTodoList(insertVo);
+        System.out.println(userVo);
+        result *= todoDao.copyTodoList(userVo);
+        System.out.println(result);
+        result *= challengeDao.updateEndDate(updateVo);
+        return result;
+    }
+
+    /**
+     * 챌린지 시작 메소드 중복시작할수 없음
+     * @param startVo
+     * @return
+     */
+    @Override
+    public int startSingle(SingleStartVo startVo) {
+        startVo.setStatus(ChallengeStatus.SINGLE);
+        int result = challengeDao.insertSingle(startVo);
+        if(result==0){return 0;}
+        result *= challengeDao.joinUser(new ChallengeUserVo(startVo.getUserNo(),startVo.getChallengeNo(),ChallengeUserStatus.READY));
+        EndDateUpdateVo updateVo = new EndDateUpdateVo();
+
+        CGTodoInsertVo insertVo = makeTodo(startVo,updateVo);
+        result *= todoDao.insertTodoList(insertVo);
+        result *= challengeDao.updateEndDate(updateVo);
+        //종료일을 설정한다.
+        return result;
+    }
+
+
+    private CGTodoInsertVo makeTodo(SingleStartVo startVo,EndDateUpdateVo updateVo) {
+        int templateNo=startVo.getTemplateNo();
+        LocalDate startDate=startVo.getStartDate();
+        ChallengeOption co=startVo.getOption();
+        List<OfficialHoliday> holidayList = null;
+        //공휴일 제외인경우
+        if (co.isOfficialHoliday()) {
+            int length = templateDao.findRange(templateNo);
+            long range = (length / co.getWeekDo() + 1) * 7;
+            LocalDate endDate = startDate.plusDays(range);
+            PeriodVo periodVo = new PeriodVo(startDate, endDate);
+            holidayList = holidayDao.findByPeriod(periodVo);
+        }
+        List<TemplateTodo> todoList = templateTodoDao.findByTemplate(templateNo);
+
+
+        List<CGTodoItemVo> challengeTodos = new ArrayList<>(todoList.size());
+        int dayPoint = 1;
+        LocalDate datePoint =startDate ;
+        int weekIndex = datePoint.getDayOfWeek().getValue() - 1;
+        boolean[] optionArr = co.getOptionArray();
+        Iterator<OfficialHoliday> iter = holidayList.iterator();
+        for (TemplateTodo templateTodo : todoList) {
+            if (templateTodo.getDay() != dayPoint) {
+                //해당일이 수행일인지 확인
+                int period = templateTodo.getDay() - dayPoint;
+                dayPoint = templateTodo.getDay();
+                datePoint = datePoint.plusDays(period);
+                weekIndex = weekIndex + period % 7 > 6 ? weekIndex + period % 7 - 7 : weekIndex + period % 7;
+
+                loop:while (true) {
+                    if (!optionArr[weekIndex]) {
+                        weekIndex = weekIndex < 6 ? weekIndex + 1 : 0;
+                        datePoint = datePoint.plusDays(1);
+                        continue;
+                    }
+                    while (iter.hasNext()) {
+                        LocalDate holiyDate = iter.next().getHoliday();
+                        if (holiyDate.equals(datePoint)) {
+                            weekIndex = weekIndex < 6 ? weekIndex + 1 : 0;
+                            datePoint = datePoint.plusDays(1);
+                            continue loop;
+                        }
+                        if (holiyDate.isBefore(datePoint)) {
+                            iter.remove();
+                        }
+                    }
+                    break;
+                }
+            }
+            CGTodoItemVo todo = new CGTodoItemVo();
+            todo.setTodoDate(datePoint);
+            todo.setTodoContent(templateTodo.getContent());
+            todo.setValue(templateTodo.getValue());
+            challengeTodos.add(todo);
+        }
+        CGTodoInsertVo insertVo=new CGTodoInsertVo();
+        updateVo.setEndDate(datePoint);
+        updateVo.setChallengeNo(startVo.getChallengeNo());
+        insertVo.setTodoList(challengeTodos);
+        insertVo.setUserNo(startVo.getUserNo());
+        insertVo.setChallengeNo(startVo.getChallengeNo());
+
+        return insertVo;
+    }
 
 
 }

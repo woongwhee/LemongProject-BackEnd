@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.common.domain.dto.OfficialHoliday;
+import site.lemongproject.common.domain.vo.PeriodVo;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -22,13 +24,21 @@ public class MybatisHolidayDao implements HolidayDao {
         return  result;
     }
     @Override
-    public List<OfficialHoliday> findByMonth(Date month){
+    public List<OfficialHoliday> findByMonth(LocalDate month){
         return session.selectList("holidayMapper.findByMonth",month);
 
     }
 
     @Override
-    public List<OfficialHoliday> findByPeriod(Map<String, Date> periodMap){
-        return session.selectList("holidayMapper.findByMonth",periodMap);
+    public List<OfficialHoliday> findByPeriod(PeriodVo period) {
+        return session.selectList("holidayMapper.findByPeriod",period);
     }
+
+    @Override
+    public List<OfficialHoliday> findByMonth(Map<String, LocalDate> map) {
+        return session.selectList("holidayMapper.findByMonth",map);
+
+    }
+
+
 }

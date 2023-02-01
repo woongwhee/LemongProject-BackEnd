@@ -5,11 +5,10 @@ import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.member.model.vo.Member;
+import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
-import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
-import site.lemongproject.web.template.model.vo.TempalteTodoInsertVo;
-import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
+import site.lemongproject.web.template.model.vo.*;
 import site.lemongproject.web.template.service.TemplateReadService;
 import site.lemongproject.web.template.service.TemplateWriteService;
 
@@ -40,7 +39,7 @@ public class TemplateController {
     public ResponseBody<List<Template>> list(@PathVariable(value = "templateNo") int templateNo) {
         Template template = ReadService.getTemplateDetail(templateNo);
         if (template != null) {
-            return ResponseBuilder.success(templateNo);
+            return ResponseBuilder.success(template);
         } else {
             return ResponseBuilder.findNothing();
         }
@@ -115,14 +114,51 @@ public class TemplateController {
     }
     @DeleteMapping("/delete/{templateNo}")
     public ResponseBody<Integer> deleteTemplate(@SessionAttribute("loginUser") Member loginUser, @PathVariable("templateNo") int templateNo) {
-        int result = WriteService.deleteTemplate(loginUser.getUserNo(),templateNo);
+        int result = ReadService.deleteTemplate(loginUser.getUserNo(),templateNo);
         if (result > 0) {
             return ResponseBuilder.success(result);
         } else {
             return ResponseBuilder.deleteFail();
         }
     }
-
+    @PostMapping("/review/insert")
+    public ResponseBody<Integer> reviewInsert(@SessionAttribute("loginUser")Member loginUser, ReviewInsertVo riv){
+        riv.setUserNo(loginUser.getUserNo());
+        int result=ReadService.insertReview(riv);
+        if(result>0){
+            return ResponseBuilder.success(result);
+        }else{
+            return ResponseBuilder.upLoadFail();
+        }
+    };
+    @DeleteMapping("/review/delete/{reviewNo}")
+    public ResponseBody<Integer> reviewDelete(@SessionAttribute("loginUser")Member loginUser, @PathVariable("reviewNo")int reviewNo){
+        ReviewDeleteVo reviewDeleteVo=new ReviewDeleteVo(reviewNo,loginUser.getUserNo());
+        int result=ReadService.deleteReview(reviewDeleteVo);
+        if(result>0){
+            return ResponseBuilder.success(result);
+        }else{
+            return ResponseBuilder.upLoadFail();
+        }
+    };
+    @GetMapping("/review/list/{templateNo}")
+    public ResponseBody<List<Review>> reviewList(@PathVariable("templateNo")int templateNo){
+        List<Review> rList=ReadService.getReviewList(templateNo);
+        if(rList!=null){
+            return ResponseBuilder.success(rList);
+        }else{
+            return ResponseBuilder.findNothing();
+        }
+    }
+    @GetMapping("/review/one/{reviewNo}")
+    public ResponseBody<Review> reviewOne(@PathVariable("reviewNo")int reviewNo){
+        Review review=ReadService.getReviewOne(reviewNo);
+        if(review!=null){
+            return ResponseBuilder.success(review);
+        }else{
+            return ResponseBuilder.findNothing();
+        }
+    }
 
 
 }

@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="holidayMapper">
+    <resultMap id="holidayMap" type="Holiday">
+        <id column="HOLIDAY_NO" property="holidayNo"/>
+        <result column="HOLIDAY" property="holiday"/>
+        <result column="HOLIDAY_NAME" property="holidayName"/>
+    </resultMap>
+
     <insert id="insertMany" parameterType="Holiday">
         insert into OFFICIAL_HOLIDAY VALUES (SEQ_HOLIDAY.NEXTVAL,#{holiday},#{holidayName})
     </insert>
+
+    <select id="findByPeriod" parameterType="PeriodVo" resultMap="holidayMap">
+        SELECT * FROM OFFICIAL_HOLIDAY WHERE HOLIDAY BETWEEN #{startDate} AND #{endDate}
+    </select>
+
+
+    <select id="findByMonth" parameterType="map" resultMap="holidayMap">
+        SELECT * FROM OFFICIAL_HOLIDAY WHERE HOLIDAY &gt;= #{month} AND HOLIDAY &lt; ADD_MONTHS(#{month},1)
+    </select>
 </mapper>

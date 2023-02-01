@@ -11,13 +11,17 @@
     </select>
     <!--  이메일 체크 삽입  -->
     <insert id="insertConfirm" parameterType="EmailConfirm">
+        <selectKey keyProperty="confirmNo" resultType="_int" >
+            SELECT SEQ_CONFIRM.nextval from dual
+        </selectKey>
+
         INSERT INTO EMAIL_CONFIRM (CONFIRM_NO, CODE, EMAIL, STATUS)
-        VALUES(SEQ_CONFIRM.NEXTVAL, #{code}, #{email}, DEFAULT)
+        VALUES(#{confirmNo}, #{code}, #{email}, DEFAULT)
     </insert>
     <!-- 이전 인증코드 삭제 -->
     <delete id="deleteAnother" parameterType="EmailConfirm" >
         delete EMAIL_CONFIRM
-        where  EMAIl=#{email} and NOT CONFIRM_NO = SEQ_CONFIRM.CURRVAL
+        where  EMAIl=#{email}
     </delete>
 
 

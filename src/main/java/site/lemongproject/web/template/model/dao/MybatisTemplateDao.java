@@ -21,17 +21,18 @@ public class MybatisTemplateDao implements TemplateDao {
     @Override
     public List<Template> findList(int categoryNo, int page, int limit) {
         int offSet=page*limit;
-        System.out.println(offSet);
-        System.out.println(limit);
         RowBounds rowBounds=new RowBounds(offSet,limit);
         return sqlSession.selectList("templateMapper.findMany",categoryNo,rowBounds);
     }
 
     @Override
+    public Template findDetail(int templateNo) {
+        return sqlSession.selectOne("templateMapper.findDetail",templateNo);
+    }
+    @Override
     public Template findOne(int templateNo) {
         return sqlSession.selectOne("templateMapper.findOne",templateNo);
     }
-
     @Override
     public int countTemplate(int categoryNo) {return sqlSession.selectOne("templateMapper.countTemplate",categoryNo);}
     @Override
@@ -58,6 +59,11 @@ public class MybatisTemplateDao implements TemplateDao {
     @Override
     public boolean isWriter(WriterCheckVo writerCheckVo){
         return sqlSession.selectOne("templateMapper.isWriter",writerCheckVo);
+    }
+
+    @Override
+    public int findRange(int templateNo) {
+        return sqlSession.selectOne("templateMapper.findRange",templateNo);
     }
 
 }
