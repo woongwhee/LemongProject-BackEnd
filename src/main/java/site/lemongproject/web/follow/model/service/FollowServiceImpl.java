@@ -46,4 +46,23 @@ public class FollowServiceImpl implements FollowService{
     public List<Follow> selectMyFollowersdList(Follow f){
         return followDao.selectMyFollowersdList(f);
     }
+
+    public Follow MyFollowingCount(Follow f){
+        return followDao.MyFollowingCount(f);
+    }
+
+    public List<Follow> selectAcceptFollowingList(Follow f){
+        return followDao.selectAcceptFollowingList(f);
+    }
+
+    public List<Follow> selectAcceptFollowerList(Follow f){
+        return followDao.selectAcceptFollowerList(f);
+    }
+    public List<Follow> selectMyFollowingList(Follow f){
+        return followDao.selectMyFollowingList(f);
+    }
+
+    public List<Follow> selectMyFollowerAlertList(Follow f){
+        return followDao.selectMyFollowerAlertList(f);
+    }
 }

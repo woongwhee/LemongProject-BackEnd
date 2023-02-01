@@ -115,9 +115,9 @@ public class MemberServiceImpl implements MemberService {
         return memberDao.updatePassword(cpw);
     }
 
-    public Member seletMember(int userNo) {
-        return memberDao.selectMember(userNo);
-    }
+//    public Member selectMember(int userNo){
+//        return memberDao.selectMember(userNo);
+//    }
 
     @Override
     public int deleteUser(int userNo) {
@@ -130,12 +130,23 @@ public class MemberServiceImpl implements MemberService {
         return profileDao.findOne(userNo);
     }
 
-    @Override
-    public Member selectMember(int userNo) {
-        return memberDao.selectMember(userNo);
+    public Member selectMembers(int userNo){
+        return memberDao.selectMembers(userNo);
     }
 
     public List<Profile> searchUser(String userNick) {
         return profileDao.searchUser(userNick);
+    }
+
+    public Profile MyPageNickCheck(String checkNick){
+        return profileDao.MyPageNickCheck(checkNick);
+    }
+
+    public Profile updateMyNick(Profile pro){
+        return profileDao.updateMyNick(pro);
+    }
+
+    public Profile updateMyContent(Profile p){
+        return profileDao.updateMyContent(p);
     }
 }

@@ -39,15 +39,18 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.findPublic", userNo);
     }
 
-    public Member selectMember(int userNo) {
-        return sqlSession.selectOne("memberMapper.selectMember", userNo);
-    }
+//    public Member selectMember(int userNo) {
+//        return sqlSession.selectOne("memberMapper.selectMember", userNo);
+//    }
 
     public Profile selectMyProfile(int userNo) {
         return sqlSession.selectOne("profileMapper.selectMyProfile", userNo);
     }
 
 
+    public Member selectMembers(int userNo) {
+        return sqlSession.selectOne("memberMapper.selectMember", userNo);
+    }
 }
 
 //    public int checkEmail(Map<String, Object> e, String ranNum) {
