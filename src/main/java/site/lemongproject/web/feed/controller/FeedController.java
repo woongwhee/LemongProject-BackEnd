@@ -8,12 +8,10 @@ import site.lemongproject.common.util.FileUtil;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.service.FeedService;
-import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
-import site.lemongproject.web.reply.model.vo.Reply;
+import site.lemongproject.web.feed.model.vo.Reply;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

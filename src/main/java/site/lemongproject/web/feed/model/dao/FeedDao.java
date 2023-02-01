@@ -6,9 +6,8 @@ import org.springframework.stereotype.Repository;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
-import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
-import site.lemongproject.web.reply.model.vo.Reply;
+import site.lemongproject.web.feed.model.vo.Reply;
 
 
 import java.util.List;
