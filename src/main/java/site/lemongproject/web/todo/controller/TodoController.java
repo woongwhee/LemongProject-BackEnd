@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.member.model.vo.Member;
-import site.lemongproject.web.todo.model.dto.DailyFindVO;
+import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.dto.DailyTodoVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 import site.lemongproject.web.todo.service.TodoService;
@@ -40,9 +40,10 @@ public class TodoController {
     @GetMapping("/daily/{todoDate}")
     public ResponseBody<DailyTodoVo> getDaily(
             @PathVariable("todoDate")
-            @DateTimeFormat(pattern = "yyyy-MM-dd")
-            LocalDate todoDate,@SessionAttribute("loginUser")Member member){
-        DailyFindVO dailyFind=new DailyFindVO();
+            @DateTimeFormat(pattern = "yyMMdd")
+            LocalDate todoDate,
+            @SessionAttribute("loginUser")Member member){
+        DailyFindVo dailyFind=new DailyFindVo();
         dailyFind.setTodoDate(todoDate);
         dailyFind.setUserNo(member.getUserNo());
         DailyTodoVo daily=todoService.getDaily(dailyFind);
