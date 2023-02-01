@@ -35,7 +35,9 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
 
     @Override
     public int updateUnSaveTemplate(TemplateUpdateVo templateVo) {
-        return templateDao.updateUnSave(templateVo);
+        if(templateDao.isWriter(new WriterCheckVo(templateVo.getUserNo(),templateVo.getTemplateNo()))){
+            return templateDao.updateUnSave(templateVo);}
+        else return 0;
     }
 
     /**
@@ -107,16 +109,7 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
      * @param templateNo
      * @return
      */
-    @Override
-    public int deleteTemplate(int userNo,int templateNo) {
-        boolean isWriter=templateDao.isWriter(new WriterCheckVo(userNo,templateNo));
-        if(!isWriter){
-            return 0;
-        }
-        int result=templateTodoDao.deleteTemplate(templateNo);
-        result*=templateDao.deleteTemp(templateNo);
-        return result;
-    }
+
 
     /**
      * 임시저장된 템플릿을저장

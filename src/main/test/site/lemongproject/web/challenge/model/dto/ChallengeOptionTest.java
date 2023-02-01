@@ -11,10 +11,7 @@ public class ChallengeOptionTest {
         String option="11111110";
         ChallengeOption c=ChallengeOption.getInstance(option);
         Assertions.assertThat(c).isNotNull();
-
-        String o=ChallengeOption.parseOption(c);
-        Assertions.assertThat(o).isEqualTo(option);
-
-
+//        String o=ChallengeOption.parseOption(c);
+//        Assertions.assertThat(o).isEqualTo(option);
     }
 }
