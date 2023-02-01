@@ -26,28 +26,25 @@ public class MemberController {
 
     final private MemberService memberService;
     final private FileUtil fileUtil;
-
     final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    // 로그인
-    @PostMapping("/login")
-    public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
-        Member loginUser = memberService.loginMember(m);
-        // 암호화 후
-        if(loginUser != null && bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())) {
-            System.out.println("컨트롤러 넘어옴");
-            System.out.println(ResponseBuilder.success(loginUser));
-            return ResponseBuilder.success(loginUser);
-        } else {
-            System.out.println("컨트롤러 못 넘어옴");
-            return ResponseBuilder.unLogin(null);
-        }
+//    // 로그인
+//    @PostMapping("/login")
+//    public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
+//        Member loginUser = memberService.loginMember(m);
+//        // 암호화 후
+//        if(loginUser != null && bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())) {
+//            System.out.println("컨트롤러 넘어옴");
+//            System.out.println(ResponseBuilder.success(loginUser));
+//            return ResponseBuilder.success(loginUser);
+//        } else {
+//            System.out.println("컨트롤러 못 넘어옴");
+//            return ResponseBuilder.unLogin(null);
+//        }
+//
+//    }
 
-    }
-
-
-
-    // 마이페이지 회원정보 수정
+//     마이페이지 회원정보 수정
 //    @GetMapping("/selectPro")
 //    public List<Profile> MyPageUpdate(@SessionAttribute()){
 //
@@ -55,8 +52,8 @@ public class MemberController {
 //
 //        return mList;
 //    }
-//
-//    // MEMBER테이블 유저 정보 조회.
+////
+////    // MEMBER테이블 유저 정보 조회.
 //    @GetMapping("/selectUser")
 //    public List<Member> selectUser(){
 //        List<Member> mList = memberService.selectUser();
@@ -89,11 +86,15 @@ public class MemberController {
     }
 
     @GetMapping("/myPwdUpdate")
-    public int myupdatePwd(@SessionAttribute("loginUser") Member loginUser,@RequestParam(value = "upPwd" , required = false)String upPwd){
-        String pwd=bCryptPasswordEncoder.encode(upPwd);
-        int userNo=loginUser.getUserNo();
-        ChangePwdVo cpw=new ChangePwdVo(userNo,pwd);
+    public int myupdatePwd(@SessionAttribute("loginUser") Member loginUser , @RequestParam(value = "updatePwd" , required = false)String updatePwd){
+        String pwd = bCryptPasswordEncoder.encode(updatePwd);
+        int userNo = loginUser.getUserNo();
+
+        System.out.println(updatePwd + " === success === ");
+
+        ChangePwdVo cpw = new ChangePwdVo(userNo,pwd);
         int result = memberService.updatePassword(cpw);
+
         return result;
     }
 
@@ -190,16 +191,16 @@ public class MemberController {
     //
 
     @GetMapping("/selectMember")
-    public ResponseBody<Member> selectMember(@SessionAttribute("loginUser") Member loginUser){
+    public ResponseBody<Member> selectMembers(@RequestParam(value = "userNo") int userNo){
 
-        Member m = memberService.selectMember(loginUser.getUserNo());
+        Member m = memberService.selectMembers(userNo);
         return ResponseBuilder.success(m);
     }
 
     // userNo에 해당하는 user 프로필 정보 가져오기(changeName 포함).
     @GetMapping("/selectMyProfile")
-    public ResponseBody<Profile> selectMyProfile(@SessionAttribute("loginUser") Member loginUser){
-        Profile p = memberService.selectMyProfile(loginUser.getUserNo());
+    public ResponseBody<Profile> selectMyProfile(@RequestParam(value = "userNo" , required = false) int userNo){
+        Profile p = memberService.selectMyProfile(userNo);
         return ResponseBuilder.success(p);
     }
 
@@ -214,6 +215,45 @@ public class MemberController {
         System.out.println(p + " : success");
 
         return ResponseBuilder.success(p);
+    }
+
+    // 마이페이지에서 유저 닉네임 검색해서 없는 닉네임인 경우 변경
+    @GetMapping("/MyPageNickCheck")
+    public ResponseBody<Profile> MyPageNickCheck(@RequestParam(value = "checkNick" , required = false) String checkNick){
+
+        Profile p = memberService.MyPageNickCheck(checkNick);
+
+        return ResponseBuilder.success(p);
+    }
+
+    // 유효성 검사 통과 후 닉네임 변경.
+    @GetMapping("/updateMyNick")
+    public ResponseBody<Profile> updateMyNick(@RequestParam(value = "updateNick" , required = false) String updateNick ,
+                                              @RequestParam(value = "userNo" , required = false) int userNo){
+
+        System.out.println(userNo + " === updateMyNick === ");
+        System.out.println(updateNick + " === updateMyNick === ");
+
+        Profile pro = new Profile();
+        pro.setUserNo(userNo);
+        pro.setNickName(updateNick);
+
+        Profile p = memberService.updateMyNick(pro);
+
+        return ResponseBuilder.success(p);
+    }
+
+    // 마이페이지 자기소개 변경
+    @GetMapping("/updateMyContent")
+    public ResponseBody<Profile> updateMyContent(@RequestParam(value = "updateCont" , required = false) String updateCont ,
+                                                 @RequestParam(value = "userNo" , required = false) int userNo){
+        Profile p = new Profile();
+        p.setProfileComment(updateCont);
+        p.setUserNo(userNo);
+
+        Profile content = memberService.updateMyContent(p);
+
+        return ResponseBuilder.success(content);
     }
 
 }

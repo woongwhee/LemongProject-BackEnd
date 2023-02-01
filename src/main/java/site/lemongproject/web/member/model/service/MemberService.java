@@ -36,9 +36,15 @@ public interface MemberService {
 
     Profile selectMyProfile(int userNo);
 
-    Member selectMember(int userNo);
-
     MyProfileVo getMyProfile(int userNo);
+
+    Member selectMembers(int userNo);
+
+    Profile MyPageNickCheck(String checkNick);
+
+    Profile updateMyNick(Profile pro);
+
+    Profile updateMyContent(Profile p);
 
 //    int checkConfirm(EmailConfirm confirm);
 }
