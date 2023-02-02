@@ -35,5 +35,9 @@ public class TodoDao {
 
     public int delayTodo(Todo t){ return sqlSession.update("todoMapper.delayTodo", t);}
 
+    public List<Todo> calTodo(Todo t){
+        return sqlSession.selectList("todoMapper.calTodo", t);
+    }
+
 
 }

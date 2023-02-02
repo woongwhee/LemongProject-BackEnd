@@ -39,8 +39,15 @@ public class TodoServiceImpl implements TodoService {
     }
 
     public int delayTodo(Todo t){
+
         return todoDao.delayTodo(t);
     }
+
+    public List<Todo> calTodo(Todo t) {
+        return todoDao.calTodo(t);
+    }
+
+
 
 
 

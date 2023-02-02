@@ -96,8 +96,7 @@ public class TodoController {
 
         return ResponseBuilder.success(t);
     }
-    
-    
+
     //투두 내일로 미루기
     @GetMapping("/delayTodo")
     public ResponseBody<Todo> delayTodo(@RequestParam(value = "todoNo", required = false) int todoNo){
@@ -109,8 +108,21 @@ public class TodoController {
         todoService.delayTodo(t);
 
         return ResponseBuilder.success(t);
-
     }
+
+    @GetMapping("/calTodo")
+    public  List<Todo> calTodo(@RequestParam(value = "userNo", required = false) int userNo){
+        System.out.println("cal userNo: "+userNo);
+
+        Todo t = new Todo();
+        t.setUserNo(userNo);
+
+        List<Todo> calTodos = todoService.calTodo(t);
+
+        return calTodos;
+    }
+
+
     
     
     
