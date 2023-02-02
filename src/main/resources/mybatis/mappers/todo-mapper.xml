@@ -77,17 +77,24 @@
     <update id="delayTodo" parameterType="Todo">
         UPDATE TODO
         SET TODO_DATE = TODO_DATE + 1,
-            VALUE = ( SELECT
+            VALUE = (SELECT
                         MAX(VALUE) + 1
-                        FROM TODO
-                        WHERE USER_NO = 1 AND
-                        TODO_DATE = ( SELECT
+                    FROM TODO
+                    WHERE USER_NO = 1 AND
+                          TODO_DATE = ( SELECT
                                         TODO_DATE + 1
                                         FROM TODO
                                         WHERE TODO_NO = #{todoNo}
         ))
         WHERE TODO_NO = #{todoNo}
     </update>
+
+    <select id="calTodo" resultType="string">
+        SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
+        FROM TODO
+        WHERE USER_NO = #{userNo}
+        ORDER BY TODO_DATE
+    </select>
 
 
 

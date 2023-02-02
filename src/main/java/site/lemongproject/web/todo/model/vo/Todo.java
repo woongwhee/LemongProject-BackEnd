@@ -11,7 +11,9 @@ public class Todo {
 
     private long todoNo; //투두넘버
 
-    //@JsonFormat(pattern = "yyMMdd" ,timezone = "GMT+9") //JSON의 165030033같은 이상한 날짜값을 제대로 변환시켜준다.
+    @JsonFormat(pattern = "yyMMdd" ,timezone = "GMT+9") //JSON의 165030033같은 이상한 날짜값을 제대로 변환시켜준다.
+    //private Date todoDate2;
+
     private String todoDate; //투두리스트 날짜
 
     private int userNo; //작성자
