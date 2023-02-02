@@ -176,5 +176,12 @@ public class FeedController {
         return result;
     }
 
+    @RequestMapping("/changeValue")
+    public Map<String, Object>changeValue(@RequestBody Map<String,Object> doublePhotoNo){
+        System.out.println(doublePhotoNo);
+        Map<String,Object> result = new HashMap<>();
+        return result;
+    }
+
 
 }
