@@ -77,4 +77,23 @@
             VALUES (SEQ_MEMBER.NEXTVAL, #{email}, #{userPwd}, DEFAULT, #{userName}, #{socialType})
     </insert>
 
+
+    <!--  카카오 유저 확인  -->
+    <select id="isKakao" parameterType="Member" resultType="int">
+        SELECT COUNT(*) AS COUT
+        FROM MEMBER
+        WHERE EMAIL = #{email}
+            AND SOCIAL_TYPE = 'KAKAO'
+    </select>
+
+
+    <!--  카카오 회원 가입  -->
+    <insert id="insertKakao" parameterType="Member">
+        INSERT INTO MEMBER (USER_NO, EMAIL, STATUS, USER_NAME, SOCIAL_TYPE)
+            VALUES (SEQ_MEMBER.NEXTVAL, #{email}, DEFAULT, #{userName}, #{socialType})
+    </insert>
+
+
+
+
 </mapper>
