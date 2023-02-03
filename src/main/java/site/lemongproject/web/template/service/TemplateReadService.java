@@ -20,7 +20,4 @@ public interface TemplateReadService {
 
     int deleteTemplate(int userNo, int templateNo);
     Review getReviewOne(int reviewNo);
-
-    int SingleStart(String option, Date StartAt,int userNo);
-    int MultiStart(String option, Date StartAt,int userNo);
-}
+ }
