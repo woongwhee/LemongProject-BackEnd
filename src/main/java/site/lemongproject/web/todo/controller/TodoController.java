@@ -110,6 +110,7 @@ public class TodoController {
         return ResponseBuilder.success(t);
     }
 
+    //캘린더에 투두 표시
     @GetMapping("/calTodo")
     public  List<Todo> calTodo(@RequestParam(value = "userNo", required = false) int userNo){
         System.out.println("cal userNo: "+userNo);
