@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.domain.dto.MailMessage;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
+import site.lemongproject.common.type.SocialType;
 import site.lemongproject.common.util.MailUtil;
 import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
+import site.lemongproject.web.member.model.vo.KakaoToken;
 import site.lemongproject.web.member.model.vo.Member;
 
 import javax.servlet.http.HttpSession;
@@ -153,8 +155,47 @@ public class PublicController {
         } else {
             return ResponseBuilder.failAuthEmail(result);
         }
+    }
+
+
+
+    @RequestMapping(value = "kakaoLogin", method = RequestMethod.GET)
+    public ResponseBody<Map<String, Object>> kakaoLogin(@RequestParam Map<String, Object> code, HttpSession session) {
+        String authCode = String.valueOf(code.get("code"));
+        System.out.println("인가코드: "+authCode);
+
+        // 인가코드를 통해 access_token 발급
+        String token = memberService.getAccessToken(authCode);
+        System.out.println("acessToken: "+token);
+
+        // 접속자 정보 얻어오기
+        Map<String, Object> kakaoUser = memberService.getKakaoUser(token);
+        System.out.println("카카오 유저 정보: "+kakaoUser);
+
+        // 이메일 + 소셜 타입으로 사용자 정보 확인
+        String email = String.valueOf(kakaoUser.get("email"));
+        String userName = String.valueOf(kakaoUser.get("nickName"));
+        SocialType socialType = SocialType.KAKAO;
+
+        // 멤버 셋팅
+        Member isKakao = new Member();
+        isKakao.setEmail(email);
+        isKakao.setSocialType(socialType);
+        isKakao.setUserName(userName);
+
+        // 일치하는 회원이 있는지 확인
+        int result = memberService.isKakaoUser(isKakao);
+
+        if(result > 0) { // 회원정보가 있는 경우 -> 로그인
+            return ResponseBuilder.success(result);
+        } else { // 회원정보가 없는 경우 -> 회원가입 -> 닉네임 설정
+            int kakaoJoin = memberService.insertKakao(isKakao);
+            System.out.println("회원가입 여부: "+kakaoJoin);
+            return ResponseBuilder.noKakao(result);
+        }
 
     }
+
 
 
 

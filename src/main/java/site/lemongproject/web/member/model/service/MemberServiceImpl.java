@@ -1,5 +1,8 @@
 package site.lemongproject.web.member.model.service;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +15,20 @@ import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.dao.ProfileDao;
 import site.lemongproject.web.member.model.dto.MyProfileVo;
+import site.lemongproject.web.member.model.vo.KakaoToken;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.photo.model.vo.Photo;
 
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.nio.Buffer;
+import java.sql.Struct;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -83,6 +95,132 @@ public class MemberServiceImpl implements MemberService {
         System.out.println("중복 체크 dao 실행: " + result);
         return result;
     }
+
+
+    // 카카오 로그인 access token 발급
+    @Override
+    public String getAccessToken(String authCode) {
+        String acessToken = "";
+        String refreshToken = "";
+        String reqURL = "https://kauth.kakao.com/oauth/token";
+
+        // access token을 받기 위한 중요 코드 -> 나중에 따로 빼기
+        String restApi = "6c1bbd8efca92b427aff16845e3336d1";
+        String redirectUri = "http://localhost:3000/kakao";
+
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            // HttpURLConnection 설정 값 셋팅
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+
+            // buffer를 통해 값 셋팅 후 요청
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            StringBuilder sb = new StringBuilder();
+            sb.append("grant_type=authorization_code");
+            sb.append("&client_id="+restApi);
+            sb.append("&redirect_uri="+redirectUri);
+            sb.append("&code="+authCode);
+            bw.write(sb.toString());
+            bw.flush();
+
+
+            // return 값을 새로운 변수에 저장
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String brLine = "";
+            String result = "";
+
+            while ((brLine = br.readLine()) != null) {
+                result += brLine;
+            }
+
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+
+            // 토근 값 저장 및 리턴
+            acessToken = element.getAsJsonObject().get("access_token").getAsString();
+            refreshToken = element.getAsJsonObject().get("refresh_token").getAsString();
+
+            br.close();
+            bw.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return acessToken;
+    }
+
+
+    // 카카오 로그인 접속자 정보 get
+    @Override
+    public Map<String, Object> getKakaoUser(String token) {
+        Map<String, Object> kakaoUser = new HashMap<>();
+        String reqURL = "https://kapi.kakao.com/v2/user/me";
+
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            // 요청에 필요한 Header에 포함할 내용
+            conn.setRequestProperty("Authorization", "Bearer "+token);
+            conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode: "+responseCode);
+            // 실행 문제 없음
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));
+
+            String brLine = "";
+            String result = "";
+
+            while ((brLine = br.readLine()) != null) {
+                result += brLine;
+            }
+
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+            System.out.println("element: "+element);
+
+            JsonObject properties = element.getAsJsonObject().get("properties").getAsJsonObject();
+            JsonObject kakaoAccount = element.getAsJsonObject().get("kakao_account").getAsJsonObject();
+
+            String nickName = properties.getAsJsonObject().get("nickname").getAsString();
+            String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
+
+            kakaoUser.put("nickName", nickName);
+            kakaoUser.put("email", email);
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return kakaoUser;
+    }
+
+
+    // DB에 저장되어 있는 카카오 회원인지 확인
+    @Override
+    public int isKakaoUser(Member isKakao) {
+        int result = memberDao.isKakaoUser(isKakao);
+        System.out.println("kakaoUser 서비스: "+result);
+        return result;
+    }
+
+
+    // 카카오 회원 가입
+    @Override
+    public int insertKakao(Member isKakao) {
+        int result = memberDao.insertKakao(isKakao);
+        System.out.println("kakaoUser 삽입: "+result);
+        return result;
+    }
+
+
 
     @Override
     public int updateProfile(Profile profile) {
