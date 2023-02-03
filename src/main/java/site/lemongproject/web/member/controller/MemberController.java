@@ -27,23 +27,8 @@ public class MemberController {
     final private MemberService memberService;
     final private FileUtil fileUtil;
 
-    final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 로그인
-    @PostMapping("/login")
-    public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
-        Member loginUser = memberService.loginMember(m);
-        // 암호화 후
-        if(loginUser != null && bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())) {
-            System.out.println("컨트롤러 넘어옴");
-            System.out.println(ResponseBuilder.success(loginUser));
-            return ResponseBuilder.success(loginUser);
-        } else {
-            System.out.println("컨트롤러 못 넘어옴");
-            return ResponseBuilder.unLogin(null);
-        }
-
-    }
 
 
 
@@ -90,9 +75,8 @@ public class MemberController {
 
     @GetMapping("/myPwdUpdate")
     public int myupdatePwd(@SessionAttribute("loginUser") Member loginUser,@RequestParam(value = "upPwd" , required = false)String upPwd){
-        String pwd=bCryptPasswordEncoder.encode(upPwd);
         int userNo=loginUser.getUserNo();
-        ChangePwdVo cpw=new ChangePwdVo(userNo,pwd);
+        ChangePwdVo cpw=new ChangePwdVo(userNo,upPwd);
         int result = memberService.updatePassword(cpw);
         return result;
     }

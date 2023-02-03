@@ -24,7 +24,9 @@ public class TodoController {
 
     //투두 목록 가져오기
     @GetMapping ("/getTodo")
-    public List<Todo> selectTodo(@RequestParam(value = "todoDate" , required = false) String todoDate,
+    public List<Todo> selectTodo(@RequestParam(value = "todoDate" , required = false)
+                                     @DateTimeFormat(pattern = "yyMMdd")
+                                     LocalDate todoDate,
                                  @RequestParam(value = "userNo", required = false) int userNo) throws ParseException {
 //        List<Todo> t = todoService.selectToDo(loginUser.getUserNo(),date);
 
@@ -41,11 +43,11 @@ public class TodoController {
     public ResponseBody<DailyTodoVo> getDaily(
             @PathVariable("todoDate")
             @DateTimeFormat(pattern = "yyMMdd")
-            LocalDate todoDate,
-            @SessionAttribute("loginUser")Member member){
+            LocalDate todoDate){
+//            @SessionAttribute("loginUser")Member member){
         DailyFindVo dailyFind=new DailyFindVo();
         dailyFind.setTodoDate(todoDate);
-        dailyFind.setUserNo(member.getUserNo());
+        dailyFind.setUserNo(31);
         DailyTodoVo daily=todoService.getDaily(dailyFind);
         if(daily.getNormalList().size()==0&&daily.getChallengeList().size()==0){
             return ResponseBuilder.findNothing();

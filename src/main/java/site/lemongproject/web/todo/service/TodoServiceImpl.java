@@ -51,6 +51,7 @@ public class TodoServiceImpl implements TodoService {
         DailyTodoVo todoVo=new DailyTodoVo();
         List<Todo> normalList=todoDao.findDaily(dailyFind);
         List<ChallengeTodoVo>challengeList =challengeTodoDao.findDaily(dailyFind);
+        System.out.println(challengeList);
         todoVo.setNormalList(normalList);
         todoVo.setChallengeList(challengeList);
         return todoVo;

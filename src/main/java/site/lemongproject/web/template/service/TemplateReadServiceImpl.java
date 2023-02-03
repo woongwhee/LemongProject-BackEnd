@@ -73,15 +73,6 @@ public class TemplateReadServiceImpl implements TemplateReadService {
         return reviewDao.findOne(reviewNo);
     }
 
-    @Override
-    public int SingleStart(String option, Date StartAt, int userNo) {
-        return 0;
-    }
-
-    @Override
-    public int MultiStart(String option, Date StartAt, int userNo) {
-        return 0;
-    }
 
 
 }

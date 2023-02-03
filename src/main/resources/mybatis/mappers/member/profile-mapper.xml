@@ -4,15 +4,14 @@
     <resultMap id="profileDetail" type="Profile">
         <result column="USER_NO" property="userNo"/>
         <result column="NICK_NAME" property="nickName"/>
-        <result column="PHOTO_NO" property="photoNo"/>
         <result column="PROFILE_COMMENT" property="profileComment"/>
-        <association property="photo" resultMap="photoMapper.photoMap"/>
+        <association property="photo"  resultMap="photoMapper.photoMap"/>
     </resultMap>
-    <select id="findOne" parameterType="int" resultType="Profile">
-        select *
-        from user_profile
-            left join PHOTO using (photo_NO)
-        where user_no = #{userNo}
+    <select id="findOne" parameterType="int" resultMap="profileDetail">
+        SELECT *
+        FROM USER_PROFILE pro
+        LEFT JOIN PHOTO pho USING (PHOTO_NO)
+        WHERE pro.USER_NO = #{userNo}
     </select>
 
     <!--프로필 생성    -->

@@ -7,6 +7,6 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class DailyFindVo {
-    private LocalDate todoDate;
     private int userNo;
+    private LocalDate todoDate;
 }
