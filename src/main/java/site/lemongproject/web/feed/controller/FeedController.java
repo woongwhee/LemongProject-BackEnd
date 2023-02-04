@@ -52,7 +52,8 @@ public class FeedController {
     // 피드 수정
     @RequestMapping(value = "/updateFeed", method = RequestMethod.POST)
     public Map<String, Object> feedUpdate(@RequestBody FeedInsert updatefeed ){
-        System.out.println(updatefeed);
+        System.out.println("updateFeed : " + updatefeed);
+        System.out.println(updatefeed.getFeedContent().equals(""));
         int check = feedService.updateFeed(updatefeed);
         Map<String, Object> result = new HashMap<>();
         if(check > 0){
@@ -80,7 +81,6 @@ public class FeedController {
     @RequestMapping(value = "/deleteFeed", method = RequestMethod.POST)
     public Map<String,Object> feedDelete(@RequestBody Map<String,Object> deleteFeedNo){
         System.out.println(deleteFeedNo);
-
         int check = feedService.deleteFeed(deleteFeedNo);
         System.out.println(check);
         Map<String, Object> result = new HashMap<>();
@@ -180,6 +180,12 @@ public class FeedController {
     public Map<String, Object>changeValue(@RequestBody Map<String,Object> doublePhotoNo){
         System.out.println(doublePhotoNo);
         Map<String,Object> result = new HashMap<>();
+        int check = feedService.changeValue(doublePhotoNo);
+        if(check>0){
+            result.put("Java","success");
+        }else{
+            result.put("Java", "success");
+        }
         return result;
     }
 

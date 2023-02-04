@@ -121,4 +121,18 @@
         DELETE FROM FEED_PHOTO where PHOTO_NO = #{photoNo}
     </delete>
 
+<!--  현재 밸류 가져오기  -->
+    <select id="startValue" parameterType="Map" resultType="int">
+        SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO= #{startPhoNo}
+    </select>
+    <select id="finishValue" parameterType="Map" resultType="int">
+        SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO= #{finishPhoNo}
+    </select>
+    <update id="updateStartValue" parameterType="Map">
+        update FEED_PHOTO SET VALUE=#{finishValue} WHERE PHOTO_NO=#{startPhoNo}
+    </update>
+    <update id="updateFinishValue" parameterType="Map">
+        update FEED_PHOTO SET VALUE=#{startValue} WHERE PHOTO_NO=#{finishPhoNo}
+    </update>
+
 </mapper>

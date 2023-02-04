@@ -39,8 +39,13 @@ public class FeedServiceImpl implements FeedService{
     @Override
     public int updateFeed(FeedInsert updatefeed){
         int result = 0;
-        result +=feedDao.updateFeed(updatefeed); // 내용 업데이트
+        if(updatefeed.getFeedContent().equals("")){
+            result += 1;
+        }else{
+            result +=feedDao.updateFeed(updatefeed); // 내용 업데이트
+        }
         result += feedDao.deleteFeedPhotoFeedNo2(updatefeed); // 피드 수정하기전 사진삭제
+
         for (int i =0; i<updatefeed.getPhotoNo().size(); i++){
             result += feedDao.insertFeedPhoto(new FeedInsertPhoto(updatefeed.getFeedNo(), updatefeed.getPhotoNo().get(i), i+1));
         }
@@ -105,5 +110,20 @@ public class FeedServiceImpl implements FeedService{
         result*=feedDao.modifyPhoto(photoNo);
             return result;
 
+    }
+    // 사진 value 수정하기
+    @Override
+    public int changeValue(Map<String, Object> doublePhotoNo){
+        int startValue = feedDao.startValue(doublePhotoNo); // 1
+        int finishValue = feedDao.finishValue(doublePhotoNo); // 2
+        int result = 0;
+        doublePhotoNo.put("startValue",startValue);
+        doublePhotoNo.put("finishValue",finishValue);
+        System.out.println(doublePhotoNo);
+        result += feedDao.updateStartValue(doublePhotoNo);
+        result += feedDao.updateFinishValue(doublePhotoNo);
+        return result;
+
+//        int updateValue = feedDao.chagneValue(doublePhotoNo)
     }
 }

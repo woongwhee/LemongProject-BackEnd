@@ -98,5 +98,22 @@ public class FeedDao {
         return sqlSession.delete("feedMapper.deleteFeedPhoto",photoNo);
     }
 
+    // 현재 value
+    public int startValue(Map<String, Object> doublePhotoNo) {
+        return sqlSession.selectOne("feedMapper.startValue",doublePhotoNo);
+    }
+
+    public int finishValue(Map<String, Object> doublePhotoNo) {
+        return sqlSession.selectOne("feedMapper.finishValue",doublePhotoNo);
+    }
+    // value 바꾸기
+    public int updateStartValue(Map<String, Object> doublePhotoNo) {
+        return sqlSession.update("feedMapper.updateStartValue",doublePhotoNo);
+    }
+
+    public int updateFinishValue(Map<String, Object> doublePhotoNo) {
+        return sqlSession.update("feedMapper.updateFinishValue",doublePhotoNo);
+    }
+
 
 }
