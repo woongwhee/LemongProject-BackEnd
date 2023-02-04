@@ -1,5 +1,6 @@
 package site.lemongproject.common.response;
 
+import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.template.model.dto.Template;
 
 import java.util.List;
@@ -103,11 +104,11 @@ public class ResponseBuilder{
     }
 
     // 카카오 사용자 가입
-    public static ResponseBody noKakao(int num) {
+    public static ResponseBody noKakao(Member isKakao) {
         ResponseBody response = new ResponseBody();
         response.setCode("3007");
         response.setMessage("SOCIALJOIN");
-        response.setResult(num);
+        response.setResult(isKakao);
         return response;
     }
 

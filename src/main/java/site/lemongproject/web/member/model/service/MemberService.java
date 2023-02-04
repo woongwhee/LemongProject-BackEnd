@@ -49,9 +49,10 @@ public interface MemberService {
 
     Map<String, Object> getKakaoUser(String token);
 
-    int isKakaoUser(Member isKakao);
+    Member isKakaoUser(Member isKakao);
 
     int insertKakao(Member isKakao);
 
+    int setNick(JoinVo joinVo);
 
 }
