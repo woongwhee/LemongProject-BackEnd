@@ -47,13 +47,14 @@ public class MemberDao {
         return sqlSession.selectOne("profileMapper.selectMyProfile", userNo);
     }
 
-    public int isKakaoUser(Member isKakao) {
+    public Member isKakaoUser(Member isKakao) {
         return sqlSession.selectOne("memberMapper.isKakao", isKakao);
     }
 
     public int insertKakao(Member isKakao) {
         return sqlSession.insert("memberMapper.insertKakao", isKakao);
     }
+
 
 
 }

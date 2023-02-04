@@ -2,6 +2,7 @@ package site.lemongproject.web.member.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.domain.dto.MailMessage;
@@ -184,15 +185,33 @@ public class PublicController {
         isKakao.setUserName(userName);
 
         // 일치하는 회원이 있는지 확인
-        int result = memberService.isKakaoUser(isKakao);
+        Member result = memberService.isKakaoUser(isKakao);
 
-        if(result > 0) { // 회원정보가 있는 경우 -> 로그인
-            return ResponseBuilder.success(result);
+        if(result != null) { // 회원정보가 있는 경우 -> 로그인
+            isKakao = memberService.isKakaoUser(isKakao);
+//            System.out.println(isKakao);
+            return ResponseBuilder.success(isKakao);
         } else { // 회원정보가 없는 경우 -> 회원가입 -> 닉네임 설정
             int kakaoJoin = memberService.insertKakao(isKakao);
             System.out.println("회원가입 여부: "+kakaoJoin);
-            return ResponseBuilder.noKakao(result);
+            isKakao = memberService.isKakaoUser(isKakao);
+            return ResponseBuilder.noKakao(isKakao);
         }
+
+    }
+
+
+    @PostMapping("setNickJoin")
+    public ResponseBody<Map<String, Object>> setNick(@RequestBody JoinVo newMem) {
+
+        int result = memberService.setNick(newMem);
+
+        if(result > 0) {
+            return ResponseBuilder.success(result);
+        } else {
+            return ResponseBuilder.unJoin(result);
+        }
+
 
     }
 

@@ -205,8 +205,8 @@ public class MemberServiceImpl implements MemberService {
 
     // DB에 저장되어 있는 카카오 회원인지 확인
     @Override
-    public int isKakaoUser(Member isKakao) {
-        int result = memberDao.isKakaoUser(isKakao);
+    public Member isKakaoUser(Member isKakao) {
+        Member result = memberDao.isKakaoUser(isKakao);
         System.out.println("kakaoUser 서비스: "+result);
         return result;
     }
@@ -219,6 +219,14 @@ public class MemberServiceImpl implements MemberService {
         System.out.println("kakaoUser 삽입: "+result);
         return result;
     }
+
+    @Override
+    public int setNick(JoinVo newMem) {
+        int result = profileDao.createProfile(newMem.getNickName());
+        System.out.println("소셜 닉 삽입: "+result);
+        return result;
+    }
+
 
 
 
