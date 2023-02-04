@@ -41,5 +41,7 @@ public interface FeedService  {
 
     // 사진 수정하기
     int modifyPhoto(Map<String,Object> photoNo);
-
+    
+    // 사진 value 수정하기
+    int changeValue(Map<String, Object> doublePhotoNo);
 }
