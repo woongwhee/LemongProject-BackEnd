@@ -25,9 +25,11 @@
         <typeAlias type="site.lemongproject.web.follow.model.vo.Follow" alias="Follow"/>
         <typeAlias type="site.lemongproject.common.domain.vo.PeriodVo" alias="PeriodVO"/>
         <typeAlias type="site.lemongproject.web.todo.model.dto.DailyFindVo" alias="DailyFindVO"/>
+        <typeAlias type="site.lemongproject.web.feed.model.dto.FeedDetail" alias="FeedDetail"/>
         <package name="site.lemongproject.web.template.model.vo"/>
         <package name="site.lemongproject.web.challenge.model.dto"/>
         <package name="site.lemongproject.web.challenge.model.vo"/>
+
     </typeAliases>
 
     <typeHandlers>

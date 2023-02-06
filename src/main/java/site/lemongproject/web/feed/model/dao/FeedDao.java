@@ -3,6 +3,7 @@ package site.lemongproject.web.feed.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
@@ -30,11 +31,11 @@ public class FeedDao {
     public int insertFeedPhoto(FeedInsertPhoto feedPhoto) {
         return sqlSession.insert("feedMapper.insertFeedPhoto",feedPhoto);
     }
+
     // 피드 게시물 수정
     public int updateFeed(FeedInsert updatefeed){
         return sqlSession.update("feedMapper.updateFeed", updatefeed);
     }
-
     // 피드 게시물 삭제
     public int deleteFeed(Map<String,Object> deleteFeedNo){
         return sqlSession.delete("feedMapper.deleteFeed",deleteFeedNo);
@@ -115,4 +116,7 @@ public class FeedDao {
     }
 
 
+    public List<FeedList> FeedDetail(int feedNo) {
+        return sqlSession.selectList("feedMapper.detailFeed", feedNo);
+    }
 }

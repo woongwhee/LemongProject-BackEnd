@@ -22,10 +22,29 @@
     <resultMap id="feedListResultSet" type="FeedList">
         <result column="FEED_NO" property="feedNo"/>
         <result column="USER_NO" property="userNo"/>
+        <result column="NICK_NAME" property="nickName"/>
         <result column="FEED_CONTENT" property="feedContent"/>
         <result column="FEED_AT" property="feedAt"/>
         <result column="FILEPATH" property="filePath"/>
     </resultMap>
+
+    <select id="detailFeed" resultMap="feedListResultSet">
+        SELECT
+        F.FEED_NO,
+        F.USER_NO,
+        UP.NICK_NAME,
+        F.FEED_CONTENT,
+        F.FEED_AT,
+        LISTAGG(P.FILE_PATH ||P.CHANGE_NAME,',')WITHIN GROUP(ORDER BY VALUE) AS filePath,
+        LISTAGG(FP.PHOTO_NO, ',') WITHIN GROUP ( ORDER BY VALUE) AS photoNo
+        FROM FEED F
+        JOIN FEED_PHOTO FP on F.FEED_NO = FP.FEED_NO
+        JOIN PHOTO P on FP.PHOTO_NO = P.PHOTO_NO
+        JOIN USER_PROFILE UP on F.USER_NO = UP.USER_NO
+        WHERE F.FEED_NO= #{feedNo}
+        GROUP BY F.FEED_NO, F.USER_NO,UP.NICK_NAME, F.FEED_CONTENT, F.FEED_AT
+        order by F.FEED_AT DESC
+    </select>
 
 
     <select id="selectMyFeed" resultMap="feedResultSet">
@@ -53,6 +72,7 @@
         SELECT
         F.FEED_NO,
         F.USER_NO,
+        UP.NICK_NAME,
         F.FEED_CONTENT,
         F.FEED_AT,
         LISTAGG(P.FILE_PATH ||P.CHANGE_NAME,',')WITHIN GROUP(ORDER BY VALUE) AS filePath,
@@ -60,7 +80,8 @@
         FROM FEED F
         JOIN FEED_PHOTO FP on F.FEED_NO = FP.FEED_NO
         JOIN PHOTO P on FP.PHOTO_NO = P.PHOTO_NO
-        GROUP BY F.FEED_NO, F.USER_NO, F.FEED_CONTENT, F.FEED_AT
+        JOIN USER_PROFILE UP on F.USER_NO = UP.USER_NO
+        GROUP BY F.FEED_NO, F.USER_NO,UP.NICK_NAME, F.FEED_CONTENT, F.FEED_AT
         order by F.FEED_AT DESC
     </select>
 
