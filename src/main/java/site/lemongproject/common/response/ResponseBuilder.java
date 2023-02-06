@@ -103,12 +103,12 @@ public class ResponseBuilder{
         return response;
     }
 
-    // 카카오 사용자 가입
-    public static ResponseBody noKakao(Member isKakao) {
+    // 소셜 사용자 가입
+    public static ResponseBody noSocial(Member isSocial) {
         ResponseBody response = new ResponseBody();
         response.setCode("3007");
         response.setMessage("SOCIALJOIN");
-        response.setResult(isKakao);
+        response.setResult(isSocial);
         return response;
     }
 

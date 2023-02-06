@@ -185,21 +185,20 @@ public class PublicController {
         isKakao.setUserName(userName);
 
         // 일치하는 회원이 있는지 확인
-        Member result = memberService.isKakaoUser(isKakao);
+        Member result = memberService.isSocialUser(isKakao);
 
         if(result != null) { // 회원정보가 있는 경우 -> 로그인
-            isKakao = memberService.isKakaoUser(isKakao);
+            isKakao = memberService.isSocialUser(isKakao);
 //            System.out.println(isKakao);
             return ResponseBuilder.success(isKakao);
         } else { // 회원정보가 없는 경우 -> 회원가입 -> 닉네임 설정
-            int kakaoJoin = memberService.insertKakao(isKakao);
+            int kakaoJoin = memberService.insertSocial(isKakao);
             System.out.println("회원가입 여부: "+kakaoJoin);
-            isKakao = memberService.isKakaoUser(isKakao);
-            return ResponseBuilder.noKakao(isKakao);
+            isKakao = memberService.isSocialUser(isKakao);
+            return ResponseBuilder.noSocial(isKakao);
         }
 
     }
-
 
     @PostMapping("setNickJoin")
     public ResponseBody<Map<String, Object>> setNick(@RequestBody JoinVo newMem) {
@@ -211,9 +210,44 @@ public class PublicController {
         } else {
             return ResponseBuilder.unJoin(result);
         }
-
-
     }
+
+
+
+    @RequestMapping(value = "naverLogin", method = RequestMethod.GET)
+    public ResponseBody<Map<String, Object>> naverLogin(@RequestParam Map<String, Object> aToken, HttpSession session) {
+
+        String token = String.valueOf(aToken.get("accessToken"));
+        System.out.println("네이버 토큰: " + token);
+
+        // 사용자 정보 추출
+        Map<String, Object> naverUser = memberService.getNaverUser(token);
+        System.out.println("네이버 유저:" + naverUser);
+        String userName = String.valueOf(naverUser.get("userName"));
+        String email = String.valueOf(naverUser.get("email"));
+        SocialType socialType = SocialType.NAVER;
+
+        // 사용자 정보 셋팅
+        Member isNaver = new Member();
+        isNaver.setUserName(userName);
+        isNaver.setEmail(email);
+        isNaver.setSocialType(socialType);
+
+        // 일치하는 회원이 있는지 확인
+        Member result = memberService.isSocialUser(isNaver);
+
+        if(result != null) { // 회원정보가 있는 경우 -> 로그인
+            isNaver = memberService.isSocialUser(isNaver);
+            return ResponseBuilder.success(isNaver);
+        } else { // 회원정보가 없는 경우 -> 회원가입 -> 닉네임 설정
+            int naverJoin = memberService.insertSocial(isNaver);
+            System.out.println("회원가입 여부: "+naverJoin);
+            isNaver = memberService.isSocialUser(isNaver);
+            return ResponseBuilder.noSocial(isNaver);
+        }
+    }
+
+
 
 
 
