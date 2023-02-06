@@ -51,5 +51,19 @@ public class MybatisProfileDao implements ProfileDao {
     public List<Profile> searchUser(String userNick) {
         return sqlSession.selectList("profileMapper.searchUser", userNick);
     }
+    @Override
+    public Profile MyPageNickCheck(String checkNick){
+        return sqlSession.selectOne("profileMapper.myPageNickCheck" , checkNick);
+    }
+
+    @Override
+    public Profile updateMyNick(Profile pro){
+        return sqlSession.selectOne("profileMapper.updateMyNick" , pro);
+    }
+
+    @Override
+    public Profile updateMyContent(Profile p){
+        return sqlSession.selectOne("profileMapper.updateMyContent" , p);
+    }
 
 }
