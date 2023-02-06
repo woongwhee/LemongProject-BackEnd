@@ -3,6 +3,7 @@ package site.lemongproject.web.challenge.service;
 
 import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeChat;
+import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.SingleStartVo;
@@ -23,4 +24,6 @@ public interface ChallengeService {
     Challenge selectChallenge(Challenge cNo);
 
     int insertChatData(ChallengeChat chatData);
+
+    int clearChallengeTodo(ChallengeTodo cTd);
 }

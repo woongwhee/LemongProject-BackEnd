@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.member.model.vo.Member;
+import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.dto.DailyTodoVo;
 import site.lemongproject.web.todo.model.vo.Todo;
@@ -43,16 +44,16 @@ public class TodoController {
     public ResponseBody<DailyTodoVo> getDaily(
             @PathVariable("todoDate")
             @DateTimeFormat(pattern = "yyMMdd")
-            LocalDate todoDate){
-//            @SessionAttribute("loginUser")Member member){
-        DailyFindVo dailyFind=new DailyFindVo();
+            LocalDate todoDate,
+            @SessionAttribute("loginUser") Profile member){
+        DailyFindVo dailyFind = new DailyFindVo();
         dailyFind.setTodoDate(todoDate);
-        dailyFind.setUserNo(31);
-        DailyTodoVo daily=todoService.getDaily(dailyFind);
-        if(daily.getNormalList().size()==0&&daily.getChallengeList().size()==0){
+        dailyFind.setUserNo(member.getUserNo());
+        DailyTodoVo daily = todoService.getDaily(dailyFind);
+        if(daily.getNormalList().size() == 0 && daily.getChallengeList().size() == 0){
             return ResponseBuilder.findNothing();
         }
-        else if(daily.getChallengeList()!=null && daily.getNormalList()!=null){
+        else if(daily.getChallengeList() != null && daily.getNormalList() != null){
             return ResponseBuilder.success(daily);
         }else{
             return ResponseBuilder.serverError();
@@ -60,10 +61,12 @@ public class TodoController {
     }
     //투두 작성
     @PostMapping("/insertTodo")
-    public ResponseBody<Todo> insertTodo(@RequestBody Todo t){
+    public ResponseBody<Todo> insertTodo(@RequestBody Todo t ,
+                                         @SessionAttribute("loginUser") Profile p){
 
-        System.out.println("t : "+t);
-
+        System.out.println("Profile : "+ p);
+        System.out.println("t : "+ t);
+        t.setUserNo(p.getUserNo());
         todoService.insertTodo(t);
 
         return ResponseBuilder.success(t);
@@ -126,11 +129,11 @@ public class TodoController {
 
     //캘린더에 투두 표시
     @GetMapping("/calTodo")
-    public  List<Todo> calTodo(@RequestParam(value = "userNo", required = false) int userNo){
-        System.out.println("cal userNo: "+userNo);
+    public  List<Todo> calTodo(@SessionAttribute("loginUser") Profile p){
+        System.out.println("cal userNo: "+p);
 
         Todo t = new Todo();
-        t.setUserNo(userNo);
+        t.setUserNo(p.getUserNo());
 
         List<Todo> calTodos = todoService.calTodo(t);
 

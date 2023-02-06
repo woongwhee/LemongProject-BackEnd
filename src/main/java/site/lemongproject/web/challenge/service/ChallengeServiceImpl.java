@@ -192,5 +192,9 @@ public class ChallengeServiceImpl implements ChallengeService {
         return chatDao.insertChatData(chatData);
     }
 
+    public int clearChallengeTodo(ChallengeTodo cTd){
+        return todoDao.clearChallengeTodo(cTd);
+    }
+
 
 }
