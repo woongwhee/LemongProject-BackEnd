@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
+import site.lemongproject.common.type.SocialType;
 import site.lemongproject.common.util.FileUtil;
 import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.MyProfileVo;
@@ -199,5 +200,18 @@ public class MemberController {
 
         return ResponseBuilder.success(p);
     }
+    @GetMapping("/logout")
+    public ResponseBody<Integer> logout(@SessionAttribute("loginUser")Profile profile, @SessionAttribute("socialType")SocialType socialType,HttpSession session){
+        switch (socialType){
+            case NONE: session.invalidate();
+            case NAVER:
+            case KAKAO:
+        }
 
+
+        return ResponseBuilder.success(11);
+    }
+//    private LogoutKakao(int accesstoken){
+//
+//    }
 }

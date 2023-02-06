@@ -2,6 +2,7 @@ package site.lemongproject.web.template.service;
 
 import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
+import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.ReviewDeleteVo;
 import site.lemongproject.web.template.model.vo.ReviewInsertVo;
@@ -11,6 +12,9 @@ import java.util.List;
 
 public interface TemplateReadService {
     List<Template> getTemplateList(int categoryNo,int page);
+
+    int getTemplateCount(int categoryNo);
+
     Template getTemplateDetail(int templateNo);
     List<TemplateTodo> getTemplateTodo(int templateNo);
     int insertReview(ReviewInsertVo riv);
@@ -20,4 +24,6 @@ public interface TemplateReadService {
 
     int deleteTemplate(int userNo, int templateNo);
     Review getReviewOne(int reviewNo);
- }
+
+    List<TemplateCategory> getTemplateCategory();
+}

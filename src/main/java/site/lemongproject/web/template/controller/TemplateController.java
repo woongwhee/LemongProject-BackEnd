@@ -8,6 +8,7 @@ import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
+import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.*;
 import site.lemongproject.web.template.service.TemplateReadService;
@@ -35,7 +36,13 @@ public class TemplateController {
             return ResponseBuilder.findNothing();
         }
     }
+    @GetMapping(value = {"/count/{categoryNo}"})
+    public ResponseBody<Integer> count(@PathVariable(value = "categoryNo", required = false) Optional<Integer> cno) {
+        int categoryNo = cno.orElse(0);//없는 경우 모든 카테고리
+        int count = ReadService.getTemplateCount(categoryNo);
+        return ResponseBuilder.success(count);
 
+    }
     @GetMapping(value = {"/one/{templateNo}"})
     public ResponseBody<List<Template>> list(@PathVariable(value = "templateNo") int templateNo) {
         Template template = ReadService.getTemplateDetail(templateNo);
@@ -45,7 +52,16 @@ public class TemplateController {
             return ResponseBuilder.findNothing();
         }
     }
+    @GetMapping("/category")
+    public ResponseBody<List<TemplateCategory>> category(){
+        List<TemplateCategory> categoryList=ReadService.getTemplateCategory();
+        if(categoryList.size()>0){
+            return ResponseBuilder.success(categoryList);
+        }else{
+            return ResponseBuilder.findNothing();
+        }
 
+    }
 
     @GetMapping("/unsave/load")
     public ResponseBody<Template> load(@SessionAttribute("loginUser") Profile loginMember) {

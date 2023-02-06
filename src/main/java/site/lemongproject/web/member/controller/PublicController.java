@@ -54,6 +54,7 @@ public class PublicController {
         if(loginUser != null) {
             System.out.println("컨트롤러 넘어옴");
             session.setAttribute("loginUser",loginUser);
+            session.setAttribute("socialType",SocialType.NONE);
             System.out.println(ResponseBuilder.success(loginUser));
             return ResponseBuilder.success(loginUser);
         } else {
