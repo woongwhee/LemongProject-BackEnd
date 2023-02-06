@@ -3,6 +3,7 @@ package site.lemongproject.web.challenge.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.vo.CGTodoInsertVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeTodoVo;
@@ -29,5 +30,9 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
         return session.insert("challengeTodoMapper.copyTodo",joinVo);
     }
 
+    @Override
+    public  int clearChallengeTodo(ChallengeTodo cTd){
+        return session.update("challengeTodoMapper.clearChallTodo", cTd);
+    }
 
 }
