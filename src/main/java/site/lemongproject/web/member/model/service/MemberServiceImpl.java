@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.Buffer;
+import java.nio.charset.StandardCharsets;
 import java.sql.Struct;
 import java.util.HashMap;
 import java.util.List;
@@ -203,23 +204,42 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    // DB에 저장되어 있는 카카오 회원인지 확인
+    // 소셜 회원인지 확인
     @Override
-    public Member isKakaoUser(Member isKakao) {
-        Member result = memberDao.isKakaoUser(isKakao);
-        System.out.println("kakaoUser 서비스: "+result);
+    public Member isSocialUser(Member isSocial) {
+        Member result = memberDao.isSocialUser(isSocial);
+        System.out.println("소셜유저 서비스: "+result);
         return result;
     }
+
+    // 소셜 회원 회원가입
+    @Override
+    public int insertSocial(Member isSocial) {
+        int result = memberDao.insertSocial(isSocial);
+        System.out.println("소셜유저 삽입: "+result);
+        return result;
+    }
+
+
+
+    // DB에 저장되어 있는 카카오 회원인지 확인
+//    @Override
+//    public Member isKakaoUser(Member isKakao) {
+//        Member result = memberDao.isSocialUser(isKakao);
+//        System.out.println("kakaoUser 서비스: "+result);
+//        return result;
+//    }
 
 
     // 카카오 회원 가입
-    @Override
-    public int insertKakao(Member isKakao) {
-        int result = memberDao.insertKakao(isKakao);
-        System.out.println("kakaoUser 삽입: "+result);
-        return result;
-    }
+//    @Override
+//    public int insertKakao(Member isKakao) {
+//        int result = memberDao.insertSocial(isKakao);
+//        System.out.println("kakaoUser 삽입: "+result);
+//        return result;
+//    }
 
+    // 소셜 로그인 사용자 닉네임 셋팅
     @Override
     public int setNick(JoinVo newMem) {
         int result = profileDao.createProfile(newMem.getNickName());
@@ -227,6 +247,71 @@ public class MemberServiceImpl implements MemberService {
         return result;
     }
 
+
+    // 네이버 사용자 정보 반환
+    @Override
+    public Map<String, Object> getNaverUser(String token) {
+
+        Map<String, Object> naverUser = new HashMap<>();
+        String userInfo_URI = "https://openapi.naver.com/v1/nid/me";
+
+        try {
+            URL url = new URL(userInfo_URI);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+
+            // 요청 header에 담을 내용
+            conn.setRequestProperty("Authorization", "Bearer " + token);
+
+            int responseCode = conn.getResponseCode();
+//            System.out.println("네이버 응답 코드: " + responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String brLine = "";
+            String result = "";
+            while ((brLine = br.readLine()) != null) {
+                result += brLine;
+            }
+            System.out.println("response: "+result);
+
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(result);
+
+            JsonObject response = element.getAsJsonObject().get("response").getAsJsonObject();
+
+            String email = response.getAsJsonObject().get("email").getAsString();
+            String userName = response.getAsJsonObject().get("name").getAsString();
+
+            naverUser.put("userName", userName);
+            naverUser.put("email", email);
+
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return naverUser;
+    }
+
+
+    // 네이버 유저인지 확인
+//    @Override
+//    public Member isNaverUser(Member isNaver) {
+//        Member result = memberDao.isSocialUser(isNaver);
+//        System.out.println("NaverUser 서비스: "+result);
+//        return result;
+//    }
+
+
+    // 네이버 유저 회원가입
+//    @Override
+//    public int insertNaver(Member isNaver) {
+//        int result = memberDao.insertSocial(isNaver);
+//        System.out.println("NaverUser 삽입: "+result);
+//        return result;
+//    }
 
 
 

@@ -79,22 +79,21 @@
     </insert>
 
 
-    <!--  카카오 유저 확인  -->
-    <select id="isKakao" parameterType="Member" resultMap="memberResultSet">
+    <!--  카카오 유저 확인 -> 소셜 유저 확인  -->
+    <select id="isSocialUser" parameterType="Member" resultMap="memberResultSet">
         SELECT *
         FROM MEMBER
         WHERE EMAIL = #{email}
-            AND SOCIAL_TYPE = 'KAKAO'
+            AND SOCIAL_TYPE = #{socialType}
             AND STATUS = '1'
     </select>
 
 
-    <!--  카카오 회원 가입  -->
-    <insert id="insertKakao" parameterType="Member">
+    <!--  카카오 회원 가입 -> 소셜 가입  -->
+    <insert id="insertSocial" parameterType="Member">
         INSERT INTO MEMBER (USER_NO, EMAIL, STATUS, USER_NAME, SOCIAL_TYPE)
             VALUES (SEQ_MEMBER.NEXTVAL, #{email}, DEFAULT, #{userName}, #{socialType})
     </insert>
-
 
 
 
