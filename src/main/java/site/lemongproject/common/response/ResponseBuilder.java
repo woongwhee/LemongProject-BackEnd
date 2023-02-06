@@ -76,7 +76,7 @@ public class ResponseBuilder{
         return response;
     }
     //조회된결과없음
-    public static ResponseBody<List<Template>> findNothing() {
+    public static ResponseBody findNothing() {
         ResponseBody response = new ResponseBody();
         response.setCode("4008");
         response.setMessage("FOUND_NOTHING");
