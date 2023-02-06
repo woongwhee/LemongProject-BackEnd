@@ -25,6 +25,7 @@ import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.template.model.dao.ReviewDao;
 import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
+import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.ReviewDeleteVo;
 import site.lemongproject.web.template.model.vo.ReviewInsertVo;
@@ -51,6 +52,7 @@ public class TpReadServiceTest extends Configure{
     final static int TEST_TP_NO=30;
     final static int TEST_USER_NO=1;
     @Test
+
     @DisplayName("목록조회 테스트")
     public void selectTemplate(){
         List<Template> t=readService.getTemplateList(0,0);
@@ -86,6 +88,14 @@ public class TpReadServiceTest extends Configure{
         assertThat(result).isEqualTo(1);
     }
     @Test
+    @DisplayName("카테고리 총계수계산")
+    public void count(){
+        int count= readService.getTemplateCount(0);
+        int count2= readService.getTemplateCount(1);
+        System.out.println(count);
+        System.out.println(count2);
+    }
+    @Test
     @DisplayName("리뷰조회테스트")
     public void  getReviewList(){
         insertReview();
@@ -106,5 +116,11 @@ public class TpReadServiceTest extends Configure{
         r=reviewDao.findOne(3);
         assertThat(r).isNull();
     }
-
+    @Test
+    @DisplayName("카테고리")
+    public void getCategory(){
+        List<TemplateCategory> categoryList=readService.getTemplateCategory();
+        System.out.println(categoryList);
+        assertThat(categoryList).isNotNull();
+    }
 }

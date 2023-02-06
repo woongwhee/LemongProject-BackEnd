@@ -138,7 +138,7 @@
         SELECT COUNT(*)
         FROM TEMPLATE
         WHERE SAVE_STATUS=1
-        <if test="categoryNo != null">
+        <if test="categoryNo>0">
             AND CATEGORY_NO=#{categoryNo}
         </if>
     </select>
