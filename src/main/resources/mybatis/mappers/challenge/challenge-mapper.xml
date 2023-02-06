@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="challengeMapper">
+    <resultMap id="challengeMap" type="Challenge">
+        <id column="CHALLENGE_NO"  property="challengeNo" />
+        <result column="TEMPLATE_NO" property="templateNo" />
+        <result column="CHALLENGE_TITLE" property="challengeTitle" />
+        <result column="CHALLENGE_INFO"  property="challengeInfo" />
+        <result column="START_DATE"  property="startDate" />
+        <result column="END_DATE"  property="endDate" />
+        <result column="CREATE_AT"  property="createAt" />
+        <result column="CHALLENGE_OPTION"  property="challengeOption" />
+        <result column="STATUS" property="status" />
+        <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser" />
+    </resultMap>
+    <insert id="insertSingle" parameterType="SingleStartVo">
+        <selectKey keyProperty="challengeNo" resultType="int" order="BEFORE">
+            select SEQ_CHALLENGE.nextval from dual
+        </selectKey>
+        INSERT INTO CHALLENGE (CHALLENGE_NO, CREATE_USER, TEMPLATE_NO, START_DATE, CHALLENGE_OPTION,STATUS) VALUES
+        (#{challengeNo},#{userNo},#{templateNo},#{startDate},#{option},#{status})
+    </insert>
+    <insert id="insertMulti" parameterType="MultiCreateVo">
+        <selectKey keyProperty="challengeNo" resultType="int" order="BEFORE">
+            select SEQ_CHALLENGE.nextval from dual
+        </selectKey>
+        INSERT INTO CHALLENGE (CHALLENGE_NO, CREATE_USER, TEMPLATE_NO, START_DATE,STATUS,CHALLENGE_INFO,CHALLENGE_TITLE) VALUES
+        (#{challengeNo},#{userNo},#{templateNo},#{startDate},#{status},#{challengeInfo},#{challengeTitle})
+    </insert>
+    <insert id="joinUser" parameterType="ChallengeUserVo">
+        INSERT INTO CHALLENGE_USER (CHALLENGE_NO,USER_NO,STATUS) VALUES (#{challengeNo},#{userNo},#{status})
+    </insert>
+    <update id="updateEndDate" parameterType="EndDateUpdateVo">
+        update CHALLENGE
+        SET END_DATE=#{endDate}
+        WHERE CHALLENGE_NO=#{challengeNo}
+    </update>
+<!--    <select id="hasChallenge" parameterType="">-->
+<!--        update CHALLENGE-->
+<!--        SET END_DATE=#{endDate}-->
+<!--        WHERE CHALLENGE_NO=#{challengeNo}-->
+<!--    </select>-->
+<!--    <select id="findDaily" parameterType="" >-->
+
+<!--    </select>-->
+</mapper>

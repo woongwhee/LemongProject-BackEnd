@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="emailConfirmMapper">
+
+    <!-- 이메일 체크 -->
+    <select id="checkConfirm" parameterType="EmailConfirm" resultType="_int">
+        SELECT
+            CASE WHEN ROUND((SYSDATE-CONFIRM_AT) * 24 * 60,2)&lt;3 THEN '1' ELSE '-1' END AS "result"
+        FROM EMAIL_CONFIRM
+        WHERE EMAIL = #{email} AND CONFIRM_NO=#{confrimNo}
+    </select>
+    <!--  이메일 체크 삽입  -->
+    <insert id="insertConfirm" parameterType="EmailConfirm">
+        <selectKey keyProperty="confirmNo" resultType="_int" >
+            SELECT SEQ_CONFIRM.nextval from dual
+        </selectKey>
+
+        INSERT INTO EMAIL_CONFIRM (CONFIRM_NO, CODE, EMAIL, STATUS)
+        VALUES(#{confirmNo}, #{code}, #{email}, DEFAULT)
+    </insert>
+    <!-- 이전 인증코드 삭제 -->
+    <delete id="deleteAnother" parameterType="EmailConfirm" >
+        delete EMAIL_CONFIRM
+        where  EMAIl=#{email}
+    </delete>
+
+
+
+
+</mapper>

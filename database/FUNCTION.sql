@@ -1,0 +1,8 @@
+
+create or replace function GET_CH_TODO_SEQ
+    RETURN NUMBER
+  IS
+    TODO_NO NUMBER;
+  BEGIN TODO_NO := SEQ_CHALLENGE_TODO.nextval;
+  RETURN TODO_NO;
+  END;

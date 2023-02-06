@@ -1,22 +1,24 @@
 package site.lemongproject.web.member.model.service;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.session.SqlSession;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+import site.lemongproject.common.util.FileUtil;
+import site.lemongproject.web.member.model.dao.EmailConfirmDao;
 import site.lemongproject.web.member.model.dao.MemberDao;
-import site.lemongproject.web.member.model.dao.MybatisProfileDao;
 import site.lemongproject.web.member.model.dao.ProfileDao;
+import site.lemongproject.web.member.model.dto.ChangePwdVo;
+import site.lemongproject.web.member.model.dto.JoinVo;
+import site.lemongproject.web.member.model.vo.EmailConfirm;
+import site.lemongproject.web.member.model.dao.ProfileDao;
+import site.lemongproject.web.member.model.dto.MyProfileVo;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
+import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.photo.model.vo.Photo;
-import site.lemongproject.web.member.model.vo.Profile;
 
 import java.util.List;
-import java.sql.Connection;
 import java.util.Map;
 
 @Service
@@ -25,89 +27,122 @@ import java.util.Map;
 public class MemberServiceImpl implements MemberService {
     final private MemberDao memberDao;
     final private ProfileDao profileDao;
+    final private PhotoDao photoDao;
+    final private EmailConfirmDao confirmDao;
+    final private FileUtil fileUtil;
+    final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-
-    public Member loginMember(Member m) {
+    @Override
+    public Profile loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
-        System.out.println("서비스 : " + loginUser);
-        return loginUser;
+        if(bCryptPasswordEncoder.matches(m.getUserPwd(),loginUser.getUserPwd())){
+            return profileDao.findOne(loginUser.getUserNo());
+
+        }else{
+            return null;
+        }
     }
 
 
-
-    public int insertMember(Map<String, Object> m) {
-        int result1 = memberDao.insertMember(m);
-        int result2 = profileDao.insertNick(m);
-        System.out.println(result1);
-        System.out.println(result2);
-        int result = result1 * result2;
-        System.out.println("회원가입 dao 실행 : " + result);
+    @Override
+//    public int insertMember(Map<String, Object> m) {
+    public int insertMember(JoinVo joinVo) {
+//        int result = memberDao.insertMember(m);
+        int result = memberDao.insertMember(joinVo);
+        result *= profileDao.createProfile(joinVo.getNickName());
+//        System.out.println("회원가입 dao 실행 : " + result);
+//        result*=profileDao.createProfile((String) m.get("nickName"));
         return result;
     }
 
 
-    public int checkNick(Member m) {
-        int result = memberDao.checkNick(m);
-        System.out.println("중복 체크 dao 실행: "+result);
-        return result;
-    }
-
-
-    public int checkEmail(Member m) {
-        int result = memberDao.checkEmail(m);
-        System.out.println("인증 번호 dao 실행: "+result);
+    @Override
+    public int insertConfirm(EmailConfirm confirm) {
+        int result = confirmDao.insertConfirm(confirm);
+        confirmDao.deleteAnother(confirm);
         return result;
     }
 
     @Override
-    public List<Profile> selectMyProList() {
-        return null;
+    public int checkEmail(EmailConfirm confirm) {
+        return confirmDao.checkConfirm(confirm);
+    }
+
+//    public int insertMember(Member m) {
+//        int result = memberDao.insertMember(m);
+//        System.out.println("dao 실행 : " + result);
+//        return result;
+//    }
+
+
+    @Override
+    public int checkNick(String nickName) {
+        int result = profileDao.checkNick(nickName);
+        System.out.println("중복 체크 dao 실행: " + result);
+        return result;
     }
 
     @Override
-    public List<Member> selectUser() {
-        return null;
+    public int updateProfile(Profile profile) {
+        return profileDao.updateProfile(profile);
+    }
+
+//
+//    public int updateUserProfile(Photo p){
+//        return memberDao.updateUserProfile(p);
+//    }
+
+    public MyProfileVo getMyProfile(int userNo) {
+        Member m = memberDao.findPublic(userNo);
+        Profile p = profileDao.findOne(userNo);
+        return new MyProfileVo(m, p);
+    }
+
+    /**
+     * 유저의 프로필사진을 업데이트한다.
+     * 이전프로필은 서버에서 삭제된다.
+     * @param newP
+     * @return
+     */
+    @Override
+    public int insertUserPhoto(Photo newP) {
+        Photo oldP = photoDao.findByUser(newP.getUserNo());
+        if (oldP != null) {
+            fileUtil.deleteFile(oldP);
+            photoDao.deletePhoto(oldP.getPhotoNo());
+        }
+        int result = photoDao.insertPhoto(newP);
+        result *= profileDao.updateProfilePhoto(newP);
+        return result;
     }
 
     @Override
-    public int updateUser(String nickName) {
-        return 0;
+    public int updatePassword(ChangePwdVo cpw) {
+        cpw.setPassword(bCryptPasswordEncoder.encode(cpw.getPassword()));
+        return memberDao.updatePassword(cpw);
+    }
+
+    public Member seletMember(int userNo) {
+        return memberDao.selectMember(userNo);
     }
 
     @Override
-    public int checkNickName(String nickName) {
-        return 0;
+    public int deleteUser(int userNo) {
+        int result = memberDao.deleteUser(userNo);
+        result = profileDao.deleteProfile(userNo);
+        return result;
+    }
+
+    public Profile selectMyProfile(int userNo) {
+        return profileDao.findOne(userNo);
     }
 
     @Override
-    public int updateComment(String comment) {
-        return 0;
+    public Member selectMember(int userNo) {
+        return memberDao.selectMember(userNo);
     }
 
-    @Override
-    public int insertUserProfile(Photo p) {
-        return 0;
+    public List<Profile> searchUser(String userNick) {
+        return profileDao.searchUser(userNick);
     }
-
-    @Override
-    public int myupdatePwd(String upPwd) {
-        return 0;
-    }
-
-    @Override
-    public List<Photo> selectMyProfile() {
-        return null;
-    }
-
-    @Override
-    public int updateUserProfile(Photo p) {
-        return 0;
-    }
-
-    @Override
-    public int deleteUser() {
-        return 0;
-    }
-
-
 }

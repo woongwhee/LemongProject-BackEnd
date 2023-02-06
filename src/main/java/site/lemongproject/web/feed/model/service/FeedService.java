@@ -23,7 +23,6 @@ public interface FeedService  {
     // feed 게시글 삭제
     int deleteFeed(Map<String,Object> deleteFeedNo);
 
-
     // feed 게시글 댓글 쓰기
     int insertFeedReply(Map<String, Object> paramMap);
 
