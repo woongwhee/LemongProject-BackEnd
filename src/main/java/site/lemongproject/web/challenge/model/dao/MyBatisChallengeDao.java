@@ -3,10 +3,13 @@ package site.lemongproject.web.challenge.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.EndDateUpdateVo;
 import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
 import site.lemongproject.web.challenge.model.vo.SingleStartVo;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Repository
@@ -36,5 +39,10 @@ public class MyBatisChallengeDao implements ChallengeDao{
     @Override
     public int deleteUser(ChallengeUserVo userVo) {
         return 0;
+    }
+
+    @Override
+    public Challenge selectChallenge(Challenge cNo){
+        return session.selectOne("challengeMapper.selectChallenge" , cNo);
     }
 }

@@ -25,6 +25,7 @@
         <typeAlias type="site.lemongproject.web.follow.model.vo.Follow" alias="Follow"/>
         <typeAlias type="site.lemongproject.common.domain.vo.PeriodVo" alias="PeriodVO"/>
         <typeAlias type="site.lemongproject.web.todo.model.dto.DailyFindVo" alias="DailyFindVO"/>
+        <typeAlias type="site.lemongproject.web.challenge.model.dto.ChallengeChat" alias="ChallengeChat"/>
         <package name="site.lemongproject.web.template.model.vo"/>
         <package name="site.lemongproject.web.challenge.model.dto"/>
         <package name="site.lemongproject.web.challenge.model.vo"/>
@@ -50,6 +51,7 @@
         <mapper resource="mybatis/mappers/member/profile-mapper.xml"/>
         <mapper resource="mybatis/mappers/member/emailconfirm-mapper.xml"/>
         <mapper resource="mybatis/mappers/challenge/challenge-mapper.xml"/>
+        <mapper resource="mybatis/mappers/challenge/challengechat-mapper.xml"/>
         <mapper resource="mybatis/mappers/challenge/challengetodo-mapper.xml"/>
 <!--        <mapper resource="mybatis/mappers/emailconfirm-mapper.xml" />-->
     </mappers>
