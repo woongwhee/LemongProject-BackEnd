@@ -26,7 +26,7 @@
         WHERE USER_NO = #{userNo}
                 AND TO_CHAR(TODO_DATE, 'yymmdd') = #{todoDate}
                 AND STATUS = 'N'
-        ORDER BY TODO_NO
+        ORDER BY VALUE
     </select>
 
     <insert id="insertTodo" parameterType="Todo" >
@@ -120,11 +120,15 @@
     <select id="calTodo" resultType="string">
         SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
         FROM TODO
-        WHERE USER_NO = #{userNo} AND STATUS = 'N'
+        WHERE USER_NO = #{userNo} AND STATUS = 'N' AND CLEAR = 0
         ORDER BY TODO_DATE
     </select>
 
-
+    <update id="dndTodo" parameterType="Todo">
+        UPDATE TODO
+        SET VALUE = #{value}
+        WHERE TODO_NO = #{todoNo}
+    </update>
 
 
 

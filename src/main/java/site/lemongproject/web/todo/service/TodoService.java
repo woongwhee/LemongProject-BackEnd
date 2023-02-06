@@ -20,4 +20,7 @@ public interface TodoService {
     int delayTodo(Todo t);
 
     List<Todo> calTodo(Todo t);
+
+    int dndTodo(Todo t);
+
 }
