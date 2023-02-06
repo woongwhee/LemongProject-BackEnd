@@ -10,6 +10,8 @@ import site.lemongproject.common.type.ChallengeUserStatus;
 import site.lemongproject.web.challenge.model.dao.ChallengeChatDao;
 import site.lemongproject.web.challenge.model.dao.ChallengeDao;
 import site.lemongproject.web.challenge.model.dao.ChallengeTodoDao;
+import site.lemongproject.web.challenge.model.dto.Challenge;
+import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 import site.lemongproject.web.challenge.model.dto.ChallengeOption;
 import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.vo.*;
@@ -167,6 +169,14 @@ public class ChallengeServiceImpl implements ChallengeService {
         insertVo.setChallengeNo(startVo.getChallengeNo());
 
         return insertVo;
+    }
+
+    public Challenge selectChallenge(Challenge cNo){
+        return challengeDao.selectChallenge(cNo);
+    }
+
+    public int insertChatData(ChallengeChat chatData){
+        return chatDao.insertChatData(chatData);
     }
 
 

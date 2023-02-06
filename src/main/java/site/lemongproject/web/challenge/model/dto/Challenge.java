@@ -10,7 +10,6 @@ import site.lemongproject.web.template.model.dto.Template;
 
 import java.sql.Date;
 import java.time.LocalDate;
-
 @Getter
 @Setter
 @ToString
@@ -23,6 +22,7 @@ public class Challenge {
     private String ChallengeInfo;
     private LocalDate StartDate;
     private LocalDate endDate;
+    private Date createAt;
     private String ChallengeOption;
     private ChallengeStatus status;
 }
