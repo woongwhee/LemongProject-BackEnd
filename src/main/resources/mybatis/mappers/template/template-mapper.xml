@@ -12,7 +12,7 @@
         <association property="create" javaType="site.lemongproject.web.member.model.vo.Profile"
                      resultMap="profileMapper.profileDetail"/>
     </resultMap>
-    <resultMap id="templateOne" type="Template">
+    <resultMap id="templateDetail" type="Template">
         <id column="TEMPLATE_NO" property="templateNo"/>
         <result column="CATEGORY_NO" property="categoryNo"/>
         <result column="RANGE" property="range"/>
@@ -21,7 +21,7 @@
         <result property="clearCount" column="CLEAR_COUNT"/>
         <result property="playCount" column="PLAY_COUNT"/>
         <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
-        <association property="profile" resultMap="profileMapper.profileDetail"/>
+        <association property="create" resultMap="profileMapper.profileDetail"/>
         <collection property="todoList" select="templateTodoMapper.findByTemplate" javaType="List"
                     column="TEMPLATE_NO"/>
     </resultMap>
@@ -38,27 +38,27 @@
         WHERE TP_CREATER = #{userNo}
           AND SAVE_STATUS = 0
     </select>
-    <select id="findOne" parameterType="Integer" resultMap="templateOne" useCache="true">
-        SELECT T.*,
-               (SELECT COUNT(*)
-                FROM TEMPLATE T1
-                         JOIN CHALLENGE C ON C.TEMPLATE_NO = T1.TEMPLATE_NO
-                         JOIN CHALLENGE_USER CU USING (CHALLENGE_NO)
-                WHERE CU.STATUS = 'PLAY'
-                  AND T.TEMPLATE_NO = T1.TEMPLATE_NO) as PLAY_COUNT,
-               (SELECT COUNT(*)
-                FROM TEMPLATE T2
-                         JOIN CHALLENGE C ON C.TEMPLATE_NO = T2.TEMPLATE_NO
-                         JOIN CHALLENGE_USER CU USING (CHALLENGE_NO)
-                WHERE CU.STATUS = 'CLEAR'
-                  AND T.TEMPLATE_NO = T2.TEMPLATE_NO) as CLEAR_COUNT,
-               P.*,
-               up.*,
-               tc.*
+
+    <select id="findDetail" parameterType="Integer" resultMap="templateDetail">
+        SELECT
+            T.*,
+            (SELECT COUNT(*)
+             FROM CHALLENGE_USER CU1
+                Join CHALLENGE C USING(CHALLENGE_NO)
+             WHERE CU1.STATUS = 'PLAY'
+               AND C.TEMPLATE_NO=T.TEMPLATE_NO) as PLAY_COUNT,
+            (SELECT COUNT(*)
+             FROM CHALLENGE_USER CU2
+                Join CHALLENGE C USING(CHALLENGE_NO)
+             WHERE CU2.STATUS = 'CLEAR'
+               AND C.TEMPLATE_NO=T.TEMPLATE_NO) as CLEAR_COUNT,
+            P.*,
+            up.*,
+            tc.*
         FROM TEMPLATE T
-                 JOIN TEMPLATE_CATEGORY tc USING (CATEGORY_NO)
                  LEFT JOIN USER_PROFILE up ON T.TP_CREATER = up.USER_NO
                  LEFT JOIN PHOTO P ON UP.PHOTO_NO = P.PHOTO_NO
+                 JOIN TEMPLATE_CATEGORY tc on T.CATEGORY_NO=tc.CATEGORY_NO
         WHERE T.SAVE_STATUS = 1
           AND T.TEMPLATE_NO = #{templateNo}
         ORDER BY T.CREATED_AT DESC
@@ -87,7 +87,7 @@
         JOIN TEMPLATE_CATEGORY tc on T.CATEGORY_NO=tc.CATEGORY_NO
         WHERE T.SAVE_STATUS=1
         <if test="categoryNo>0">
-            AND CATEGORY_NO=#{categoryNo}
+            AND tc.CATEGORY_NO=#{categoryNo}
         </if>
         ORDER BY T.CREATED_AT DESC
     </select>
@@ -138,7 +138,7 @@
         SELECT COUNT(*)
         FROM TEMPLATE
         WHERE SAVE_STATUS=1
-        <if test="categoryNo != null">
+        <if test="categoryNo>0">
             AND CATEGORY_NO=#{categoryNo}
         </if>
     </select>
@@ -147,5 +147,10 @@
         FROM TEMPLATE
         WHERE TP_CREATER = #{userNo}
           AND TEMPLATE_NO = #{refNo}
+    </select>
+    <select id="findRange" parameterType="int" resultType="int">
+        SELECT RANGE
+        FROM TEMPLATE
+        WHERE TEMPLATE_NO=#{templateNo}
     </select>
 </mapper>

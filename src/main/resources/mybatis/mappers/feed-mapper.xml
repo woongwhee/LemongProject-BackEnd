@@ -8,7 +8,7 @@
         <result column="USER_NO" property="userNo"/>
         <result column="FEED_CONTENT" property="feedContent"/>
         <result column="FEED_AT" property="feedAt"/>
-        <result column="FILEPATH" property="filePath"/>
+<!--        <result column="FILEPATH" property="filePath"/>-->
     </resultMap>
 
     <resultMap  type="Photo" id="photoResultSet">
@@ -77,10 +77,18 @@
     <update id="updateFeed" parameterType="Map">
         UPDATE FEED SET FEED_CONTENT = #{feedContent} where FEED_NO = #{feedNo}
     </update>
+<!--  피드 사진 수정  -->
+    <update id="updateFeedPhoto" parameterType="Map">
+
+    </update>
 
 <!--  피드 삭제  -->
     <delete id="deleteFeed" parameterType="Map">
         DELETE FROM FEED WHERE FEED_NO = #{feedNo}
+    </delete>
+<!-- 피드 사진 삭제   -->
+    <delete id="deleteFeedPhotoFeedNo">
+        DELETE FROM FEED_PHOTO WHERE FEED_NO = #{feedNo}
     </delete>
 <!-- 사진 등록 -->
 
@@ -100,20 +108,30 @@
     <insert id="insertFeedPhoto" parameterType="site.lemongproject.web.feed.model.dto.FeedInsertPhoto">
         INSERT INTO FEED_PHOTO (FEED_NO, PHOTO_NO, VALUE) VALUES (#{feedNo},#{photoNo},#{value})
     </insert>
+
+
 <!--  피드 사진 수정  -->
     <select id="maxValue" parameterType="Map" resultType="int">
-        SELECT MAX(VALUE) FROM FEED_PHOTO WHERE FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
+        SELECT MAX(VALUE) FROM FEED_PHOTO
+        WHERE
+        FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
     </select>
     <select id="nowValue" parameterType="Map" resultType="int">
-        SELECT VALUE FROM FEED_PHOTO WHERE FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND PHOTO_NO= #{photoNo}
+        SELECT VALUE FROM FEED_PHOTO
+        WHERE
+        FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
+        AND
+        PHOTO_NO= #{photoNo}
     </select>
 
     <update id="updateValueFirst" parameterType="Map">
         UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) = 1
     </update>
     <update id="updateValueMiddle" parameterType="Map">
-        UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND
-        (SELECT Max(VALUE) from FEED_PHOTO where FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})) > (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) > 1
+        UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE
+        PHOTO_NO IN (SELECT PHOTO_NO FROM FEED_PHOTO WHERE (VALUE > (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}))
+        AND
+        FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE  PHOTO_NO= #{photoNo}))
     </update>
     <update id="updateValueLast" parameterType="Map">
         UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE  PHOTO_NO= #{photoNo}) AND

@@ -1,11 +1,16 @@
 package site.lemongproject.web.template.model.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import site.lemongproject.web.member.model.vo.Profile;
 
 import java.sql.Date;
 import java.util.List;
-@Data
+@Getter
+@Setter
+@ToString
 public class Template {
     private int templateNo;
     private int categoryNo;

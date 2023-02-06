@@ -39,9 +39,9 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.findPublic", userNo);
     }
 
-    public Member selectMember(int userNo) {
-        return sqlSession.selectOne("memberMapper.selectMember", userNo);
-    }
+//    public Member selectMember(int userNo) {
+//        return sqlSession.selectOne("memberMapper.selectMember", userNo);
+//    }
 
     public Profile selectMyProfile(int userNo) {
         return sqlSession.selectOne("profileMapper.selectMyProfile", userNo);
@@ -65,6 +65,9 @@ public class MemberDao {
 
 
 
+    public Member selectMembers(int userNo) {
+        return sqlSession.selectOne("memberMapper.selectMember", userNo);
+    }
 }
 
 

@@ -11,8 +11,8 @@ import site.lemongproject.web.member.model.vo.Profile;
 @ToString
 @Alias("ChallengeUser")
 public class ChallengeUser {
-    int challengeNo;
-    Profile profile;
-    int clearCount;
-    ChallengeUserStatus status;
+    private int challengeNo;
+    private Profile profile;
+    private int clearCount;
+    private ChallengeUserStatus status;
 }

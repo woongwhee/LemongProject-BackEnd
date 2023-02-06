@@ -6,13 +6,24 @@
         <result column="NICK_NAME" property="nickName"/>
         <result column="PHOTO_NO" property="photoNo"/>
         <result column="PROFILE_COMMENT" property="profileComment"/>
-        <association property="photo" resultMap="photoMapper.photoMap"/>
+        <association property="photo"  resultMap="photoMapper.photoMap"/>
     </resultMap>
-    <select id="findOne" parameterType="int" resultType="Profile">
-        select *
-        from user_profile
-            left join PHOTO using (photo_NO)
-        where user_no = #{userNo}
+
+    <select id="findOne" parameterType="int" resultMap="profileDetail">
+<!--        SELECT-->
+<!--            U.USER_NO ,-->
+<!--            NICK_NAME ,-->
+<!--            U.PHOTO_NO ,-->
+<!--            PROFILE_COMMENT ,-->
+<!--            CHANGE_NAME-->
+<!--        FROM USER_PROFILE U-->
+<!--        JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)-->
+<!--        WHERE U.USER_NO = #{userNo}-->
+<!--    <select id="findOne" parameterType="int" resultMap="profileDetail">-->
+        SELECT *
+        FROM USER_PROFILE pro
+        LEFT JOIN PHOTO pho USING (PHOTO_NO)
+        WHERE pro.USER_NO = #{userNo}
     </select>
 
     <!--프로필 생성    -->
@@ -41,9 +52,37 @@
         FROM USER_PROFILE
         WHERE NICK_NAME = #{nickName}
     </select>
-<!--    <delete id="deleteProfile" parameterType="_int">-->
-<!--        DELETE USER_PROFILE-->
-<!--        WHERE USER_NO=#{userNo}-->
-<!--    </delete>-->
+
+    <!-- 유저 닉네임 검색 -->
+    <select id="searchUser" parameterType="string" resultMap="profileDetail">
+        SELECT
+            U.USER_NO ,
+            U.PHOTO_NO ,
+            NICK_NAME ,
+            PROFILE_COMMENT ,
+            CHANGE_NAME
+        FROM USER_PROFILE U
+        LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
+        WHERE NICK_NAME LIKE '%' || #{userNick} || '%'
+    </select>
+
+    <select id="myPageNickCheck" parameterType="string" resultMap="profileDetail">
+        SELECT
+            NICK_NAME
+        FROM USER_PROFILE
+        WHERE NICK_NAME LIKE '%' || #{checkNick} || '%'
+    </select>
+
+    <update id="updateMyNick" parameterType="Profile">
+        UPDATE USER_PROFILE
+            SET NICK_NAME = #{nickName}
+        WHERE USER_NO = #{userNo}
+    </update>
+
+    <update id="updateMyContent" parameterType="Profile">
+        UPDATE USER_PROFILE
+            SET PROFILE_COMMENT = #{profileComment}
+        WHERE USER_NO = #{userNo}
+    </update>
 
 </mapper>

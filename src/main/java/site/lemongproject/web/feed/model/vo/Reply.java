@@ -1,4 +1,4 @@
-package site.lemongproject.web.reply.model.vo;
+package site.lemongproject.web.feed.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
