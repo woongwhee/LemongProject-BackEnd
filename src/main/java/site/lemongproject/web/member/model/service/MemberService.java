@@ -14,7 +14,7 @@ import java.util.Map;
 
 public interface MemberService {
 
-     Member loginMember(Member m);
+     Profile loginMember(Member m);
 
      int insertMember(JoinVo m);
 
@@ -37,8 +37,6 @@ public interface MemberService {
     List<Profile> searchUser(String userNick);
 
     Profile selectMyProfile(int userNo);
-
-    Member selectMember(int userNo);
 
     MyProfileVo getMyProfile(int userNo);
 
@@ -63,6 +61,8 @@ public interface MemberService {
     Member isSocialUser(Member isSocial);
 
     int insertSocial(Member isSocial);
+
+    int isExEmail(String email);
 
 
 }
