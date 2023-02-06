@@ -53,6 +53,7 @@ public class PublicController {
         // 암호화 후
         if(loginUser != null && bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())) {
             System.out.println("컨트롤러 넘어옴");
+            session.setAttribute("loginUser",loginUser);
             System.out.println(ResponseBuilder.success(loginUser));
             return ResponseBuilder.success(loginUser);
         } else {
