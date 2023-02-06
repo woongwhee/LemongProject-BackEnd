@@ -25,12 +25,31 @@
         <result column="FEED_CONTENT" property="feedContent"/>
         <result column="FEED_AT" property="feedAt"/>
         <result column="FILEPATH" property="filePath"/>
-        <result column="PHOTONO" property="photoNo"/>
     </resultMap>
 
 
+    <select id="selectMyFeed" resultMap="feedResultSet">
+        SELECT
+            FEED_NO ,
+            USER_NO ,
+            FEED_CONTENT ,
+            FEED_AT
+        FROM FEED
+        WHERE USER_NO = 2
+    </select>
 <!-- 피드 게시물  -->
-    <select id="selectFeed" resultMap="feedListResultSet" >
+    <select id="selectFeed" resultMap="feedListResultSet">
+<!--        SELECT-->
+<!--        F.FEED_NO,-->
+<!--        F.USER_NO,-->
+<!--        F.FEED_CONTENT,-->
+<!--        F.FEED_AT,-->
+<!--        P.FILE_PATH,-->
+<!--        P.CHANGE_NAME-->
+<!--        FROM FEED F-->
+<!--        JOIN FEED_PHOTO FP on F.FEED_NO = FP.FEED_NO-->
+<!--        JOIN PHOTO P on FP.PHOTO_NO = P.PHOTO_NO-->
+<!--        order by F.FEED_AT DESC-->
         SELECT
         F.FEED_NO,
         F.USER_NO,
@@ -72,6 +91,7 @@
         DELETE FROM FEED_PHOTO WHERE FEED_NO = #{feedNo}
     </delete>
 <!-- 사진 등록 -->
+
     <insert id="insertPhoto" parameterType="Photo">
         <selectKey keyProperty="photoNo" resultType="int" order="BEFORE">
             SELECT SEQ_PHOTO.nextval from dual
