@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
+import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
@@ -128,5 +129,10 @@ public class FeedServiceImpl implements FeedService{
         return result;
 
 //        int updateValue = feedDao.chagneValue(doublePhotoNo)
+    }
+
+    @Override
+    public List<FeedList> detailFeed(int feedNo){
+        return feedDao.FeedDetail(feedNo);
     }
 }
