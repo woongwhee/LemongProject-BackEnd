@@ -1,13 +1,19 @@
 package site.lemongproject.web.template.model.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import site.lemongproject.web.member.model.vo.Profile;
 
 import java.sql.Date;
 import java.util.List;
-@Data
+@Getter
+@Setter
+@ToString
 public class Template {
     private int templateNo;
+    private int categoryNo;
     private Integer range;
     private String title;
     private String content;
@@ -15,8 +21,9 @@ public class Template {
     private boolean saveStatus;//true: 작성완료 false : 임시저장
     private int todoCount;
     private int clearCount;
-    private int challengeCount;
-    private TemplateCategory templateCategory;
-    private Profile profile;
+    private int playCount;
+    private TemplateCategory category;
+    private Profile create;
     private List<TemplateTodo> todoList;
+
 }

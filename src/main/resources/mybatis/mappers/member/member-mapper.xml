@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="memberMapper">
+
+    <!-- MEMBER 테이블  -->
+    <resultMap type="member" id="memberResultSet">
+        <result column="USER_NO" property="userNo" />
+        <result column="EMAIL" property="email" />
+        <result column="USER_PWD" property="userPwd" />
+        <result column="SOCIAL_TYPE" property="socialType" />
+        <result column="ACCESS_TOKEN" property="accessToken" />
+        <result column="STATUS" property="status" />
+        <result column="USER_NAME" property="userName" />
+    </resultMap>
+
+    <!-- PROFILE 테이블  -->
+    <resultMap type="Profile" id="profileResultSet">
+        <result column="USER_NO" property="userNo"></result>
+        <result column="NICK_NAME" property="nickName"></result>
+        <result column="PHOTO_NO" property="photoNo"></result>
+        <result column="PROFILE_COMMENT" property="profileComment"></result>
+    </resultMap>
+
+    <resultMap id="potoResultSet" type="Photo">
+        <result column="PHOTO_NO" property="photoNo"></result>
+        <result column="USER_NO" property="userNo"></result>
+        <result column="ORIGIN_NAME" property="originName"></result>
+        <result column="CHANGE_NAME" property="changeName"></result>
+        <result column="FILE_PATH" property="filePath"></result>
+    </resultMap>
+
+    <!--  이메일 인증  -->
+    <resultMap id="emailConfirmResultSet" type="EmailConfirm">
+        <result column="CONFIRM_NO" property="confirmNo" />
+        <result column="CODE" property="code" />
+        <result column="EMAIL" property="email" />
+        <result column="CONFIRM_AT" property="confirmDate" />
+        <result column="STATUS" property="status" />
+    </resultMap>
+
+
+
+
+    <!-- USER(회원가입)정보 가져오기  -->
+    <select id="selectUser" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE USER_NO = 2
+    </select>
+
+
+
+    <update id="updatePassword" parameterType="site.lemongproject.web.member.model.dto.ChangePwdVo">
+        UPDATE MEMBER
+        SET USER_PWD = #{password}
+        WHERE USER_NO = #{userNo}
+    </update>
+
+
+    <update id="deleteUser" parameterType="int">
+        UPDATE MEMBER
+        SET STATUS = 0
+        WHERE USER_NO = #{userNo}
+    </update>
+
+    <!--  로그인  -->
+    <select id="loginMember" parameterType="Member" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE EMAIL = #{email}
+          AND STATUS = '1'
+    </select>
+
+    <!--  회원가입  -->
+    <insert id="insertMember" parameterType="site.lemongproject.web.member.model.dto.JoinVo">
+        INSERT INTO MEMBER (USER_NO, EMAIL, USER_PWD, STATUS, USER_NAME)
+        VALUES (SEQ_MEMBER.NEXTVAL, #{email}, #{userPwd}, DEFAULT, #{userName})
+    </insert>
+
+    <select id="selectMember" parameterType="int" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE USER_NO = #{userNo}
+    </select>
+
+</mapper>

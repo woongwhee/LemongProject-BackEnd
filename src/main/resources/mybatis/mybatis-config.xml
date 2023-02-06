@@ -1,33 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE configuration
-        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "https://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 
     <settings>
         <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
+
     <typeAliases>
         <typeAlias type="site.lemongproject.web.template.model.dto.Template" alias="Template"/>
+        <typeAlias type="site.lemongproject.web.template.model.dto.Review" alias="Review"/>
         <typeAlias type="site.lemongproject.web.template.model.dto.TemplateCategory" alias="TemplateCategory"/>
         <typeAlias type="site.lemongproject.web.template.model.dto.TemplateTodo" alias="TemplateTodo"/>
         <typeAlias type="site.lemongproject.web.template.model.vo.TemplateUpdateVo" alias="TemplateUpdateVo"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Profile" alias="Profile"/>
         <typeAlias type="site.lemongproject.web.member.model.vo.Member" alias="Member"/>
-        <typeAlias type="site.lemongproject.web.feed.domain.vo.Feed" alias="Feed"/>
-        <typeAlias type="site.lemongproject.web.feed.domain.vo.Reply" alias="Reply"/>
+        <typeAlias type="site.lemongproject.web.photo.model.vo.Photo" alias="Photo"/>
+        <typeAlias type="site.lemongproject.web.feed.model.vo.Reply" alias="Reply"/>
         <typeAlias type="site.lemongproject.common.domain.dto.OfficialHoliday" alias="Holiday"/>
+        <typeAlias type="site.lemongproject.web.feed.model.vo.Feed" alias="Feed"/>
         <typeAlias type="site.lemongproject.web.todo.model.vo.Todo" alias="Todo"/>
+        <typeAlias type="site.lemongproject.web.member.model.vo.EmailConfirm" alias="EmailConfirm" />
+        <typeAlias type="site.lemongproject.web.feed.model.dto.FeedInsert" alias="FeedInsert"/>
+        <typeAlias type="site.lemongproject.web.feed.model.dto.FeedList" alias="FeedList"/>
+        <typeAlias type="site.lemongproject.web.follow.model.vo.Follow" alias="Follow"/>
+        <typeAlias type="site.lemongproject.common.domain.vo.PeriodVo" alias="PeriodVO"/>
+        <typeAlias type="site.lemongproject.web.todo.model.dto.DailyFindVo" alias="DailyFindVO"/>
+        <typeAlias type="site.lemongproject.web.challenge.model.dto.ChallengeChat" alias="ChallengeChat"/>
+        <package name="site.lemongproject.web.template.model.vo"/>
+        <package name="site.lemongproject.web.challenge.model.dto"/>
+        <package name="site.lemongproject.web.challenge.model.vo"/>
     </typeAliases>
 
+    <typeHandlers>
+        <typeHandler handler="site.lemongproject.common.type.handler.NameEnumTypeHandler"/>
+        <typeHandler handler="site.lemongproject.common.type.handler.LocalDateTypeHandler"/>
+        <typeHandler handler="site.lemongproject.common.type.handler.ChallengeOptionTypeHandler"/>
+    </typeHandlers>
     <mappers>
-        <mapper resource="mybatis/mappers/member-mapper.xml"/>
-        <mapper resource="mybatis/mappers/template-mapper.xml"/>
-        <mapper resource="mybatis/mappers/templatetodo-mapper.xml"/>
-        <mapper resource="mybatis/mappers/templatecategory-mapper.xml"/>
+        <mapper resource="mybatis/mappers/photo-mapper.xml"/>
+        <mapper resource="mybatis/mappers/follow-mapper.xml"/>
+        <mapper resource="mybatis/mappers/reply-mapper.xml"/>
         <mapper resource="mybatis/mappers/holiday-mapper.xml"/>
         <mapper resource="mybatis/mappers/feed-mapper.xml"/>
-        <mapper resource="mybatis/mappers/reply-mapper.xml"/>
         <mapper resource="mybatis/mappers/todo-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/template-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/templatetodo-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/templatecategory-mapper.xml"/>
+        <mapper resource="mybatis/mappers/template/review-mapper.xml"/>
+        <mapper resource="mybatis/mappers/member/member-mapper.xml"/>
+        <mapper resource="mybatis/mappers/member/profile-mapper.xml"/>
+        <mapper resource="mybatis/mappers/member/emailconfirm-mapper.xml"/>
+        <mapper resource="mybatis/mappers/challenge/challenge-mapper.xml"/>
+        <mapper resource="mybatis/mappers/challenge/challengechat-mapper.xml"/>
+        <mapper resource="mybatis/mappers/challenge/challengetodo-mapper.xml"/>
+<!--        <mapper resource="mybatis/mappers/emailconfirm-mapper.xml" />-->
     </mappers>
 </configuration>
