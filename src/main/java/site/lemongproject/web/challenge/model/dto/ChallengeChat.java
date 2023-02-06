@@ -11,10 +11,11 @@ import java.sql.Date;
 @ToString
 @Alias("ChallengeChat")
 public class ChallengeChat {
-    int chatNo;
-    int challengeNo;
-    int userNo;
-    String chatMessage;
-    Date sendAt;
+    private int chatNo;
+    private int challengeNo;
+    private int userNo;
+    private String chatMessage;
+    private Date sendAt;
+//    private Challenge challenge;
 }
 

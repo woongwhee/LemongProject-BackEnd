@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 public class ChangePwdVo {
     int userNo;

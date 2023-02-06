@@ -42,6 +42,7 @@ public class ResponseBuilder{
         return response;
     }
 
+
     // 이메일 인증번호 전송
     public static ResponseBody failEmail(int num) {
         ResponseBody response = new ResponseBody();
@@ -90,6 +91,12 @@ public class ResponseBuilder{
         response.setCode("3005");
         response.setMessage("FAILAUTHEMAIL");
         response.setResult(num);
+        return response;
+    }
+    public static ResponseBody serverError() {
+        ResponseBody response = new ResponseBody();
+        response.setCode("5000");
+        response.setMessage("SERVER_ERROR");
         return response;
     }
 

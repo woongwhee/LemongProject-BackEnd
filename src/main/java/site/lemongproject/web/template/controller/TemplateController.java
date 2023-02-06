@@ -5,11 +5,12 @@ import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.member.model.vo.Member;
+import site.lemongproject.web.member.model.vo.Profile;
+import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
+import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
-import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
-import site.lemongproject.web.template.model.vo.TempalteTodoInsertVo;
-import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
+import site.lemongproject.web.template.model.vo.*;
 import site.lemongproject.web.template.service.TemplateReadService;
 import site.lemongproject.web.template.service.TemplateWriteService;
 
@@ -35,20 +36,35 @@ public class TemplateController {
             return ResponseBuilder.findNothing();
         }
     }
+    @GetMapping(value = {"/count/{categoryNo}"})
+    public ResponseBody<Integer> count(@PathVariable(value = "categoryNo", required = false) Optional<Integer> cno) {
+        int categoryNo = cno.orElse(0);//없는 경우 모든 카테고리
+        int count = ReadService.getTemplateCount(categoryNo);
+        return ResponseBuilder.success(count);
 
+    }
     @GetMapping(value = {"/one/{templateNo}"})
     public ResponseBody<List<Template>> list(@PathVariable(value = "templateNo") int templateNo) {
         Template template = ReadService.getTemplateDetail(templateNo);
         if (template != null) {
-            return ResponseBuilder.success(templateNo);
+            return ResponseBuilder.success(template);
         } else {
             return ResponseBuilder.findNothing();
         }
     }
+    @GetMapping("/category")
+    public ResponseBody<List<TemplateCategory>> category(){
+        List<TemplateCategory> categoryList=ReadService.getTemplateCategory();
+        if(categoryList.size()>0){
+            return ResponseBuilder.success(categoryList);
+        }else{
+            return ResponseBuilder.findNothing();
+        }
 
+    }
 
     @GetMapping("/unsave/load")
-    public ResponseBody<Template> load(@SessionAttribute("loginUser") Member loginMember) {
+    public ResponseBody<Template> load(@SessionAttribute("loginUser") Profile loginMember) {
         Template cur = WriteService.loadInsertPage(loginMember.getUserNo());
         ResponseBody<Template> responseBody = new ResponseBody<>();
         responseBody.setCode("2000");
@@ -56,9 +72,17 @@ public class TemplateController {
         ResponseBody<Template> response = ResponseBuilder.success(cur);
         return response;
     }
-
+    @GetMapping("/todo/detail/{templateNo}")
+    public ResponseBody<List<TemplateTodo>> todoDetail(int templateNo) {
+        List<TemplateTodo> todoList = ReadService.getTemplateTodo(templateNo);
+        if(todoList!=null&&todoList.size()>0){
+            return ResponseBuilder.success(todoList);
+        }else{
+            return ResponseBuilder.findNothing();
+        }
+    }
     @PutMapping(value = "/unsave/upload")
-    public ResponseBody<Integer> upload(@SessionAttribute("loginUser") Member loginUser) {
+    public ResponseBody<Integer> upload(@SessionAttribute("loginUser") Profile loginUser) {
         int result = WriteService.uploadUnSave(loginUser.getUserNo());
         if (result > 0) {
             return ResponseBuilder.success(result);
@@ -68,7 +92,7 @@ public class TemplateController {
     }
 
     @PutMapping("/unsave/update")
-    public ResponseBody<Integer> updateUnSave(@SessionAttribute("loginUser") Member loginUser, @RequestBody TemplateUpdateVo tuv) {
+    public ResponseBody<Integer> updateUnSave(@SessionAttribute("loginUser") Profile loginUser, @RequestBody TemplateUpdateVo tuv) {
         if ((tuv == null || tuv.getTemplateNo() == null) ||
                 (tuv.getRange() == null && tuv.getTitle() == null && tuv.getCategoryNo() == null && tuv.getContent() == null)) {
             return ResponseBuilder.upLoadFail();
@@ -83,7 +107,7 @@ public class TemplateController {
     }
 
     @PutMapping("/unsave/reset")
-    public ResponseBody<Template> resetUnSave(@SessionAttribute("loginUser") Member loginUser) {
+    public ResponseBody<Template> resetUnSave(@SessionAttribute("loginUser") Profile loginUser) {
 
         Template t = WriteService.resetUnSave(loginUser.getUserNo());
         if (t != null) {
@@ -95,7 +119,8 @@ public class TemplateController {
 
 
     @PostMapping("/todo/insert")
-    public ResponseBody<List<TemplateTodo>> insertTodo(Member loginUser, @RequestBody TempalteTodoInsertVo tiv) {
+    public ResponseBody<List<TemplateTodo>> insertTodo(@SessionAttribute("loginUser")Profile loginUser, @RequestBody TempalteTodoInsertVo tiv) {
+        tiv.setUserNo(loginUser.getUserNo());
         int result = WriteService.insertTodo(tiv);
         if (result>0) {
             return ResponseBuilder.success(result);
@@ -104,8 +129,8 @@ public class TemplateController {
         }
     }
 
-    @DeleteMapping("/todo/{tpTodoNo}/deleteUnSave")
-    public ResponseBody<Integer> deleteTodo(@SessionAttribute("loginUser") Member loginUser, @PathVariable("tpTodoNo") int tpTodoNo) {
+    @DeleteMapping("/todo/deleteUnSave/{tpTodoNo}")
+    public ResponseBody<Integer> deleteTodo(@SessionAttribute("loginUser") Profile loginUser, @PathVariable("tpTodoNo") int tpTodoNo) {
         int result = WriteService.deleteTodo(new TPTodoDeleteVo(1, tpTodoNo));
         if (result > 0) {
             return ResponseBuilder.success(result);
@@ -114,15 +139,52 @@ public class TemplateController {
         }
     }
     @DeleteMapping("/delete/{templateNo}")
-    public ResponseBody<Integer> deleteTemplate(@SessionAttribute("loginUser") Member loginUser, @PathVariable("templateNo") int templateNo) {
-        int result = WriteService.deleteTemplate(loginUser.getUserNo(),templateNo);
+    public ResponseBody<Integer> deleteTemplate(@SessionAttribute("loginUser") Profile loginUser, @PathVariable("templateNo") int templateNo) {
+        int result = ReadService.deleteTemplate(loginUser.getUserNo(),templateNo);
         if (result > 0) {
             return ResponseBuilder.success(result);
         } else {
             return ResponseBuilder.deleteFail();
         }
     }
-
+    @PostMapping("/review/insert")
+    public ResponseBody<Integer> reviewInsert(@SessionAttribute("loginUser")Profile loginUser, ReviewInsertVo riv){
+        riv.setUserNo(loginUser.getUserNo());
+        int result=ReadService.insertReview(riv);
+        if(result>0){
+            return ResponseBuilder.success(result);
+        }else{
+            return ResponseBuilder.upLoadFail();
+        }
+    };
+    @DeleteMapping("/review/delete/{reviewNo}")
+    public ResponseBody<Integer> reviewDelete(@SessionAttribute("loginUser")Member loginUser, @PathVariable("reviewNo")int reviewNo){
+        ReviewDeleteVo reviewDeleteVo=new ReviewDeleteVo(reviewNo,loginUser.getUserNo());
+        int result=ReadService.deleteReview(reviewDeleteVo);
+        if(result>0){
+            return ResponseBuilder.success(result);
+        }else{
+            return ResponseBuilder.upLoadFail();
+        }
+    };
+    @GetMapping("/review/list/{templateNo}")
+    public ResponseBody<List<Review>> reviewList(@PathVariable("templateNo")int templateNo){
+        List<Review> rList=ReadService.getReviewList(templateNo);
+        if(rList!=null){
+            return ResponseBuilder.success(rList);
+        }else{
+            return ResponseBuilder.findNothing();
+        }
+    }
+    @GetMapping("/review/one/{reviewNo}")
+    public ResponseBody<Review> reviewOne(@PathVariable("reviewNo")int reviewNo){
+        Review review=ReadService.getReviewOne(reviewNo);
+        if(review!=null){
+            return ResponseBuilder.success(review);
+        }else{
+            return ResponseBuilder.findNothing();
+        }
+    }
 
 
 }

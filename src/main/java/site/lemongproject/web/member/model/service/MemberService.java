@@ -31,10 +31,7 @@ public interface MemberService {
      int updatePassword(ChangePwdVo cpw);
 
      int deleteUser(int userNo);
-
-     // 이메일인증
-    int isExEmail(String email);
-
+//     이메일인증
     int insertConfirm(EmailConfirm confirm);
 
     List<Profile> searchUser(String userNick);
@@ -44,6 +41,16 @@ public interface MemberService {
     Member selectMember(int userNo);
 
     MyProfileVo getMyProfile(int userNo);
+
+    Member selectMembers(int userNo);
+
+    Profile MyPageNickCheck(String checkNick);
+
+    Profile updateMyNick(Profile pro);
+
+    Profile updateMyContent(Profile p);
+
+//    int checkConfirm(EmailConfirm confirm);
 
     String getAccessToken(String authCode);
 

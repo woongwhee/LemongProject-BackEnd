@@ -9,19 +9,20 @@ import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.template.model.dto.Template;
 
 import java.sql.Date;
-
+import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
 @Alias("Challenge")
 public class Challenge {
-    int challengeNo;
-    Profile createUser;
-    Template templateNo;
-    String ChallengeTitle;
-    String ChallengeInfo;
-    Date StartDate;
-    Date endDate;
-    String ChallengeOption;
-    ChallengeStatus status;
+    private int challengeNo;
+    private Profile createUser;
+    private int templateNo;
+    private String ChallengeTitle;
+    private String ChallengeInfo;
+    private LocalDate StartDate;
+    private LocalDate endDate;
+    private Date createAt;
+    private String ChallengeOption;
+    private ChallengeStatus status;
 }

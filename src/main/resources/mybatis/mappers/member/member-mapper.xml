@@ -95,7 +95,10 @@
             VALUES (SEQ_MEMBER.NEXTVAL, #{email}, DEFAULT, #{userName}, #{socialType})
     </insert>
 
-
-
+    <select id="selectMember" parameterType="int" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE USER_NO = #{userNo}
+    </select>
 
 </mapper>
