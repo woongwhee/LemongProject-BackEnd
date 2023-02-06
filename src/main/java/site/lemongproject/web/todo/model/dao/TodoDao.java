@@ -39,5 +39,6 @@ public class TodoDao {
         return sqlSession.selectList("todoMapper.calTodo", t);
     }
 
+    public int dndTodo(Todo t){ return  sqlSession.update("todoMapping.dndTodo", t);}
 
 }

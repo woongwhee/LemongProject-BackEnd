@@ -47,7 +47,7 @@ public class TodoServiceImpl implements TodoService {
         return todoDao.calTodo(t);
     }
 
-
+    public  int dndTodo(Todo t){return todoDao.dndTodo(t);}
 
 
 

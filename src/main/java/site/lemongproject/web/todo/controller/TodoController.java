@@ -123,7 +123,20 @@ public class TodoController {
         return calTodos;
     }
 
+    @GetMapping("/dndTodo")
+    public ResponseBody<Todo> dndTodo(@RequestParam(value="todoNo" , required=false) int todoNo,
+                                         @RequestParam(value = "value" , required = false)int value){
 
+        System.out.println("dnd todoNo: "+todoNo);
+
+        Todo t = new Todo();
+        t.setTodoNo(todoNo);
+        t.setValue(value);
+
+        todoService.updateTodo(t);
+
+        return ResponseBuilder.success(t);
+    }
     
     
     
