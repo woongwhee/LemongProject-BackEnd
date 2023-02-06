@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+        <!-- defaultEncoding : 업로드 되는 파일에 대한 인코딩처리를 어떻게 할것인지 여부 -->
+        <property name="defaultEncoding" value="UTF-8"/>
+
+        <property name="maxUploadSize" value="10000000"/>
+        <property name="maxInMemorySize" value="10000000"/>
+
+    </bean>
+
 </beans>

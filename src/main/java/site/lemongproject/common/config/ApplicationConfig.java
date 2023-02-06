@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -25,6 +26,7 @@ import java.util.Properties;
 
 @EnableTransactionManagement
 @EnableScheduling
+@EnableWebMvc
 @Configuration
 @ComponentScan(basePackages = "site.lemongproject")
 public class ApplicationConfig {
@@ -78,6 +80,11 @@ public class ApplicationConfig {
         dataSource.setMinIdle(Integer.parseInt(properties.getProperty("minIdle")));
         dataSource.setMaxIdle(Integer.parseInt(properties.getProperty("maxIdle")));
         return dataSource;
+    }
+
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

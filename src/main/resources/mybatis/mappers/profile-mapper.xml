@@ -1,16 +1,49 @@
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="profileMapper">
-    <resultMap id="profileDetail" type="Profile">
-        <result column="USER_NO" property="userNo"/>
-        <result column="NICK_NAME" property="nickName"/>
-        <result column="PHOTO_NO" property="photoNo"/>
-        <result column="PROFILE_COMMENT" property="profileComment"/>
-    </resultMap>
 
-    <select id="selectOne" parameterType="int" resultType="Profile">
-        select * from user_profile where user_no=#{userNo}
-    </select>
+<!--<!DOCTYPE mapper-->
+<!--        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"-->
+<!--        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+<!--<mapper namespace="profileMapper">-->
 
-</mapper>
+<!--    <resultMap id="profileDetail" type="Profile">-->
+<!--        <result column="USER_NO" property="userNo"/>-->
+<!--        <result column="NICK_NAME" property="nickName"/>-->
+<!--        <result column="PHOTO_NO" property="photoNo"/>-->
+<!--        <result column="PROFILE_COMMENT" property="profileComment"/>-->
+<!--        <result column="PROFILE_COMMENT" property="profileComment"/>-->
+<!--        <association property="photo" resultMap="photoMapper.potoResultSet"/>-->
+<!--    </resultMap>-->
+
+<!--    <resultMap id="profileNick" type="Profile">-->
+<!--        <result column="USER_NO" property="userNo"/>-->
+<!--        <result column="NICK_NAME" property="nickName"/>-->
+<!--        <result column="PROFILE_COMMENT" property="profileComment"/>-->
+<!--        <association property="photo" resultMap="photoMapper.potoResultSet"/>-->
+<!--    </resultMap>-->
+
+<!--    &lt;!&ndash; userNo에 해당하는 userProfile정보 가져오기. &ndash;&gt;-->
+<!--    <select id="selectMyProfile" parameterType="int" resultMap="profileDetail">-->
+<!--        SELECT-->
+<!--            U.USER_NO ,-->
+<!--            NICK_NAME ,-->
+<!--            U.PHOTO_NO ,-->
+<!--            PROFILE_COMMENT ,-->
+<!--            CHANGE_NAME-->
+<!--        FROM USER_PROFILE U-->
+<!--        JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)-->
+<!--        WHERE U.USER_NO = #{userNo}-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 유저 닉네임 검색 &ndash;&gt;-->
+<!--    <select id="searchUser" parameterType="string" resultMap="profileNick">-->
+<!--        SELECT-->
+<!--            U.USER_NO ,-->
+<!--            U.PHOTO_NO ,-->
+<!--            NICK_NAME ,-->
+<!--            PROFILE_COMMENT ,-->
+<!--            CHANGE_NAME-->
+<!--        FROM USER_PROFILE U-->
+<!--        LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)-->
+<!--        WHERE NICK_NAME LIKE '%' || #{userNick} || '%'-->
+<!--    </select>-->
+
+<!--</mapper>-->

@@ -1,0 +1,156 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="templateMapper">
+    <resultMap id="templateList" type="Template">
+        <id column="TEMPLATE_NO" property="templateNo"/>
+        <result column="CATEGORY_NO" property="categoryNo"/>
+        <result column="RANGE" property="range"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+        <result property="clearCount" column="CLEAR_COUNT"/>
+        <result property="playCount" column="PLAY_COUNT"/>
+        <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
+        <association property="create" javaType="site.lemongproject.web.member.model.vo.Profile"
+                     resultMap="profileMapper.profileDetail"/>
+    </resultMap>
+    <resultMap id="templateDetail" type="Template">
+        <id column="TEMPLATE_NO" property="templateNo"/>
+        <result column="CATEGORY_NO" property="categoryNo"/>
+        <result column="RANGE" property="range"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+        <result property="clearCount" column="CLEAR_COUNT"/>
+        <result property="playCount" column="PLAY_COUNT"/>
+        <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
+        <association property="create" resultMap="profileMapper.profileDetail"/>
+        <collection property="todoList" select="templateTodoMapper.findByTemplate" javaType="List"
+                    column="TEMPLATE_NO"/>
+    </resultMap>
+    <resultMap id="templateUnSave" type="Template">
+        <id column="TEMPLATE_NO" property="templateNo"/>
+        <result column="CATEGORY_NO" property="categoryNo"/>
+        <result column="RANGE" property="range"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+    </resultMap>
+    <select id="findUnSave" parameterType="Integer" resultMap="templateUnSave">
+        SELECT *
+        FROM TEMPLATE
+        WHERE TP_CREATER = #{userNo}
+          AND SAVE_STATUS = 0
+    </select>
+
+    <select id="findDetail" parameterType="Integer" resultMap="templateDetail">
+        SELECT
+            T.*,
+            (SELECT COUNT(*)
+             FROM CHALLENGE_USER CU1
+                Join CHALLENGE C USING(CHALLENGE_NO)
+             WHERE CU1.STATUS = 'PLAY'
+               AND C.TEMPLATE_NO=T.TEMPLATE_NO) as PLAY_COUNT,
+            (SELECT COUNT(*)
+             FROM CHALLENGE_USER CU2
+                Join CHALLENGE C USING(CHALLENGE_NO)
+             WHERE CU2.STATUS = 'CLEAR'
+               AND C.TEMPLATE_NO=T.TEMPLATE_NO) as CLEAR_COUNT,
+            P.*,
+            up.*,
+            tc.*
+        FROM TEMPLATE T
+                 LEFT JOIN USER_PROFILE up ON T.TP_CREATER = up.USER_NO
+                 LEFT JOIN PHOTO P ON UP.PHOTO_NO = P.PHOTO_NO
+                 JOIN TEMPLATE_CATEGORY tc on T.CATEGORY_NO=tc.CATEGORY_NO
+        WHERE T.SAVE_STATUS = 1
+          AND T.TEMPLATE_NO = #{templateNo}
+        ORDER BY T.CREATED_AT DESC
+    </select>
+
+    <select id="findMany" parameterType="Map" resultMap="templateList">
+        SELECT
+        T.* ,
+        (SELECT COUNT(*) FROM TEMPLATE T1
+        JOIN CHALLENGE C ON C.TEMPLATE_NO=T1.TEMPLATE_NO
+        JOIN CHALLENGE_USER CU USING(CHALLENGE_NO)
+        WHERE CU.STATUS='PLAY'
+        AND T.TEMPLATE_NO=T1.TEMPLATE_NO)as PLAY_COUNT,
+        --진행중인 사람수
+        (SELECT COUNT(*)
+        FROM TEMPLATE T2
+        JOIN CHALLENGE C ON C.TEMPLATE_NO=T2.TEMPLATE_NO
+        JOIN CHALLENGE_USER CU USING(CHALLENGE_NO)
+        WHERE CU.STATUS='CLEAR'
+        AND T.TEMPLATE_NO=T2.TEMPLATE_NO)as CLEAR_COUNT ,
+        --완료수
+        P.*,up.*,tc.*
+        FROM TEMPLATE T
+        LEFT JOIN USER_PROFILE up ON T.TP_CREATER = up.USER_NO
+        LEFT JOIN PHOTO P ON UP.PHOTO_NO = P.PHOTO_NO
+        JOIN TEMPLATE_CATEGORY tc on T.CATEGORY_NO=tc.CATEGORY_NO
+        WHERE T.SAVE_STATUS=1
+        <if test="categoryNo>0">
+            AND tc.CATEGORY_NO=#{categoryNo}
+        </if>
+        ORDER BY T.CREATED_AT DESC
+    </select>
+    <delete id="deleteTemp" parameterType="int">
+        DELETE TEMPLATE
+        WHERE TEMPLATE_NO = #{templateNo}
+    </delete>
+    <delete id="deleteUnSave" parameterType="int">
+        DELETE TEMPLATE
+        WHERE TP_CREATER = #{userNo}
+          AND SAVE_STATUS = 0
+    </delete>
+    <insert id="createTemp" parameterType="integer">
+        INSERT INTO TEMPLATE (TEMPLATE_NO, TP_CREATER)
+        VALUES (SEQ_TEMPLATE.NEXTVAL, #{userNo})
+    </insert>
+    <update id="uploadUnSave" parameterType="int">
+        update template
+        set todo_count  = (select count(*)
+                           from template_todo
+                           where save_status = 0
+                             and TP_CREATER = #{userNo}),
+            SAVE_STATUS = 1,
+            CREATED_AT  = SYSDATE
+        where save_status = 0
+          and TP_CREATER = #{userNo}
+    </update>
+    <update id="updateUnSave" parameterType="TemplateUpdateVo">
+        update template
+        <set>
+            <if test="categoryNo != null">
+                CATEGORY_NO=#{categoryNo},
+            </if>
+            <if test="range != null">
+                RANGE = #{range},
+            </if>
+            <if test="title != null">
+                TITLE = #{title},
+            </if>
+            <if test="content != null">
+                CONTENT= #{content}
+            </if>
+        </set>
+        where TEMPLATE_NO=#{templateNo}
+        AND TP_CREATER=#{userNo}
+    </update>
+    <select id="countTemplate" parameterType="Integer" resultType="Integer">
+        SELECT COUNT(*)
+        FROM TEMPLATE
+        WHERE SAVE_STATUS=1
+        <if test="categoryNo>0">
+            AND CATEGORY_NO=#{categoryNo}
+        </if>
+    </select>
+    <select id="isWriter" parameterType="WriterCheckVo" resultType="_boolean">
+        SELECT COUNT(*)
+        FROM TEMPLATE
+        WHERE TP_CREATER = #{userNo}
+          AND TEMPLATE_NO = #{refNo}
+    </select>
+    <select id="findRange" parameterType="int" resultType="int">
+        SELECT RANGE
+        FROM TEMPLATE
+        WHERE TEMPLATE_NO=#{templateNo}
+    </select>
+</mapper>
