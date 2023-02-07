@@ -34,8 +34,8 @@
     <select id="findByUser" parameterType="_int" resultMap="photoMap">
         SELECT
             P.*
-        FROM PHOTO P
-            JOIN USER_PROFILE U USING (PHOTO_NO)
+        FROM USER_PROFILE U
+            LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE U.USER_NO=#{userNo}
     </select>
     <select id="findOne" parameterType="_int" resultMap="photoMap">
