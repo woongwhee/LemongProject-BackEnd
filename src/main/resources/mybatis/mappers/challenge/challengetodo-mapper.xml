@@ -74,7 +74,7 @@
     </select>
 
 
-    <update id="clearChallTodo" parameterType="ChallengeTodo">
+    <update id="clearChTodo" parameterType="ChallengeTodo">
         UPDATE CHALLENGE_TODO
         SET CLEAR =
                 CASE WHEN CLEAR = 0 THEN 1
@@ -82,4 +82,14 @@
                     END
         WHERE TODO_NO = #{todoNo}
     </update>
+
+    <select id="calTodo" resultType="string">
+        SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
+        FROM CHALLENGE_TODO
+        WHERE USER_NO = #{userNo} AND STATUS = 'N' AND CLEAR = 0
+        ORDER BY TODO_DATE
+    </select>
+
+
+
 </mapper>

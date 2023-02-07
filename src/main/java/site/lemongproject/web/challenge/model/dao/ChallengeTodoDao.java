@@ -14,4 +14,6 @@ public interface ChallengeTodoDao {
     int copyTodoList(ChallengeUserVo joinVo);
 
     int clearChallengeTodo(ChallengeTodo cTd);
+
+    List<ChallengeTodo> calChTodo(ChallengeTodo ct);
 }
