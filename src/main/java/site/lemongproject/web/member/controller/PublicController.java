@@ -29,7 +29,7 @@ public class PublicController {
     final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 로그인
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
         /*  @RequestBody(클라이언트-서버) -> json 객체를 자바 객체로 변환해줌
             HTTP 요청의 바디 내용을 통째로 자바객체로 변환해서 매핑된 메소드 파라미터로 전달
