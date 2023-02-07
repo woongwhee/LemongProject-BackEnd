@@ -32,7 +32,6 @@ public class MemberController {
     // 로그인
 
 
-
     // 마이페이지 회원정보 수정
 //    @GetMapping("/selectPro")
 //    public List<Profile> MyPageUpdate(@SessionAttribute()){
@@ -52,9 +51,9 @@ public class MemberController {
 
     // USER_PROFILE테이블 유저 닉네임 업데이트.
     @GetMapping("/checkNickName")
-    public int updateUser(@SessionAttribute("loginUser")Member loginUser,@RequestParam(value="modifyNickname" , required=false) String nickName){
+    public int updateUser(@SessionAttribute("loginUser") Member loginUser, @RequestParam(value = "modifyNickname", required = false) String nickName) {
 
-        Profile p=new Profile();
+        Profile p = new Profile();
         p.setUserNo(loginUser.getUserNo());
         p.setNickName(nickName);
         int upList = memberService.updateProfile(p);
@@ -66,8 +65,8 @@ public class MemberController {
 
     // USER_PROFILE테이블 유저 자기소개 업데이트.
     @GetMapping("/updateComment")
-    public int updateComment(@SessionAttribute("loginUser")Member loginUser,@RequestParam(value="modifyComment" , required = false) String comment){
-        Profile p=new Profile();
+    public int updateComment(@SessionAttribute("loginUser") Member loginUser, @RequestParam(value = "modifyComment", required = false) String comment) {
+        Profile p = new Profile();
         p.setUserNo(loginUser.getUserNo());
         p.setProfileComment(comment);
         int upList2 = memberService.updateProfile(p);
@@ -75,9 +74,9 @@ public class MemberController {
     }
 
     @GetMapping("/myPwdUpdate")
-    public int myupdatePwd(@SessionAttribute("loginUser") Member loginUser,@RequestParam(value = "upPwd" , required = false)String upPwd){
-        int userNo=loginUser.getUserNo();
-        ChangePwdVo cpw=new ChangePwdVo(userNo,upPwd);
+    public int myupdatePwd(@SessionAttribute("loginUser") Member loginUser, @RequestParam(value = "upPwd", required = false) String upPwd) {
+        int userNo = loginUser.getUserNo();
+        ChangePwdVo cpw = new ChangePwdVo(userNo, upPwd);
         int result = memberService.updatePassword(cpw);
         return result;
     }
@@ -86,8 +85,8 @@ public class MemberController {
     @PostMapping("/insertUserProfile")
 //    @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
     public ResponseBody<Photo> insertProfilePhoto(
-            @RequestParam(value="file", required=false) MultipartFile[] files,
-            @SessionAttribute("loginUser")Member loginUser) {
+            @RequestParam(value = "file", required = false) MultipartFile[] files,
+            @SessionAttribute("loginUser") Member loginUser) {
         Photo p = new Photo();
         p.setUserNo(loginUser.getUserNo());
         fileUtil.saveFile(files[0], p);
@@ -95,10 +94,11 @@ public class MemberController {
         return ResponseBuilder.success(p);
 
     }
+
     // 유저 프로필 UPDATE. => 웅휘형이 만든 FileUtil로 빼기 => rename(m.getOriginalFilename()) 오류 고치기.
     @RequestMapping(value = "/updateUserProfile")
     public int updateUserProfile(
-            @RequestParam(value = "file" , required = false) MultipartFile[] ufiles ,
+            @RequestParam(value = "file", required = false) MultipartFile[] ufiles,
             @SessionAttribute(value = "loginMember") Member loginMember) {
 
 //        String webPath = "/resources/images/userProfile/";
@@ -150,10 +150,10 @@ public class MemberController {
 //            result = memberService.updateUserProfile(p);
 //
 //        }
-        Photo p=new Photo();
+        Photo p = new Photo();
         p.setUserNo(loginMember.getUserNo());
-        fileUtil.saveFile(ufiles[0],p );
-        int result=memberService.insertUserPhoto(p);
+        fileUtil.saveFile(ufiles[0], p);
+        int result = memberService.insertUserPhoto(p);
 
 
         return result;
@@ -161,21 +161,20 @@ public class MemberController {
     }
 
     @GetMapping("/myprofile")
-    public ResponseBody<MyProfileVo> getLogin(@SessionAttribute("loginUser") Member loginMember){
+    public ResponseBody<MyProfileVo> getLogin(@SessionAttribute("loginUser") Member loginMember) {
 
 //        List<Member> mList = memberService.userSelect(loginMember);
-        MyProfileVo glv=memberService.getMyProfile(loginMember.getUserNo());
-        if (glv!=null) {
+        MyProfileVo glv = memberService.getMyProfile(loginMember.getUserNo());
+        if (glv != null) {
             return ResponseBuilder.success(glv);
-        }else
-        {
+        } else {
             return ResponseBuilder.success(glv);
         }
     }
     //
 
     @GetMapping("/selectMember")
-    public ResponseBody<Member> selectMember(@SessionAttribute("loginUser") Member loginUser){
+    public ResponseBody<Member> selectMember(@SessionAttribute("loginUser") Member loginUser) {
 
         Member m = memberService.selectMember(loginUser.getUserNo());
         return ResponseBuilder.success(m);
@@ -183,14 +182,14 @@ public class MemberController {
 
     // userNo에 해당하는 user 프로필 정보 가져오기(changeName 포함).
     @GetMapping("/selectMyProfile")
-    public ResponseBody<Profile> selectMyProfile(@SessionAttribute("loginUser") Member loginUser){
+    public ResponseBody<Profile> selectMyProfile(@SessionAttribute("loginUser") Member loginUser) {
         Profile p = memberService.selectMyProfile(loginUser.getUserNo());
         return ResponseBuilder.success(p);
     }
 
     // 검색 기능(유저 아이디 검색)
     @GetMapping("/searchUser")
-    public ResponseBody<Profile> searchUser(@RequestParam(value="userNick" , required = false) String userNick){
+    public ResponseBody<Profile> searchUser(@RequestParam(value = "userNick", required = false) String userNick) {
 
         System.out.println(userNick + " : success");
 
@@ -200,10 +199,12 @@ public class MemberController {
 
         return ResponseBuilder.success(p);
     }
+
     @GetMapping("/logout")
-    public ResponseBody<Integer> logout(@SessionAttribute("loginUser")Profile profile, @SessionAttribute("socialType")SocialType socialType,HttpSession session){
-        switch (socialType){
-            case NONE: session.invalidate();
+    public ResponseBody<Integer> logout(@SessionAttribute("loginUser") Profile profile, @SessionAttribute("socialType") SocialType socialType, HttpSession session) {
+        switch (socialType) {
+            case NONE:
+                session.invalidate();
             case NAVER:
             case KAKAO:
         }
