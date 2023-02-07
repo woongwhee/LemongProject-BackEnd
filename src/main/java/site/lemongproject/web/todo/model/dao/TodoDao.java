@@ -7,6 +7,7 @@ import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Repository
@@ -40,9 +41,23 @@ public class TodoDao {
         return sqlSession.selectList("todoMapper.calTodo", t);
     }
 
-    public int dndTodo(Todo t){ return  sqlSession.update("todoMapping.dndTodo", t);}
-
     public List<Todo> findDaily(DailyFindVo dailyFind) {
         return sqlSession.selectList("todoMapper.findDaily",dailyFind);
+    }
+
+    public int startValue(Map<Integer, Object> todoNo) {
+        return sqlSession.selectOne("todoMapper.startValue",todoNo);
+    }
+
+    public int finishValue(Map<Integer, Object> todoNo) {
+        return sqlSession.selectOne("todoMapper.finishValue",todoNo);
+    }
+    // value 바꾸기
+    public int updateStartValue(Map<Integer, Object> todoNo) {
+        return sqlSession.update("todoMapper.updateStartValue",todoNo);
+    }
+
+    public int updateFinishValue(Map<Integer, Object> todoNo) {
+        return sqlSession.update("todoMapper.updateFinishValue",todoNo);
     }
 }

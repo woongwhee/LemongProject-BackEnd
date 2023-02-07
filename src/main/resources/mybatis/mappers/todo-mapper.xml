@@ -127,11 +127,12 @@
         ORDER BY TODO_DATE
     </select>
 
-    <update id="dndTodo" parameterType="Todo">
-        UPDATE TODO
-        SET VALUE = #{value}
-        WHERE TODO_NO = #{todoNo}
-    </update>
+<!--    <update id="dndTodo" parameterType="Todo">-->
+<!--        UPDATE TODO-->
+<!--        SET VALUE = #{value}-->
+<!--        WHERE TODO_NO = #{todoNo}-->
+<!--    </update>-->
+
     <select id="findDaily" resultMap="todoResultSet" parameterType="DailyFindVo">
         <![CDATA[
         SELECT TODO_NO,
@@ -148,6 +149,19 @@
         ORDER BY TODO_NO
         ]]>
     </select>
+
+    <select id="startValue" parameterType="Map" resultType="int">
+        SELECT VALUE FROM TODO WHERE TODO_NO= #{originArr}
+    </select>
+    <select id="finishValue" parameterType="Map" resultType="int">
+        SELECT VALUE FROM TODO WHERE TODO_NO= #{changeArr}
+    </select>
+    <update id="updateStartValue" parameterType="Map">
+        update VALUE SET VALUE=#{finishValue} WHERE TODO_NO=#{originArr}
+    </update>
+    <update id="updateFinishValue" parameterType="Map">
+        update VALUE SET VALUE=#{startValue} WHERE TODO_NO=#{changeArr}
+    </update>
 
 
 
