@@ -214,9 +214,19 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member isSocialUser(Member isSocial) {
         Member result = memberDao.isSocialUser(isSocial);
-        System.out.println("소셜유저 서비스: "+result);
+//        System.out.println("소셜유저 서비스: "+result);
         return result;
     }
+
+    @Override
+    public Profile socialProfile(Member isSocial) {
+        Member socialUser = memberDao.isSocialUser(isSocial);
+        Profile socialProfile = profileDao.findOne(socialUser.getUserNo());
+        System.out.println("소셜유저 프로필 서비스:" +socialProfile);
+        return socialProfile;
+    }
+
+
 
     // 소셜 회원 회원가입
     @Override
