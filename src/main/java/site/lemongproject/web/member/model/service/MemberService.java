@@ -60,6 +60,8 @@ public interface MemberService {
 
     Member isSocialUser(Member isSocial);
 
+    Profile socialProfile(Member isSocial);
+
     int insertSocial(Member isSocial);
 
     int isExEmail(String email);

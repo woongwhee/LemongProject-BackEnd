@@ -57,7 +57,7 @@ public class PublicController {
             System.out.println("컨트롤러 넘어옴");
             session.setAttribute("loginUser",loginUser);
             session.setAttribute("socialType",SocialType.NONE);
-            System.out.println(ResponseBuilder.success(loginUser));
+//            System.out.println(ResponseBuilder.success(loginUser));
             return ResponseBuilder.success(loginUser);
         } else {
             System.out.println("컨트롤러 못 넘어옴");
@@ -175,6 +175,7 @@ public class PublicController {
     }
 
 
+    // 카카오 로그인
     @RequestMapping(value = "kakaoLogin", method = RequestMethod.GET)
     public ResponseBody<Map<String, Object>> kakaoLogin(@RequestParam Map<String, Object> code, HttpSession session) {
         String authCode = String.valueOf(code.get("code"));
@@ -183,7 +184,7 @@ public class PublicController {
         // 인가코드를 통해 access_token 발급
         String token = memberService.getAccessToken(authCode);
         System.out.println("acessToken: "+token);
-
+        session.setAttribute("accessToken",token);
         // 접속자 정보 얻어오기
         Map<String, Object> kakaoUser = memberService.getKakaoUser(token);
         System.out.println("카카오 유저 정보: "+kakaoUser);
@@ -204,6 +205,8 @@ public class PublicController {
 
         if(result != null) { // 회원정보가 있는 경우 -> 로그인
             isKakao = memberService.isSocialUser(isKakao);
+            session.setAttribute("loginUser", isKakao);
+            session.setAttribute("socialType",SocialType.KAKAO);
 //            System.out.println(isKakao);
             return ResponseBuilder.success(isKakao);
         } else { // 회원정보가 없는 경우 -> 회원가입 -> 닉네임 설정
@@ -228,7 +231,7 @@ public class PublicController {
     }
 
 
-
+    // 네이버 로그인
     @RequestMapping(value = "naverLogin", method = RequestMethod.GET)
     public ResponseBody<Map<String, Object>> naverLogin(@RequestParam Map<String, Object> aToken, HttpSession session) {
 
@@ -237,7 +240,7 @@ public class PublicController {
 
         // 사용자 정보 추출
         Map<String, Object> naverUser = memberService.getNaverUser(token);
-        System.out.println("네이버 유저:" + naverUser);
+//        System.out.println("네이버 유저:" + naverUser);
         String userName = String.valueOf(naverUser.get("userName"));
         String email = String.valueOf(naverUser.get("email"));
         SocialType socialType = SocialType.NAVER;
@@ -252,8 +255,10 @@ public class PublicController {
         Member result = memberService.isSocialUser(isNaver);
 
         if(result != null) { // 회원정보가 있는 경우 -> 로그인
-            isNaver = memberService.isSocialUser(isNaver);
-            return ResponseBuilder.success(isNaver);
+            Profile oldNaver = memberService.socialProfile(isNaver); // 유저가 있을 경우 프로필 반환
+            session.setAttribute("loginUser",oldNaver);
+            session.setAttribute("socialType",SocialType.NAVER);
+            return ResponseBuilder.success(oldNaver);
         } else { // 회원정보가 없는 경우 -> 회원가입 -> 닉네임 설정
             int naverJoin = memberService.insertSocial(isNaver);
             System.out.println("회원가입 여부: "+naverJoin);
