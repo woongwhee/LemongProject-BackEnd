@@ -62,7 +62,7 @@ public class TodoServiceImpl implements TodoService {
         return todoDao.calTodo(t);
     }
 
-    public int dndTodo(Map<Integer, Object> todoNo){
+    public int dndTodo(Map<String, Object> todoNo){
         int startValue = todoDao.startValue(todoNo); // 1
         int finishValue = todoDao.finishValue(todoNo); // 2
         int result = 0;

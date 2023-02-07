@@ -26,6 +26,6 @@ public interface TodoService {
 
     List<Todo> calTodo(Todo t);
 
-    int dndTodo(Map<Integer, Object> todoNo);
+    int dndTodo(Map<String, Object> todoNo);
 
 }
