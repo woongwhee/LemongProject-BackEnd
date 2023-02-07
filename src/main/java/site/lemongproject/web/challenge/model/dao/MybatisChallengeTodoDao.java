@@ -32,7 +32,12 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
 
     @Override
     public  int clearChallengeTodo(ChallengeTodo cTd){
-        return session.update("challengeTodoMapper.clearChallTodo", cTd);
+        return session.update("challengeTodoMapper.clearChTodo", cTd);
+    }
+
+    @Override
+    public List<ChallengeTodo> calChTodo(ChallengeTodo ct){
+        return session.selectList("challengeTodoMapper.calChTodo", ct);
     }
 
 }

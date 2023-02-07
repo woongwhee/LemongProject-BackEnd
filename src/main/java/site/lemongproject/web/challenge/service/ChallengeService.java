@@ -26,4 +26,6 @@ public interface ChallengeService {
     int insertChatData(ChallengeChat chatData);
 
     int clearChallengeTodo(ChallengeTodo cTd);
+
+    List<ChallengeTodo> calChTodo(ChallengeTodo ct);
 }
