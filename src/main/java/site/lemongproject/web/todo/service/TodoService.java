@@ -1,10 +1,9 @@
 package site.lemongproject.web.todo.service;
 
-import site.lemongproject.web.todo.model.dto.DailyFindVO;
+import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.dto.DailyTodoVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 
-import java.util.Date;
 import java.util.List;
 
 public interface TodoService {
@@ -21,5 +20,5 @@ public interface TodoService {
 
     int delayTodo(Todo t);
 
-    DailyTodoVo getDaily(DailyFindVO dailyFind);
+    DailyTodoVo getDaily(DailyFindVo dailyFind);
 }

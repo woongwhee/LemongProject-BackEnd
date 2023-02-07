@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
+import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
@@ -40,14 +41,31 @@ public class FeedServiceImpl implements FeedService{
     }
     // 피드 업데이트
     @Override
-    public int updateFeed(Map<String,Object> updatefeed){
-        return feedDao.updateFeed(updatefeed);
+    public int updateFeed(FeedInsert updatefeed){
+        int result = 0;
+        if(updatefeed.getFeedContent().equals("")){
+            result += 1;
+        }else{
+            result +=feedDao.updateFeed(updatefeed); // 내용 업데이트
+        }
+        result += feedDao.deleteFeedPhotoFeedNo2(updatefeed); // 피드 수정하기전 사진삭제
+
+        for (int i =0; i<updatefeed.getPhotoNo().size(); i++){
+            result += feedDao.insertFeedPhoto(new FeedInsertPhoto(updatefeed.getFeedNo(), updatefeed.getPhotoNo().get(i), i+1));
+        }
+        return result;
     };
 
     // 피드 삭제
     @Override
     public int deleteFeed(Map<String,Object> deleteFeedNo){
-        return feedDao.deleteFeed(deleteFeedNo);
+        int result =  feedDao.deleteFeedPhotoFeedNo(deleteFeedNo);
+        if(result > 0){
+            result *= feedDao.deleteFeed(deleteFeedNo);
+        }else {
+            result *= 0;
+        }
+        return result;
     }
 
     // 피드 댓글 등록
@@ -81,24 +99,40 @@ public class FeedServiceImpl implements FeedService{
     // 사진 피드 수정하기
     @Override
     public int modifyPhoto(Map<String,Object> photoNo){
-        int maxValue = feedDao.maxValue(photoNo);
-        int nowValue = feedDao.nowValue(photoNo);
-        System.out.println(maxValue);
-        System.out.println(nowValue);
+        int maxValue = feedDao.maxValue(photoNo);  // 4
+        int nowValue = feedDao.nowValue(photoNo);  // 2
+        System.out.println("maxValue : " + maxValue);
+        System.out.println("nowValue : "+nowValue);
 
-        int result = 1;
+        int result = 0;
 
         if(nowValue == 1){
-            result *= feedDao.updateValueFirst(photoNo);
+            result += feedDao.updateValueFirst(photoNo);
         } else if (1 < nowValue && nowValue < maxValue) {
-            result *= feedDao.updateValueMiddle(photoNo);
-        }else{
-            result *= feedDao.updateValueLast(photoNo);
+            result += feedDao.updateValueMiddle(photoNo);
         }
-        if(result > 1){
-            return feedDao.modifyPhoto(photoNo);
-        }else{
-            return result*0;
-        }
-    };
+        result*=feedDao.modifyPhoto(photoNo);
+            return result;
+
+    }
+    // 사진 value 수정하기
+    @Override
+    public int changeValue(Map<String, Object> doublePhotoNo){
+        int startValue = feedDao.startValue(doublePhotoNo); // 1
+        int finishValue = feedDao.finishValue(doublePhotoNo); // 2
+        int result = 0;
+        doublePhotoNo.put("startValue",startValue);
+        doublePhotoNo.put("finishValue",finishValue);
+        System.out.println(doublePhotoNo);
+        result += feedDao.updateStartValue(doublePhotoNo);
+        result += feedDao.updateFinishValue(doublePhotoNo);
+        return result;
+
+//        int updateValue = feedDao.chagneValue(doublePhotoNo)
+    }
+
+    @Override
+    public List<FeedList> detailFeed(int feedNo){
+        return feedDao.FeedDetail(feedNo);
+    }
 }

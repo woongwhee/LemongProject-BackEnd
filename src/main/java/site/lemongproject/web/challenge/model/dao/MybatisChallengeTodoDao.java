@@ -3,11 +3,10 @@ package site.lemongproject.web.challenge.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.vo.CGTodoInsertVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeTodoVo;
-import site.lemongproject.web.todo.model.dto.DailyFindVO;
+import site.lemongproject.web.todo.model.dto.DailyFindVo;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
         return session.insert("challengeTodoMapper.insertTodo",insertVo);
     }
     @Override
-    public List<ChallengeTodoVo> findDaily(DailyFindVO dailyFind) {
+    public List<ChallengeTodoVo> findDaily(DailyFindVo dailyFind) {
         return session.selectList("challengeTodoMapper.findDaily",dailyFind);
     }
 

@@ -1,6 +1,7 @@
 package site.lemongproject.web.member.model.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.common.util.FileUtil;
@@ -29,12 +30,17 @@ public class MemberServiceImpl implements MemberService {
     final private PhotoDao photoDao;
     final private EmailConfirmDao confirmDao;
     final private FileUtil fileUtil;
+    final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    public Member loginMember(Member m) {
+    public Profile loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
-        System.out.println("서비스 : " + loginUser);
-        return loginUser;
+        if(bCryptPasswordEncoder.matches(m.getUserPwd(),loginUser.getUserPwd())){
+            return profileDao.findOne(loginUser.getUserNo());
+
+        }else{
+            return null;
+        }
     }
 
 
@@ -116,6 +122,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int updatePassword(ChangePwdVo cpw) {
+        cpw.setPassword(bCryptPasswordEncoder.encode(cpw.getPassword()));
         return memberDao.updatePassword(cpw);
     }
 

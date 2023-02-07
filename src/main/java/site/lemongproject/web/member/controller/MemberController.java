@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
+import site.lemongproject.common.type.SocialType;
 import site.lemongproject.common.util.FileUtil;
 import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.MyProfileVo;
@@ -29,38 +30,13 @@ public class MemberController {
     final private FileUtil fileUtil;
     final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-//    // 로그인
-//    @PostMapping("/login")
-//    public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
-//        Member loginUser = memberService.loginMember(m);
-//        // 암호화 후
-//        if(loginUser != null && bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())) {
-//            System.out.println("컨트롤러 넘어옴");
-//            System.out.println(ResponseBuilder.success(loginUser));
-//            return ResponseBuilder.success(loginUser);
-//        } else {
-//            System.out.println("컨트롤러 못 넘어옴");
-//            return ResponseBuilder.unLogin(null);
-//        }
-//
-//    }
+
+    // 로그인
+
 
 //     마이페이지 회원정보 수정
-//    @GetMapping("/selectPro")
-//    public List<Profile> MyPageUpdate(@SessionAttribute()){
-//
-//        List<Profile> mList = memberService.mypage();
-//
-//        return mList;
-//    }
 ////
 ////    // MEMBER테이블 유저 정보 조회.
-//    @GetMapping("/selectUser")
-//    public List<Member> selectUser(){
-//        List<Member> mList = memberService.selectUser();
-//        ResponseBody<List<Member>> r= ResponseBuilder.success(mList);
-//        return mList;
-//    }
 
     // USER_PROFILE테이블 유저 닉네임 업데이트.
     @GetMapping("/checkNickName")
@@ -173,44 +149,45 @@ public class MemberController {
 
         return ResponseBuilder.success(p);
     }
-
-    // 마이페이지에서 유저 닉네임 검색해서 없는 닉네임인 경우 변경
-    @GetMapping("/MyPageNickCheck")
-    public ResponseBody<Profile> MyPageNickCheck(@RequestParam(value = "checkNick" , required = false) String checkNick){
-
-        Profile p = memberService.MyPageNickCheck(checkNick);
-
-        return ResponseBuilder.success(p);
+    @GetMapping("/logout")
+    public ResponseBody<Integer> logout(@SessionAttribute("loginUser")Profile profile, @SessionAttribute("socialType")SocialType socialType,HttpSession session){
+        switch (socialType){
+            case NONE: session.invalidate();
+            case NAVER:
+            case KAKAO:
+        }
+        return ResponseBuilder.success(11);
     }
+        // 유효성 검사 통과 후 닉네임 변경.
+        @GetMapping("/updateMyNick")
+        public ResponseBody<Profile> updateMyNick(@RequestParam(value = "updateNick" , required = false) String updateNick ,
+        @RequestParam(value = "userNo" , required = false) int userNo){
 
-    // 유효성 검사 통과 후 닉네임 변경.
-    @GetMapping("/updateMyNick")
-    public ResponseBody<Profile> updateMyNick(@RequestParam(value = "updateNick" , required = false) String updateNick ,
-                                              @RequestParam(value = "userNo" , required = false) int userNo){
+            System.out.println(userNo + " === updateMyNick === ");
+            System.out.println(updateNick + " === updateMyNick === ");
 
-        System.out.println(userNo + " === updateMyNick === ");
-        System.out.println(updateNick + " === updateMyNick === ");
+            Profile pro = new Profile();
+            pro.setUserNo(userNo);
+            pro.setNickName(updateNick);
 
-        Profile pro = new Profile();
-        pro.setUserNo(userNo);
-        pro.setNickName(updateNick);
+            Profile p = memberService.updateMyNick(pro);
 
-        Profile p = memberService.updateMyNick(pro);
+            return ResponseBuilder.success(p);
+        }
 
-        return ResponseBuilder.success(p);
-    }
+        // 마이페이지 자기소개 변경
+        @GetMapping("/updateMyContent")
+        public ResponseBody<Profile> updateMyContent(@RequestParam(value = "updateCont" , required = false) String updateCont ,
+        @RequestParam(value = "userNo" , required = false) int userNo){
+            Profile p = new Profile();
+            p.setProfileComment(updateCont);
+            p.setUserNo(userNo);
 
-    // 마이페이지 자기소개 변경
-    @GetMapping("/updateMyContent")
-    public ResponseBody<Profile> updateMyContent(@RequestParam(value = "updateCont" , required = false) String updateCont ,
-                                                 @RequestParam(value = "userNo" , required = false) int userNo){
-        Profile p = new Profile();
-        p.setProfileComment(updateCont);
-        p.setUserNo(userNo);
+            Profile content = memberService.updateMyContent(p);
 
-        Profile content = memberService.updateMyContent(p);
+            return ResponseBuilder.success(content);
+        }
 
-        return ResponseBuilder.success(content);
-    }
+
 
 }

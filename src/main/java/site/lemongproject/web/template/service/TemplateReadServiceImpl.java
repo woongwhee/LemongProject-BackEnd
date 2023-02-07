@@ -4,16 +4,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.lemongproject.common.domain.dao.HolidayDao;
 import site.lemongproject.web.template.model.dao.ReviewDao;
+import site.lemongproject.web.template.model.dao.TemplateCategoryDao;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
 import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
+import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.ReviewDeleteVo;
 import site.lemongproject.web.template.model.vo.ReviewInsertVo;
 import site.lemongproject.web.template.model.vo.WriterCheckVo;
 
-import java.sql.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class TemplateReadServiceImpl implements TemplateReadService {
 
     final private TemplateDao templateDao;
     final private TemplateTodoDao templateTodoDao;
+    final private TemplateCategoryDao templateCategoryDao;
     final private HolidayDao holidayDao;
     final private ReviewDao reviewDao;
 
@@ -29,6 +31,10 @@ public class TemplateReadServiceImpl implements TemplateReadService {
     public List<Template> getTemplateList(int categoryNo, int page) {
 
         return templateDao.findList(categoryNo, page, 8);
+    }
+    @Override
+    public int getTemplateCount(int categoryNo){
+     return templateDao.countTemplate(categoryNo);
     }
 
     @Override
@@ -74,13 +80,8 @@ public class TemplateReadServiceImpl implements TemplateReadService {
     }
 
     @Override
-    public int SingleStart(String option, Date StartAt, int userNo) {
-        return 0;
-    }
-
-    @Override
-    public int MultiStart(String option, Date StartAt, int userNo) {
-        return 0;
+    public List<TemplateCategory> getTemplateCategory() {
+        return templateCategoryDao.findList();
     }
 
 

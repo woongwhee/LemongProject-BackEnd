@@ -18,7 +18,7 @@ public interface FeedService  {
     int insertFeed(FeedInsert paramMap);
 
     // feed 게시글 업데이트
-    int updateFeed(Map<String,Object> updatefeed);
+    int updateFeed(FeedInsert updatefeed);
 
     // feed 게시글 삭제
     int deleteFeed(Map<String,Object> deleteFeedNo);
@@ -40,5 +40,9 @@ public interface FeedService  {
 
     // 사진 수정하기
     int modifyPhoto(Map<String,Object> photoNo);
+    
+    // 사진 value 수정하기
+    int changeValue(Map<String, Object> doublePhotoNo);
 
+    List detailFeed(int feedNo);
 }

@@ -13,6 +13,7 @@ import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.vo.Member;
+import site.lemongproject.web.member.model.vo.Profile;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -23,12 +24,12 @@ import java.util.Map;
 public class PublicController {
 
     final private MemberService memberService;
-    final private BCryptPasswordEncoder bCryptPasswordEncoder;
     final private MailUtil mailUtil;
 
+    final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 로그인
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
         /*  @RequestBody(클라이언트-서버) -> json 객체를 자바 객체로 변환해줌
             HTTP 요청의 바디 내용을 통째로 자바객체로 변환해서 매핑된 메소드 파라미터로 전달
@@ -48,17 +49,18 @@ public class PublicController {
         */
 
         m.setSocialType(SocialType.NONE);
-        Member loginUser = memberService.loginMember(m);
-
+        Profile loginUser = memberService.loginMember(m);
         // 암호화 후
-        if(loginUser != null && bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())) {
+        if(loginUser != null) {
             System.out.println("컨트롤러 넘어옴");
             session.setAttribute("loginUser",loginUser);
+            session.setAttribute("socialType",SocialType.NONE);
             System.out.println(ResponseBuilder.success(loginUser));
             return ResponseBuilder.success(loginUser);
         } else {
             System.out.println("컨트롤러 못 넘어옴");
             return ResponseBuilder.unLogin(null);
+
         }
 
     }
@@ -149,7 +151,17 @@ public class PublicController {
         }
 
     }
+    @GetMapping("checkLogin")
+    public ResponseBody<Profile> checkLogin(@SessionAttribute(value = "loginUser",required = false) Profile loginUser){
 
+        if(loginUser==null){
+            return ResponseBuilder.unLogin(null);
+        }else {
+            return ResponseBuilder.success(loginUser);
+        }
+
+
+    }
 
 
 }
