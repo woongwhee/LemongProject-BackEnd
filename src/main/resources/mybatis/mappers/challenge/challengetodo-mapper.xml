@@ -83,10 +83,10 @@
         WHERE TODO_NO = #{todoNo}
     </update>
 
-    <select id="calTodo" resultType="string">
+    <select id="calChTodo" resultType="string">
         SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
         FROM CHALLENGE_TODO
-        WHERE USER_NO = #{userNo} AND STATUS = 'N' AND CLEAR = 0
+        WHERE USER_NO = #{userNo}
         ORDER BY TODO_DATE
     </select>
 

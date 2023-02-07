@@ -14,7 +14,10 @@ import site.lemongproject.web.todo.service.TodoService;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/todo", method = {RequestMethod.GET, RequestMethod.POST})
@@ -130,7 +133,7 @@ public class TodoController {
     //캘린더에 투두 표시
     @GetMapping("/calTodo")
     public  List<Todo> calTodo(@SessionAttribute("loginUser") Profile p){
-        System.out.println("cal userNo: "+p);
+        //System.out.println("cal userNo: "+p);
 
         Todo t = new Todo();
         t.setUserNo(p.getUserNo());
@@ -140,22 +143,33 @@ public class TodoController {
         return calTodos;
     }
 
-    @GetMapping("/dndTodo")
-    public ResponseBody<Todo> dndTodo(@RequestParam(value="todoNo" , required=false) int todoNo,
-                                         @RequestParam(value = "value" , required = false)int value){
+//    @PostMapping("/dndTodo")
+//    public ResponseBody<List<Todo>> dndTodo(@RequestBody List<Todo> t){
+//
+//        System.out.println("dnd todo: "+t);
+//
+//        List<Todo> tList = new ArrayList<Todo>(t);
+//        //t.setTodoNo(todoNo);
+//        //t.setValue(value);
+//
+//        //int tList = todoService.dndTodo(t);
+//
+//        System.out.println("tList: "+tList);
+//
+//        return ResponseBuilder.success(tList);
+//    }
 
-        System.out.println("dnd todoNo: "+todoNo);
+    @RequestMapping("/dndTodo")
+    public Map<Integer, Object> dndTodo(@RequestBody Map<Integer, Object> todoNo){
 
-        Todo t = new Todo();
-        t.setTodoNo(todoNo);
-        t.setValue(value);
+        System.out.println("dnd todo: "+todoNo);
 
-        todoService.updateTodo(t);
+        Map<Integer, Object> result = new HashMap<>();
 
-        return ResponseBuilder.success(t);
+        int check = TodoService.dndTodo(todoNo);
+
+        return result;
     }
-    
-    
     
     
     
