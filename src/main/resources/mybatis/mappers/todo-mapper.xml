@@ -28,7 +28,6 @@
                 AND TODO_DATE<#{todoDate}+1
                 AND STATUS = 'N'
         ORDER BY VALUE
-        ORDER BY TODO_NO
         ]]>
     </select>
 
@@ -157,10 +156,10 @@
         SELECT VALUE FROM TODO WHERE TODO_NO= #{changeArr}
     </select>
     <update id="updateStartValue" parameterType="Map">
-        update VALUE SET VALUE=#{finishValue} WHERE TODO_NO=#{originArr}
+        update TODO SET VALUE=#{finishValue} WHERE TODO_NO=#{originArr}
     </update>
     <update id="updateFinishValue" parameterType="Map">
-        update VALUE SET VALUE=#{startValue} WHERE TODO_NO=#{changeArr}
+        update TODO SET VALUE=#{startValue} WHERE TODO_NO=#{changeArr}
     </update>
 
 

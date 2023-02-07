@@ -67,8 +67,8 @@ public class TodoController {
     public ResponseBody<Todo> insertTodo(@RequestBody Todo t ,
                                          @SessionAttribute("loginUser") Profile p){
 
-        System.out.println("Profile : "+ p);
-        System.out.println("t : "+ t);
+        //System.out.println("Profile : "+ p);
+        //System.out.println("t : "+ t);
         t.setUserNo(p.getUserNo());
         todoService.insertTodo(t);
 
@@ -160,13 +160,19 @@ public class TodoController {
 //    }
 
     @RequestMapping("/dndTodo")
-    public Map<Integer, Object> dndTodo(@RequestBody Map<Integer, Object> todoNo){
+    public Map<String, Object> dndTodo(@RequestBody Map<String, Object> todoNo){
 
         System.out.println("dnd todo: "+todoNo);
 
-        Map<Integer, Object> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
 
-        int check = TodoService.dndTodo(todoNo);
+        int check = todoService.dndTodo(todoNo);
+
+        if(check>0){
+            result.put("Java","success");
+        }else{
+            result.put("Java", "success");
+        }
 
         return result;
     }
