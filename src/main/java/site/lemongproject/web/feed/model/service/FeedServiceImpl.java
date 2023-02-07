@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.vo.Feed;
+import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
@@ -76,7 +77,7 @@ public class FeedServiceImpl implements FeedService{
 
     // 피드 댓글 불러오기
     @Override
-    public List listReply(int feedNo) {return feedDao.listReply(feedNo);}
+    public List<Reply> listReply(int feedNo) {return feedDao.listReply(feedNo);}
 
     // 피드 댓글 삭제
     @Override

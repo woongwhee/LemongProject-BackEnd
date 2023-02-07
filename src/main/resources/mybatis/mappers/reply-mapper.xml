@@ -10,24 +10,18 @@
         <result column="REPLY_AT" property="replyAt"></result>
     </resultMap>
 
-    <select id="selectFeedReply" resultMap="replyResultSet">
-        SELECT *
-        FROM REPLY
-        WHERE USER_NO = 2
-        AND FEED_NO = 11
-        AND REPLY_NO = 31
-    </select>
-
     <!--  피드 댓글 작성  -->
     <insert id="insertFeedReply" parameterType="Map">
         INSERT INTO REPLY (REPLY_NO, USER_NO, FEED_NO, REPLY_CONTENT, REPLY_AT) VALUES
         (SEQ_REPLY.nextval, #{userNo}, #{feedNo}, #{replyContent},SYSDATE)
     </insert>
-<!-- 피드 댓글 달기 -->
+
+<!-- 피드 댓글 -->
     <select id="listReply" resultMap="replyResultSet" parameterType="int">
         SELECT REPLY_NO, USER_NO, REPLY_CONTENT, REPLY_AT FROM REPLY
         WHERE FEED_NO = #{feedNo}
     </select>
+
 <!-- 피드 댓글 삭제 -->
     <delete id="deleteReply" parameterType="Map">
         DELETE FROM REPLY WHERE FEED_NO = #{feedNo} AND REPLY_NO=#{replyNo}
