@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface MemberService {
 
-     Member loginMember(Member m);
+     Profile loginMember(Member m);
 
      int insertMember(JoinVo m);
 

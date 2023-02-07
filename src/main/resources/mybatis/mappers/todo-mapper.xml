@@ -14,6 +14,8 @@
 
 
     <select id="selectTodo" resultMap="todoResultSet" parameterType="Todo">
+        <![CDATA[
+
         SELECT TODO_NO,
                TODO_DATE,
                TODO_CONTENT,
@@ -22,9 +24,11 @@
                 VALUE
         FROM TODO
         WHERE USER_NO = #{userNo}
-                AND TO_CHAR(TODO_DATE, 'yymmdd') = #{todoDate}
+                AND  #{todoDate}<=TODO_DATE
+                AND TODO_DATE<#{todoDate}+1
                 AND STATUS = 'N'
         ORDER BY TODO_NO
+        ]]>
     </select>
 
     <insert id="insertTodo" parameterType="Todo" >
@@ -86,9 +90,8 @@
         ))
         WHERE TODO_NO = #{todoNo}
     </update>
-
-
     <select id="findDaily" resultMap="todoResultSet" parameterType="DailyFindVo">
+        <![CDATA[
         SELECT TODO_NO,
                TODO_DATE,
                TODO_CONTENT,
@@ -97,9 +100,11 @@
                VALUE
         FROM TODO
         WHERE USER_NO = #{userNo}
-          AND TO_CHAR(TODO_DATE, 'yymmdd') = #{todoDate}
+          AND  #{todoDate} <= TODO_DATE
+          AND  #{todoDate}+1 > TODO_DATE
           AND STATUS = 'N'
         ORDER BY TODO_NO
+        ]]>
     </select>
 
 

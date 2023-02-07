@@ -45,7 +45,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     public int joinMulti(ChallengeUserVo joinVo) {
         joinVo.setStatus(ChallengeUserStatus.READY);
         int result = challengeDao.joinUser(joinVo);
-        result*=todoDao.copyTodoList(joinVo);
+        result *= todoDao.copyTodoList(joinVo);
         return result;
     }
 
@@ -67,14 +67,16 @@ public class ChallengeServiceImpl implements ChallengeService {
     public int createMulti(MultiCreateVo createVo) {
         createVo.setStatus(ChallengeStatus.READY);
         int result = challengeDao.insertMulti(createVo);
-        if(result==0){return 0;}
+        if (result == 0) {
+            return 0;
+        }
         EndDateUpdateVo updateVo = new EndDateUpdateVo();
         //방장도 challengeUser에 넣는다.
-        ChallengeUserVo userVo=new ChallengeUserVo(createVo.getUserNo(),createVo.getChallengeNo(),ChallengeUserStatus.READY);
+        ChallengeUserVo userVo = new ChallengeUserVo(createVo.getUserNo(), createVo.getChallengeNo(), ChallengeUserStatus.READY);
         result *= challengeDao.joinUser(userVo);
         System.out.println(userVo);
         updateVo.setChallengeNo(createVo.getChallengeNo());
-        CGTodoInsertVo insertVo = makeTodo(createVo,updateVo);
+        CGTodoInsertVo insertVo = makeTodo(createVo, updateVo);
         insertVo.setUserNo(-1);
         result *= todoDao.insertTodoList(insertVo);
         System.out.println(userVo);
@@ -93,11 +95,13 @@ public class ChallengeServiceImpl implements ChallengeService {
     public int startSingle(SingleStartVo startVo) {
         startVo.setStatus(ChallengeStatus.SINGLE);
         int result = challengeDao.insertSingle(startVo);
-        if(result==0){return 0;}
-        result *= challengeDao.joinUser(new ChallengeUserVo(startVo.getUserNo(),startVo.getChallengeNo(),ChallengeUserStatus.READY));
+        if (result == 0) {
+            return 0;
+        }
+        result *= challengeDao.joinUser(new ChallengeUserVo(startVo.getUserNo(), startVo.getChallengeNo(), ChallengeUserStatus.READY));
         EndDateUpdateVo updateVo = new EndDateUpdateVo();
 
-        CGTodoInsertVo insertVo = makeTodo(startVo,updateVo);
+        CGTodoInsertVo insertVo = makeTodo(startVo, updateVo);
         result *= todoDao.insertTodoList(insertVo);
         result *= challengeDao.updateEndDate(updateVo);
         //종료일을 설정한다.
@@ -105,25 +109,21 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
 
-    private CGTodoInsertVo makeTodo(SingleStartVo startVo,EndDateUpdateVo updateVo) {
-        int templateNo=startVo.getTemplateNo();
-        LocalDate startDate=startVo.getStartDate();
-        ChallengeOption co=startVo.getOption();
+    private CGTodoInsertVo makeTodo(SingleStartVo startVo, EndDateUpdateVo updateVo) {
+        int templateNo = startVo.getTemplateNo();
+        LocalDate startDate = startVo.getStartDate();
+        ChallengeOption co = startVo.getOption();
         List<OfficialHoliday> holidayList = null;
         //공휴일 제외인경우
         if (co.isOfficialHoliday()) {
-            int length = templateDao.findRange(templateNo);
-            long range = (length / co.getWeekDo() + 1) * 7;
-            LocalDate endDate = startDate.plusDays(range);
-            PeriodVo periodVo = new PeriodVo(startDate, endDate);
-            holidayList = holidayDao.findByPeriod(periodVo);
+            holidayList = getOfficialHolidays(templateNo, startDate, co);
         }
         List<TemplateTodo> todoList = templateTodoDao.findByTemplate(templateNo);
 
 
         List<CGTodoItemVo> challengeTodos = new ArrayList<>(todoList.size());
         int dayPoint = 1;
-        LocalDate datePoint =startDate ;
+        LocalDate datePoint = startDate;
         int weekIndex = datePoint.getDayOfWeek().getValue() - 1;
         boolean[] optionArr = co.getOptionArray();
         Iterator<OfficialHoliday> iter = holidayList.iterator();
@@ -134,13 +134,15 @@ public class ChallengeServiceImpl implements ChallengeService {
                 dayPoint = templateTodo.getDay();
                 datePoint = datePoint.plusDays(period);
                 weekIndex = weekIndex + period % 7 > 6 ? weekIndex + period % 7 - 7 : weekIndex + period % 7;
-
-                loop:while (true) {
+                loop:
+                while (true) {
+                    //해당 요일이 수행일인지 확인
                     if (!optionArr[weekIndex]) {
                         weekIndex = weekIndex < 6 ? weekIndex + 1 : 0;
                         datePoint = datePoint.plusDays(1);
                         continue;
                     }
+                    //해당일이 공휴일인지;(공휴일제외를 하지 않았을시 iter의 값이 비어있음)
                     while (iter.hasNext()) {
                         LocalDate holiyDate = iter.next().getHoliday();
                         if (holiyDate.equals(datePoint)) {
@@ -152,6 +154,7 @@ public class ChallengeServiceImpl implements ChallengeService {
                             iter.remove();
                         }
                     }
+
                     break;
                 }
             }
@@ -161,7 +164,7 @@ public class ChallengeServiceImpl implements ChallengeService {
             todo.setValue(templateTodo.getValue());
             challengeTodos.add(todo);
         }
-        CGTodoInsertVo insertVo=new CGTodoInsertVo();
+        CGTodoInsertVo insertVo = new CGTodoInsertVo();
         updateVo.setEndDate(datePoint);
         updateVo.setChallengeNo(startVo.getChallengeNo());
         insertVo.setTodoList(challengeTodos);
@@ -169,6 +172,16 @@ public class ChallengeServiceImpl implements ChallengeService {
         insertVo.setChallengeNo(startVo.getChallengeNo());
 
         return insertVo;
+    }
+
+    private List<OfficialHoliday> getOfficialHolidays(int templateNo, LocalDate startDate, ChallengeOption co) {
+        List<OfficialHoliday> holidayList;
+        int length = templateDao.findRange(templateNo);
+        long range = (length / co.getWeekDo() + 1) * 7;
+        LocalDate endDate = startDate.plusDays(range);
+        PeriodVo periodVo = new PeriodVo(startDate, endDate);
+        holidayList = holidayDao.findByPeriod(periodVo);
+        return holidayList;
     }
 
     public Challenge selectChallenge(Challenge cNo){

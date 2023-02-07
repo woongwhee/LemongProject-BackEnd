@@ -106,4 +106,6 @@ public class ForTest {
         double e=System.currentTimeMillis();
         System.out.println("result:"+result+"\ntime"+(e-s));
     }
+
+
 }

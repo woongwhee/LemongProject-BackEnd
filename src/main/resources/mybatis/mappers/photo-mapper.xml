@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="photoMapper">
   <resultMap id="photoMap" type="Photo">
-      <result column="PHOTO_NO" property="photoNo"/>
+      <id column="PHOTO_NO" property="photoNo"/>
       <result column="ORIGIN_NAME" property="originName"/>
       <result column="CHANGE_NAME" property="changeName"/>
       <result column="FILE_PATH" property="filePath"/>

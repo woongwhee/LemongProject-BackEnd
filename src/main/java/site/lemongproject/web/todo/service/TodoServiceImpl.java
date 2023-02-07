@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import site.lemongproject.web.challenge.model.dao.ChallengeTodoDao;
 import site.lemongproject.web.challenge.model.vo.ChallengeTodoVo;
 import site.lemongproject.web.todo.model.dao.TodoDao;
-import site.lemongproject.web.todo.model.dto.DailyFindVO;
+import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.dto.DailyTodoVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 
@@ -47,10 +47,11 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public DailyTodoVo getDaily(DailyFindVO dailyFind) {
+    public DailyTodoVo getDaily(DailyFindVo dailyFind) {
         DailyTodoVo todoVo=new DailyTodoVo();
         List<Todo> normalList=todoDao.findDaily(dailyFind);
         List<ChallengeTodoVo>challengeList =challengeTodoDao.findDaily(dailyFind);
+        System.out.println(challengeList);
         todoVo.setNormalList(normalList);
         todoVo.setChallengeList(challengeList);
         return todoVo;
