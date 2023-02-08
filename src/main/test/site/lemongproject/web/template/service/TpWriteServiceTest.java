@@ -17,6 +17,7 @@ import site.lemongproject.web.template.model.dao.TemplateTodoDao;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
+import site.lemongproject.web.template.model.vo.TPUnsaveVo;
 import site.lemongproject.web.template.model.vo.TempalteTodoInsertVo;
 import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
 
@@ -36,19 +37,19 @@ public class TpWriteServiceTest extends Configure {
     @Test
     @DisplayName("리셋테스트")
     public void 리셋(){
-        Template t=templateService.resetUnSave(5);
+        TPUnsaveVo t=templateService.resetUnSave(5);
         assertThat(t).isNotNull();
     }
     @Test
     @DisplayName("임시저장템플릿 불러오기 테스트")
     public void loadUnSave(){
-        Template t=templateService.loadInsertPage(1);
+        TPUnsaveVo t=templateService.loadInsertPage(1);
         assertThat(t).isNotNull();
     }
     @Test
     @DisplayName("템플릿 투두리스트 삽입테스트")
     public void 삽입() {
-        Template t=templateService.loadInsertPage(1);
+        TPUnsaveVo t=templateService.loadInsertPage(1);
         System.out.println(t);
 
         TempalteTodoInsertVo ttiv=new TempalteTodoInsertVo();
@@ -60,8 +61,8 @@ public class TpWriteServiceTest extends Configure {
         day.add(3);
         ttiv.setDayList(day);
         ttiv.setUserNo(1);
-        int result=templateService.insertTodo(ttiv);
-        assertThat(result).isEqualTo(3);
+        List<TemplateTodo> todoList = templateService.insertTodo(ttiv);
+        assertThat(todoList).isNotNull();
 
     }
     @Test
@@ -80,7 +81,7 @@ public class TpWriteServiceTest extends Configure {
     @Test
     @DisplayName("업데이트 테스트")
     public void 업데이트(){
-        Template t=templateService.resetUnSave(1);
+        TPUnsaveVo t=templateService.resetUnSave(1);
         int tno=t.getTemplateNo();
         TemplateUpdateVo tuv=new TemplateUpdateVo();
         tuv.setUserNo(1);

@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
+import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
 import site.lemongproject.web.template.model.vo.WriterCheckVo;
 
 import java.util.List;
@@ -45,6 +46,11 @@ public class MybatisTemplateTodoDao implements TemplateTodoDao{
     @Override
     public boolean isWriter(WriterCheckVo writerCheckVo) {
         return session.selectOne("templateTodoMapper.isWriter",writerCheckVo);
+    }
+
+    @Override
+    public int deleteRangeOver(TemplateUpdateVo templateVo) {
+        return session.delete("templateTodoMapper.deleteRangeOver",templateVo);
     }
 
     @Override

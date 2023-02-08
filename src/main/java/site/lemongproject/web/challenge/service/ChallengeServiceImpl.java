@@ -2,9 +2,10 @@ package site.lemongproject.web.challenge.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import site.lemongproject.common.domain.dao.HolidayDao;
-import site.lemongproject.common.domain.dto.OfficialHoliday;
-import site.lemongproject.common.domain.vo.PeriodVo;
+import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
+import site.lemongproject.web.todo.model.dao.HolidayDao;
+import site.lemongproject.web.todo.model.dto.PeriodVo;
+import site.lemongproject.web.todo.model.vo.OfficialHoliday;
 import site.lemongproject.common.type.ChallengeStatus;
 import site.lemongproject.common.type.ChallengeUserStatus;
 import site.lemongproject.web.challenge.model.dao.ChallengeChatDao;
@@ -13,11 +14,9 @@ import site.lemongproject.web.challenge.model.dao.ChallengeTodoDao;
 import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 import site.lemongproject.web.challenge.model.dto.ChallengeOption;
-import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.vo.*;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
-import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 
 import java.time.LocalDate;
@@ -25,8 +24,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Service
+
 @RequiredArgsConstructor
+@Service
 public class ChallengeServiceImpl implements ChallengeService {
     final private ChallengeDao challengeDao;
     final private HolidayDao holidayDao;
@@ -55,6 +55,7 @@ public class ChallengeServiceImpl implements ChallengeService {
      * @param
      * @return
      */
+    //todo:투두도 지우게할것
     @Override
     public int leaveMulti(ChallengeUserVo userVo) {
         int result = challengeDao.deleteUser(userVo);
@@ -79,9 +80,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         CGTodoInsertVo insertVo = makeTodo(createVo, updateVo);
         insertVo.setUserNo(-1);
         result *= todoDao.insertTodoList(insertVo);
-        System.out.println(userVo);
         result *= todoDao.copyTodoList(userVo);
-        System.out.println(result);
         result *= challengeDao.updateEndDate(updateVo);
         return result;
     }
@@ -113,7 +112,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         int templateNo = startVo.getTemplateNo();
         LocalDate startDate = startVo.getStartDate();
         ChallengeOption co = startVo.getOption();
-        List<OfficialHoliday> holidayList = null;
+        List<OfficialHoliday> holidayList = new ArrayList<>();
         //공휴일 제외인경우
         if (co.isOfficialHoliday()) {
             holidayList = getOfficialHolidays(templateNo, startDate, co);
@@ -167,6 +166,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         CGTodoInsertVo insertVo = new CGTodoInsertVo();
         updateVo.setEndDate(datePoint);
         updateVo.setChallengeNo(startVo.getChallengeNo());
+        updateVo.setChallengeNo(startVo.getUserNo());
         insertVo.setTodoList(challengeTodos);
         insertVo.setUserNo(startVo.getUserNo());
         insertVo.setChallengeNo(startVo.getChallengeNo());

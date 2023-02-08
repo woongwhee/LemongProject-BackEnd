@@ -9,6 +9,8 @@ import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.dto.DailyTodoVo;
+import site.lemongproject.web.todo.model.dto.MonthFindVo;
+import site.lemongproject.web.todo.model.dto.MonthMarkVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 import site.lemongproject.web.todo.service.TodoService;
 
@@ -27,10 +29,10 @@ public class TodoController {
     final private TodoService todoService;
 
     //투두 목록 가져오기
-    @GetMapping ("/getTodo")
-    public List<Todo> selectTodo(@RequestParam(value = "todoDate" , required = false)
-                                     @DateTimeFormat(pattern = "yyMMdd")
-                                     LocalDate todoDate,
+    @GetMapping("/getTodo")
+    public List<Todo> selectTodo(@RequestParam(value = "todoDate", required = false)
+                                 @DateTimeFormat(pattern = "yyMMdd")
+                                 LocalDate todoDate,
                                  @RequestParam(value = "userNo", required = false) int userNo) throws ParseException {
 //        List<Todo> t = todoService.selectToDo(loginUser.getUserNo(),date);
 
@@ -43,29 +45,30 @@ public class TodoController {
         List<Todo> todoList = todoService.selectTodo(t);
         return todoList;
     }
+
     @GetMapping("/daily/{todoDate}")
     public ResponseBody<DailyTodoVo> getDaily(
             @PathVariable("todoDate")
             @DateTimeFormat(pattern = "yyMMdd")
             LocalDate todoDate,
-            @SessionAttribute("loginUser") Profile member){
+            @SessionAttribute("loginUser") Profile member) {
         DailyFindVo dailyFind = new DailyFindVo();
         dailyFind.setTodoDate(todoDate);
         dailyFind.setUserNo(member.getUserNo());
         DailyTodoVo daily = todoService.getDaily(dailyFind);
-        if(daily.getNormalList().size() == 0 && daily.getChallengeList().size() == 0){
+        if (daily.getNormalList().size() == 0 && daily.getChallengeList().size() == 0) {
             return ResponseBuilder.findNothing();
-        }
-        else if(daily.getChallengeList() != null && daily.getNormalList() != null){
+        } else if (daily.getChallengeList() != null && daily.getNormalList() != null) {
             return ResponseBuilder.success(daily);
-        }else{
+        } else {
             return ResponseBuilder.serverError();
         }
     }
+
     //투두 작성
     @PostMapping("/insertTodo")
-    public ResponseBody<Todo> insertTodo(@RequestBody Todo t ,
-                                         @SessionAttribute("loginUser") Profile p){
+    public ResponseBody<Todo> insertTodo(@RequestBody Todo t,
+                                         @SessionAttribute("loginUser") Profile p) {
 
         //System.out.println("Profile : "+ p);
         //System.out.println("t : "+ t);
@@ -77,9 +80,9 @@ public class TodoController {
 
     //투두 삭제
     @GetMapping("/deleteTodo")
-    public ResponseBody<Todo> deleteTodo(@RequestParam(value = "todoNo") int todoNo){
+    public ResponseBody<Todo> deleteTodo(@RequestParam(value = "todoNo") int todoNo) {
 
-        System.out.println("delete todoNo: "+todoNo);
+        System.out.println("delete todoNo: " + todoNo);
 
         Todo t = new Todo();
         t.setTodoNo(todoNo);
@@ -92,9 +95,9 @@ public class TodoController {
 
     //투두 완료
     @GetMapping("/clearTodo")
-    public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo" , required = false) int todoNo){
+    public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo", required = false) int todoNo) {
 
-        System.out.println("clear todoNo: "+todoNo);
+        System.out.println("clear todoNo: " + todoNo);
         Todo t = new Todo();
         t.setTodoNo(todoNo);
         todoService.clearTodo(t);
@@ -103,10 +106,10 @@ public class TodoController {
 
     //투두 수정하기
     @GetMapping("/updateTodo")
-    public ResponseBody<Todo> updateTodo(@RequestParam(value="todoNo" , required=false) int todoNo,
-                                         @RequestParam(value = "todoContent" , required = false)String todoContent){
+    public ResponseBody<Todo> updateTodo(@RequestParam(value = "todoNo", required = false) int todoNo,
+                                         @RequestParam(value = "todoContent", required = false) String todoContent) {
 
-        System.out.println("update todoNo: "+todoNo);
+        System.out.println("update todoNo: " + todoNo);
 
         Todo t = new Todo();
         t.setTodoNo(todoNo);
@@ -119,9 +122,9 @@ public class TodoController {
 
     //투두 내일로 미루기
     @GetMapping("/delayTodo")
-    public ResponseBody<Todo> delayTodo(@RequestParam(value = "todoNo", required = false) int todoNo){
+    public ResponseBody<Todo> delayTodo(@RequestParam(value = "todoNo", required = false) int todoNo) {
 
-        System.out.println("delay todoNo: "+todoNo);
+        System.out.println("delay todoNo: " + todoNo);
         Todo t = new Todo();
         t.setTodoNo(todoNo);
 
@@ -131,8 +134,20 @@ public class TodoController {
     }
 
     //캘린더에 투두 표시
+    @GetMapping("getMonth/{month}")
+    public ResponseBody<MonthMarkVo> monthMark(
+            @SessionAttribute("loginUser") Profile loginUser,
+            @PathVariable("month")
+            @DateTimeFormat(pattern = "yyMMdd") LocalDate month) {
+        month = month.withDayOfMonth(1);
+        System.out.println(month);
+        MonthFindVo findVo = new MonthFindVo(loginUser.getUserNo(), month);
+        MonthMarkVo monthMark = todoService.getMonthMark(findVo);
+        return ResponseBuilder.success(monthMark);
+    }
+
     @GetMapping("/calTodo")
-    public  List<Todo> calTodo(@SessionAttribute("loginUser") Profile p){
+    public List<Todo> calTodo(@SessionAttribute("loginUser") Profile p) {
         //System.out.println("cal userNo: "+p);
 
         Todo t = new Todo();
@@ -157,9 +172,9 @@ public class TodoController {
     }
 
     @RequestMapping("/dndTodo")
-    public Map<String, Object> dndTodo(@RequestBody Map<String, Object> todoNo){
+    public Map<String, Object> dndTodo(@RequestBody Map<String, Object> todoNo) {
 
-        System.out.println("dnd todo: "+todoNo);
+        System.out.println("dnd todo: " + todoNo);
 
         Map<String, Object> result = new HashMap<>();
 
@@ -167,14 +182,6 @@ public class TodoController {
 
         return result;
     }
-
-    
-    
-    
-    
-    
-    
-    
 
 
 }

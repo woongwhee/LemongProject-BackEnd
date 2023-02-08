@@ -29,6 +29,7 @@ import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.ReviewDeleteVo;
 import site.lemongproject.web.template.model.vo.ReviewInsertVo;
+import site.lemongproject.web.template.model.vo.TemplateFindVo;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -55,7 +56,7 @@ public class TpReadServiceTest extends Configure{
 
     @DisplayName("목록조회 테스트")
     public void selectTemplate(){
-        List<Template> t=readService.getTemplateList(0,0);
+        List<Template> t=readService.getTemplateList(new TemplateFindVo(0,0,TEST_USER_NO));
         assertThat(t).isNotNull();
         assertThat(t.size()).isLessThan(9);
 
@@ -63,7 +64,8 @@ public class TpReadServiceTest extends Configure{
     @Test
     @DisplayName("상세조회 테스트")
     public void selectDetail(){
-        Template t=readService.getTemplateDetail(TEST_TP_NO);
+
+        Template t=readService.getTemplateDetail(new TemplateFindVo(TEST_TP_NO,TEST_USER_NO));
         System.out.println(t);
         assertThat(t).isNotNull();
         assertThat(t.getCreate()).isNotNull();
