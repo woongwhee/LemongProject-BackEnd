@@ -98,4 +98,11 @@ public class ResponseBuilder{
         response.setMessage("SERVER_ERROR");
         return response;
     }
+    //권한부족
+    public static ResponseBody authError() {
+        ResponseBody response = new ResponseBody();
+        response.setCode("4030");
+        response.setMessage("AUTH_ERROR");
+        return response;
+    }
 }

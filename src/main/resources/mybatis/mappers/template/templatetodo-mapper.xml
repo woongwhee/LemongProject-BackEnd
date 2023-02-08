@@ -56,6 +56,11 @@
                WHERE TP_CREATER = #{userNo}
                  AND SAVE_STATUS = 0)
     </delete>
+    <delete id="deleteRangeOver" parameterType="TemplateUpdateVo">
+        DELETE TEMPLATE_TODO
+        WHERE TEMPLATE_NO = #{templateNo}
+        AND DAY>#{Range}
+    </delete>
     <select id="isWriter" parameterType="WriterCheckVo" resultType="_boolean">
         SELECT COUNT(*)
         FROM TEMPLATE_TODO

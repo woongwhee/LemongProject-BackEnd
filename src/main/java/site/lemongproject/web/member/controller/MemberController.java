@@ -40,7 +40,6 @@ public class MemberController {
     // USER_PROFILE테이블 유저 닉네임 업데이트.
     @GetMapping("/checkNickName")
     public int updateUser(@SessionAttribute("loginUser")Member loginUser,@RequestParam(value="modifyNickname" , required=false) String nickName){
-
         Profile p=new Profile();
         p.setUserNo(loginUser.getUserNo());
         p.setNickName(nickName);

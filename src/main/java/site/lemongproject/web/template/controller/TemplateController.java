@@ -26,10 +26,12 @@ public class TemplateController {
 
     @GetMapping(value = {"/list", "/list/{page}", "/list/{page}/{categoryNo}"})
     public ResponseBody<List<Template>> list(@PathVariable(value = "page", required = false) Optional<Integer> p,
-                                             @PathVariable(value = "categoryNo", required = false) Optional<Integer> cno) {
+                                             @PathVariable(value = "categoryNo", required = false) Optional<Integer> cno,
+    @SessionAttribute("loginUser")Profile loginUser) {
         int categoryNo = cno.orElse(0);//없는 경우 모든 카테고리
         int page = p.orElse(0);//없는 경우 0페이지
-        List<Template> templateList = ReadService.getTemplateList(categoryNo, page);
+        TemplateFindVo findVo=new TemplateFindVo(page,categoryNo, loginUser.getUserNo());
+        List<Template> templateList = ReadService.getTemplateList(findVo);
         if (templateList != null && templateList.size() > 0) {
             return ResponseBuilder.success(templateList);
         } else {
@@ -44,8 +46,8 @@ public class TemplateController {
 
     }
     @GetMapping(value = {"/one/{templateNo}"})
-    public ResponseBody<List<Template>> list(@PathVariable(value = "templateNo") int templateNo) {
-        Template template = ReadService.getTemplateDetail(templateNo);
+    public ResponseBody<List<Template>> list(@PathVariable(value = "templateNo") int templateNo,@SessionAttribute("loginUser")Profile loginUser) {
+        Template template = ReadService.getTemplateDetail(new TemplateFindVo(templateNo,loginUser.getUserNo()));
         if (template != null) {
             return ResponseBuilder.success(template);
         } else {
@@ -64,13 +66,9 @@ public class TemplateController {
     }
 
     @GetMapping("/unsave/load")
-    public ResponseBody<Template> load(@SessionAttribute("loginUser") Profile loginMember) {
-        Template cur = WriteService.loadInsertPage(loginMember.getUserNo());
-        ResponseBody<Template> responseBody = new ResponseBody<>();
-        responseBody.setCode("2000");
-        responseBody.setMessage("SUCCESS");
-        ResponseBody<Template> response = ResponseBuilder.success(cur);
-        return response;
+    public ResponseBody<TPUnsaveVo> load(@SessionAttribute("loginUser") Profile loginMember) {
+        TPUnsaveVo cur = WriteService.loadInsertPage(loginMember.getUserNo());
+        return ResponseBuilder.success(cur);
     }
     @GetMapping("/todo/detail/{templateNo}")
     public ResponseBody<List<TemplateTodo>> todoDetail(int templateNo) {
@@ -107,9 +105,9 @@ public class TemplateController {
     }
 
     @PutMapping("/unsave/reset")
-    public ResponseBody<Template> resetUnSave(@SessionAttribute("loginUser") Profile loginUser) {
+    public ResponseBody<TPUnsaveVo> resetUnSave(@SessionAttribute("loginUser") Profile loginUser) {
 
-        Template t = WriteService.resetUnSave(loginUser.getUserNo());
+        TPUnsaveVo t = WriteService.resetUnSave(loginUser.getUserNo());
         if (t != null) {
             return ResponseBuilder.success(t);
         } else {
@@ -121,9 +119,9 @@ public class TemplateController {
     @PostMapping("/todo/insert")
     public ResponseBody<List<TemplateTodo>> insertTodo(@SessionAttribute("loginUser")Profile loginUser, @RequestBody TempalteTodoInsertVo tiv) {
         tiv.setUserNo(loginUser.getUserNo());
-        int result = WriteService.insertTodo(tiv);
-        if (result>0) {
-            return ResponseBuilder.success(result);
+        List<TemplateTodo> todoList = WriteService.insertTodo(tiv);
+        if (todoList!=null) {
+            return ResponseBuilder.success(todoList);
         } else {
             return ResponseBuilder.upLoadFail();
         }
@@ -147,6 +145,8 @@ public class TemplateController {
             return ResponseBuilder.deleteFail();
         }
     }
+
+
     @PostMapping("/review/insert")
     public ResponseBody<Integer> reviewInsert(@SessionAttribute("loginUser")Profile loginUser, ReviewInsertVo riv){
         riv.setUserNo(loginUser.getUserNo());
@@ -156,7 +156,7 @@ public class TemplateController {
         }else{
             return ResponseBuilder.upLoadFail();
         }
-    };
+    }
     @DeleteMapping("/review/delete/{reviewNo}")
     public ResponseBody<Integer> reviewDelete(@SessionAttribute("loginUser")Member loginUser, @PathVariable("reviewNo")int reviewNo){
         ReviewDeleteVo reviewDeleteVo=new ReviewDeleteVo(reviewNo,loginUser.getUserNo());
