@@ -145,9 +145,13 @@
           AND  #{todoDate} <= TODO_DATE
           AND  #{todoDate}+1 > TODO_DATE
           AND STATUS = 'N'
-        ORDER BY TODO_NO
+        ORDER BY VALUE
         ]]>
     </select>
+
+<!--    <update id="dndTodo" parameterType="">-->
+<!--        UPDATE VALUE FROM TODO WHERE-->
+<!--    </update>-->
 
     <select id="startValue" parameterType="Map" resultType="int">
         SELECT VALUE FROM TODO WHERE TODO_NO= #{originArr}
