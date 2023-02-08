@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.todo.model.dto.DailyFindVo;
+import site.lemongproject.web.todo.model.dto.MonthFindVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -64,5 +66,10 @@ public class TodoDao {
 
     public int updateFinishValue(Map<String, Object> todoNo) {
         return sqlSession.update("todoMapper.updateFinishValue",todoNo);
+    }
+
+    public List<Integer> findByCal(MonthFindVo findVo) {
+            return sqlSession.selectList("todoMapper.findByCal", findVo);
+
     }
 }
