@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.FileUtil;
+import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.service.FeedService;
@@ -50,7 +51,8 @@ public class FeedController {
     // 피드 수정
     @RequestMapping(value = "/updateFeed", method = RequestMethod.POST)
     public Map<String, Object> feedUpdate(@RequestBody FeedInsert updatefeed ){
-        System.out.println(updatefeed);
+        System.out.println("updateFeed : " + updatefeed);
+        System.out.println(updatefeed.getFeedContent().equals(""));
         int check = feedService.updateFeed(updatefeed);
         Map<String, Object> result = new HashMap<>();
         if(check > 0){
@@ -78,7 +80,6 @@ public class FeedController {
     @RequestMapping(value = "/deleteFeed", method = RequestMethod.POST)
     public Map<String,Object> feedDelete(@RequestBody Map<String,Object> deleteFeedNo){
         System.out.println(deleteFeedNo);
-
         int check = feedService.deleteFeed(deleteFeedNo);
         System.out.println(check);
         Map<String, Object> result = new HashMap<>();
@@ -174,5 +175,24 @@ public class FeedController {
         return result;
     }
 
+    @RequestMapping("/changeValue")
+    public Map<String, Object>changeValue(@RequestBody Map<String,Object> doublePhotoNo){
+        System.out.println(doublePhotoNo);
+        Map<String,Object> result = new HashMap<>();
+        int check = feedService.changeValue(doublePhotoNo);
+        if(check>0){
+            result.put("Java","success");
+        }else{
+            result.put("Java", "success");
+        }
+        return result;
+    }
 
+    @RequestMapping("/detailFeed")
+    public List<FeedList> detailFeed(@RequestParam int feedNo){
+        System.out.println(feedNo);
+        List<FeedList> list = feedService.detailFeed(feedNo);
+        System.out.println(list);
+        return list;
+    }
 }
