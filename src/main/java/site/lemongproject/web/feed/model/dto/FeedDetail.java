@@ -7,7 +7,7 @@ import java.sql.Date;
 @Data
 public class FeedDetail {
     private int feedNo;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd  HH:mm:ss")
     private Date feedAt;
     private String nickName;
     private String feedContent;
@@ -18,6 +18,6 @@ public class FeedDetail {
     private int replyNo;
     private String replyContent;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date replyAt;
 }

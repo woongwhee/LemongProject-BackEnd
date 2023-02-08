@@ -74,7 +74,6 @@ public class FeedServiceImpl implements FeedService{
     public int insertFeedReply(Map<String, Object> paramMap){
         return feedDao.insertFeedReply(paramMap);
     }
-
     // 피드 댓글 불러오기
     @Override
     public List<Reply> listReply(int feedNo) {return feedDao.listReply(feedNo);}

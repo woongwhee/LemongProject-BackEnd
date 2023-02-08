@@ -10,7 +10,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <mvc:exclude-mapping path="/p/*"/>
+            <mvc:exclude-mapping path="/p/**"/>
             <beans:bean id="loginInterceptor" class="site.lemongproject.common.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
