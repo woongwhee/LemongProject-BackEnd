@@ -14,5 +14,5 @@ public class ChallengeTodo {
     private LocalDate todoDate;
     private String todoContent;
     private int value;
-    private boolean clear;
+    private int clear;
 }

@@ -72,4 +72,24 @@
         WHERE cu.USER_NO = #{userNo}
           AND cu.STATUS = 'PLAY'
     </select>
+
+
+    <update id="clearChTodo" parameterType="ChallengeTodo">
+        UPDATE CHALLENGE_TODO
+        SET CLEAR =
+                CASE WHEN CLEAR = 0 THEN 1
+                     WHEN CLEAR = 1 THEN 0
+                    END
+        WHERE TODO_NO = #{todoNo}
+    </update>
+
+    <select id="calChTodo" resultType="string">
+        SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
+        FROM CHALLENGE_TODO
+        WHERE USER_NO = #{userNo}
+        ORDER BY TODO_DATE
+    </select>
+
+
+
 </mapper>
