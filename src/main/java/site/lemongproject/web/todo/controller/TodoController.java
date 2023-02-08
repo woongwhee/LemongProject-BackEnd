@@ -143,15 +143,18 @@ public class TodoController {
         return calTodos;
     }
 
-//    @PostMapping("/dndTodo")
-//    public ResponseBody<List<Todo>> dndTodo(@RequestBody List<Todo> t){
-//
-//        System.out.println("dnd todo: "+t);
-//
-//        todoService.dndTodo(t);
-//
-//        return ResponseBuilder.success(t);
-//    }
+    @GetMapping("/dndTodos")
+    public ResponseBody<List<Todo>> dndTodo2(@RequestParam(value = "dndTodoList" , required = false) Todo t){
+
+        System.out.println("dnd todo: "+t);
+
+        Todo tt = new Todo();
+        //tt.setValue();
+
+        //todoService.dndTodo2();
+
+        return ResponseBuilder.success(t);
+    }
 
     @RequestMapping("/dndTodo")
     public Map<String, Object> dndTodo(@RequestBody Map<String, Object> todoNo){

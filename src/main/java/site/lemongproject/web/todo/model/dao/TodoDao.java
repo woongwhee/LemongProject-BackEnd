@@ -45,9 +45,9 @@ public class TodoDao {
         return sqlSession.selectList("todoMapper.findDaily",dailyFind);
     }
 
-//    public int dndTodo(List<Todo> t){
-//        return sqlSession.update("todoMapper.dndTodo", t);
-//    }
+    public int dndTodo2(List<Todo> t){
+        return sqlSession.update("todoMapper.dndTodo", t);
+    }
 
 
     public int startValue(Map<String, Object> todoNo) {
