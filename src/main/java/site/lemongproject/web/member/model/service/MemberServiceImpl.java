@@ -201,6 +201,8 @@ public class MemberServiceImpl implements MemberService {
             kakaoUser.put("nickName", nickName);
             kakaoUser.put("email", email);
 
+            br.close();
+
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -234,6 +236,41 @@ public class MemberServiceImpl implements MemberService {
         int result = memberDao.insertSocial(isSocial);
         System.out.println("소셜유저 삽입: "+result);
         return result;
+    }
+
+
+    // 카카오 로그아웃
+    @Override
+    public void kakaoLogout() {
+        String CLIENT_ID = "6c1bbd8efca92b427aff16845e3336d1";
+        String KAKAO_LOGOUT_URL = "http://localhost:3000";
+
+        String reqURL = "https://kauth.kakao.com/oauth/logout?";
+
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("GET");
+            conn.setDoOutput(true);
+
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+            StringBuilder sb = new StringBuilder();
+            sb.append("client_id="+CLIENT_ID);
+            sb.append("&logout_redirect_uri="+KAKAO_LOGOUT_URL);
+            bw.write(sb.toString());
+            bw.flush();
+
+            bw.close();
+            System.out.println("실행됨");
+
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        
+
     }
 
 
