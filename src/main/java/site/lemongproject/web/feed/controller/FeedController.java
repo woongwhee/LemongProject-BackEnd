@@ -126,14 +126,14 @@ public class FeedController {
     }
 
     // 피드 댓글 불러오기
-    @RequestMapping("/listReply")
-    public List<Reply> listReply(@RequestParam int feedNo){
+    @GetMapping("/listReply")
+    public ResponseBody<List<Reply>> listReply(@RequestParam int feedNo){
         System.out.println(feedNo);
 
-        List<Reply> list = feedService.listReply(feedNo);
+        List <Reply> list = feedService.listReply(feedNo);
         System.out.println(list);
 
-        return list;
+        return ResponseBuilder.success(list);
     }
 
 //    -- 좋아요 수
