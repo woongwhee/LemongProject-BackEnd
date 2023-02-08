@@ -135,4 +135,9 @@ public class FeedServiceImpl implements FeedService{
     public List<FeedList> detailFeed(int feedNo){
         return feedDao.FeedDetail(feedNo);
     }
+
+    @Override
+    public int countReply(int feedNo){
+        return feedDao.countReply(feedNo);
+    }
 }

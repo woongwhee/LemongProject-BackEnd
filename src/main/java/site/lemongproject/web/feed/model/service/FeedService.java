@@ -46,4 +46,7 @@ public interface FeedService  {
     int changeValue(Map<String, Object> doublePhotoNo);
 
     List detailFeed(int feedNo);
+
+    // 댓글수
+    int countReply(int feedNo);
 }

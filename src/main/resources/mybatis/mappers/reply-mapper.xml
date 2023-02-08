@@ -30,4 +30,9 @@
         DELETE FROM REPLY WHERE FEED_NO = #{feedNo} AND REPLY_NO=#{replyNo}
     </delete>
 
+<!-- 피드 댓글 갯수-->
+    <select id="countReply" parameterType="int" resultType="int">
+        SELECT count(*) FROM REPLY WHERE FEED_NO=#{feedNo}
+    </select>
+
 </mapper>
