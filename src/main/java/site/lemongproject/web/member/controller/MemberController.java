@@ -203,7 +203,9 @@ public class MemberController {
                 break;
             case KAKAO: {
                 session.invalidate();
-                // 카카오 연결 끊는 링크 달아두기
+                memberService.kakaoLogout();
+                System.out.println("카카오 자체 로그아웃 완료");
+                // 카카오 연결 끊는 링크 달아두기(별표)
             }
         }
         return ResponseBuilder.success(11);
