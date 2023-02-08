@@ -119,4 +119,13 @@ public class ResponseBuilder{
         return response;
     }
 
+    // 카카오 로그아웃 반환
+    public static ResponseBody logoutKakao(Object o) {
+        ResponseBody response = new ResponseBody();
+        response.setCode("3008");
+        response.setMessage("LOGOUTKAKAO");
+        response.setResult(o);
+        return response;
+    }
+
 }
