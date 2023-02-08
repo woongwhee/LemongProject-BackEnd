@@ -1,5 +1,6 @@
 package site.lemongproject.web.challenge.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.ibatis.type.Alias;
@@ -11,6 +12,6 @@ import java.time.LocalDate;
 @Setter
 @Alias("MultiCreateVo")
 public class MultiCreateVo extends SingleStartVo{
-    private String challengeTitle;
+    @JsonProperty
     private String challengeInfo;
 }

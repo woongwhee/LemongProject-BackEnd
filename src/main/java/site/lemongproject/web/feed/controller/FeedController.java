@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.FileUtil;
+import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.service.FeedService;
@@ -187,5 +188,11 @@ public class FeedController {
         return result;
     }
 
-
+    @RequestMapping("/detailFeed")
+    public List<FeedList> detailFeed(@RequestParam int feedNo){
+        System.out.println(feedNo);
+        List<FeedList> list = feedService.detailFeed(feedNo);
+        System.out.println(list);
+        return list;
+    }
 }

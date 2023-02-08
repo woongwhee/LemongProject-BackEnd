@@ -17,8 +17,8 @@
         <selectKey keyProperty="challengeNo" resultType="int" order="BEFORE">
             select SEQ_CHALLENGE.nextval from dual
         </selectKey>
-        INSERT INTO CHALLENGE (CHALLENGE_NO, CREATE_USER, TEMPLATE_NO, START_DATE, CHALLENGE_OPTION,STATUS) VALUES
-        (#{challengeNo},#{userNo},#{templateNo},#{startDate},#{option},#{status})
+        INSERT INTO CHALLENGE (CHALLENGE_NO, CREATE_USER, TEMPLATE_NO, START_DATE, CHALLENGE_OPTION,STATUS,CHALLENGE_TITLE) VALUES
+        (#{challengeNo},#{userNo},#{templateNo},#{startDate},#{option},#{status},#{challengeTitle})
     </insert>
     <insert id="insertMulti" parameterType="MultiCreateVo">
         <selectKey keyProperty="challengeNo" resultType="int" order="BEFORE">
@@ -35,7 +35,9 @@
         SET END_DATE=#{endDate}
         WHERE CHALLENGE_NO=#{challengeNo}
     </update>
-<!--    <select id="hasChallenge" parameterType="">-->
+
+
+    <!--    <select id="hasChallenge" parameterType="">-->
 <!--        update CHALLENGE-->
 <!--        SET END_DATE=#{endDate}-->
 <!--        WHERE CHALLENGE_NO=#{challengeNo}-->

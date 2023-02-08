@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.ibatis.type.Alias;
 import site.lemongproject.web.member.model.vo.Profile;
 
 import java.sql.Date;
@@ -11,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@Alias("Template")
 public class Template {
     private int templateNo;
     private int categoryNo;
@@ -22,6 +24,7 @@ public class Template {
     private int todoCount;
     private int clearCount;
     private int playCount;
+    private boolean isClear;
     private TemplateCategory category;
     private Profile create;
     private List<TemplateTodo> todoList;

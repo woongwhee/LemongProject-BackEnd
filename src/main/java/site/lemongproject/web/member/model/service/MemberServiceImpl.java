@@ -35,9 +35,8 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Profile loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
-        if(bCryptPasswordEncoder.matches(m.getUserPwd(),loginUser.getUserPwd())){
+        if(loginUser!=null&&bCryptPasswordEncoder.matches(m.getUserPwd(),loginUser.getUserPwd())){
             return profileDao.findOne(loginUser.getUserNo());
-
         }else{
             return null;
         }
@@ -121,10 +120,6 @@ public class MemberServiceImpl implements MemberService {
         cpw.setPassword(bCryptPasswordEncoder.encode(cpw.getPassword()));
         return memberDao.updatePassword(cpw);
     }
-
-//    public Member selectMember(int userNo){
-//        return memberDao.selectMember(userNo);
-//    }
 
     @Override
     public int deleteUser(int userNo) {
