@@ -1,13 +1,14 @@
-package site.lemongproject.common.domain.vo;
+package site.lemongproject.web.todo.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.ibatis.type.Alias;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
+@Alias("PeriodVo")
 public class PeriodVo {
     LocalDate startDate;
     LocalDate endDate;

@@ -153,14 +153,11 @@ public class PublicController {
     }
     @GetMapping("checkLogin")
     public ResponseBody<Profile> checkLogin(@SessionAttribute(value = "loginUser",required = false) Profile loginUser){
-
         if(loginUser==null){
             return ResponseBuilder.unLogin(null);
         }else {
             return ResponseBuilder.success(loginUser);
         }
-
-
     }
 
 

@@ -3,17 +3,18 @@ package site.lemongproject.web.template.service;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
+import site.lemongproject.web.template.model.vo.TPUnsaveVo;
 import site.lemongproject.web.template.model.vo.TempalteTodoInsertVo;
 import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
 
 import java.util.List;
 
 public interface TemplateWriteService {
-    Template loadInsertPage(int memberNo);
+    TPUnsaveVo loadInsertPage(int memberNo);
     int updateUnSaveTemplate(TemplateUpdateVo template);
 
-    int insertTodo(TempalteTodoInsertVo tiv);
-    Template resetUnSave(int i);
+    List<TemplateTodo> insertTodo(TempalteTodoInsertVo tiv);
+    TPUnsaveVo resetUnSave(int i);
 
     int deleteTodo(TPTodoDeleteVo tdv);
 

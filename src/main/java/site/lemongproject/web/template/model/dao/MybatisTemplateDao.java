@@ -5,6 +5,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.template.model.dto.Template;
+import site.lemongproject.web.template.model.vo.TPUnsaveVo;
+import site.lemongproject.web.template.model.vo.TemplateFindVo;
 import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
 import site.lemongproject.web.template.model.vo.WriterCheckVo;
 
@@ -15,19 +17,19 @@ import java.util.List;
 public class MybatisTemplateDao implements TemplateDao {
     final private SqlSession sqlSession;
     @Override
-    public Template findUnSave(int userNo) {
+    public TPUnsaveVo findUnSave(int userNo) {
         return sqlSession.selectOne("templateMapper.findUnSave",userNo);
     }
     @Override
-    public List<Template> findList(int categoryNo, int page, int limit) {
-        int offSet=page*limit;
+    public List<Template> findList(TemplateFindVo findVo, int limit) {
+        int offSet=findVo.getPage()*limit;
         RowBounds rowBounds=new RowBounds(offSet,limit);
-        return sqlSession.selectList("templateMapper.findMany",categoryNo,rowBounds);
+        return sqlSession.selectList("templateMapper.findMany",findVo,rowBounds);
     }
 
     @Override
-    public Template findDetail(int templateNo) {
-        return sqlSession.selectOne("templateMapper.findDetail",templateNo);
+    public Template findDetail(TemplateFindVo findVo) {
+        return sqlSession.selectOne("templateMapper.findDetail",findVo);
     }
     @Override
     public Template findOne(int templateNo) {

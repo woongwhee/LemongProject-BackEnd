@@ -38,7 +38,7 @@
         INSERT INTO CHALLENGE_TODO(TODO_NO, CHALLENGE_NO, USER_NO, TODO_DATE, TODO_CONTENT, VALUE, CLEAR)
         SELECT SEQ_CHALLENGE_TODO.nextval as TODO_NO,
                CHALLENGE_NO,
-               #{userNo}                  as USER_NO,
+               #{userNo} as USER_NO,
                TODO_DATE,
                TODO_CONTENT,
                VALUE,
