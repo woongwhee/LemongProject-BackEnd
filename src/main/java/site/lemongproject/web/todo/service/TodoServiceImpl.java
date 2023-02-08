@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import site.lemongproject.web.challenge.model.dao.ChallengeTodoDao;
 import site.lemongproject.web.challenge.model.vo.ChallengeTodoVo;
+import site.lemongproject.web.todo.model.dao.HolidayDao;
 import site.lemongproject.web.todo.model.dao.TodoDao;
 import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.dto.DailyTodoVo;
+import site.lemongproject.web.todo.model.dto.MonthFindVo;
+import site.lemongproject.web.todo.model.dto.MonthMarkVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 
 import java.util.List;
@@ -18,6 +21,7 @@ public class TodoServiceImpl implements TodoService {
 
     final private TodoDao todoDao;
     final private ChallengeTodoDao challengeTodoDao;
+    final private HolidayDao holidayDao;
 
     public List<Todo> selectTodo(Todo t){
         return todoDao.selectTodo(t);
@@ -81,6 +85,14 @@ public class TodoServiceImpl implements TodoService {
         return result;
     }
 
+    @Override
+    public MonthMarkVo getMonthMark(MonthFindVo findVo) {
+        MonthMarkVo monthMarkVo=new MonthMarkVo();
+        monthMarkVo.setTodoDayList(todoDao.findByCal(findVo));
+        monthMarkVo.setChallengeDayList(challengeTodoDao.findByCal(findVo));
+        monthMarkVo.setHolidayList(holidayDao.findByMonth(findVo));
+        return monthMarkVo;
+    }
 
 
 }

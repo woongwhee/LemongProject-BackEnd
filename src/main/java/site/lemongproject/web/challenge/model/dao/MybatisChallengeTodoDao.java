@@ -8,7 +8,9 @@ import site.lemongproject.web.challenge.model.vo.CGTodoInsertVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeTodoVo;
 import site.lemongproject.web.todo.model.dto.DailyFindVo;
+import site.lemongproject.web.todo.model.dto.MonthFindVo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -39,5 +41,9 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
     public List<ChallengeTodo> calChTodo(ChallengeTodo ct){
         return session.selectList("challengeTodoMapper.calChTodo", ct);
     }
+    @Override
+    public List<Integer> findByCal(MonthFindVo findVo) {
+        return session.selectList("challengeTodoMapper.findByCal", findVo);
 
+    }
 }

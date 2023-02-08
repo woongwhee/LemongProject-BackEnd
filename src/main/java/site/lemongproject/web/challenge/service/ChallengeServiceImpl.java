@@ -2,6 +2,7 @@ package site.lemongproject.web.challenge.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.todo.model.dao.HolidayDao;
 import site.lemongproject.web.todo.model.dto.PeriodVo;
 import site.lemongproject.web.todo.model.vo.OfficialHoliday;

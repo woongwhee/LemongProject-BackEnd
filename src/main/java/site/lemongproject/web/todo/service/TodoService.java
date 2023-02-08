@@ -2,6 +2,8 @@ package site.lemongproject.web.todo.service;
 
 import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.dto.DailyTodoVo;
+import site.lemongproject.web.todo.model.dto.MonthFindVo;
+import site.lemongproject.web.todo.model.dto.MonthMarkVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 
 import java.util.List;
@@ -30,4 +32,5 @@ public interface TodoService {
 
     int dndTodo(Map<String, Object> todoNo);
 
+    MonthMarkVo getMonthMark(MonthFindVo findVo);
 }

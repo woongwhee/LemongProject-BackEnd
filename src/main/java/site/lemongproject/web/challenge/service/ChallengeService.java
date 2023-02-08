@@ -8,6 +8,8 @@ import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.SingleStartVo;
 
+import java.util.List;
+
 public interface ChallengeService {
 
 

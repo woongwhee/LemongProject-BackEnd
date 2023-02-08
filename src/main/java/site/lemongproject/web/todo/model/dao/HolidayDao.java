@@ -1,5 +1,6 @@
 package site.lemongproject.web.todo.model.dao;
 
+import site.lemongproject.web.todo.model.dto.MonthFindVo;
 import site.lemongproject.web.todo.model.dto.PeriodVo;
 import site.lemongproject.web.todo.model.vo.OfficialHoliday;
 
@@ -12,5 +13,5 @@ public interface HolidayDao {
      List<OfficialHoliday> findByMonth(LocalDate month);
      List<OfficialHoliday> findByPeriod(PeriodVo period);
 
-     List<OfficialHoliday> findByMonth(Map<String, LocalDate> map);
+     List<OfficialHoliday> findByMonth(MonthFindVo findVo);
 }

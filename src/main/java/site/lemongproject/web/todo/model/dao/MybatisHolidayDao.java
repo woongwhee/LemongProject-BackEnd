@@ -3,6 +3,7 @@ package site.lemongproject.web.todo.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.web.todo.model.dto.MonthFindVo;
 import site.lemongproject.web.todo.model.dto.PeriodVo;
 import site.lemongproject.web.todo.model.vo.OfficialHoliday;
 
@@ -34,8 +35,8 @@ public class MybatisHolidayDao implements HolidayDao {
     }
 
     @Override
-    public List<OfficialHoliday> findByMonth(Map<String, LocalDate> map) {
-        return session.selectList("holidayMapper.findByMonth",map);
+    public List<OfficialHoliday> findByMonth(MonthFindVo findVo) {
+        return session.selectList("holidayMapper.findByMonth",findVo);
 
     }
 

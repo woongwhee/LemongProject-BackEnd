@@ -35,7 +35,9 @@
         SET END_DATE=#{endDate}
         WHERE CHALLENGE_NO=#{challengeNo}
     </update>
-<!--    <select id="hasChallenge" parameterType="">-->
+
+
+    <!--    <select id="hasChallenge" parameterType="">-->
 <!--        update CHALLENGE-->
 <!--        SET END_DATE=#{endDate}-->
 <!--        WHERE CHALLENGE_NO=#{challengeNo}-->
