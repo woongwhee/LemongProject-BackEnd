@@ -64,8 +64,6 @@ public interface MemberService {
 
     int insertSocial(Member isSocial);
 
-    public void kakaoLogout();
-
     int isExEmail(String email);
 
 

@@ -59,6 +59,7 @@ public class PublicController {
         // 비밀번호 암호화
         String encPwd = bCryptPasswordEncoder.encode(joinVo.getUserPwd());
         joinVo.setUserPwd(encPwd);
+        joinVo.setSocialType(SocialType.NONE);
         // 암호화된 비밀번호 setting 해주기
         int result = memberService.insertMember(joinVo);
 

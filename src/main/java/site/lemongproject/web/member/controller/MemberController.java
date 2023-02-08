@@ -194,6 +194,9 @@ public class MemberController {
     }
     @GetMapping("/logout")
     public ResponseBody<Integer> logout(@SessionAttribute("loginUser")Profile profile, @SessionAttribute("socialType")SocialType socialType, HttpSession session){
+
+        String type = "";
+
         switch (socialType){
             case NONE:
                 session.invalidate();
@@ -201,14 +204,20 @@ public class MemberController {
             case NAVER:
                 session.invalidate();
                 break;
-            case KAKAO: {
+            case KAKAO:
+                type = "KAKAO";
                 session.invalidate();
-                memberService.kakaoLogout();
+//                memberService.kakaoLogout();
                 System.out.println("카카오 자체 로그아웃 완료");
+                break;
                 // 카카오 연결 끊는 링크 달아두기(별표)
-            }
         }
-        return ResponseBuilder.success(11);
+//        System.out.println(type);
+        if(type == "KAKAO") {
+            return ResponseBuilder.logoutKakao(type);
+        } else {
+            return ResponseBuilder.success(type);
+        }
     }
 
 
