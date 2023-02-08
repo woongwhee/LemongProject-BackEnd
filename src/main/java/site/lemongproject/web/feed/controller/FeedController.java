@@ -1,5 +1,6 @@
 package site.lemongproject.web.feed.controller;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
@@ -92,10 +93,20 @@ public class FeedController {
         return result;
     }
 
+
+
+
+
+
+
+
+
+
+
     // 피드 댓글 달기
     @RequestMapping(value = "/insertReply", method = RequestMethod.POST)
     public Map<String, Object> insertReply(@RequestBody Map<String, Object> paramMap){
-        System.out.println(paramMap);
+//        System.out.println("insert"+paramMap);
         int check = feedService.insertFeedReply(paramMap);
 
         Map<String, Object> result = new HashMap<>();
@@ -111,30 +122,40 @@ public class FeedController {
 //  피드 댓글 삭제
     @RequestMapping("/deleteReply")
     public Map<String,Object> deleteReply(@RequestBody Map<String, Object> data){
-        System.out.println(data);
+        System.out.println("딜리트입니다" + data);
 
-        int check = feedService.deleteReply(data);
-        System.out.println(check);
-
+//        int check = feedService.deleteReply(data);
+//        System.out.println(check);
+//
         Map<String,Object> result = new HashMap<>();
-        if(check > 0){
-            result.put("Java","success");
-        }else{
-            result.put("Java","fail");
-        }
+//        if(check > 0){
+//            result.put("Java","success");
+//        }else{
+//            result.put("Java","fail");
+//        }
         return result;
     }
 
     // 피드 댓글 불러오기
     @GetMapping("/listReply")
     public ResponseBody<List<Reply>> listReply(@RequestParam int feedNo){
-        System.out.println(feedNo);
+//        System.out.println("list" + feedNo);
 
         List <Reply> list = feedService.listReply(feedNo);
         System.out.println(list);
 
         return ResponseBuilder.success(list);
     }
+
+
+
+
+
+
+
+
+
+
 
 //    -- 좋아요 수
 //    SELECT COUNT(*) FROM HEART WHERE REF_NO=3;

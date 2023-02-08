@@ -89,7 +89,7 @@ public class PublicController {
     // 닉네임 체크
     @PostMapping("join/chNick")
     public ResponseBody<Integer> checkNick(@RequestBody String nickName) {
-
+        System.out.println(nickName);
         int result = memberService.checkNick(nickName);
         System.out.println(result);
         if(result > 0) {

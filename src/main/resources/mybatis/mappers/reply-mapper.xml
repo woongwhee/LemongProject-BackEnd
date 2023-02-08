@@ -8,6 +8,7 @@
         <result column="FEED_NO" property="feedNo"></result>
         <result column="REPLY_CONTENT" property="replyContent"></result>
         <result column="REPLY_AT" property="replyAt"></result>
+        <result column="NICK_NAME" property="nickName"></result>
     </resultMap>
 
     <!--  피드 댓글 작성  -->
@@ -18,8 +19,10 @@
 
 <!-- 피드 댓글 -->
     <select id="listReply" resultMap="replyResultSet" parameterType="int">
-        SELECT REPLY_NO, USER_NO, REPLY_CONTENT, REPLY_AT FROM REPLY
+        SELECT REPLY_NO, REPLY.USER_NO, REPLY_CONTENT, REPLY_AT, NICK_NAME FROM REPLY
+        JOIN USER_PROFILE UP on REPLY.USER_NO = UP.USER_NO
         WHERE FEED_NO = #{feedNo}
+        order by REPLY_AT DESC
     </select>
 
 <!-- 피드 댓글 삭제 -->
