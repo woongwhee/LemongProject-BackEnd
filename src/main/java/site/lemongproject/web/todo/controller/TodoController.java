@@ -148,15 +148,9 @@ public class TodoController {
 //
 //        System.out.println("dnd todo: "+t);
 //
-//        List<Todo> tList = new ArrayList<Todo>(t);
-//        //t.setTodoNo(todoNo);
-//        //t.setValue(value);
+//        todoService.dndTodo(t);
 //
-//        //int tList = todoService.dndTodo(t);
-//
-//        System.out.println("tList: "+tList);
-//
-//        return ResponseBuilder.success(tList);
+//        return ResponseBuilder.success(t);
 //    }
 
     @RequestMapping("/dndTodo")
@@ -168,15 +162,9 @@ public class TodoController {
 
         int check = todoService.dndTodo(todoNo);
 
-        if(check>0){
-            result.put("Java","success");
-        }else{
-            result.put("Java", "success");
-        }
-
         return result;
     }
-    
+
     
     
     

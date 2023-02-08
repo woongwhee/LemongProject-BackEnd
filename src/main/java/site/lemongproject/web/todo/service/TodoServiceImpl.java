@@ -53,7 +53,7 @@ public class TodoServiceImpl implements TodoService {
         DailyTodoVo todoVo=new DailyTodoVo();
         List<Todo> normalList=todoDao.findDaily(dailyFind);
         List<ChallengeTodoVo>challengeList =challengeTodoDao.findDaily(dailyFind);
-        System.out.println(challengeList);
+        //System.out.println(challengeList);
         todoVo.setNormalList(normalList);
         todoVo.setChallengeList(challengeList);
         return todoVo;
@@ -62,16 +62,24 @@ public class TodoServiceImpl implements TodoService {
         return todoDao.calTodo(t);
     }
 
+//    public int dndTodo(List<Todo> t){
+//        return todoDao.dndTodo(t);
+//    }
+
     public int dndTodo(Map<String, Object> todoNo){
         int startValue = todoDao.startValue(todoNo); // 1
         int finishValue = todoDao.finishValue(todoNo); // 2
         int result = 0;
+
         todoNo.put("startValue",startValue);
         todoNo.put("finishValue",finishValue);
+
         System.out.println(todoNo);
+
         result += todoDao.updateStartValue(todoNo);
         result += todoDao.updateFinishValue(todoNo);
-        return result;}
+        return result;
+    }
 
 
 
