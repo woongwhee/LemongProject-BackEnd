@@ -5,6 +5,7 @@ import site.lemongproject.web.todo.model.dto.DailyTodoVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TodoService {
 
@@ -21,4 +22,12 @@ public interface TodoService {
     int delayTodo(Todo t);
 
     DailyTodoVo getDaily(DailyFindVo dailyFind);
+
+
+    List<Todo> calTodo(Todo t);
+
+    //int dndTodo(List<Todo> t);
+
+    int dndTodo(Map<String, Object> todoNo);
+
 }

@@ -27,7 +27,7 @@
                 AND  #{todoDate}<=TODO_DATE
                 AND TODO_DATE<#{todoDate}+1
                 AND STATUS = 'N'
-        ORDER BY TODO_NO
+        ORDER BY VALUE
         ]]>
     </select>
 
@@ -76,20 +76,62 @@
         WHERE TODO_NO = #{todoNo}
     </update>
 
+<!--    <update id="delayTodo" parameterType="Todo">-->
+<!--        UPDATE TODO-->
+<!--        SET TODO_DATE = TODO_DATE + 1,-->
+<!--            VALUE = (SELECT-->
+<!--                        MAX(VALUE) + 1-->
+<!--                    FROM TODO-->
+<!--                    WHERE USER_NO = 1 AND-->
+<!--                          TODO_DATE = ( SELECT-->
+<!--                                        TODO_DATE + 1-->
+<!--                                        FROM TODO-->
+<!--                                        WHERE TODO_NO = #{todoNo}-->
+<!--        ))-->
+<!--        WHERE TODO_NO = #{todoNo}-->
+<!--    </update>-->
+
     <update id="delayTodo" parameterType="Todo">
         UPDATE TODO
         SET TODO_DATE = TODO_DATE + 1,
-            VALUE = ( SELECT
-                        MAX(VALUE) + 1
+            VALUE =
+            CASE WHEN (SELECT COUNT(TODO_NO)
                         FROM TODO
-                        WHERE USER_NO = 1 AND
-                        TODO_DATE = ( SELECT
+                        WHERE TODO_DATE = ( SELECT
                                         TODO_DATE + 1
                                         FROM TODO
-                                        WHERE TODO_NO = #{todoNo}
-        ))
+                                        WHERE TODO_NO = #{todoNo}))  > 0
+            THEN (SELECT MAX(VALUE) + 1
+                    FROM TODO
+                    WHERE USER_NO = 1 AND
+                    TODO_DATE = ( SELECT
+                                    TODO_DATE + 1
+                                    FROM TODO
+                                    WHERE TODO_NO = #{todoNo}))
+            WHEN (SELECT COUNT(TODO_NO)
+                    FROM TODO
+                    WHERE TODO_DATE = (SELECT
+                                        TODO_DATE + 1
+                                        FROM TODO
+                                        WHERE TODO_NO = #{todoNo})) = 0
+            THEN 1
+            END
         WHERE TODO_NO = #{todoNo}
     </update>
+
+    <select id="calTodo" resultType="string">
+        SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
+        FROM TODO
+        WHERE USER_NO = #{userNo} AND STATUS = 'N' AND CLEAR = 0
+        ORDER BY TODO_DATE
+    </select>
+
+<!--    <update id="dndTodo" parameterType="Todo">-->
+<!--        UPDATE TODO-->
+<!--        SET VALUE = #{value}-->
+<!--        WHERE TODO_NO = #{todoNo}-->
+<!--    </update>-->
+
     <select id="findDaily" resultMap="todoResultSet" parameterType="DailyFindVo">
         <![CDATA[
         SELECT TODO_NO,
@@ -103,9 +145,26 @@
           AND  #{todoDate} <= TODO_DATE
           AND  #{todoDate}+1 > TODO_DATE
           AND STATUS = 'N'
-        ORDER BY TODO_NO
+        ORDER BY VALUE
         ]]>
     </select>
+
+<!--    <update id="dndTodo" parameterType="">-->
+<!--        UPDATE VALUE FROM TODO WHERE-->
+<!--    </update>-->
+
+    <select id="startValue" parameterType="Map" resultType="int">
+        SELECT VALUE FROM TODO WHERE TODO_NO= #{originArr}
+    </select>
+    <select id="finishValue" parameterType="Map" resultType="int">
+        SELECT VALUE FROM TODO WHERE TODO_NO= #{changeArr}
+    </select>
+    <update id="updateStartValue" parameterType="Map">
+        update TODO SET VALUE=#{finishValue} WHERE TODO_NO=#{originArr}
+    </update>
+    <update id="updateFinishValue" parameterType="Map">
+        update TODO SET VALUE=#{startValue} WHERE TODO_NO=#{changeArr}
+    </update>
 
 
 
