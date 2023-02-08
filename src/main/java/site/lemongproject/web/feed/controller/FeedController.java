@@ -10,10 +10,13 @@ import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.service.FeedService;
+import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
 
 
+import javax.servlet.http.HttpSession;
+import java.nio.file.FileStore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +38,11 @@ public class FeedController {
 
     // 피드 사진 넣기
     @RequestMapping(value = "/insert",method = RequestMethod.POST)
-    public Map<String, Object> feedInsert(@RequestBody FeedInsert paramMap){
-        System.out.println(paramMap); //FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)
+    public Map<String, Object> feedInsert(@RequestBody FeedInsert paramMap, HttpSession session, @SessionAttribute("loginUser") Profile loginUser){
+        System.out.println(paramMap); //FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)Profile
+        System.out.println(loginUser);
+        paramMap.setUserNo(loginUser.getUserNo());
+        System.out.println("추가후"+ paramMap);
         int check = feedService.insertFeed(paramMap);
 
         Map<String, Object> result = new HashMap<>();
@@ -124,27 +130,31 @@ public class FeedController {
     public Map<String,Object> deleteReply(@RequestBody Map<String, Object> data){
         System.out.println("딜리트입니다" + data);
 
-//        int check = feedService.deleteReply(data);
-//        System.out.println(check);
+        int check = feedService.deleteReply(data);
+        System.out.println(check);
 //
         Map<String,Object> result = new HashMap<>();
-//        if(check > 0){
-//            result.put("Java","success");
-//        }else{
-//            result.put("Java","fail");
-//        }
+        if(check > 0){
+            result.put("Java","success");
+        }else{
+            result.put("Java","fail");
+        }
         return result;
     }
-
     // 피드 댓글 불러오기
     @GetMapping("/listReply")
     public ResponseBody<List<Reply>> listReply(@RequestParam int feedNo){
 //        System.out.println("list" + feedNo);
 
         List <Reply> list = feedService.listReply(feedNo);
-        System.out.println(list);
+
 
         return ResponseBuilder.success(list);
+    }
+    // 피드 댓글수 불러오기
+    public int countReply(@RequestBody int feedNo){
+        int check = feedService.countReply(feedNo);
+        return check;
     }
 
 

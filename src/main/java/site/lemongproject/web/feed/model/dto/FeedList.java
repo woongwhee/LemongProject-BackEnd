@@ -12,7 +12,7 @@ public class FeedList {
     private int userNo;
     private String nickName;
     private String feedContent;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date feedAt;
     private String filePath;
     private String photoNo;
