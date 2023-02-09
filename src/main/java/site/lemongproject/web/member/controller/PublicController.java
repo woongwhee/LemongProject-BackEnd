@@ -33,7 +33,7 @@ public class PublicController {
     // 로그인
     @PostMapping("/login")
     public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
-
+        System.out.println(m);
         m.setSocialType(SocialType.NONE);
         Profile loginUser = memberService.loginMember(m);
         // 암호화 후
@@ -138,7 +138,8 @@ public class PublicController {
         confirm.setCode(code);
 
         int result = memberService.checkEmail(confirm);
-        System.out.println(result);
+        System.out.println(confirm);
+        System.out.println("authoCode: "+result);
 
         if(result > 0) {
             return ResponseBuilder.success(result);
@@ -251,6 +252,39 @@ public class PublicController {
             return ResponseBuilder.noSocial(isNaver);
         }
     }
+
+
+    @PostMapping("findPwd/chEmail")
+    public ResponseBody<Map<String, Object>> pwdChEmail (@RequestBody Member userEmail){
+
+        userEmail.setSocialType(SocialType.NONE);
+        Member exUser = memberService.pwdChEmail(userEmail);
+
+        if(exUser != null) { // 회원정보가 있는 경우 -> 메일 발송
+
+            String ranNum = mailUtil.ranNum();
+
+            MailMessage mailMessage = mailUtil.setConfirmMail(exUser.getEmail(), ranNum);
+            mailUtil.htmlSend(mailMessage);
+
+            EmailConfirm confirm = new EmailConfirm();
+            confirm.setEmail(exUser.getEmail());
+            confirm.setCode(ranNum);
+
+            int authCode = memberService.insertConfirm(confirm);
+
+            if(authCode > 0) {
+                return ResponseBuilder.success(authCode);
+            } else {
+                return ResponseBuilder.failEmail(authCode);
+            }
+
+        } else { // 회원 정보가 없는 경우, 일치하지 않는 경우
+            return ResponseBuilder.failEmail(0);
+        }
+
+    }
+
 
 
 

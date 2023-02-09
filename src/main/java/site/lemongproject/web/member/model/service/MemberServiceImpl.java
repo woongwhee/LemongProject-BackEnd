@@ -48,7 +48,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Profile loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
-        if(bCryptPasswordEncoder.matches(m.getUserPwd(),loginUser.getUserPwd())){
+        if(bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())){
             return profileDao.findOne(loginUser.getUserNo());
 
         }else{
@@ -313,22 +313,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
-    // 네이버 유저인지 확인
-//    @Override
-//    public Member isNaverUser(Member isNaver) {
-//        Member result = memberDao.isSocialUser(isNaver);
-//        System.out.println("NaverUser 서비스: "+result);
-//        return result;
-//    }
+    @Override
+    public Member pwdChEmail(Member userEmail) {
+        return memberDao.pwdChEmail(userEmail);
+    }
 
-
-    // 네이버 유저 회원가입
-//    @Override
-//    public int insertNaver(Member isNaver) {
-//        int result = memberDao.insertSocial(isNaver);
-//        System.out.println("NaverUser 삽입: "+result);
-//        return result;
-//    }
 
 
 
