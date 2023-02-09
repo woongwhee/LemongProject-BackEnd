@@ -12,6 +12,6 @@ public class Feed {
     private int feedNo;
     private int userNo;
     private String feedContent;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private Date feedAt;
 }

@@ -4,6 +4,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.vo.Feed;
+import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface FeedService  {
     int insertFeedReply(Map<String, Object> paramMap);
 
     // feed 게시글 댓글 보기
-    List listReply(int feedNo);
+    List<Reply> listReply(int feedNo);
 
     // feed 게시글 댓글 삭제
     int deleteReply(Map<String,Object> data);
@@ -45,4 +46,7 @@ public interface FeedService  {
     int changeValue(Map<String, Object> doublePhotoNo);
 
     List detailFeed(int feedNo);
+
+    // 댓글수
+    int countReply(int feedNo);
 }

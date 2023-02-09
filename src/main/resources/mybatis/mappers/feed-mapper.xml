@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
@@ -19,7 +20,7 @@
         <result column="FILE_PATH" property="filePath"/>
     </resultMap>
 
-    <resultMap id="feedListResultSet" type="FeedList">
+    <resultMap  type="FeedList" id="feedListResultSet">
         <result column="FEED_NO" property="feedNo"/>
         <result column="USER_NO" property="userNo"/>
         <result column="NICK_NAME" property="nickName"/>
