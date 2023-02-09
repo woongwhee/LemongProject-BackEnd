@@ -80,10 +80,10 @@ public class MemberController {
     @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
     public ResponseBody<Photo> insertProfilePhoto(
             @RequestParam(value="file", required=false) MultipartFile[] files,
-            @SessionAttribute("loginUser")Member loginUser) {
+            @SessionAttribute("loginUser") Member loginUser) {
 
         System.out.println(files + " =============> [success]");
-        System.out.println(loginUser + " =============> [success]");
+        System.out.println(loginUser.getUserNo() + " =============> [success]");
         System.out.println(files[0].getOriginalFilename() + " =============> [success]");
 
         Photo p = new Photo();
