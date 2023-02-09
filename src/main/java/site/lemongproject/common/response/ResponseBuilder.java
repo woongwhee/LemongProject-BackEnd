@@ -1,5 +1,6 @@
 package site.lemongproject.common.response;
 
+import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.template.model.dto.Template;
 
 import java.util.List;
@@ -98,4 +99,33 @@ public class ResponseBuilder{
         response.setMessage("SERVER_ERROR");
         return response;
     }
+
+
+    // 중복 이메일 체크
+    public static ResponseBody isExEmail(int num) {
+        ResponseBody response = new ResponseBody();
+        response.setCode("3006");
+        response.setMessage("ISEXEMAIL");
+        response.setResult(num);
+        return response;
+    }
+
+    // 소셜 사용자 가입
+    public static ResponseBody noSocial(Member isSocial) {
+        ResponseBody response = new ResponseBody();
+        response.setCode("3007");
+        response.setMessage("SOCIALJOIN");
+        response.setResult(isSocial);
+        return response;
+    }
+
+    // 카카오 로그아웃 반환
+    public static ResponseBody logoutKakao(Object o) {
+        ResponseBody response = new ResponseBody();
+        response.setCode("3008");
+        response.setMessage("LOGOUTKAKAO");
+        response.setResult(o);
+        return response;
+    }
+
 }

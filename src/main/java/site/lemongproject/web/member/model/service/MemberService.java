@@ -4,11 +4,13 @@ import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.dto.MyProfileVo;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
+import site.lemongproject.web.member.model.vo.KakaoToken;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MemberService {
 
@@ -47,4 +49,22 @@ public interface MemberService {
     Profile updateMyContent(Profile p);
 
 //    int checkConfirm(EmailConfirm confirm);
+
+    String getAccessToken(String authCode);
+
+    Map<String, Object> getKakaoUser(String token);
+
+    int setNick(JoinVo joinVo);
+
+    Map<String, Object> getNaverUser(String token);
+
+    Member isSocialUser(Member isSocial);
+
+    Profile socialProfile(Member isSocial);
+
+    int insertSocial(Member isSocial);
+
+    int isExEmail(String email);
+
+
 }
