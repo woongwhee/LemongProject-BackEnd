@@ -51,13 +51,9 @@ public class MemberDao {
         return sqlSession.insert("memberMapper.insertSocial", isSocial);
     }
 
-//    public Member isNaverUser(Member isNaver) {
-//        return sqlSession.selectOne("memberMapper.isNaver", isNaver);
-//    }
-//
-//    public int insertNaver(Member isNaver) {
-//        return sqlSession.insert("memberMapper.insertNaver", isNaver);
-//    }
+    public Member pwdChEmail(Member userEmail) {
+        return sqlSession.selectOne("memberMapper.pwdChEmail", userEmail);
+    }
 
 
 

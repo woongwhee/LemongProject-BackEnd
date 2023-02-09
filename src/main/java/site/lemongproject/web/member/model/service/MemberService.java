@@ -66,5 +66,7 @@ public interface MemberService {
 
     int isExEmail(String email);
 
+    Member pwdChEmail(Member userEmail);
+
 
 }
