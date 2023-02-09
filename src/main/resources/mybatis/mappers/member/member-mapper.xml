@@ -101,4 +101,14 @@
         WHERE USER_NO = #{userNo}
     </select>
 
+    <!--  비밀번호 재설정 이메일 체크  -->
+    <select id="pwdChEmail" parameterType="Member" resultMap="memberResultSet">
+        SELECT *
+        FROM MEMBER
+        WHERE USER_NAME = #{userName}
+        AND EMAIL = #{email}
+        AND SOCIAL_TYPE = #{socialType}
+        AND STATUS = 1
+    </select>
+
 </mapper>

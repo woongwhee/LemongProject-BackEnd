@@ -15,7 +15,7 @@
     <!-- 이메일 체크 -->
     <select id="checkConfirm" parameterType="EmailConfirm" resultType="int">
         SELECT
-            CASE WHEN ROUND((SYSDATE-CONFIRM_AT) * 24 * 60,2)&lt;3 THEN '1' ELSE '-1' END AS "result"
+            CASE WHEN ROUND((SYSDATE-CONFIRM_AT) * 24 * 60,2)&lt;3 THEN '1' ELSE '0' END AS "result"
         FROM EMAIL_CONFIRM
         WHERE EMAIL = #{email} AND CODE = #{code}
     </select>
