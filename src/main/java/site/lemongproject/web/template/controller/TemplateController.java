@@ -91,10 +91,13 @@ public class TemplateController {
 
     @PutMapping("/unsave/update")
     public ResponseBody<Integer> updateUnSave(@SessionAttribute("loginUser") Profile loginUser, @RequestBody TemplateUpdateVo tuv) {
+        System.out.println(tuv);
         if ((tuv == null || tuv.getTemplateNo() == null) ||
                 (tuv.getRange() == null && tuv.getTitle() == null && tuv.getCategoryNo() == null && tuv.getContent() == null)) {
             return ResponseBuilder.upLoadFail();
         }
+        System.out.println(tuv);
+
         tuv.setUserNo(loginUser.getUserNo());
         int result = WriteService.updateUnSaveTemplate(tuv);
         if (result > 0) {
@@ -117,7 +120,7 @@ public class TemplateController {
 
 
     @PostMapping("/todo/insert")
-    public ResponseBody<List<TemplateTodo>> insertTodo(@SessionAttribute("loginUser")Profile loginUser, @RequestBody TempalteTodoInsertVo tiv) {
+    public ResponseBody<List<TemplateTodo>> insertTodo(@SessionAttribute("loginUser")Profile loginUser, @RequestBody TemplateTodoInsertVo tiv) {
         tiv.setUserNo(loginUser.getUserNo());
         List<TemplateTodo> todoList = WriteService.insertTodo(tiv);
         if (todoList!=null) {

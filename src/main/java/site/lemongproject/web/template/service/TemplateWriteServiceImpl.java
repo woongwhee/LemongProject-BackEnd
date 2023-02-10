@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.common.exception.IsNotWriterException;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
-import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.*;
 
@@ -40,10 +39,9 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
             throw new IsNotWriterException();
         }
         int result=templateDao.updateUnSave(templateVo);
+        System.out.println(result);
         if(result>0&&templateVo.getRange()!=null){
             templateTodoDao.deleteRangeOver(templateVo);
-
-
         }
         return result;
     }
@@ -55,7 +53,7 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
      * @return
      */
     @Override
-    public List<TemplateTodo> insertTodo(TempalteTodoInsertVo tiv) {
+    public List<TemplateTodo> insertTodo(TemplateTodoInsertVo tiv) {
         boolean isWriter = checkTodoWriter(tiv.getUserNo(),tiv.getTemplateNo());
         if (!isWriter) {
             throw new IsNotWriterException("잘못된접근");
