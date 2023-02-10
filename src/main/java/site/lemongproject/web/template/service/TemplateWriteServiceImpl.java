@@ -64,7 +64,7 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
             TemplateTodo t = new TemplateTodo();
             t.setTemplateNo(tiv.getTemplateNo());
             t.setDay(day);
-            t.setContent(tiv.getContent());
+           //t.setContent(tiv.getContent());
             todoList.add(t);
             result += templateTodoDao.insertOne(t);
             System.out.println(t);

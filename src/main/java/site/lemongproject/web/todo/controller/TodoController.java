@@ -159,53 +159,22 @@ public class TodoController {
         return calTodos;
     }
 
-    @GetMapping("/dndTodos")
-    public ResponseBody<Todo> dndTodo2(@RequestParam(value = "dndTodoNo") int dndTodo,
-                                       @RequestParam(value = "value") int value){
 
-        System.out.println("dnd todo: "+ dndTodo + ", value :" + value);
+    @PostMapping("/dndTodo")
+    public ResponseBody<DailyTodoVo> dndTodo(@RequestBody Todo dndTodoList){
 
-        Todo t = new Todo();
-        t.setTodoNo(dndTodo);
-        t.setValue(value);
+        System.out.println("dndTodoList: "+ dndTodoList);
+        System.out.println("dndTodo: "+ dndTodoList.getDndTodoList());
 
-        int result = todoService.dndTodo2(t);
+        List<Todo> tList = dndTodoList.getDndTodoList();
+        System.out.println("tList : "+tList.get(0));
 
-        return ResponseBuilder.success(dndTodo);
+       todoService.dndTodo(tList);
+
+        return ResponseBuilder.success(tList);
     }
 
-    @RequestMapping("/dndTodo3")
-    public ResponseBody<DailyTodoVo> dndTodo3(@RequestBody DailyTodoVo todoList){
 
-        System.out.println("dndTodoList: "+ todoList);
-
-        for(Todo todo : todoList.getNormalList()){
-            System.out.println("todo: "+ todo);
-        }
-
-        List<Todo> t = todoList.getNormalList();
-
-        int result = todoService.dndTodo3(t);
-
-        return ResponseBuilder.success(result);
-    }
-
-    @RequestMapping("/dndTodo")
-    public Map<String, Object> dndTodo(@RequestBody Map<String, Object> dndTodo2) {
-
-        //String dndTodo = request.getParameterValues("dndTodo[]");
-
-        //System.out.println("dndTodo: " + dndTodo);
-        //System.out.println("originNo: " + dndTodo.get("dndTodo"));
-
-
-
-        Map<String, Object> result = new HashMap<>();
-
-        int check = todoService.dndTodo(result);
-
-        return result;
-    }
 
 
 }

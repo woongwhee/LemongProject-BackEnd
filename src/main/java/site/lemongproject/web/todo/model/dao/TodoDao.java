@@ -47,17 +47,8 @@ public class TodoDao {
         return sqlSession.selectList("todoMapper.findDaily",dailyFind);
     }
 
-    public int dndTodo2(Todo t){
-        return sqlSession.update("todoMapper.dndTodo2", t);
-    }
-
-    public int dndTodo3(List<Todo> dndTodoList){
-        return sqlSession.update("todoMapper.dndTodo3", dndTodoList);
-    }
-
-
-    public int dndTodo(Map<String, Object> dndTodo){
-        return  sqlSession.update("todoMapper.dndTodo", dndTodo);
+    public int dndTodo(List<Todo> tList){
+        return sqlSession.update("todoMapper.dndTodo", tList);
     }
 
     public List<Integer> findByCal(MonthFindVo findVo) {

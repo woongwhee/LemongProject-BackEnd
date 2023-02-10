@@ -66,17 +66,9 @@ public class TodoServiceImpl implements TodoService {
         return todoDao.calTodo(t);
     }
 
-    public int dndTodo2(Todo t){
-        return todoDao.dndTodo2(t);
-    }
-
-    public  int dndTodo3(List<Todo> dndTodoList){
-
-        return todoDao.dndTodo3(dndTodoList);
-    }
-
-    public int dndTodo(Map<String, Object> dndTodo){
-        return todoDao.dndTodo(dndTodo);
+    public  int dndTodo(List<Todo> tList){
+        System.out.println("여기까지 왔다 tList : "+ tList);
+        return todoDao.dndTodo(tList);
     }
 
     @Override
