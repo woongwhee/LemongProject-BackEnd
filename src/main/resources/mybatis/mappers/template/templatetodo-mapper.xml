@@ -14,9 +14,21 @@
         </selectKey>
         INSERT INTO TEMPLATE_TODO (TP_TODO_NO,TEMPLATE_NO,DAY,CONTENT,VALUE)
         VALUES(#{tpTodoNo},#{templateNo},#{day},#{content},
-        (SELECT NVL(Max(value),0) + 1 FROM TEMPLATE_TODO WHERE DAY=#{day} AND TEMPLATE_NO=#{templateNo})
-        )
+        (SELECT NVL(Max(value),0)+1 FROM TEMPLATE_TODO WHERE DAY=#{day} AND TEMPLATE_NO=#{templateNo}))
     </insert>
+
+    <insert id="insertMany" parameterType="TemplateTodoInsertVo">
+        INSERT ALL
+        <foreach collection="dayList" item="day">
+            <foreach collection="contentList" item="content" index="i">
+                INTO TEMPLATE_TODO (TP_TODO_NO,TEMPLATE_NO,DAY,CONTENT,VALUE)
+                VALUES (GET_TP_TODO_SEQ(),#{templateNo},#{day},CONTENT,(
+                SELECT NVL(Max(value),0) + #{i+1} FROM TEMPLATE_TODO
+                WHERE DAY=#{day} AND TEMPLATE_NO=#{templateNo}))
+            </foreach>
+        </foreach>
+    </insert>
+
     <select id="findByTemplate" parameterType="Integer" resultMap="templateTodoMap">
         SELECT *
         FROM TEMPLATE_TODO
@@ -59,13 +71,13 @@
     <delete id="deleteRangeOver" parameterType="TemplateUpdateVo">
         DELETE TEMPLATE_TODO
         WHERE TEMPLATE_NO = #{templateNo}
-        AND DAY>#{Range}
+          AND DAY > #{range}
     </delete>
     <select id="isWriter" parameterType="WriterCheckVo" resultType="_boolean">
         SELECT COUNT(*)
         FROM TEMPLATE_TODO
-        JOIN TEMPLATE USING(TEMPLATE_NO)
-        WHERE TP_CREATER=#{userNo}
-          AND TP_TODO_NO=#{refNo}
+                 JOIN TEMPLATE USING (TEMPLATE_NO)
+        WHERE TP_CREATER = #{userNo}
+          AND TP_TODO_NO = #{refNo}
     </select>
 </mapper>
