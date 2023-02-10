@@ -73,20 +73,6 @@
         WHERE TODO_NO = #{todoNo}
     </update>
 
-    <!--    <update id="delayTodo" parameterType="Todo">-->
-    <!--        UPDATE TODO-->
-    <!--        SET TODO_DATE = TODO_DATE + 1,-->
-    <!--            VALUE = (SELECT-->
-    <!--                        MAX(VALUE) + 1-->
-    <!--                    FROM TODO-->
-    <!--                    WHERE USER_NO = 1 AND-->
-    <!--                          TODO_DATE = ( SELECT-->
-    <!--                                        TODO_DATE + 1-->
-    <!--                                        FROM TODO-->
-    <!--                                        WHERE TODO_NO = #{todoNo}-->
-    <!--        ))-->
-    <!--        WHERE TODO_NO = #{todoNo}-->
-    <!--    </update>-->
 
     <update id="delayTodo" parameterType="Todo">
         UPDATE TODO
@@ -150,46 +136,8 @@
         ]]>
     </select>
 
-
-    <select id="startValue" parameterType="Map" resultType="int">
-        SELECT VALUE
-        FROM TODO
-        WHERE TODO_NO = #{originArr}
-    </select>
-    <select id="finishValue" parameterType="Map" resultType="int">
-        SELECT VALUE
-        FROM TODO
-        WHERE TODO_NO = #{changeArr}
-    </select>
-    <update id="updateStartValue" parameterType="Map">
-        update TODO
-        SET VALUE=#{finishValue}
-        WHERE TODO_NO = #{originArr}
-    </update>
-    <update id="updateFinishValue" parameterType="Map">
-        update TODO
-        SET VALUE=#{startValue}
-        WHERE TODO_NO = #{changeArr}
-    </update>
-
-
-
-    <!--맨 밑으로 이동-->
-    <update id="dndTodo2" parameterType="Todo">
-        UPDATE TODO
-        SET VALUE = VALUE - 1
-        WHERE TODO_DATE = (SELECT TODO_DATE FROM TODO WHERE TODO_NO = #{todoNo})
-        AND VALUE < #{value}
-    </update>
-    <!--맨 위로 이동-->
-    <update id="dndTodo2" parameterType="Todo">
-        UPDATE TODO
-        SET VALUE = VALUE + 1
-        WHERE TODO_DATE = (SELECT TODO_DATE FROM TODO WHERE TODO_NO = #{todoNo}) AND VALUE > #{value}
-    </update>
-
-    <update id="dndTodo3" parameterType="DailyTodoVo">
-        <foreach collection="list" item="todo" index="index" >
+    <update id="dndTodo" parameterType="java.util.List">
+        <foreach collection="list" item="todo" index="index" separator=";" open="DECLARE BEGIN" close="; END;">
             UPDATE TODO
             SET VALUE = #{index}
             WHERE TODO_NO = #{todo.todoNo}
