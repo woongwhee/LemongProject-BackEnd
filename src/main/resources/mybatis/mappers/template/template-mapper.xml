@@ -147,8 +147,7 @@
                 CONTENT= #{content}
             </if>
         </set>
-        where TEMPLATE_NO=#{templateNo}
-        AND TP_CREATER=#{userNo}
+        WHERE TEMPLATE_NO=#{templateNo}
     </update>
     <select id="countTemplate" parameterType="Integer" resultType="Integer">
         SELECT COUNT(*)

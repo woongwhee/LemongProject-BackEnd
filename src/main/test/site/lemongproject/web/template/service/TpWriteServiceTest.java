@@ -2,23 +2,16 @@ package site.lemongproject.web.template.service;
 
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import site.lemongproject.common.config.ApplicationConfig;
 import site.lemongproject.config.Configure;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
-import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
 import site.lemongproject.web.template.model.vo.TPUnsaveVo;
-import site.lemongproject.web.template.model.vo.TempalteTodoInsertVo;
+import site.lemongproject.web.template.model.vo.TemplateTodoInsertVo;
 import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
 
 import java.util.ArrayList;
@@ -34,6 +27,9 @@ public class TpWriteServiceTest extends Configure {
     @Autowired private TemplateTodoDao templateTodoDao;
 
     @Autowired private ApplicationContext ap;
+
+
+
     @Test
     @DisplayName("리셋테스트")
     public void 리셋(){
@@ -52,7 +48,7 @@ public class TpWriteServiceTest extends Configure {
         TPUnsaveVo t=templateService.loadInsertPage(1);
         System.out.println(t);
 
-        TempalteTodoInsertVo ttiv=new TempalteTodoInsertVo();
+        TemplateTodoInsertVo ttiv=new TemplateTodoInsertVo();
         ttiv.setTemplateNo(t.getTemplateNo());
         ttiv.setContent("테스트투두");
         List<Integer> day= new ArrayList<>();
