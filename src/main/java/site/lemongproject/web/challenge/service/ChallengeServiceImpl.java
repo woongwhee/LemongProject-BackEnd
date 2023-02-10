@@ -10,6 +10,8 @@ import site.lemongproject.common.type.ChallengeUserStatus;
 import site.lemongproject.web.challenge.model.dao.ChallengeChatDao;
 import site.lemongproject.web.challenge.model.dao.ChallengeDao;
 import site.lemongproject.web.challenge.model.dao.ChallengeTodoDao;
+import site.lemongproject.web.challenge.model.dto.Challenge;
+import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 import site.lemongproject.web.challenge.model.dto.ChallengeOption;
 import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.vo.*;
@@ -86,7 +88,6 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     /**
      * 챌린지 시작 메소드 중복시작할수 없음
-     *
      * @param startVo
      * @return
      */
@@ -142,9 +143,6 @@ public class ChallengeServiceImpl implements ChallengeService {
                         continue;
                     }
                     //해당일이 공휴일인지;(공휴일제외를 하지 않았을시 iter의 값이 비어있음)
-                    for(;iter.hasNext();){
-
-                    }
                     while (iter.hasNext()) {
                         LocalDate holiyDate = iter.next().getHoliday();
                         if (holiyDate.equals(datePoint)) {
@@ -184,6 +182,14 @@ public class ChallengeServiceImpl implements ChallengeService {
         PeriodVo periodVo = new PeriodVo(startDate, endDate);
         holidayList = holidayDao.findByPeriod(periodVo);
         return holidayList;
+    }
+
+    public Challenge selectChallenge(Challenge cNo){
+        return challengeDao.selectChallenge(cNo);
+    }
+
+    public int insertChatData(ChallengeChat chatData){
+        return chatDao.insertChatData(chatData);
     }
 
 

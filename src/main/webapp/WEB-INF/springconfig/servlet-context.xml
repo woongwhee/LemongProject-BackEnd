@@ -4,14 +4,13 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:task="http://www.springframework.org/schema/task"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:beans="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <mvc:exclude-mapping path="/p/**"/>
-            <beans:bean id="loginInterceptor" class="site.lemongproject.common.interceptor.LoginInterceptor"/>
+            <mvc:exclude-mapping path="/p/*"/>
+            <beans:bean id="loginInterce m[ptor" class="site.lemongproject.common.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
     <context:component-scan base-package="site.lemongproject"/>
@@ -32,6 +31,6 @@
     <mvc:resources mapping="/resources/**" location="/resources/" />
     <!-- http://localhost:8081/api/images/이미지명.jpg 로 이미지를 불러와서 사용할것이다.-->
     <!-- IMAGE VIEW -->
-    <mvc:resources mapping="/images/**" location="/images/" />
+    <mvc:resources mapping="/images/**" location="file:///C:/LemongProject/src/main/webapp/resources/images/userProfile/" />
 
 </beans>

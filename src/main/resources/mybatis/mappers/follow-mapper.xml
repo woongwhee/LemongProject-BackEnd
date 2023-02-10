@@ -8,8 +8,8 @@
         <result column="FOLLOWING" property="following"/>
         <result column="FOLLOW_AT" property="followAt"/>
         <result column="ACCEPT" property="accept"/>
-        <association property="photo" resultMap="photoMapper.potoResultSet"/>
-        <association property="profile" resultMap="profileMapper.profileNick"/>
+        <association property="photo" resultMap="photoMapper.photoMap"/>
+        <association property="profile" resultMap="profileMapper.profileDetail"/>
     </resultMap>
 
     <!-- 팔로우 신청  -->
@@ -24,7 +24,7 @@
     </insert>
 
     <!-- 나한테 온 팔로우 신청 리스트 -->
-    <select id="selectMyFollowerList" parameterType="Follow" resultMap="followResultSet">
+    <select id="selectMyFollowerAlertList" parameterType="Follow" resultMap="followResultSet">
         SELECT
             FOLLOWER ,
             FOLLOWING ,
@@ -34,8 +34,7 @@
         FROM FOLLOW F
         LEFT JOIN PHOTO P ON(F.FOLLOWING = P.USER_NO)
         LEFT JOIN USER_PROFILE U USING(PHOTO_NO)
-        WHERE P.USER_NO = #{following}
-        AND FOLLOWER = #{follower}
+        WHERE FOLLOWER = #{follower}
     </select>
 
     <!-- 팔로우 신청 수락 시 accept 'n'에서 'y'로 업데이트  -->
@@ -77,14 +76,10 @@
      -->
     <select id="acceptFollowCount" parameterType="Follow" resultType="Follow">
         SELECT
-            FOLLOWING ,
-            COUNT(*) as count ,
-            ACCEPT
+        COUNT(*) as count
         FROM FOLLOW
-        GROUP BY FOLLOWING , FOLLOWER , ACCEPT
+        GROUP BY FOLLOWING
         HAVING FOLLOWING = #{following}
-        AND FOLLOWER = #{follower}
-        AND ACCEPT = 'Y'
     </select>
 
     <!--
@@ -93,10 +88,9 @@
      -->
     <select id="acceptFollowingCount" parameterType="Follow" resultType="Follow">
         SELECT
-            FOLLOWING ,
             COUNT(*) as count
         FROM FOLLOW
-        GROUP BY FOLLOWING , FOLLOWER
+        GROUP BY FOLLOWER
         HAVING FOLLOWER = #{follower}
     </select>
 
@@ -111,6 +105,51 @@
         LEFT JOIN PHOTO P USING(PHOTO_NO)
         WHERE F.FOLLOWING = #{following}
     </select>
+
+    <!-- 나의 입장에서 팔로우 신청의 수락여부에 상관없이 나의 팔로잉이 증가해야함  -->
+    <select id="myFollowingCount" parameterType="Follow" resultType="Follow">
+        SELECT
+            FOLLOWING ,
+            COUNT(*) as count
+        FROM FOLLOW
+        GROUP BY FOLLOWING , FOLLOWER
+        HAVING FOLLOWER = #{follower}
+    </select>
+
+    <select id="selectAcceptFollowingList" parameterType="Follow" resultMap="followResultSet">
+        SELECT
+            U.USER_NO ,
+            NICK_NAME ,
+            CHANGE_NAME
+        FROM FOLLOW F
+        JOIN USER_PROFILE U ON(F.FOLLOWING = U.USER_NO)
+        LEFT JOIN PHOTO P USING(PHOTO_NO)
+        WHERE F.FOLLOWER = #{follower}
+    </select>
+
+    <!-- 상대방의 입장에서 팔로우 신청 허용 시 'Y'에 해당하는 리스트 불러오기 -->
+    <select id="selectAcceptFollowerList" parameterType="Follow" resultMap="followResultSet">
+        SELECT
+            U.USER_NO ,
+            NICK_NAME ,
+            CHANGE_NAME
+        FROM FOLLOW F
+        JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
+        LEFT JOIN PHOTO P USING(PHOTO_NO)
+        WHERE F.FOLLOWING = #{following}
+    </select>
+
+    <select id="selectMyFollowingList" parameterType="Follow" resultMap="followResultSet">
+        SELECT
+            U.USER_NO ,
+            NICK_NAME ,
+            CHANGE_NAME
+        FROM FOLLOW F
+        JOIN USER_PROFILE U ON(F.FOLLOWING = U.USER_NO)
+        LEFT JOIN PHOTO P USING(PHOTO_NO)
+        WHERE F.FOLLOWER = #{follower}
+    </select>
+
 
 </mapper>
 

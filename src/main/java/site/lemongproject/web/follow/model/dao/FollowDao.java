@@ -45,4 +45,24 @@ public class FollowDao {
     public List<Follow> selectMyFollowersdList(Follow f) {
         return sqlSession.selectList("followMapper.selectMyFollowersdList" , f);
     }
+
+    public Follow MyFollowingCount(Follow f) {
+        return sqlSession.selectOne("followMapper.myFollowingCount" , f);
+    }
+
+    public List<Follow> selectAcceptFollowingList(Follow f) {
+        return sqlSession.selectList("followMapper.selectAcceptFollowingList" , f);
+    }
+
+    public List<Follow> selectAcceptFollowerList(Follow f) {
+        return sqlSession.selectList("followMapper.selectAcceptFollowerList" , f);
+    }
+
+    public List<Follow> selectMyFollowingList(Follow f) {
+        return sqlSession.selectList("followMapper.selectMyFollowingList" , f);
+    }
+
+    public List<Follow> selectMyFollowerAlertList(Follow f) {
+        return sqlSession.selectList("followMapper.selectMyFollowerAlertList" , f);
+    }
 }

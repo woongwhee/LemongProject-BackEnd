@@ -43,4 +43,11 @@
 <!--    <select id="findDaily" parameterType="" >-->
 
 <!--    </select>-->
+
+    <!-- 테스트 챌린지No(3000)번에 해당하는 챌린지 정보 다가져오기  -->
+    <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
+        SELECT *
+        FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengeNo}
+    </select>
 </mapper>
