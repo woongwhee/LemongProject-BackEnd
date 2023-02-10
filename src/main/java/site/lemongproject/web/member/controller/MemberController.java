@@ -1,6 +1,7 @@
 package site.lemongproject.web.member.controller;
 
 import lombok.RequiredArgsConstructor;
+import oracle.net.aso.s;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,16 +75,21 @@ public class MemberController {
     }
 
     // 유저 프로필 INSERT. => 웅휘형이 만든 FileUtil로 빼기 => rename(m.getOriginalFilename()) 오류 고치기.
-    @PostMapping("/insertUserProfile")
-//    @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
+//    @PostMapping("/insertUserProfile")
+    @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
     public ResponseBody<Photo> insertProfilePhoto(
             @RequestParam(value="file", required=false) MultipartFile[] files,
-            @SessionAttribute("loginUser")Member loginUser) {
+            @SessionAttribute("loginUser") Member loginUser) {
+
+        System.out.println(files + " =============> [success]");
+        System.out.println(loginUser.getUserNo() + " =============> [success]");
+        System.out.println(files[0].getOriginalFilename() + " =============> [success]");
+
         Photo p = new Photo();
         p.setUserNo(loginUser.getUserNo());
         fileUtil.saveFile(files[0], p);
         int result = memberService.insertUserPhoto(p);
-        return ResponseBuilder.success(p);
+        return ResponseBuilder.success(result);
 
     }
     // 유저 프로필 UPDATE. => 웅휘형이 만든 FileUtil로 빼기 => rename(m.getOriginalFilename()) 오류 고치기.
@@ -92,55 +98,6 @@ public class MemberController {
             @RequestParam(value = "file" , required = false) MultipartFile[] ufiles ,
             @SessionAttribute(value = "loginMember") Member loginMember) {
 
-//        String webPath = "/resources/images/userProfile/";
-//
-//        int result = 0;
-//
-//        Photo p = new Photo();
-//
-//        for (MultipartFile mf : ufiles) {
-//
-//            String originFileName = mf.getOriginalFilename(); // 원본 파일 명
-//            long fileSize = mf.getSize(); // 파일 사이즈
-//            System.out.println("originFileName : " + originFileName);
-//            System.out.println("fileSize : " + fileSize);
-//
-//            // 1. 원본 파일명 뽑기.
-//            String originName= mf.getOriginalFilename();
-//
-//            // 2. 시간 형식을 문자열로 뽑아오기.
-//            // 년월일시분초
-//            String currentTime = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-//
-//            // 3. 뒤에 붙을 5자리 랜덤값 뽑기.
-//            int random = (int)(Math.random() * 90000 + 10000); // 5자리 랜덤값
-//
-//            // 4. 원본파일명으로부터 확장자명 뽑기.
-//            // .jpg
-//            String ext = originName.substring(originName.lastIndexOf("."));
-//
-//            // 5. 다 이어붙이기.
-//            String changeName = currentTime + random + ext;
-//
-//            // 폴더에 이미지 저장.
-//            String savePath = "C:/LemongProject/src/main/webapp/resources/images/userProfile/";
-//
-//            if (!mf.getOriginalFilename().equals("")) { // 파일명이 비어있지 않은 경우
-//                try {
-//                    mf.transferTo(new File(savePath + changeName));
-//                } catch (IllegalStateException | IOException e) {
-//                    System.out.println(e.getMessage() + "오류 발생");
-//                }
-//            }
-//
-//            p.setFilePath(webPath+mf.getOriginalFilename());
-//            p.setUserNo(userNo);
-//            p.setChangeName(changeName);
-//            p.setOriginName(mf.getOriginalFilename());
-//
-//            result = memberService.updateUserProfile(p);
-//
-//        }
         Photo p=new Photo();
         p.setUserNo(loginMember.getUserNo());
         fileUtil.saveFile(ufiles[0],p );
