@@ -38,7 +38,7 @@ public class FeedController {
 
     // 피드 사진 넣기
     @RequestMapping(value = "/insert",method = RequestMethod.POST)
-    public Map<String, Object> feedInsert(@RequestBody FeedInsert paramMap, HttpSession session, @SessionAttribute("loginUser") Profile loginUser){
+    public Map<String, Object> feedInsert(@RequestBody FeedInsert paramMap, @SessionAttribute("loginUser") Profile loginUser){
         System.out.println(paramMap); //FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)Profile
         System.out.println(loginUser);
         paramMap.setUserNo(loginUser.getUserNo());
@@ -152,7 +152,9 @@ public class FeedController {
         return ResponseBuilder.success(list);
     }
     // 피드 댓글수 불러오기
-    public int countReply(@RequestBody int feedNo){
+    @GetMapping("countReply")
+    public int countReply(@RequestParam int feedNo){
+        System.out.println(feedNo);
         int check = feedService.countReply(feedNo);
         return check;
     }
@@ -223,7 +225,7 @@ public class FeedController {
 
     @RequestMapping("/detailFeed")
     public List<FeedList> detailFeed(@RequestParam int feedNo){
-        System.out.println(feedNo);
+//        System.out.println(feedNo);
         List<FeedList> list = feedService.detailFeed(feedNo);
         System.out.println(list);
         return list;
