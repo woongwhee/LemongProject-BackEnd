@@ -10,6 +10,7 @@ import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.type.SocialType;
 import site.lemongproject.common.util.MailUtil;
+import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
@@ -18,6 +19,7 @@ import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 
 import javax.servlet.http.HttpSession;
+import java.awt.image.RescaleOp;
 import java.util.Map;
 
 @RestController
@@ -57,8 +59,9 @@ public class PublicController {
     public ResponseBody<Map<String, Object>> insertMember(@RequestBody JoinVo joinVo) {
 
         // 비밀번호 암호화
-        String encPwd = bCryptPasswordEncoder.encode(joinVo.getUserPwd());
-        joinVo.setUserPwd(encPwd);
+//        String encPwd = bCryptPasswordEncoder.encode(joinVo.getUserPwd());
+//        joinVo.setUserPwd(encPwd);
+        joinVo.setUserPwd(joinVo.getUserPwd());
         joinVo.setSocialType(SocialType.NONE);
         // 암호화된 비밀번호 setting 해주기
         int result = memberService.insertMember(joinVo);
@@ -285,6 +288,50 @@ public class PublicController {
 
     }
 
+
+
+    // 비밀번호 재설정 페이지로 이동
+    @PostMapping("toNewPwd")
+    public ResponseBody<Map<String, Object>> toNewPwd (@RequestBody Map<String, Object> userEmail, HttpSession session) {
+
+        String email = String.valueOf(userEmail.get("email"));
+
+        Member findUser = memberService.findUserNo(email);
+
+        int userNo = findUser.getUserNo();
+
+        if(userNo > 0) {
+            session.setAttribute("userNo", userNo);
+            return ResponseBuilder.success(userNo);
+        } else {
+            System.out.println("회원번호 넘기기 실패");
+            return ResponseBuilder.failEmail(userNo);
+        }
+    }
+
+
+    // 비밀번호 재설정
+    @PostMapping("newPwd")
+    public ResponseBody<Map<String, Object>> setNewPwd (@RequestBody Map<String, Object> newPwd, HttpSession session) {
+
+        String num = String.valueOf(session.getAttribute("userNo"));
+        int userNo = Integer.parseInt(num);
+        System.out.println(userNo);
+
+        String userPwd = String.valueOf(newPwd.get("userPwd"));
+        System.out.println(userPwd);
+
+        // update
+        ChangePwdVo cpw = new ChangePwdVo(userNo, userPwd);
+        int result = memberService.updatePassword(cpw);
+
+        if(result > 0) {
+            return ResponseBuilder.success(result);
+        } else {
+            return ResponseBuilder.upLoadFail();
+        }
+
+    }
 
 
 

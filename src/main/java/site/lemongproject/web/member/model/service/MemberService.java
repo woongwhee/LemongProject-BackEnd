@@ -68,5 +68,7 @@ public interface MemberService {
 
     Member pwdChEmail(Member userEmail);
 
+    Member findUserNo(String email);
+
 
 }

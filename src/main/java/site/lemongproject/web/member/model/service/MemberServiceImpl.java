@@ -48,12 +48,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Profile loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
-        if(bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())){
+//        if(bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())){
+//
+//        }else{
+//            return null;
+//        }
             return profileDao.findOne(loginUser.getUserNo());
-
-        }else{
-            return null;
-        }
     }
 
 
@@ -318,6 +318,11 @@ public class MemberServiceImpl implements MemberService {
         return memberDao.pwdChEmail(userEmail);
     }
 
+
+    @Override
+    public Member findUserNo(String email) {
+        return memberDao.findUserNo(email);
+    }
 
 
 

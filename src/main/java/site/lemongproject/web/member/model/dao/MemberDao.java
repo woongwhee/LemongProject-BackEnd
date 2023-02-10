@@ -55,6 +55,10 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.pwdChEmail", userEmail);
     }
 
+    public Member findUserNo(String email) {
+        return sqlSession.selectOne("memberMapper.loginMember", email);
+    }
+
 
 
     public Member selectMembers(int userNo) {
