@@ -47,25 +47,17 @@ public class TodoDao {
         return sqlSession.selectList("todoMapper.findDaily",dailyFind);
     }
 
-    public int dndTodo2(List<Todo> t){
-        return sqlSession.update("todoMapper.dndTodo", t);
+    public int dndTodo2(Todo t){
+        return sqlSession.update("todoMapper.dndTodo2", t);
+    }
+
+    public int dndTodo3(List<Todo> dndTodoList){
+        return sqlSession.update("todoMapper.dndTodo3", dndTodoList);
     }
 
 
-    public int startValue(Map<String, Object> todoNo) {
-        return sqlSession.selectOne("todoMapper.startValue",todoNo);
-    }
-
-    public int finishValue(Map<String, Object> todoNo) {
-        return sqlSession.selectOne("todoMapper.finishValue",todoNo);
-    }
-    // value 바꾸기
-    public int updateStartValue(Map<String, Object> todoNo) {
-        return sqlSession.update("todoMapper.updateStartValue",todoNo);
-    }
-
-    public int updateFinishValue(Map<String, Object> todoNo) {
-        return sqlSession.update("todoMapper.updateFinishValue",todoNo);
+    public int dndTodo(Map<String, Object> dndTodo){
+        return  sqlSession.update("todoMapper.dndTodo", dndTodo);
     }
 
     public List<Integer> findByCal(MonthFindVo findVo) {

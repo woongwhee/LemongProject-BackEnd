@@ -66,33 +66,17 @@ public class TodoServiceImpl implements TodoService {
         return todoDao.calTodo(t);
     }
 
-    public int dndTodo2(List<Todo> t){
-
-//        if(t.size() > 0){
-//            for(int i = 0; i > t.size(); i++){
-//
-//            }
-//
-//        }
-
-
-
+    public int dndTodo2(Todo t){
         return todoDao.dndTodo2(t);
     }
 
-    public int dndTodo(Map<String, Object> todoNo){
-        int startValue = todoDao.startValue(todoNo); // 1
-        int finishValue = todoDao.finishValue(todoNo); // 2
-        int result = 0;
+    public  int dndTodo3(List<Todo> dndTodoList){
 
-        todoNo.put("startValue",startValue);
-        todoNo.put("finishValue",finishValue);
+        return todoDao.dndTodo3(dndTodoList);
+    }
 
-        System.out.println(todoNo);
-
-        result += todoDao.updateStartValue(todoNo);
-        result += todoDao.updateFinishValue(todoNo);
-        return result;
+    public int dndTodo(Map<String, Object> dndTodo){
+        return todoDao.dndTodo(dndTodo);
     }
 
     @Override
