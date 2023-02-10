@@ -1,137 +1,137 @@
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--<!DOCTYPE mapper-->
+<!--        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"-->
+<!--        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
 
-<mapper namespace="memberMapper">
+<!--<mapper namespace="memberMapper">-->
 
-    <!-- MEMBER 테이블  -->
-    <resultMap type="member" id="memberResultSet">
-        <result column="USER_NO" property="userNo" />
-        <result column="EMAIL" property="email" />
-        <result column="USER_PWD" property="userPwd" />
-        <result column="SOCIAL_TYPE" property="socialType" />
-        <result column="ACCESS_TOKEN" property="accessToken" />
-        <result column="STATUS" property="status" />
-        <result column="USER_NAME" property="userName" />
-        <result column="NICK_NAME" property="nickName" />
-    </resultMap>
-    <resultMap type="member" id="publicResultSet">
-        <result column="USER_NO" property="userNo" />
-        <result column="EMAIL" property="email" />
-        <result column="USER_NAME" property="userName" />
-        <result column="NICK_NAME" property="nickName" />
-    </resultMap>
-    <!-- PROFILE 테이블  -->
-    <resultMap type="Profile" id="profileResultSet">
-        <result column="USER_NO" property="userNo"></result>
-        <result column="NICK_NAME" property="nickName"></result>
-        <result column="PHOTO_NO" property="photoNo"></result>
-        <result column="PROFILE_COMMENT" property="profileComment"></result>
-    </resultMap>
-    <resultMap id="potoResultSet" type="Photo">
-        <result column="PHOTO_NO" property="photoNo"></result>
-        <result column="USER_NO" property="userNo"></result>
-        <result column="ORIGIN_NAME" property="originName"></result>
-        <result column="CHANGE_NAME" property="changeName"></result>
-        <result column="FILE_PATH" property="filePath"></result>
-    </resultMap>
-    <!-- 마이페이지 회원정보 List -->
-    <select id="selectMyProList" resultMap="profileResultSet">
-        SELECT *
-        FROM USER_PROFILE
-        WHERE USER_NO = 2
-    </select>
-
-    <!-- USER(회원가입)정보 가져오기  -->
-    <select id="selectUser" resultMap="memberResultSet">
-        SELECT *
-        FROM MEMBER
-        WHERE USER_NO = 2
-    </select>
-
-    <!-- USER정보(프로필)정보 => 닉네임 변경 -->
-    <update id="updateUser" parameterType="string">
-        UPDATE USER_PROFILE
-        SET NICK_NAME = #{nickName}
-        WHERE USER_NO = 2
-    </update>
-
-    <!-- USER정보(프로필)정보 => 자기소개 변경 -->
-    <update id="updateComment" parameterType="string">
-        UPDATE USER_PROFILE
-        SET PROFILE_COMMENT = #{comment}
-        WHERE USER_NO = 2
-    </update>
-
-    <select id="findPublic" parameterType="Integer" resultMap="publicResultSet">
-        SELECT * FROM MEMBER WHERE USER_NO = #{userNo}
-    </select>
-
-    <insert id="insertUserProfile" parameterType="photo">
-        INSERT INTO PHOTO(
-            PHOTO_NO ,
-            USER_NO ,
-            ORIGIN_NAME ,
-            CHANGE_NAME ,
-            FILE_PATH
-        )
-        VALUES(
-            SEQ_PHOTO.NEXTVAL , #{userNo} , #{originName} , #{changeName} , #{filePath}
-        )
-    </insert>
-
-    <update id="updateUserProfile" parameterType="Photo">
-        UPDATE PHOTO
-            SET ORIGIN_NAME = #{originName} ,
-                CHANGE_NAME = #{changeName} ,
-                FILE_PATH = #{filePath}
-        WHERE USER_NO = #{userNo}
-    </update>
-
-    <update id="myupdatePwd" parameterType="string">
-        UPDATE MEMBER
-            SET USER_PWD = #{upPwd}
-        WHERE USER_NO = 2
-    </update>
-
-<!--    <select id="selectMyProfile" resultMap="potoResultSet">-->
+<!--    &lt;!&ndash; MEMBER 테이블  &ndash;&gt;-->
+<!--    <resultMap type="member" id="memberResultSet">-->
+<!--        <result column="USER_NO" property="userNo" />-->
+<!--        <result column="EMAIL" property="email" />-->
+<!--        <result column="USER_PWD" property="userPwd" />-->
+<!--        <result column="SOCIAL_TYPE" property="socialType" />-->
+<!--        <result column="ACCESS_TOKEN" property="accessToken" />-->
+<!--        <result column="STATUS" property="status" />-->
+<!--        <result column="USER_NAME" property="userName" />-->
+<!--        <result column="NICK_NAME" property="nickName" />-->
+<!--    </resultMap>-->
+<!--    <resultMap type="member" id="publicResultSet">-->
+<!--        <result column="USER_NO" property="userNo" />-->
+<!--        <result column="EMAIL" property="email" />-->
+<!--        <result column="USER_NAME" property="userName" />-->
+<!--        <result column="NICK_NAME" property="nickName" />-->
+<!--    </resultMap>-->
+<!--    &lt;!&ndash; PROFILE 테이블  &ndash;&gt;-->
+<!--    <resultMap type="Profile" id="profileResultSet">-->
+<!--        <result column="USER_NO" property="userNo"></result>-->
+<!--        <result column="NICK_NAME" property="nickName"></result>-->
+<!--        <result column="PHOTO_NO" property="photoNo"></result>-->
+<!--        <result column="PROFILE_COMMENT" property="profileComment"></result>-->
+<!--    </resultMap>-->
+<!--    <resultMap id="potoResultSet" type="Photo">-->
+<!--        <result column="PHOTO_NO" property="photoNo"></result>-->
+<!--        <result column="USER_NO" property="userNo"></result>-->
+<!--        <result column="ORIGIN_NAME" property="originName"></result>-->
+<!--        <result column="CHANGE_NAME" property="changeName"></result>-->
+<!--        <result column="FILE_PATH" property="filePath"></result>-->
+<!--    </resultMap>-->
+<!--    &lt;!&ndash; 마이페이지 회원정보 List &ndash;&gt;-->
+<!--    <select id="selectMyProList" resultMap="profileResultSet">-->
 <!--        SELECT *-->
-<!--        FROM PHOTO-->
-<!--        WHERE USER_NO =2-->
+<!--        FROM USER_PROFILE-->
+<!--        WHERE USER_NO = 2-->
 <!--    </select>-->
 
-    <update id="deleteUser" parameterType="int">
-        UPDATE MEMBER
-            SET STATUS = 0
-        WHERE USER_NO = 3
-    </update>
+<!--    &lt;!&ndash; USER(회원가입)정보 가져오기  &ndash;&gt;-->
+<!--    <select id="selectUser" resultMap="memberResultSet">-->
+<!--        SELECT *-->
+<!--        FROM MEMBER-->
+<!--        WHERE USER_NO = 2-->
+<!--    </select>-->
 
-    <!--  로그인  -->
-    <select id="loginMember" parameterType="Member" resultMap="memberResultSet">
-        SELECT *
-        FROM MEMBER
-        WHERE EMAIL = #{email}
-        AND STATUS = '1'
-    </select>
+<!--    &lt;!&ndash; USER정보(프로필)정보 => 닉네임 변경 &ndash;&gt;-->
+<!--    <update id="updateUser" parameterType="string">-->
+<!--        UPDATE USER_PROFILE-->
+<!--        SET NICK_NAME = #{nickName}-->
+<!--        WHERE USER_NO = 2-->
+<!--    </update>-->
 
-    <!--  회원가입  -->
-    <insert id="insertMember" parameterType="Member">
-        INSERT INTO MEMBER (USER_NO, EMAIL, USER_PWD, STATUS, USER_NAME, NICK_NAME)
-        VALUES (SEQ_MEMBER.NEXTVAL, #{email}, #{userPwd}, DEFAULT, #{userName}, #{nickName})
-    </insert>
+<!--    &lt;!&ndash; USER정보(프로필)정보 => 자기소개 변경 &ndash;&gt;-->
+<!--    <update id="updateComment" parameterType="string">-->
+<!--        UPDATE USER_PROFILE-->
+<!--        SET PROFILE_COMMENT = #{comment}-->
+<!--        WHERE USER_NO = 2-->
+<!--    </update>-->
 
-    <!--  닉네임 중복 체크  -->
-    <select id="checkNick" parameterType="Member" resultType="int">
-        SELECT COUNT(*)
-        FROM MEMBER
-        WHERE NICK_NAME = #{nickName}
-    </select>
+<!--    <select id="findPublic" parameterType="Integer" resultMap="publicResultSet">-->
+<!--        SELECT * FROM MEMBER WHERE USER_NO = #{userNo}-->
+<!--    </select>-->
+
+<!--    <insert id="insertUserProfile" parameterType="photo">-->
+<!--        INSERT INTO PHOTO(-->
+<!--            PHOTO_NO ,-->
+<!--            USER_NO ,-->
+<!--            ORIGIN_NAME ,-->
+<!--            CHANGE_NAME ,-->
+<!--            FILE_PATH-->
+<!--        )-->
+<!--        VALUES(-->
+<!--            SEQ_PHOTO.NEXTVAL , #{userNo} , #{originName} , #{changeName} , #{filePath}-->
+<!--        )-->
+<!--    </insert>-->
+
+<!--    <update id="updateUserProfile" parameterType="Photo">-->
+<!--        UPDATE PHOTO-->
+<!--            SET ORIGIN_NAME = #{originName} ,-->
+<!--                CHANGE_NAME = #{changeName} ,-->
+<!--                FILE_PATH = #{filePath}-->
+<!--        WHERE USER_NO = #{userNo}-->
+<!--    </update>-->
+
+<!--    <update id="myupdatePwd" parameterType="string">-->
+<!--        UPDATE MEMBER-->
+<!--            SET USER_PWD = #{upPwd}-->
+<!--        WHERE USER_NO = 2-->
+<!--    </update>-->
+
+<!--&lt;!&ndash;    <select id="selectMyProfile" resultMap="potoResultSet">&ndash;&gt;-->
+<!--&lt;!&ndash;        SELECT *&ndash;&gt;-->
+<!--&lt;!&ndash;        FROM PHOTO&ndash;&gt;-->
+<!--&lt;!&ndash;        WHERE USER_NO =2&ndash;&gt;-->
+<!--&lt;!&ndash;    </select>&ndash;&gt;-->
+
+<!--    <update id="deleteUser" parameterType="int">-->
+<!--        UPDATE MEMBER-->
+<!--            SET STATUS = 0-->
+<!--        WHERE USER_NO = 3-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash;  로그인  &ndash;&gt;-->
+<!--    <select id="loginMember" parameterType="Member" resultMap="memberResultSet">-->
+<!--        SELECT *-->
+<!--        FROM MEMBER-->
+<!--        WHERE EMAIL = #{email}-->
+<!--        AND STATUS = '1'-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash;  회원가입  &ndash;&gt;-->
+<!--    <insert id="insertMember" parameterType="Member">-->
+<!--        INSERT INTO MEMBER (USER_NO, EMAIL, USER_PWD, STATUS, USER_NAME, NICK_NAME)-->
+<!--        VALUES (SEQ_MEMBER.NEXTVAL, #{email}, #{userPwd}, DEFAULT, #{userName}, #{nickName})-->
+<!--    </insert>-->
+
+<!--    &lt;!&ndash;  닉네임 중복 체크  &ndash;&gt;-->
+<!--    <select id="checkNick" parameterType="Member" resultType="int">-->
+<!--        SELECT COUNT(*)-->
+<!--        FROM MEMBER-->
+<!--        WHERE NICK_NAME = #{nickName}-->
+<!--    </select>-->
 
     <!-- userNo에 해당하는 member 데이터 가져오기  -->
-    <select id="selectMember" parameterType="int" resultMap="publicResultSet">
-        SELECT *
-        FROM MEMBER
-        WHERE USER_NO = #{userNo}
-    </select>
+<!--    <select id="selectMember" parameterType="int" resultMap="publicResultSet">-->
+<!--        SELECT *-->
+<!--        FROM MEMBER-->
+<!--        WHERE USER_NO = #{userNo}-->
+<!--    </select>-->
 
-</mapper>
+<!--</mapper>-->

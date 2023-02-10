@@ -38,6 +38,7 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -267,6 +268,23 @@
             <version>5.7.5</version>
         </dependency>
 
+        <!-- 소켓통신 -->
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-websocket</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+
+        <!--
+            웹소켓 편하게 사용할 수 있게 도와주는 설정.
+            ex) @ServerEndpoint("/리액트 프론트 서버와 소켓 통신할 주소 경로")
+         -->
+        <dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.1</version>
+        </dependency>
 
     </dependencies>
 

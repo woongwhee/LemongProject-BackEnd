@@ -39,22 +39,31 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.findPublic", userNo);
     }
 
-    public Member selectMember(int userNo) {
-        return sqlSession.selectOne("memberMapper.selectMember", userNo);
-    }
-
     public Profile selectMyProfile(int userNo) {
         return sqlSession.selectOne("profileMapper.selectMyProfile", userNo);
     }
 
+    public Member isSocialUser(Member isSocial) {
+        return sqlSession.selectOne("memberMapper.isSocialUser", isSocial);
+    }
 
+    public int insertSocial(Member isSocial) {
+        return sqlSession.insert("memberMapper.insertSocial", isSocial);
+    }
+
+    public Member pwdChEmail(Member userEmail) {
+        return sqlSession.selectOne("memberMapper.pwdChEmail", userEmail);
+    }
+
+    public Member findUserNo(String email) {
+        return sqlSession.selectOne("memberMapper.loginMember", email);
+    }
+
+
+
+    public Member selectMembers(int userNo) {
+        return sqlSession.selectOne("memberMapper.selectMember", userNo);
+    }
 }
 
-//    public int checkEmail(Map<String, Object> e, String ranNum) {
-//        e.put("code", ranNum);
-//        int eCount = sqlSession.selectOne("memberMapper.checkEmail", e);
-//        if(eCount > 0) {
-//            sqlSession.delete("memberMapper.deleteEmail", e);
-//        }
-//        return sqlSession.insert("memberMapper.insertEmail", e);
-//    }
+

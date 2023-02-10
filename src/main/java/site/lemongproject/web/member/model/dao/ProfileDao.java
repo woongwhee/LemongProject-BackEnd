@@ -12,7 +12,6 @@ public interface ProfileDao {
 
     Profile findOne(int userNo);
 
-
     int createProfile(String nickName);
 
     int updateProfile(Profile profile);
@@ -21,4 +20,10 @@ public interface ProfileDao {
     int deleteProfile(int userNo);
 
     List<Profile> searchUser(String userNick);
+
+    Profile MyPageNickCheck(String checkNick);
+
+    Profile updateMyNick(Profile pro);
+
+    Profile updateMyContent(Profile p);
 }
