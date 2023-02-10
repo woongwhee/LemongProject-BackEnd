@@ -52,10 +52,10 @@ public class PublicController {
         Profile loginUser = memberService.loginMember(m);
         // 암호화 후
         if(loginUser != null) {
-            System.out.println("컨트롤러 넘어옴");
+//            System.out.println("컨트롤러 넘어옴");
             session.setAttribute("loginUser",loginUser);
             session.setAttribute("socialType",SocialType.NONE);
-            System.out.println(ResponseBuilder.success(loginUser));
+//            System.out.println(ResponseBuilder.success(loginUser));
             return ResponseBuilder.success(loginUser);
         } else {
             System.out.println("컨트롤러 못 넘어옴");
