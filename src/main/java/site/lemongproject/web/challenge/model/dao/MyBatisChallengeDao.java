@@ -2,6 +2,7 @@ package site.lemongproject.web.challenge.model.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;

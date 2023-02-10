@@ -14,6 +14,7 @@ import site.lemongproject.web.todo.model.dto.MonthMarkVo;
 import site.lemongproject.web.todo.model.vo.Todo;
 import site.lemongproject.web.todo.service.TodoService;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -159,26 +160,49 @@ public class TodoController {
     }
 
     @GetMapping("/dndTodos")
-    public ResponseBody<List<Todo>> dndTodo2(@RequestParam(value = "dndTodoList" , required = false) Todo t){
+    public ResponseBody<Todo> dndTodo2(@RequestParam(value = "dndTodoNo") int dndTodo,
+                                       @RequestParam(value = "value") int value){
 
-        System.out.println("dnd todo: "+t);
+        System.out.println("dnd todo: "+ dndTodo + ", value :" + value);
 
-        Todo tt = new Todo();
-        //tt.setValue();
+        Todo t = new Todo();
+        t.setTodoNo(dndTodo);
+        t.setValue(value);
 
-        //todoService.dndTodo2();
+        int result = todoService.dndTodo2(t);
 
-        return ResponseBuilder.success(t);
+        return ResponseBuilder.success(dndTodo);
+    }
+
+    @RequestMapping("/dndTodo3")
+    public ResponseBody<DailyTodoVo> dndTodo3(@RequestBody DailyTodoVo todoList){
+
+        System.out.println("dndTodoList: "+ todoList);
+
+        for(Todo todo : todoList.getNormalList()){
+            System.out.println("todo: "+ todo);
+        }
+
+        List<Todo> t = todoList.getNormalList();
+
+        int result = todoService.dndTodo3(t);
+
+        return ResponseBuilder.success(result);
     }
 
     @RequestMapping("/dndTodo")
-    public Map<String, Object> dndTodo(@RequestBody Map<String, Object> todoNo) {
+    public Map<String, Object> dndTodo(@RequestBody Map<String, Object> dndTodo2) {
 
-        System.out.println("dnd todo: " + todoNo);
+        //String dndTodo = request.getParameterValues("dndTodo[]");
+
+        //System.out.println("dndTodo: " + dndTodo);
+        //System.out.println("originNo: " + dndTodo.get("dndTodo"));
+
+
 
         Map<String, Object> result = new HashMap<>();
 
-        int check = todoService.dndTodo(todoNo);
+        int check = todoService.dndTodo(result);
 
         return result;
     }

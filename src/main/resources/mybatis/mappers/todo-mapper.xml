@@ -134,12 +134,6 @@
         ]]>
     </select>
 
-    <!--    <update id="dndTodo" parameterType="Todo">-->
-    <!--        UPDATE TODO-->
-    <!--        SET VALUE = #{value}-->
-    <!--        WHERE TODO_NO = #{todoNo}-->
-    <!--    </update>-->
-
     <select id="findDaily" resultMap="todoResultSet" parameterType="DailyFindVo">
         <![CDATA[
         SELECT TODO_NO,
@@ -156,9 +150,6 @@
         ]]>
     </select>
 
-    <!--    <update id="dndTodo" parameterType="">-->
-    <!--        UPDATE VALUE FROM TODO WHERE-->
-    <!--    </update>-->
 
     <select id="startValue" parameterType="Map" resultType="int">
         SELECT VALUE
@@ -179,6 +170,30 @@
         update TODO
         SET VALUE=#{startValue}
         WHERE TODO_NO = #{changeArr}
+    </update>
+
+
+
+    <!--맨 밑으로 이동-->
+    <update id="dndTodo2" parameterType="Todo">
+        UPDATE TODO
+        SET VALUE = VALUE - 1
+        WHERE TODO_DATE = (SELECT TODO_DATE FROM TODO WHERE TODO_NO = #{todoNo})
+        AND VALUE < #{value}
+    </update>
+    <!--맨 위로 이동-->
+    <update id="dndTodo2" parameterType="Todo">
+        UPDATE TODO
+        SET VALUE = VALUE + 1
+        WHERE TODO_DATE = (SELECT TODO_DATE FROM TODO WHERE TODO_NO = #{todoNo}) AND VALUE > #{value}
+    </update>
+
+    <update id="dndTodo3" parameterType="DailyTodoVo">
+        <foreach collection="list" item="todo" index="index" >
+            UPDATE TODO
+            SET VALUE = #{index}
+            WHERE TODO_NO = #{todo.todoNo}
+        </foreach>
     </update>
 
 
