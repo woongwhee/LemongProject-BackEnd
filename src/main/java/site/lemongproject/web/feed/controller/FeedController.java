@@ -1,12 +1,10 @@
 package site.lemongproject.web.feed.controller;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.util.FileUtil;
-import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.service.FeedService;
@@ -15,8 +13,6 @@ import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
 
 
-import javax.servlet.http.HttpSession;
-import java.nio.file.FileStore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,12 +23,21 @@ import java.util.Map;
 public class FeedController {
     final private FeedService feedService;
 
+    @PostMapping("/loginFeedUserNo")
+    public int loginFeedUserNo( @SessionAttribute("loginUser") Profile loginUser){
+        return loginUser.getUserNo();
+    }
+
+    @PostMapping("/feedProfile")
+    public Map<String, Object> userProfilePhoto(@RequestBody Map<String,Object> userNo){
+        Map<String, Object> result = feedService.userProfile(userNo);
+        return result;
+    }
+
     // feed 전체 불러오기
     @RequestMapping("/main")
     public ResponseBody<List<FeedList>> feedSelect(){
-
         List<FeedList> list = feedService.selectFeed();
-//        System.out.println(list);
         return ResponseBuilder.success(list);
     }
 
@@ -57,9 +62,11 @@ public class FeedController {
 
     // 피드 수정
     @RequestMapping(value = "/updateFeed", method = RequestMethod.POST)
-    public Map<String, Object> feedUpdate(@RequestBody FeedInsert updatefeed ){
+    public Map<String, Object> feedUpdate(@RequestBody FeedInsert updatefeed, @SessionAttribute("loginUser") Profile loginUser ){
         System.out.println("updateFeed : " + updatefeed);
-        System.out.println(updatefeed.getFeedContent().equals(""));
+//        System.out.println(updatefeed.getFeedContent().equals(""));
+        updatefeed.setUserNo(loginUser.getUserNo());
+        System.out.println(updatefeed);
         int check = feedService.updateFeed(updatefeed);
         Map<String, Object> result = new HashMap<>();
         if(check > 0){
