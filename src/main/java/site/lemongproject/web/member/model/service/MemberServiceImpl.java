@@ -48,12 +48,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Profile loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
-//        if(bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())){
-//
-//        }else{
-//            return null;
-//        }
+        if(bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())){
             return profileDao.findOne(loginUser.getUserNo());
+
+        }else{
+            return null;
+        }
     }
 
 
