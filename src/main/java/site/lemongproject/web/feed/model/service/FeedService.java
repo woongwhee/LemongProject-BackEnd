@@ -3,7 +3,6 @@ package site.lemongproject.web.feed.model.service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
-import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.photo.model.vo.Photo;
 
@@ -49,4 +48,9 @@ public interface FeedService  {
 
     // 댓글수
     int countReply(int feedNo);
+
+    // 유저프로필사진
+    Map<String, Object> userProfile(Map<String,Object> userNo);
+
+
 }

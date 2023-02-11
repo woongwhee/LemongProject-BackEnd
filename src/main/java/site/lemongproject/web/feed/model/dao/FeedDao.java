@@ -3,10 +3,7 @@ package site.lemongproject.web.feed.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import site.lemongproject.web.feed.model.dto.FeedDetail;
-import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
-import site.lemongproject.web.feed.model.dto.FeedInsert;
-import site.lemongproject.web.feed.model.dto.FeedList;
+import site.lemongproject.web.feed.model.dto.*;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
 
@@ -122,5 +119,10 @@ public class FeedDao {
 
     public int countReply(int feedNo) {
         return sqlSession.selectOne("replyMapper.countReply", feedNo);
+    }
+
+
+    public Map<String, Object> userProfile(Map<String,Object> userNo) {
+        return sqlSession.selectOne("feedMapper.userProfile", userNo);
     }
 }
