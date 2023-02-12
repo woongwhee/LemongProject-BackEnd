@@ -120,11 +120,11 @@ public class TemplateController {
 
 
     @PostMapping("/todo/insert")
-    public ResponseBody<List<TemplateTodo>> insertTodo(@SessionAttribute("loginUser")Profile loginUser, @RequestBody TemplateTodoInsertVo tiv) {
+    public ResponseBody<List<Integer>> insertTodo(@SessionAttribute("loginUser")Profile loginUser, @RequestBody TemplateTodoInsertVo tiv) {
         tiv.setUserNo(loginUser.getUserNo());
-        List<TemplateTodo> todoList = WriteService.insertTodo(tiv);
-        if (todoList!=null) {
-            return ResponseBuilder.success(todoList);
+        int result = WriteService.insertTodo(tiv);
+        if (result>0) {
+            return ResponseBuilder.success(result);
         } else {
             return ResponseBuilder.upLoadFail();
         }

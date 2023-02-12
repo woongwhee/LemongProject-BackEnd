@@ -112,7 +112,6 @@ public class ForTest {
 
     @Test
     public void genericTest(){
-
     }
 
 
