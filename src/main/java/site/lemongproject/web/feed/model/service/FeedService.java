@@ -49,4 +49,8 @@ public interface FeedService  {
 
     // 댓글수
     int countReply(int feedNo);
+
+    List<FeedList> selectMyFeedList(FeedList f);
+
+    List<FeedList> searchImg(FeedList f);
 }

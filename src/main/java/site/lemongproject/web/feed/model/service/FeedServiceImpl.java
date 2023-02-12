@@ -140,4 +140,13 @@ public class FeedServiceImpl implements FeedService{
     public int countReply(int feedNo){
         return feedDao.countReply(feedNo);
     }
+
+    @Override
+    public List<FeedList> selectMyFeedList(FeedList f){
+        return feedDao.selectMyFeedList(f);
+    }
+
+    public List<FeedList> searchImg(FeedList f){
+        return feedDao.searchImg(f);
+    }
 }
