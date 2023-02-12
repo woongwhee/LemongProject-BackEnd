@@ -12,7 +12,8 @@ public class Reply {
     private int userNo;
     private int feedNo;
     private String replyContent;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date replyAt;
     private String nickName;
+    private String filePath;
 }
