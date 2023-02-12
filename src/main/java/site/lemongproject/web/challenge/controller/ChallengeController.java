@@ -10,6 +10,7 @@ import site.lemongproject.web.challenge.model.vo.SingleStartVo;
 import site.lemongproject.web.challenge.service.ChallengeService;
 import site.lemongproject.web.member.model.vo.Profile;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -30,7 +31,6 @@ public class ChallengeController {
         return ResponseBuilder.success(c);
 
     }
-
     @PostMapping("/start/single")
     public ResponseBody<Challenge> startSingle(@SessionAttribute("loginUser")Profile loginUser, @RequestBody SingleStartVo startVo) {
         System.out.println(startVo);

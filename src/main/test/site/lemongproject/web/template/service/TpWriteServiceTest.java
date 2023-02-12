@@ -50,15 +50,15 @@ public class TpWriteServiceTest extends Configure {
 
         TemplateTodoInsertVo ttiv=new TemplateTodoInsertVo();
         ttiv.setTemplateNo(t.getTemplateNo());
-        ttiv.setContent("테스트투두");
+//        ttiv.setContent("테스트투두");
         List<Integer> day= new ArrayList<>();
         day.add(2);
         day.add(1);
         day.add(3);
         ttiv.setDayList(day);
         ttiv.setUserNo(1);
-        List<TemplateTodo> todoList = templateService.insertTodo(ttiv);
-        assertThat(todoList).isNotNull();
+        int result = templateService.insertTodo(ttiv);
+        assertThat(result).isNotZero();
 
     }
     @Test

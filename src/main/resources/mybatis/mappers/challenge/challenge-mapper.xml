@@ -52,4 +52,9 @@
         FROM CHALLENGE
         WHERE CHALLENGE_NO = #{challengeNo}
     </select>
+    <select id="findByTemplate" parameterType="Challenge" resultMap="challengeMap">
+        SELECT *
+        FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengeNo}
+    </select>
 </mapper>

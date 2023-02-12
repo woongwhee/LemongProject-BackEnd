@@ -28,4 +28,5 @@ public interface ChallengeService {
     int clearChallengeTodo(ChallengeTodo cTd);
 
     List<ChallengeTodo> calChTodo(ChallengeTodo ct);
+
 }

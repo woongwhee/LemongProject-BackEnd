@@ -16,4 +16,6 @@ public interface ChallengeDao {
     int deleteUser(ChallengeUserVo userVo);
 
     Challenge selectChallenge(Challenge cNo);
+
+
 }
