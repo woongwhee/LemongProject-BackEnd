@@ -223,6 +223,7 @@ public class PublicController {
     @RequestMapping(value = "naverLogin", method = RequestMethod.GET)
     public ResponseBody<Map<String, Object>> naverLogin(@RequestParam Map<String, Object> aToken, HttpSession session) {
 
+        // accessToken
         String token = String.valueOf(aToken.get("accessToken"));
         System.out.println("네이버 토큰: " + token);
 
@@ -238,6 +239,7 @@ public class PublicController {
         isNaver.setUserName(userName);
         isNaver.setEmail(email);
         isNaver.setSocialType(socialType);
+        isNaver.setAccessToken(token);
 
         // 일치하는 회원이 있는지 확인
         Member result = memberService.isSocialUser(isNaver);

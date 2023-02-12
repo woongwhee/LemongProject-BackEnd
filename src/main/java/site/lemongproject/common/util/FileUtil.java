@@ -17,7 +17,7 @@ public class FileUtil {
     final private String SAVE_PATH;
 
     public FileUtil() {
-        this.SAVE_PATH =System.getProperty("catalina.home")+"/webapps";;
+        this.SAVE_PATH =System.getProperty("catalina.home")+"/webapps";
     }
 
     public Photo saveFile(MultipartFile m,Photo p){
