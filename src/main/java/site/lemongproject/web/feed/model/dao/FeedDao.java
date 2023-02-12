@@ -125,4 +125,20 @@ public class FeedDao {
     public Map<String, Object> userProfile(Map<String,Object> userNo) {
         return sqlSession.selectOne("feedMapper.userProfile", userNo);
     }
+
+    public int heartClick(Map<String, Object> data) {
+        return sqlSession.insert("feedMapper.heartClick", data);
+    }
+
+    public int heartCancel(Map<String, Object> data) {
+        return sqlSession.delete("feedMapper.heartCancel", data);
+    }
+
+    public int heartState(Map<String, Object> data) {
+        return sqlSession.selectOne("feedMapper.heartState", data);
+    }
+
+    public int heartCount(Map<String, Object> data) {
+        return sqlSession.selectOne("feedMapper.heartCount", data);
+    }
 }

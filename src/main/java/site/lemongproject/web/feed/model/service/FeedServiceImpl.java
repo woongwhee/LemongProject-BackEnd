@@ -142,4 +142,16 @@ public class FeedServiceImpl implements FeedService{
     public int countReply(int feedNo){
         return feedDao.countReply(feedNo);
     }
+
+    @Override
+    public int heartClick(Map<String, Object> data){return feedDao.heartClick(data);}
+
+    @Override
+    public int heartCancel(Map<String, Object> data){return feedDao.heartCancel(data);}
+
+    @Override
+    public int heartState(Map<String, Object> data) {return feedDao.heartState(data);}
+
+    @Override
+    public int heartCount(Map<String, Object> data){return feedDao.heartCount(data);}
 }

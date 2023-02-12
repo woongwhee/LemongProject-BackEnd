@@ -175,4 +175,20 @@
         update FEED_PHOTO SET VALUE=#{startValue} WHERE PHOTO_NO=#{finishPhoNo}
     </update>
 
+<!--    좋아요 클릭  -->
+    <insert id="heartClick" parameterType="Map">
+        INSERT INTO HEART (USER_NO, REF_TYPE, REF_NO) VALUES (#{userNo},1,#{refNo})
+    </insert>
+<!--    좋아요 취소 -->
+    <delete id="heartCancel" parameterType="Map">
+        DELETE FROM HEART WHERE USER_NO = #{userNo} AND REF_NO = #{refNo}
+    </delete>
+<!--    좋아요 상태-->
+    <select id="heartState" parameterType="Map" resultType="int">
+        SELECT COUNT(*) FROM HEART WHERE USER_NO = #{userNo} AND REF_NO= #{refNo} AND REF_TYPE = 1
+    </select>
+<!--    좋아요 수-->
+    <select id="heartCount" parameterType="Map" resultType="int">
+        SELECT COUNT(*) FROM HEART WHERE REF_NO=#{refNo} AND REF_TYPE=1
+    </select>
 </mapper>
