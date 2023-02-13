@@ -66,4 +66,11 @@ public class MybatisProfileDao implements ProfileDao {
         return sqlSession.selectOne("profileMapper.updateMyContent" , p);
     }
 
+    @Override
+    public int deleteNaver(int userNo) {
+        return sqlSession.delete("profileMapper.deleteNaver", userNo);
+    }
+
+
+
 }

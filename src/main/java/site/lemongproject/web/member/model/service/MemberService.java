@@ -70,11 +70,12 @@ public interface MemberService {
 
     Member findUserNo(String email);
 
-    int updateToken(Member isNaver);
+    int updateToken(Member isSocial);
 
     String selectAccessToken(int userNo);
 
     int deleteNaver(Profile profile, String token);
 
+    int deleteKakao(Profile profile, String token);
 
 }

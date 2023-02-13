@@ -326,8 +326,8 @@ public class MemberServiceImpl implements MemberService {
 
 
     @Override
-    public int updateToken(Member isNaver) {
-        return memberDao.updateToken(isNaver);
+    public int updateToken(Member isSocial) {
+        return memberDao.updateToken(isSocial);
     }
 
 
@@ -396,10 +396,11 @@ public class MemberServiceImpl implements MemberService {
     // Naver 유저 api 끊기 -> 회원 탈퇴
     public int deleteNaver(Profile profile, String token) {
 
-        int result1 = memberDao.deleteNaver(profile.getUserNo());
-        int result2 = deleteNaverToken(token); // 네이버 연동 해제
+        int result1 = memberDao.deleteUser(profile.getUserNo()); // 멤버에서 상태 0으로 변경
+        int result2 = profileDao.deleteNaver(profile.getUserNo()); // 프로필에서 삭제
+        int result3 = deleteNaverToken(token); // 네이버 연동 해제
 
-        int result = result1 * result2;
+        int result = result1 * result2 * result3;
         return result;
 
     }
@@ -450,6 +451,63 @@ public class MemberServiceImpl implements MemberService {
 
     }
 
+
+    // 카카오 유저 삭제
+    @Override
+    public int deleteKakao(Profile profile, String token) {
+
+        int result1 = memberDao.deleteUser(profile.getUserNo()); // 멤버에서 상태 0으로 변경
+        int result2 = profileDao.deleteNaver(profile.getUserNo()); // 프로필에서 삭제
+        int result3 = deleteKakaoToken(token); // 카카오 api 연동 해제
+
+        int result = result1 * result2 * result3;
+        return result;
+    }
+
+
+    public int deleteKakaoToken(String token) {
+        System.out.println(token);
+
+        String reqURL = "https://kapi.kakao.com/v1/user/unlink";
+
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            conn.setRequestProperty("Authorization", "Bearer "+token);
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("카카오 회원탈퇴 응답코드: "+responseCode);
+
+            BufferedReader br;
+            if(responseCode == 200) {
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+
+            String brLine = "";
+            String result = "";
+            while ((brLine = br.readLine()) != null) {
+                result += brLine;
+            }
+
+            br.close();
+
+            if(responseCode == 200) {
+                return 1;
+            } else {
+                return 0;
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
 
 
     public Profile selectMyProfile(int userNo) {

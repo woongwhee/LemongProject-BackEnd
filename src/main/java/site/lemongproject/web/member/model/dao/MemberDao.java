@@ -59,8 +59,8 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.loginMember", email);
     }
 
-    public int updateToken(Member isNaver) {
-        return sqlSession.update("memberMapper.updateToken", isNaver);
+    public int updateToken(Member isSocial) {
+        return sqlSession.update("memberMapper.updateToken", isSocial);
     }
 
     public String selectAccessToken(int userNo) {
@@ -68,9 +68,9 @@ public class MemberDao {
     }
 
 
-    public int deleteNaver(int userNo) {
-        return sqlSession.update("memberMapper.deleteNaver", userNo);
-    }
+//    public int deleteNaver(int userNo) {
+//        return sqlSession.update("memberMapper.deleteNaver", userNo);
+//    }
 
 
 
