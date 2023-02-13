@@ -85,4 +85,12 @@
         WHERE USER_NO = #{userNo}
     </update>
 
+    <!--  회원탈퇴 -> 프로필 삭제  -->
+    <delete id="deleteNaver" parameterType="int">
+        DELETE
+        FROM USER_PROFILE
+        WHERE USER_NO = #{userNo}
+    </delete>
+
+
 </mapper>

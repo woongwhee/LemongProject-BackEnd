@@ -171,7 +171,8 @@ public class PublicController {
         // 인가코드를 통해 access_token 발급
         String token = memberService.getAccessToken(authCode);
         System.out.println("acessToken: "+token);
-        session.setAttribute("accessToken",token);
+//        session.setAttribute("accessToken",token);
+
         // 접속자 정보 얻어오기
         Map<String, Object> kakaoUser = memberService.getKakaoUser(token);
         System.out.println("카카오 유저 정보: "+kakaoUser);
@@ -186,11 +187,17 @@ public class PublicController {
         isKakao.setEmail(email);
         isKakao.setSocialType(socialType);
         isKakao.setUserName(userName);
+        isKakao.setAccessToken(token);
+
 
         // 일치하는 회원이 있는지 확인
         Member result = memberService.isSocialUser(isKakao);
 
         if(result != null) { // 회원정보가 있는 경우 -> 로그인
+            // 토큰 업데이트
+            int updateToken = memberService.updateToken(isKakao);
+            System.out.println("카카오톡 토큰 업뎃: "+updateToken);
+            // 유저가 있을 때 profile 반환
             Profile oldKakao = memberService.socialProfile(isKakao);
 //            isKakao = memberService.isSocialUser(isKakao);
             session.setAttribute("loginUser", oldKakao);

@@ -226,6 +226,7 @@ public class MemberController {
     public ResponseBody<Integer> byeUser(@SessionAttribute("loginUser") Profile profile, @SessionAttribute("socialType") SocialType socialType, HttpSession session) {
 
         int result = 0;
+        String token = "";
 
         switch (socialType) {
             case NONE:
@@ -233,13 +234,18 @@ public class MemberController {
                 break;
             case NAVER:
                 // 토큰을 서비스로 넘겨주기
-                String token = memberService.selectAccessToken(profile.getUserNo()); // 토큰값 얻어옴 <- 여기까지 된다
-                System.out.println(token);
+                token = memberService.selectAccessToken(profile.getUserNo()); // 토큰값 얻어옴 <- 여기까지 된다
+//                System.out.println(token);
                 // 회원 삭제가 되었는지 체크
                 result = memberService.deleteNaver(profile, token);
                 System.out.println(result);
                 break;
-            case KAKAO: break;
+            case KAKAO:
+                token = memberService.selectAccessToken(profile.getUserNo());
+                System.out.println(token);
+                result = memberService.deleteKakao(profile, token);
+                System.out.println(result);
+                break;
         }
 
         if(result > 0) {

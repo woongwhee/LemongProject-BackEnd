@@ -26,4 +26,6 @@ public interface ProfileDao {
     Profile updateMyNick(Profile pro);
 
     Profile updateMyContent(Profile p);
+
+    int deleteNaver(int userNo);
 }
