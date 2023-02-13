@@ -15,6 +15,11 @@ public interface ChallengeDao {
     int updateEndDate(EndDateUpdateVo endDateUpdateVo);
     int deleteUser(ChallengeUserVo userVo);
 
+    List<Challenge> selectChallenge();
+
+    List<Challenge> detailChallenge(Challenge c);
+
+    int challengeGo(ChallengeUser u);
     Challenge selectChallenge(Challenge cNo);
 
 

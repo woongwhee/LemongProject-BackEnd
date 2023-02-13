@@ -79,7 +79,7 @@ public class MemberController {
     @RequestMapping(value="/insertUserProfile", method=RequestMethod.POST)
     public ResponseBody<Photo> insertProfilePhoto(
             @RequestParam(value="file", required=false) MultipartFile[] files,
-            @SessionAttribute("loginUser") Member loginUser) {
+            @SessionAttribute("loginUser") Profile loginUser) {
 
         System.out.println(files + " =============> [success]");
         System.out.println(loginUser.getUserNo() + " =============> [success]");
@@ -206,6 +206,15 @@ public class MemberController {
 
             return ResponseBuilder.success(content);
         }
+
+    // 마이페이지에서 유저 닉네임 검색해서 없는 닉네임인 경우 변경
+    @GetMapping("/MyPageNickCheck")
+    public ResponseBody<Profile> MyPageNickCheck(@RequestParam(value = "checkNick" , required = false) String checkNick){
+
+        Profile p = memberService.MyPageNickCheck(checkNick);
+
+        return ResponseBuilder.success(p);
+    }
 
 
 

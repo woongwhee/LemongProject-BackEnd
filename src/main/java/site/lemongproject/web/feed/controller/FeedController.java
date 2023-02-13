@@ -1,5 +1,6 @@
 package site.lemongproject.web.feed.controller;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
@@ -9,10 +10,13 @@ import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.service.FeedService;
+import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
 
 
+import javax.servlet.http.HttpSession;
+import java.nio.file.FileStore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +38,11 @@ public class FeedController {
 
     // 피드 사진 넣기
     @RequestMapping(value = "/insert",method = RequestMethod.POST)
-    public Map<String, Object> feedInsert(@RequestBody FeedInsert paramMap){
-        System.out.println(paramMap); //FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)
+    public Map<String, Object> feedInsert(@RequestBody FeedInsert paramMap, HttpSession session, @SessionAttribute("loginUser") Profile loginUser){
+        System.out.println(paramMap); //FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)Profile
+        System.out.println(loginUser);
+        paramMap.setUserNo(loginUser.getUserNo());
+        System.out.println("추가후"+ paramMap);
         int check = feedService.insertFeed(paramMap);
 
         Map<String, Object> result = new HashMap<>();
@@ -92,10 +99,20 @@ public class FeedController {
         return result;
     }
 
+
+
+
+
+
+
+
+
+
+
     // 피드 댓글 달기
     @RequestMapping(value = "/insertReply", method = RequestMethod.POST)
     public Map<String, Object> insertReply(@RequestBody Map<String, Object> paramMap){
-        System.out.println(paramMap);
+//        System.out.println("insert"+paramMap);
         int check = feedService.insertFeedReply(paramMap);
 
         Map<String, Object> result = new HashMap<>();
@@ -111,11 +128,11 @@ public class FeedController {
 //  피드 댓글 삭제
     @RequestMapping("/deleteReply")
     public Map<String,Object> deleteReply(@RequestBody Map<String, Object> data){
-        System.out.println(data);
+        System.out.println("딜리트입니다" + data);
 
         int check = feedService.deleteReply(data);
         System.out.println(check);
-
+//
         Map<String,Object> result = new HashMap<>();
         if(check > 0){
             result.put("Java","success");
@@ -124,15 +141,56 @@ public class FeedController {
         }
         return result;
     }
-
     // 피드 댓글 불러오기
-    @RequestMapping("/listReply")
+    @GetMapping("/listReply")
     public ResponseBody<List<Reply>> listReply(@RequestParam int feedNo){
+//        System.out.println("list" + feedNo);
 
-        List<Reply> list = feedService.listReply(feedNo);
+        List <Reply> list = feedService.listReply(feedNo);
+
 
         return ResponseBuilder.success(list);
     }
+    // 피드 댓글수 불러오기
+    public int countReply(@RequestBody int feedNo){
+        int check = feedService.countReply(feedNo);
+        return check;
+    }
+
+    // USER_NO에 해당하는 내가 작성한 피드정보 리스트 가져오기(마이페이지용)
+    @GetMapping("/selectMyFeedList")
+    public ResponseBody<List<FeedList>> selectMyFeedList(@RequestParam(value = "userNo" , required = false)int userNo){
+        System.out.println(userNo + "myfeed");
+
+        FeedList f = new FeedList();
+        f.setUserNo(userNo);
+
+        List<FeedList> fList = feedService.selectMyFeedList(f);
+        return ResponseBuilder.success(fList);
+    }
+
+    // FEED_NO에 해당하는 이미지 경로포함해서 다가져오기
+    @GetMapping("/searchImg")
+    public ResponseBody<List<FeedList>> searchImg(@RequestParam(value = "feedNo" , required = false)int feedNo){
+
+        System.out.println(feedNo + "success");
+
+        FeedList f = new FeedList();
+        f.setFeedNo(feedNo);
+
+        List<FeedList> sList = feedService.searchImg(f);
+
+        return ResponseBuilder.success(sList);
+    }
+
+
+
+
+
+
+
+
+
 
 //    -- 좋아요 수
 //    SELECT COUNT(*) FROM HEART WHERE REF_NO=3;
