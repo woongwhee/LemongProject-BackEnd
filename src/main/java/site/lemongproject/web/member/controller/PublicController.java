@@ -245,6 +245,8 @@ public class PublicController {
         Member result = memberService.isSocialUser(isNaver);
 
         if(result != null) { // 회원정보가 있는 경우 -> 로그인
+            int updateToken = memberService.updateToken(isNaver); // access token 업데이트
+            System.out.println("토큰 업데이트 result: " + updateToken);
             Profile oldNaver = memberService.socialProfile(isNaver); // 유저가 있을 경우 프로필 반환
             session.setAttribute("loginUser",oldNaver);
             session.setAttribute("socialType",SocialType.NAVER);

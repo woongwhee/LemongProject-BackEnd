@@ -325,6 +325,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+    @Override
+    public int updateToken(Member isNaver) {
+        return memberDao.updateToken(isNaver);
+    }
+
+
 
     @Override
     public int updateProfile(Profile profile) {
@@ -376,6 +382,15 @@ public class MemberServiceImpl implements MemberService {
         result = profileDao.deleteProfile(userNo);
         return result;
     }
+
+
+    @Override
+    public String selectAccessToken(int userNo) {
+        String token = memberDao.selectAccessToken(userNo);
+        System.out.println("서비스 token: "+token);
+        return token;
+    }
+
 
     public Profile selectMyProfile(int userNo) {
         return profileDao.findOne(userNo);
