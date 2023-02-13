@@ -68,6 +68,11 @@ public class MemberDao {
     }
 
 
+    public int deleteNaver(int userNo) {
+        return sqlSession.update("memberMapper.deleteNaver", userNo);
+    }
+
+
 
     public Member selectMembers(int userNo) {
         return sqlSession.selectOne("memberMapper.selectMember", userNo);

@@ -74,5 +74,7 @@ public interface MemberService {
 
     String selectAccessToken(int userNo);
 
+    int deleteNaver(Profile profile, String token);
+
 
 }

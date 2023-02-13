@@ -233,13 +233,17 @@ public class MemberController {
                 break;
             case NAVER:
                 // 토큰을 서비스로 넘겨주기
-                String token = memberService.selectAccessToken(profile.getUserNo());
+                String token = memberService.selectAccessToken(profile.getUserNo()); // 토큰값 얻어옴 <- 여기까지 된다
                 System.out.println(token);
+                // 회원 삭제가 되었는지 체크
+                result = memberService.deleteNaver(profile, token);
+                System.out.println(result);
                 break;
             case KAKAO: break;
         }
 
         if(result > 0) {
+            session.invalidate();
             return ResponseBuilder.success(1);
         } else {
             return ResponseBuilder.failEmail(1);
