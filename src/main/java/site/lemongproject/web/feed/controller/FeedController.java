@@ -41,7 +41,7 @@ public class FeedController {
         return ResponseBuilder.success(list);
     }
 
-    // 피드 사진 넣기
+    // 피드 사진 넣기PHOTO
     @RequestMapping(value = "/insert",method = RequestMethod.POST)
     public Map<String, Object> feedInsert(@RequestBody FeedInsert paramMap, @SessionAttribute("loginUser") Profile loginUser){
         System.out.println(paramMap); //FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)Profile
@@ -199,11 +199,11 @@ public class FeedController {
 
     // 사진 넣기
     @RequestMapping(value = "/insertPhoto", method = RequestMethod.POST)
-    public ResponseBody<Photo> insertPhoto(@RequestBody MultipartFile[] files){
+    public ResponseBody<Photo> insertPhoto(@RequestBody MultipartFile[] files, @SessionAttribute("loginUser") Profile loginUser ){
         Photo p = new Photo();
         FileUtil fileUtil = new FileUtil();
 
-        p.setUserNo(3);
+        p.setUserNo(loginUser.getUserNo());
         fileUtil.saveFile(files[0], p);
 
         int result = feedService.insertPhoto(p);
