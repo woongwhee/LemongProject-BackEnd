@@ -3,10 +3,7 @@ package site.lemongproject.web.feed.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import site.lemongproject.web.feed.model.dto.FeedDetail;
-import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
-import site.lemongproject.web.feed.model.dto.FeedInsert;
-import site.lemongproject.web.feed.model.dto.FeedList;
+import site.lemongproject.web.feed.model.dto.*;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
 
@@ -118,5 +115,30 @@ public class FeedDao {
 
     public List<FeedList> FeedDetail(int feedNo) {
         return sqlSession.selectList("feedMapper.detailFeed", feedNo);
+    }
+
+    public int countReply(int feedNo) {
+        return sqlSession.selectOne("replyMapper.countReply", feedNo);
+    }
+
+
+    public Map<String, Object> userProfile(Map<String,Object> userNo) {
+        return sqlSession.selectOne("feedMapper.userProfile", userNo);
+    }
+
+    public int heartClick(Map<String, Object> data) {
+        return sqlSession.insert("feedMapper.heartClick", data);
+    }
+
+    public int heartCancel(Map<String, Object> data) {
+        return sqlSession.delete("feedMapper.heartCancel", data);
+    }
+
+    public int heartState(Map<String, Object> data) {
+        return sqlSession.selectOne("feedMapper.heartState", data);
+    }
+
+    public int heartCount(Map<String, Object> data) {
+        return sqlSession.selectOne("feedMapper.heartCount", data);
     }
 }

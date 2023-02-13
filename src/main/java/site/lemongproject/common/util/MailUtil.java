@@ -93,8 +93,8 @@ public class MailUtil {
     // 보낼 값 셋팅
     // 보낼 값 셋팅
     public MailMessage setConfirmMail(String email, String ranNum) {
-        String subject = "[LEMONG] 회원가입 인증번호 입니다.";
-        String message = "<h1> 회원가입을 위하여 아래의 인증 번호를 입력해주세요. \n\n" + ranNum+"</h1>";
+        String subject = "[LEMONG] 인증번호 입니다.";
+        String message = "<h1> 본인 인증을 위하여 아래의 인증 번호를 입력해주세요.</h1> \n\n" +"<h2>"+ ranNum+"</h2>";
         MailMessage mail = new MailMessage(email,subject,message);
         return mail;
     }

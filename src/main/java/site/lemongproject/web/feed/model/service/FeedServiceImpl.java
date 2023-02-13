@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
-import site.lemongproject.web.feed.model.dto.FeedDetail;
+import site.lemongproject.web.feed.model.dto.*;
 import site.lemongproject.web.feed.model.vo.Feed;
+import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
-import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
-import site.lemongproject.web.feed.model.dto.FeedInsert;
-import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
 
@@ -23,6 +21,11 @@ import java.util.Map;
 public class FeedServiceImpl implements FeedService{
     final private FeedDao feedDao;
     final private PhotoDao photoDao;
+
+    @Override
+    public Map<String, Object> userProfile(Map<String,Object> userNo){
+        return feedDao.userProfile(userNo);
+    };
 
     @Override
     public List<FeedList> selectFeed() {
@@ -73,10 +76,9 @@ public class FeedServiceImpl implements FeedService{
     public int insertFeedReply(Map<String, Object> paramMap){
         return feedDao.insertFeedReply(paramMap);
     }
-
     // 피드 댓글 불러오기
     @Override
-    public List listReply(int feedNo) {return feedDao.listReply(feedNo);}
+    public List<Reply> listReply(int feedNo) {return feedDao.listReply(feedNo);}
 
     // 피드 댓글 삭제
     @Override
@@ -135,4 +137,21 @@ public class FeedServiceImpl implements FeedService{
     public List<FeedList> detailFeed(int feedNo){
         return feedDao.FeedDetail(feedNo);
     }
+
+    @Override
+    public int countReply(int feedNo){
+        return feedDao.countReply(feedNo);
+    }
+
+    @Override
+    public int heartClick(Map<String, Object> data){return feedDao.heartClick(data);}
+
+    @Override
+    public int heartCancel(Map<String, Object> data){return feedDao.heartCancel(data);}
+
+    @Override
+    public int heartState(Map<String, Object> data) {return feedDao.heartState(data);}
+
+    @Override
+    public int heartCount(Map<String, Object> data){return feedDao.heartCount(data);}
 }
