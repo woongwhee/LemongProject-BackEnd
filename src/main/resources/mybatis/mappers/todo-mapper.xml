@@ -30,7 +30,7 @@
 
     <insert id="insertTodo" parameterType="Todo">
         <selectKey order="BEFORE" resultType="Integer" keyProperty="value">
-            SELECT NVL(MAX(VALUE), 0) +1
+            SELECT NVL(MAX(VALUE), 1) +1
             FROM TODO
             WHERE USER_NO = #{userNo} AND TO_CHAR(TODO_DATE,'YYMMDD') = #{todoDate}
         </selectKey>
@@ -107,6 +107,7 @@
           AND CLEAR = 0
         ORDER BY TODO_DATE
     </select>
+
     <select id="findByCal" parameterType="MonthFindVo" resultType="_int">
     <![CDATA[
         SELECT TO_CHAR(TODO_DATE, 'dd')
