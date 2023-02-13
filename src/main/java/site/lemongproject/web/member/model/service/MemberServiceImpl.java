@@ -48,9 +48,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Profile loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
+        System.out.println("lu"+bCryptPasswordEncoder.matches(m.getUserPwd(),loginUser.getUserPwd()));
+
         if(loginUser!=null&&bCryptPasswordEncoder.matches(m.getUserPwd(),loginUser.getUserPwd())){
             return profileDao.findOne(loginUser.getUserNo());
-
         }else{
             return null;
         }
