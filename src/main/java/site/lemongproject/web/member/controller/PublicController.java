@@ -2,6 +2,7 @@ package site.lemongproject.web.member.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.domain.dto.MailMessage;
@@ -9,13 +10,16 @@ import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.common.type.SocialType;
 import site.lemongproject.common.util.MailUtil;
+import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
+import site.lemongproject.web.member.model.vo.KakaoToken;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 
 import javax.servlet.http.HttpSession;
+import java.awt.image.RescaleOp;
 import java.util.Map;
 
 @RestController
@@ -29,25 +33,9 @@ public class PublicController {
     final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 로그인
-    @PostMapping("/login")
+    @PostMapping("login")
     public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
-        /*  @RequestBody(클라이언트-서버) -> json 객체를 자바 객체로 변환해줌
-            HTTP 요청의 바디 내용을 통째로 자바객체로 변환해서 매핑된 메소드 파라미터로 전달
-
-            @ResponseBody(서버-클라이언트) -> 자바객체를 HTTP요청의 바디내용으로 매핑하여 클라이언트에게 전송
-            이 어노테이션이 붙어있다면 HTTP 요청의 미디어 타입과 파라미터의 타입을 먼저 확인해야 한다.
-            ex) text/html;charset=UTF-8
-
-            현재 데이터를 POST 방식으로 요청하고 있는데, 이 때문에 RequestBody를 사용해야 한다.
-            GET 방식은 파라미터를 직접 담아서 요청하는 방식이기 때문에 requestbody에 담지 않는다.
-
-            때문에 왜 프론트(리액트) 서버에서는 json 형태로 값을 넘겨줬는데 스프링(자바) 서버에서는 받지 못했는가?
-            post 방법으로 스프링에서 받고 있기 때문에 json 형태로 받은 데이터를
-            자동으로 자바객체로 변환하지 못했기 때문에 모든 데이터가 null 값으로 출력된 것으로 보인다.
-
-            참고 사이트) https://annajin.tistory.com/107
-        */
-
+        System.out.println(m);
         m.setSocialType(SocialType.NONE);
         Profile loginUser = memberService.loginMember(m);
         // 암호화 후
@@ -55,7 +43,7 @@ public class PublicController {
             System.out.println("컨트롤러 넘어옴");
             session.setAttribute("loginUser",loginUser);
             session.setAttribute("socialType",SocialType.NONE);
-            System.out.println(ResponseBuilder.success(loginUser));
+//            System.out.println(ResponseBuilder.success(loginUser));
             return ResponseBuilder.success(loginUser);
         } else {
             System.out.println("컨트롤러 못 넘어옴");
@@ -67,13 +55,14 @@ public class PublicController {
 
 
     // 회원가입
-    // 테스팅
     @PostMapping("join")
     public ResponseBody<Map<String, Object>> insertMember(@RequestBody JoinVo joinVo) {
 
         // 비밀번호 암호화
-        String encPwd = bCryptPasswordEncoder.encode(joinVo.getUserPwd());
-        joinVo.setUserPwd(encPwd);
+//        String encPwd = bCryptPasswordEncoder.encode(joinVo.getUserPwd());
+//        joinVo.setUserPwd(encPwd);
+        joinVo.setUserPwd(joinVo.getUserPwd());
+        joinVo.setSocialType(SocialType.NONE);
         // 암호화된 비밀번호 setting 해주기
         int result = memberService.insertMember(joinVo);
 
@@ -88,8 +77,8 @@ public class PublicController {
 
     // 닉네임 체크
     @PostMapping("join/chNick")
-    public ResponseBody<Integer> checkNick(@RequestBody String nickName) {
-
+    public ResponseBody<Integer> checkNick(@RequestBody Map<String, Object> nick) {
+        String nickName = String.valueOf(nick.get("nickName"));
         int result = memberService.checkNick(nickName);
         System.out.println(result);
         if(result > 0) {
@@ -107,28 +96,38 @@ public class PublicController {
         String email = String.valueOf(e.get("email"));
         System.out.println(email);
 
-        // 랜덤 값 생성
-        String ranNum = mailUtil.ranNum();
-        // 보낼 값 기본값 셋팅
-        MailMessage mailMessage = mailUtil.setConfirmMail(email, ranNum);
-        // MaillUtil 초기화(메일전송)
-//        mailUtil.send(mailMessage); // 일반 텍스트(보내짐)
-        mailUtil.htmlSend(mailMessage); // html 형식으로(테스트 중)
+        // 이메일 중복 체크
+        int exEmail = memberService.isExEmail(email);
+        System.out.println(exEmail);
 
-        // 체크를 위한 코드
-        EmailConfirm confirm = new EmailConfirm();
-        confirm.setEmail(email);
-        confirm.setCode(ranNum);
+        if(exEmail > 0) { // 중복 이메일 존재
+            return ResponseBuilder.isExEmail(exEmail);
 
-        int authCode = memberService.insertConfirm(confirm);
+        } else { // 중복된 이메일 x
+            // 랜덤 값 생성
+            String ranNum = mailUtil.ranNum();
+            // 보낼 값 기본값 셋팅
+            MailMessage mailMessage = mailUtil.setConfirmMail(email, ranNum);
+            // MaillUtil 초기화(메일전송)
+            mailUtil.htmlSend(mailMessage); // html 형식으로(테스트 중)
 
-        System.out.println("이게 뜬다면 error는 안났다.");
+            // 체크를 위한 코드
+            EmailConfirm confirm = new EmailConfirm();
+            confirm.setEmail(email);
+            confirm.setCode(ranNum);
 
-        if(authCode > 0) {
-            return ResponseBuilder.success(authCode);
-        } else {
-            return ResponseBuilder.failEmail(authCode);
+            int authCode = memberService.insertConfirm(confirm);
+
+            System.out.println("이게 뜬다면 error는 안났다.");
+
+            if(authCode > 0) {
+                return ResponseBuilder.success(authCode);
+            } else {
+                return ResponseBuilder.failEmail(authCode);
+            }
+
         }
+
     }
 
     // 인증번호 체크
@@ -142,14 +141,14 @@ public class PublicController {
         confirm.setCode(code);
 
         int result = memberService.checkEmail(confirm);
-        System.out.println(result);
+        System.out.println(confirm);
+        System.out.println("authoCode: "+result);
 
         if(result > 0) {
             return ResponseBuilder.success(result);
         } else {
             return ResponseBuilder.failAuthEmail(result);
         }
-
     }
     @GetMapping("checkLogin")
     public ResponseBody<Profile> checkLogin(@SessionAttribute(value = "loginUser",required = false) Profile loginUser){
@@ -159,6 +158,181 @@ public class PublicController {
             return ResponseBuilder.success(loginUser);
         }
     }
+
+
+    // 카카오 로그인
+    @RequestMapping(value = "kakaoLogin", method = RequestMethod.GET)
+    public ResponseBody<Map<String, Object>> kakaoLogin(@RequestParam Map<String, Object> code, HttpSession session) {
+        String authCode = String.valueOf(code.get("code"));
+        System.out.println("인가코드: "+authCode);
+
+        // 인가코드를 통해 access_token 발급
+        String token = memberService.getAccessToken(authCode);
+        System.out.println("acessToken: "+token);
+        session.setAttribute("accessToken",token);
+        // 접속자 정보 얻어오기
+        Map<String, Object> kakaoUser = memberService.getKakaoUser(token);
+        System.out.println("카카오 유저 정보: "+kakaoUser);
+
+        // 이메일 + 소셜 타입으로 사용자 정보 확인
+        String email = String.valueOf(kakaoUser.get("email"));
+        String userName = String.valueOf(kakaoUser.get("nickName"));
+        SocialType socialType = SocialType.KAKAO;
+
+        // 멤버 셋팅
+        Member isKakao = new Member();
+        isKakao.setEmail(email);
+        isKakao.setSocialType(socialType);
+        isKakao.setUserName(userName);
+
+        // 일치하는 회원이 있는지 확인
+        Member result = memberService.isSocialUser(isKakao);
+
+        if(result != null) { // 회원정보가 있는 경우 -> 로그인
+            Profile oldKakao = memberService.socialProfile(isKakao);
+//            isKakao = memberService.isSocialUser(isKakao);
+            session.setAttribute("loginUser", oldKakao);
+            session.setAttribute("socialType",SocialType.KAKAO);
+//            System.out.println(isKakao);
+            return ResponseBuilder.success(oldKakao);
+        } else { // 회원정보가 없는 경우 -> 회원가입 -> 닉네임 설정
+            int kakaoJoin = memberService.insertSocial(isKakao);
+            System.out.println("회원가입 여부: "+kakaoJoin);
+            isKakao = memberService.isSocialUser(isKakao);
+            return ResponseBuilder.noSocial(isKakao);
+        }
+
+    }
+
+    @PostMapping("setNickJoin")
+    public ResponseBody<Map<String, Object>> setNick(@RequestBody JoinVo newMem) {
+
+        int result = memberService.setNick(newMem);
+
+        if(result > 0) {
+            return ResponseBuilder.success(result);
+        } else {
+            return ResponseBuilder.unJoin(result);
+        }
+    }
+
+
+    // 네이버 로그인
+    @RequestMapping(value = "naverLogin", method = RequestMethod.GET)
+    public ResponseBody<Map<String, Object>> naverLogin(@RequestParam Map<String, Object> aToken, HttpSession session) {
+
+        String token = String.valueOf(aToken.get("accessToken"));
+        System.out.println("네이버 토큰: " + token);
+
+        // 사용자 정보 추출
+        Map<String, Object> naverUser = memberService.getNaverUser(token);
+//        System.out.println("네이버 유저:" + naverUser);
+        String userName = String.valueOf(naverUser.get("userName"));
+        String email = String.valueOf(naverUser.get("email"));
+        SocialType socialType = SocialType.NAVER;
+
+        // 사용자 정보 셋팅
+        Member isNaver = new Member();
+        isNaver.setUserName(userName);
+        isNaver.setEmail(email);
+        isNaver.setSocialType(socialType);
+
+        // 일치하는 회원이 있는지 확인
+        Member result = memberService.isSocialUser(isNaver);
+
+        if(result != null) { // 회원정보가 있는 경우 -> 로그인
+            Profile oldNaver = memberService.socialProfile(isNaver); // 유저가 있을 경우 프로필 반환
+            session.setAttribute("loginUser",oldNaver);
+            session.setAttribute("socialType",SocialType.NAVER);
+            return ResponseBuilder.success(oldNaver);
+        } else { // 회원정보가 없는 경우 -> 회원가입 -> 닉네임 설정
+            int naverJoin = memberService.insertSocial(isNaver);
+            System.out.println("회원가입 여부: "+naverJoin);
+            isNaver = memberService.isSocialUser(isNaver);
+            return ResponseBuilder.noSocial(isNaver);
+        }
+    }
+
+
+    @PostMapping("findPwd/chEmail")
+    public ResponseBody<Map<String, Object>> pwdChEmail (@RequestBody Member userEmail){
+
+        userEmail.setSocialType(SocialType.NONE);
+        Member exUser = memberService.pwdChEmail(userEmail);
+
+        if(exUser != null) { // 회원정보가 있는 경우 -> 메일 발송
+
+            String ranNum = mailUtil.ranNum();
+
+            MailMessage mailMessage = mailUtil.setConfirmMail(exUser.getEmail(), ranNum);
+            mailUtil.htmlSend(mailMessage);
+
+            EmailConfirm confirm = new EmailConfirm();
+            confirm.setEmail(exUser.getEmail());
+            confirm.setCode(ranNum);
+
+            int authCode = memberService.insertConfirm(confirm);
+
+            if(authCode > 0) {
+                return ResponseBuilder.success(authCode);
+            } else {
+                return ResponseBuilder.failEmail(authCode);
+            }
+
+        } else { // 회원 정보가 없는 경우, 일치하지 않는 경우
+            return ResponseBuilder.failEmail(0);
+        }
+
+    }
+
+
+
+    // 비밀번호 재설정 페이지로 이동
+    @PostMapping("toNewPwd")
+    public ResponseBody<Map<String, Object>> toNewPwd (@RequestBody Map<String, Object> userEmail, HttpSession session) {
+
+        String email = String.valueOf(userEmail.get("email"));
+
+        Member findUser = memberService.findUserNo(email);
+
+        int userNo = findUser.getUserNo();
+
+        if(userNo > 0) {
+            session.setAttribute("userNo", userNo);
+            return ResponseBuilder.success(userNo);
+        } else {
+            System.out.println("회원번호 넘기기 실패");
+            return ResponseBuilder.failEmail(userNo);
+        }
+    }
+
+
+    // 비밀번호 재설정
+    @PostMapping("newPwd")
+    public ResponseBody<Map<String, Object>> setNewPwd (@RequestBody Map<String, Object> newPwd, HttpSession session) {
+
+        String num = String.valueOf(session.getAttribute("userNo"));
+        int userNo = Integer.parseInt(num);
+        System.out.println(userNo);
+
+        String userPwd = String.valueOf(newPwd.get("userPwd"));
+        System.out.println(userPwd);
+
+        // update
+        ChangePwdVo cpw = new ChangePwdVo(userNo, userPwd);
+        int result = memberService.updatePassword(cpw);
+
+        if(result > 0) {
+            return ResponseBuilder.success(result);
+        } else {
+            return ResponseBuilder.upLoadFail();
+        }
+
+    }
+
+
+
+
 
 
 }
