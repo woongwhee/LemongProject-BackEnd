@@ -15,5 +15,4 @@ public class Reply {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date replyAt;
     private String nickName;
-    private String filePath;
 }

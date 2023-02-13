@@ -30,7 +30,9 @@ public class FeedController {
 
     @PostMapping("/feedProfile")
     public Map<String, Object> userProfilePhoto(@RequestBody Map<String,Object> userNo){
+        System.out.println(userNo);
         Map<String, Object> result = feedService.userProfile(userNo);
+//        Map<String, Object> result = new HashMap<>();
         return result;
     }
 
@@ -119,7 +121,7 @@ public class FeedController {
     // 피드 댓글 달기
     @RequestMapping(value = "/insertReply", method = RequestMethod.POST)
     public Map<String, Object> insertReply(@RequestBody Map<String, Object> paramMap){
-//        System.out.println("insert"+paramMap);
+        System.out.println("reply insert"+paramMap);
         int check = feedService.insertFeedReply(paramMap);
 
         Map<String, Object> result = new HashMap<>();
@@ -151,7 +153,7 @@ public class FeedController {
     // 피드 댓글 불러오기
     @GetMapping("/listReply")
     public ResponseBody<List<Reply>> listReply(@RequestParam int feedNo){
-//        System.out.println("list" + feedNo);
+        System.out.println("list" + feedNo);
         List <Reply> list = feedService.listReply(feedNo);
         return ResponseBuilder.success(list);
     }
@@ -159,10 +161,12 @@ public class FeedController {
     // 피드 댓글수 불러오기
     @GetMapping("countReply")
     public int countReply(@RequestParam int feedNo){
-        System.out.println(feedNo);
+//        System.out.println(feedNo);
         int check = feedService.countReply(feedNo);
         return check;
     }
+
+
 
 //    -- 좋아요 수
 //    SELECT COUNT(*) FROM HEART WHERE REF_NO=3;

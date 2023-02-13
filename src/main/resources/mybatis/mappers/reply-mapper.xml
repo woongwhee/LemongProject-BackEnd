@@ -11,7 +11,6 @@
         <result column="REPLY_CONTENT" property="replyContent"></result>
         <result column="REPLY_AT" property="replyAt"></result>
         <result column="NICK_NAME" property="nickName"></result>
-        <result column="FILEPATH" property="filePath"></result>
     </resultMap>
 
     <!--  피드 댓글 작성  -->
@@ -24,11 +23,9 @@
     <select id="listReply" resultMap="replyResultSet" parameterType="int">
         SELECT
             REPLY_NO, R.USER_NO, FEED_NO, REPLY_CONTENT, REPLY_AT,
-            NICK_NAME,
-            P.FILE_PATH || P.CHANGE_NAME AS FILEPATH
+            NICK_NAME
         FROM REPLY R
                  JOIN USER_PROFILE UP on R.USER_NO = UP.USER_NO
-                 JOIN PHOTO P on R.USER_NO = P.USER_NO
         WHERE FEED_NO=#{feedNo}
         order by REPLY_AT DESC
     </select>
