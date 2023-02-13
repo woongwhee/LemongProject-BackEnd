@@ -112,4 +112,23 @@
     </select>
 
 
+    <!--  access token 업데이트  -->
+    <update id="updateToken" parameterType="Member">
+        UPDATE MEMBER
+        SET ACCESS_TOKEN = #{accessToken}
+        WHERE EMAIL = #{email}
+            AND SOCIAL_TYPE = #{socialType}
+            AND STATUS = 1
+    </update>
+
+
+    <!--  네이버 accessToken 조회  -->
+    <select id="selectAccessToken" parameterType="int" resultType="string">
+        SELECT ACCESS_TOKEN
+        FROM MEMBER
+        WHERE USER_NO = #{userNo}
+    </select>
+
+
+
 </mapper>

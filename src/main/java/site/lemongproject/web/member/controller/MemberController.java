@@ -221,6 +221,33 @@ public class MemberController {
     }
 
 
+
+    @GetMapping("/byeUser")
+    public ResponseBody<Integer> byeUser(@SessionAttribute("loginUser") Profile profile, @SessionAttribute("socialType") SocialType socialType, HttpSession session) {
+
+        int result = 0;
+
+        switch (socialType) {
+            case NONE:
+                result = memberService.deleteUser(profile.getUserNo());
+                break;
+            case NAVER:
+                // 토큰을 서비스로 넘겨주기
+                String token = memberService.selectAccessToken(profile.getUserNo());
+                System.out.println(token);
+                break;
+            case KAKAO: break;
+        }
+
+        if(result > 0) {
+            return ResponseBuilder.success(1);
+        } else {
+            return ResponseBuilder.failEmail(1);
+        }
+    }
+
+
+
         // 유효성 검사 통과 후 닉네임 변경.
         @GetMapping("/updateMyNick")
         public ResponseBody<Profile> updateMyNick(@RequestParam(value = "updateNick" , required = false) String updateNick ,
@@ -250,6 +277,8 @@ public class MemberController {
 
             return ResponseBuilder.success(content);
         }
+
+
 
 
 

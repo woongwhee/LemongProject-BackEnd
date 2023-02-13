@@ -70,5 +70,9 @@ public interface MemberService {
 
     Member findUserNo(String email);
 
+    int updateToken(Member isNaver);
+
+    String selectAccessToken(int userNo);
+
 
 }
