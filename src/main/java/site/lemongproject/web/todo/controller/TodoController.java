@@ -53,10 +53,13 @@ public class TodoController {
             @DateTimeFormat(pattern = "yyMMdd")
             LocalDate todoDate,
             @SessionAttribute("loginUser") Profile member) {
+
         DailyFindVo dailyFind = new DailyFindVo();
         dailyFind.setTodoDate(todoDate);
         dailyFind.setUserNo(member.getUserNo());
         DailyTodoVo daily = todoService.getDaily(dailyFind);
+
+       // System.out.println(daily.getChallengeList());
         if (daily.getNormalList().size() == 0 && daily.getChallengeList().size() == 0) {
             return ResponseBuilder.findNothing();
         } else if (daily.getChallengeList() != null && daily.getNormalList() != null) {
@@ -141,9 +144,14 @@ public class TodoController {
             @PathVariable("month")
             @DateTimeFormat(pattern = "yyMMdd") LocalDate month) {
         month = month.withDayOfMonth(1);
-        System.out.println(month);
+
+       // System.out.println("캘린더 마크 month : "+month);
+
         MonthFindVo findVo = new MonthFindVo(loginUser.getUserNo(), month);
         MonthMarkVo monthMark = todoService.getMonthMark(findVo);
+
+        //System.out.println(monthMark.getTodoDayList());
+
         return ResponseBuilder.success(monthMark);
     }
 
