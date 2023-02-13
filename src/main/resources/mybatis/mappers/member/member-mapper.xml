@@ -129,6 +129,13 @@
         WHERE USER_NO = #{userNo}
     </select>
 
+    <!--  자체 서버 네이버 회원 상태 변경  -->
+    <update id="deleteNaver" parameterType="int">
+        UPDATE MEMBER
+        SET STATUS = 0
+        WHERE USER_NO = #{userNo}
+    </update>
+
 
 
 </mapper>

@@ -384,12 +384,72 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+    // 탈퇴를 위한 Naver User 토큰 조회
     @Override
     public String selectAccessToken(int userNo) {
         String token = memberDao.selectAccessToken(userNo);
         System.out.println("서비스 token: "+token);
         return token;
     }
+
+
+    // Naver 유저 api 끊기 -> 회원 탈퇴
+    public int deleteNaver(Profile profile, String token) {
+
+        int result1 = memberDao.deleteNaver(profile.getUserNo());
+        int result2 = deleteNaverToken(token); // 네이버 연동 해제
+
+        int result = result1 * result2;
+        return result;
+
+    }
+
+
+    // 네이버 연동 해제
+    public int deleteNaverToken(String token) {
+        System.out.println("탈퇴 서비스 토큰: "+token);
+
+        String clientId = "gby5MZqE_2ShDpfOnFIS";
+        String clientSecret = "OyOjXUomy0";
+
+        String reqUrl = "https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id="+clientId+
+                "&client_secret="+clientSecret+"&access_token="+token+"&service_provider=NAVER";
+
+        try {
+            URL url = new URL(reqUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("GET");
+
+            int responseCode = conn.getResponseCode();
+            System.out.println("탈퇴 응답코드: "+responseCode);
+
+            BufferedReader br;
+            if(responseCode == 200) {
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+
+            String brLine = "";
+            String result = "";
+            while ((brLine = br.readLine()) != null) {
+                result += brLine;
+            }
+
+            br.close();
+
+            if(responseCode == 200) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 
 
     public Profile selectMyProfile(int userNo) {
