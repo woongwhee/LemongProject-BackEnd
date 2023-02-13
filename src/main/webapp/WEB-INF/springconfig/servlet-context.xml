@@ -31,6 +31,6 @@
     <mvc:resources mapping="/resources/**" location="/resources/" />
     <!-- http://localhost:8081/api/images/이미지명.jpg 로 이미지를 불러와서 사용할것이다.-->
     <!-- IMAGE VIEW -->
-<!--    <mvc:resources mapping="/images/**" location="file:///C:/dev2/apache-tomcat-9.0.67/webapps/file/2023/02/06/" />-->
+    <mvc:resources mapping="/images/**" location="file:///C:/LemongProject/src/main/webapp/resources/images/userProfile/" />
 
 </beans>

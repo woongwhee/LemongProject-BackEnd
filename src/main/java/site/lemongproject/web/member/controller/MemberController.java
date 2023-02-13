@@ -149,14 +149,34 @@ public class MemberController {
         return ResponseBuilder.success(p);
     }
     @GetMapping("/logout")
-    public ResponseBody<Integer> logout(@SessionAttribute("loginUser")Profile profile, @SessionAttribute("socialType")SocialType socialType,HttpSession session){
+    public ResponseBody<Integer> logout(@SessionAttribute("loginUser")Profile profile, @SessionAttribute("socialType")SocialType socialType, HttpSession session){
+
+        String type = "";
+
         switch (socialType){
-            case NONE: session.invalidate();
+            case NONE:
+                session.invalidate();
+                break;
             case NAVER:
+                session.invalidate();
+                break;
             case KAKAO:
+                type = "KAKAO";
+                session.invalidate();
+//                memberService.kakaoLogout();
+                System.out.println("카카오 자체 로그아웃 완료");
+                break;
+                // 카카오 연결 끊는 링크 달아두기(별표)
         }
-        return ResponseBuilder.success(11);
+//        System.out.println(type);
+        if(type == "KAKAO") {
+            return ResponseBuilder.logoutKakao(type);
+        } else {
+            return ResponseBuilder.success(type);
+        }
     }
+
+
         // 유효성 검사 통과 후 닉네임 변경.
         @GetMapping("/updateMyNick")
         public ResponseBody<Profile> updateMyNick(@RequestParam(value = "updateNick" , required = false) String updateNick ,
