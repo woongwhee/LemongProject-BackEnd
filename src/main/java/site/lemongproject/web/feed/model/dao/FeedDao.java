@@ -119,4 +119,16 @@ public class FeedDao {
     public List<FeedList> FeedDetail(int feedNo) {
         return sqlSession.selectList("feedMapper.detailFeed", feedNo);
     }
+
+    public int countReply(int feedNo) {
+        return sqlSession.selectOne("replyMapper.countReply", feedNo);
+    }
+
+    public List<FeedList> selectMyFeedList(FeedList f) {
+        return sqlSession.selectList("feedMapper.selectMyFeed" , f);
+    }
+
+    public List<FeedList> searchImg(FeedList f) {
+        return sqlSession.selectList("feedMapper.searchImg" , f);
+    }
 }

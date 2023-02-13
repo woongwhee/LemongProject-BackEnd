@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.vo.Feed;
+import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
@@ -73,10 +74,9 @@ public class FeedServiceImpl implements FeedService{
     public int insertFeedReply(Map<String, Object> paramMap){
         return feedDao.insertFeedReply(paramMap);
     }
-
     // 피드 댓글 불러오기
     @Override
-    public List listReply(int feedNo) {return feedDao.listReply(feedNo);}
+    public List<Reply> listReply(int feedNo) {return feedDao.listReply(feedNo);}
 
     // 피드 댓글 삭제
     @Override
@@ -134,5 +134,19 @@ public class FeedServiceImpl implements FeedService{
     @Override
     public List<FeedList> detailFeed(int feedNo){
         return feedDao.FeedDetail(feedNo);
+    }
+
+    @Override
+    public int countReply(int feedNo){
+        return feedDao.countReply(feedNo);
+    }
+
+    @Override
+    public List<FeedList> selectMyFeedList(FeedList f){
+        return feedDao.selectMyFeedList(f);
+    }
+
+    public List<FeedList> searchImg(FeedList f){
+        return feedDao.searchImg(f);
     }
 }

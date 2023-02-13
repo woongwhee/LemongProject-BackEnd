@@ -48,6 +48,8 @@ public class FollowController {
     public ResponseBody<Follow> selectMyFollowerAlertList(
             @RequestParam(value = "follower" , required = false) int follower){
 
+        System.out.println(follower + "List success");
+
         Follow f = new Follow();
         f.setFollower(follower);
 
