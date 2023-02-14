@@ -120,8 +120,9 @@ public class FeedController {
 
     // 피드 댓글 달기
     @RequestMapping(value = "/insertReply", method = RequestMethod.POST)
-    public Map<String, Object> insertReply(@RequestBody Map<String, Object> paramMap){
+    public Map<String, Object> insertReply(@RequestBody Map<String, Object> paramMap,  @SessionAttribute("loginUser") Profile loginUser){
         System.out.println("reply insert"+paramMap);
+        paramMap.put("loginUserNo",loginUser.getUserNo());
         int check = feedService.insertFeedReply(paramMap);
 
         Map<String, Object> result = new HashMap<>();
