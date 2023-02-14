@@ -134,7 +134,7 @@
             NICK_NAME ,
             CHANGE_NAME
         FROM FOLLOW F
-        JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
+        LEFT JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
         LEFT JOIN PHOTO P USING(PHOTO_NO)
         WHERE F.FOLLOWING = #{following}
     </select>
@@ -143,10 +143,12 @@
         SELECT
             U.USER_NO ,
             NICK_NAME ,
-            CHANGE_NAME
+            CHANGE_NAME ,
+            FILE_PATH ,
+            PROFILE_COMMENT
         FROM FOLLOW F
-        JOIN USER_PROFILE U ON(F.FOLLOWING = U.USER_NO)
-        LEFT JOIN PHOTO P USING(PHOTO_NO)
+        LEFT JOIN USER_PROFILE U ON(F.FOLLOWING = U.USER_NO)
+        LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE F.FOLLOWER = #{follower}
     </select>
 

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.challenge.model.dto.Challenge;
+import site.lemongproject.web.challenge.model.dto.ChallengeUser;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.EndDateUpdateVo;
 import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
@@ -42,7 +43,17 @@ public class MyBatisChallengeDao implements ChallengeDao{
     }
 
     @Override
-    public Challenge selectChallenge(Challenge cNo){
-        return session.selectOne("challengeMapper.selectChallenge" , cNo);
+    public List<Challenge> selectChallenge(){
+        return session.selectList("challengeMapper.selectChallenge");
+    }
+
+    @Override
+    public List<Challenge> detailChallenge(Challenge c){
+        return session.selectList("challengeMapper.detailChallenge" , c);
+    }
+
+    @Override
+    public int challengeGo(ChallengeUser u){
+        return session.insert("challengeMapper.challengeGo" , u);
     }
 }

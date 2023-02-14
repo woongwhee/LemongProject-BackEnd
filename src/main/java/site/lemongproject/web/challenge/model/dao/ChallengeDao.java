@@ -1,6 +1,7 @@
 package site.lemongproject.web.challenge.model.dao;
 
 import site.lemongproject.web.challenge.model.dto.Challenge;
+import site.lemongproject.web.challenge.model.dto.ChallengeUser;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.EndDateUpdateVo;
 import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
@@ -15,5 +16,9 @@ public interface ChallengeDao {
     int updateEndDate(EndDateUpdateVo endDateUpdateVo);
     int deleteUser(ChallengeUserVo userVo);
 
-    Challenge selectChallenge(Challenge cNo);
+    List<Challenge> selectChallenge();
+
+    List<Challenge> detailChallenge(Challenge c);
+
+    int challengeGo(ChallengeUser u);
 }
