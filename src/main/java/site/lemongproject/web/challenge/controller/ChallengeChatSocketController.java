@@ -8,10 +8,12 @@ import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 import site.lemongproject.web.challenge.service.ChallengeService;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.Collections;
@@ -20,14 +22,14 @@ import java.util.Set;
 
 @Component
 @Service
-@ServerEndpoint("/socket/chatt")
+@ServerEndpoint("/socket/chatt/{chatRoomNo}")
 //@RequiredArgsConstructor // 이거 있으면 오류뜨기 때문에 직접 this. ... 해서 생성자 만들어 줄 것.
 public class ChallengeChatSocketController {
 
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 
     private static ChallengeService challengeService;
-//
+    //
     @Inject
     public void setChallengeService(ChallengeService challengeService){
         ChallengeChatSocketController.challengeService = challengeService;
@@ -36,19 +38,21 @@ public class ChallengeChatSocketController {
     @OnOpen
     public void onOpen(Session session) {
 
-//        System.out.println("open session : {}, clients={}" + session.toString() + clients);
+        System.out.println("open session : {}, clients={}" + session.toString() + clients);
 
         if(!clients.contains(session)) {
             clients.add(session);
-//            System.out.println("session open : {}" + session);
+            System.out.println("session open : {}" + session);
         }else{
-//            System.out.println("이미 연결된 session");
+            System.out.println("이미 연결된 session");
         }
     }
 
     @OnMessage
-    public void onMessage(String message, Session session) throws IOException {
+    public void onMessage(String message, Session session , @PathParam("chatRoomNo")int chatRoomNo) throws IOException {
 //        System.out.println("receive message : {}" + message);
+
+        System.out.println(chatRoomNo + " : success!!!");
 
         JsonParser parse = new JsonParser();
         Object obj = parse.parse(message);
@@ -56,11 +60,11 @@ public class ChallengeChatSocketController {
         JsonObject jsonObj = (JsonObject)obj;
 
         // 이름(보낸사람)
-        int name = Integer.parseInt(jsonObj.get("name").getAsString());
+        int name = Integer.parseInt(jsonObj.get("userNos").getAsString());
         System.out.println(name + " =======> [success]");
 
         // 챌린지 번호
-        int challengeNo = Integer.parseInt(jsonObj.get("challengeNo").getAsString());
+        int challengeNo = Integer.parseInt(jsonObj.get("chatRoomNo").getAsString());
         System.out.println(challengeNo + " =======> [success]");
 
         // 보낸 메세지
@@ -78,57 +82,25 @@ public class ChallengeChatSocketController {
         c.setUserNo(name);
         System.out.println("userNo : " + c.getUserNo());
 
+
+
         for (Session s : clients) {
             System.out.println("send data : {}" + message); // 리액트에서 넘어오는 채팅 데이터
 
-            challengeService.insertChatData(c);
-            
-            s.getBasicRemote().sendText(message);
+            if(chatRoomNo == challengeNo){
+                if(!s.equals(session)) {
+                    challengeService.insertChatData(c);
+                    s.getBasicRemote().sendText(message);
+                }
+            }
 
         }
     }
 
     @OnClose
     public void onClose(Session session) {
-//        System.out.println("session close : {}" + session);
+        System.out.println("session close : {}" + session);
         clients.remove(session);
     }
-
-//    @GetMapping("/insertChallengeChat")
-//    public ResponseBody<ChallengeChat> insertChallengeChatData(String message){
-//        JsonParser parse = new JsonParser();
-//        Object obj = parse.parse(message);
-//
-//        JsonObject jsonObj = (JsonObject)obj;
-//
-//        // 이름(보낸사람)
-//        int name = Integer.parseInt(jsonObj.get("name").getAsString());
-//        System.out.println(name + " =======> [success]");
-//
-//        // 챌린지 번호
-//        int challengeNo = Integer.parseInt(jsonObj.get("challengeNo").getAsString());
-//        System.out.println(challengeNo + " =======> [success]");
-//
-//        // 보낸 메세지
-//        String msg = jsonObj.get("msg").getAsString();
-//        System.out.println(msg + " =======> [success]");
-//
-//        ChallengeChat c = new ChallengeChat();
-//        c.setChallengeNo(challengeNo);
-//
-//        System.out.println("챌린지 넘버: "+c.getChallengeNo());
-//
-//        c.setChatMessage(msg);
-//
-//        System.out.println("챌린지 넘버: "+c.getChatMessage());
-//
-//        c.setUserNo(name);
-//
-//        System.out.println("챌린지 넘버: "+c.getUserNo());
-//
-//        int result = 1;
-//
-//        return ResponseBuilder.success(result);
-//    }
 
 }

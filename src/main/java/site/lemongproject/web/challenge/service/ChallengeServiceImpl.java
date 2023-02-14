@@ -10,10 +10,7 @@ import site.lemongproject.common.type.ChallengeUserStatus;
 import site.lemongproject.web.challenge.model.dao.ChallengeChatDao;
 import site.lemongproject.web.challenge.model.dao.ChallengeDao;
 import site.lemongproject.web.challenge.model.dao.ChallengeTodoDao;
-import site.lemongproject.web.challenge.model.dto.Challenge;
-import site.lemongproject.web.challenge.model.dto.ChallengeChat;
-import site.lemongproject.web.challenge.model.dto.ChallengeOption;
-import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
+import site.lemongproject.web.challenge.model.dto.*;
 import site.lemongproject.web.challenge.model.vo.*;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
@@ -184,13 +181,19 @@ public class ChallengeServiceImpl implements ChallengeService {
         return holidayList;
     }
 
-    public Challenge selectChallenge(Challenge cNo){
-        return challengeDao.selectChallenge(cNo);
+    public List<Challenge> selectChallenge(){
+        return challengeDao.selectChallenge();
     }
 
     public int insertChatData(ChallengeChat chatData){
         return chatDao.insertChatData(chatData);
     }
 
+    public List<Challenge> detailChallenge(Challenge c){
+        return challengeDao.detailChallenge(c);
+    }
 
+    public int challengeGo(ChallengeUser u){
+        return challengeDao.challengeGo(u);
+    }
 }

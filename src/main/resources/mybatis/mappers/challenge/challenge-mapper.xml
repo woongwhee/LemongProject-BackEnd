@@ -35,19 +35,29 @@
         SET END_DATE=#{endDate}
         WHERE CHALLENGE_NO=#{challengeNo}
     </update>
-<!--    <select id="hasChallenge" parameterType="">-->
-<!--        update CHALLENGE-->
-<!--        SET END_DATE=#{endDate}-->
-<!--        WHERE CHALLENGE_NO=#{challengeNo}-->
-<!--    </select>-->
-<!--    <select id="findDaily" parameterType="" >-->
+    <!--    <select id="hasChallenge" parameterType="">-->
+    <!--        update CHALLENGE-->
+    <!--        SET END_DATE=#{endDate}-->
+    <!--        WHERE CHALLENGE_NO=#{challengeNo}-->
+    <!--    </select>-->
+    <!--    <select id="findDaily" parameterType="" >-->
 
-<!--    </select>-->
+    <!--    </select>-->
 
     <!-- 테스트 챌린지No(3000)번에 해당하는 챌린지 정보 다가져오기  -->
     <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
         SELECT *
         FROM CHALLENGE
-        WHERE CHALLENGE_NO = #{challengeNo}
     </select>
+
+    <select id="detailChallenge" parameterType="Challenge" resultMap="challengeMap">
+        SELECT * FROM CHALLENGE
+        WHERE CHALLENGE_NO LIKE '%' || #{challengeNo} || '%'
+    </select>
+
+    <insert id="challengeGo" parameterType="ChallengeUser">
+        INSERT INTO CHALLENGE_USER(CHALLENGE_NO , USER_NO , STATUS , CLEAR_COUNT)
+        VALUES(#{challengeNo} , #{userNo} , 'READY' , 0)
+    </insert>
+
 </mapper>
