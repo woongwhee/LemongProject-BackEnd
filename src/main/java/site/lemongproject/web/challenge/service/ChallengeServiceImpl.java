@@ -200,11 +200,16 @@ public class ChallengeServiceImpl implements ChallengeService {
     public List<ChallengeListVo> getList(int page) {
         return challengeDao.findReady(page, 8);
     }
-
+    @Override
+    public ChallengeDetailVo getDetail(int challengeNo){
+        return challengeDao.findDetail(challengeNo);
+    }
     @Override
     public int clearTodo(TodoClearVo clearVo) {
         int result = todoDao.clearChallengeTodo(clearVo);
+        System.out.println(result);
         ChallengeTodo todo = todoDao.findOne(clearVo.getTodoNo());
+        System.out.println(todo);
         result *= userDao.changeClear(todo);
         return result;
     }

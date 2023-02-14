@@ -50,10 +50,12 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
     @Override
     public List<Integer> findByCal(MonthFindVo findVo) {
         return session.selectList("challengeTodoMapper.findByCal", findVo);
-
     }
     @Override
     public ChallengeTodo findOne(long todoNo) {
         return session.selectOne("challengeTodoMapper.findOne",todoNo);
     }
+
+
+
 }

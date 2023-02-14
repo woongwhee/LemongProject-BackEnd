@@ -24,5 +24,9 @@ public interface ChallengeDao {
     Challenge findOne(int challengeNo);
 
     List<ChallengeListVo> findReady(int page, int limit);
+    ChallengeDetailVo findDetail(int challengeNo);
 
+    int startChallenge();
+    int finishChallenge();
+    int cancelChallenge(int challengeNo);
 }
