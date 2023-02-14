@@ -13,27 +13,14 @@
         <result column="STATUS" property="status" />
         <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser" />
     </resultMap>
+
     <resultMap id="ReadyListMap" type="ChallengeListVo">
-        <result column="CHALLENGE_TITLE" property="challengeTitle" />
+        <result column="CHALLENGE_TITLE" property="title" />
         <result column="START_DATE"  property="startDate" />
         <result column="END_DATE"  property="endDate" />
-        <result column="userCount"  property="categoryName" />
+        <result column="userCount"  property="count" />
         <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser" />
     </resultMap>
-    <select id="findReady"  resultMap="ReadyListMap">
-        SELECT *
-        FROM CHALLENGE c
-        JOIN USER_PROFILE up ON up.USER_NO=c.CREATE_USER
-        WHERE STATUS = #{challengeNo}
-    </select>
-
-
-
-
-
-
-
-
 
 
     <insert id="insertSingle" parameterType="SingleStartVo">
@@ -50,25 +37,19 @@
         INSERT INTO CHALLENGE (CHALLENGE_NO, CREATE_USER, TEMPLATE_NO, START_DATE,STATUS,CHALLENGE_INFO,CHALLENGE_TITLE) VALUES
         (#{challengeNo},#{userNo},#{templateNo},#{startDate},#{status},#{challengeInfo},#{challengeTitle})
     </insert>
-    <insert id="joinUser" parameterType="ChallengeUserVo">
-        INSERT INTO CHALLENGE_USER (CHALLENGE_NO,USER_NO,STATUS) VALUES (#{challengeNo},#{userNo},#{status})
-    </insert>
+    <select id="findReady"  resultMap="ReadyListMap">
+        SELECT *
+        FROM CHALLENGE c
+                 JOIN USER_PROFILE up ON up.USER_NO=c.CREATE_USER
+                 LEFT JOIN PHOTO p ON p.PHOTO_NO=up.PHOTO_NO
+        WHERE STATUS = 'READY'
+    </select>
+
     <update id="updateEndDate" parameterType="EndDateUpdateVo">
         update CHALLENGE
         SET END_DATE=#{endDate}
         WHERE CHALLENGE_NO=#{challengeNo}
     </update>
-
-
-    <!--    <select id="hasChallenge" parameterType="">-->
-<!--        update CHALLENGE-->
-<!--        SET END_DATE=#{endDate}-->
-<!--        WHERE CHALLENGE_NO=#{challengeNo}-->
-<!--    </select>-->
-<!--    <select id="findDaily" parameterType="" >-->
-
-<!--    </select>-->
-
     <!-- 테스트 챌린지No(3000)번에 해당하는 챌린지 정보 다가져오기  -->
     <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
         SELECT *
@@ -80,11 +61,11 @@
         FROM CHALLENGE
         WHERE CHALLENGE_NO = #{challengeNo}
     </select>
-
     <select id="detailChallenge" parameterType="Challenge" resultMap="challengeMap">
         SELECT * FROM CHALLENGE
         WHERE CHALLENGE_NO LIKE '%' || #{challengeNo} || '%'
     </select>
+    <!-- todo:필요없음   -->
     <insert id="challengeGo" parameterType="ChallengeUser">
         INSERT INTO CHALLENGE_USER(CHALLENGE_NO , USER_NO , STATUS , CLEAR_COUNT)
         VALUES(#{challengeNo} , #{userNo} , 'READY' , 0)

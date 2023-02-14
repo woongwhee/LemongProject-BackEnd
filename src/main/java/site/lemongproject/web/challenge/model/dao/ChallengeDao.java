@@ -8,9 +8,11 @@ import java.util.List;
 
 public interface ChallengeDao {
     int insertSingle(SingleStartVo startVo);
+
     int insertMulti(MultiCreateVo createVo);
-    int joinUser(ChallengeUserVo joinVo);
+
     int updateEndDate(EndDateUpdateVo endDateUpdateVo);
+
     int deleteUser(ChallengeUserVo userVo);
 
     List<Challenge> selectChallenge();
@@ -18,6 +20,7 @@ public interface ChallengeDao {
     List<Challenge> detailChallenge(Challenge c);
 
     int challengeGo(ChallengeUser u);
+
     Challenge findOne(int challengeNo);
 
     List<ChallengeListVo> findReady(int page, int limit);

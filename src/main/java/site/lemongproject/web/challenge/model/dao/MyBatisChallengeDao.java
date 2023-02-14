@@ -26,10 +26,6 @@ public class MyBatisChallengeDao implements ChallengeDao{
         return session.insert("challengeMapper.insertMulti",createVo);
     }
 
-    @Override
-    public int joinUser(ChallengeUserVo challengeUserVo) {
-        return session.insert("challengeMapper.joinUser",challengeUserVo);
-    }
 
     @Override
     public int updateEndDate(EndDateUpdateVo endDateUpdateVo) {

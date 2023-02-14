@@ -5,10 +5,7 @@ import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.dto.ChallengeUser;
-import site.lemongproject.web.challenge.model.vo.ChallengeListVo;
-import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
-import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
-import site.lemongproject.web.challenge.model.vo.SingleStartVo;
+import site.lemongproject.web.challenge.model.vo.*;
 
 import java.util.List;
 
@@ -31,9 +28,9 @@ public interface ChallengeService {
 
     int challengeGo(ChallengeUser u);
 
-    int clearChallengeTodo(ChallengeTodo cTd);
-
     List<ChallengeTodo> calChTodo(ChallengeTodo ct);
 
     List<ChallengeListVo> getList(int page);
+
+    int clearTodo(TodoClearVo clearVo);
 }
