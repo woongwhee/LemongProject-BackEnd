@@ -20,6 +20,6 @@ public interface ChallengeTodoDao {
 
     List<ChallengeTodo> calChTodo(ChallengeTodo ct);
     List<Integer> findByCal(MonthFindVo findVo);
-
     ChallengeTodo findOne(long todoNo);
+
 }

@@ -5,10 +5,16 @@
     <resultMap type="ChallengeTodo" id="ChallengeTodoMap">
         <result column="TODO_NO" property="todoNo"/>
         <result column="CHALLENGE_NO" property="challengeNo"/>
+        <result column="USER_NO" property="userNo"/>
         <result column="TODO_DATE" property="todoDate"/>
         <result column="TODO_CONTENT" property="todoContent"/>
         <result column="CLEAR" property="clear"/>
         <result column="VALUE" property="value"/>
+    </resultMap>
+    <resultMap type="ChallengeTodoVo" id="previewMap">
+        <id column="CHALLENGE_NO" property="challengeNo"/>
+        <result column="CHALLENGE_TITLE" property="challengeName"/>
+        <collection  property="todoList" resultMap="todoMap"/>
     </resultMap>
     <resultMap type="Todo" id="todoMap">
         <result column="TODO_NO" property="todoNo"/>
@@ -48,7 +54,7 @@
           AND USER_NO = '-1'
     </insert>
     <!-- 미리보기  -->
-    <select id="findPreview" parameterType="_int" resultMap="ChallengeTodoMap">
+    <select id="findPreview" parameterType="_int" resultMap="previewMap">
         SELECT *
         FROM CHALLENGE_TODO
         WHERE CHALLENGE_NO = #{challenge_no}
@@ -77,7 +83,7 @@
         FROM CHALLENGE_TODO
         WHERE TODO_NO=#{todoNo}
     </select>
-    <update id="clearChTodo" parameterType="ChallengeTodo">
+    <update id="clearChallengeTodo" parameterType="TodoClearVo">
         UPDATE CHALLENGE_TODO
         SET CLEAR =
                 CASE
@@ -86,7 +92,6 @@
                     END
         WHERE TODO_NO = #{todoNo}
     </update>
-
 
     <select id="calChTodo" resultType="string">
         SELECT TO_CHAR(TODO_DATE, 'YYMMDD')

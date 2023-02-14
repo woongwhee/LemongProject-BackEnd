@@ -22,5 +22,12 @@ public class MyBatisChallengeUserDao implements ChallengeUserDao{
     public int adjustClearCount(){
         return sqlSession.update("challengeUserMapper.adjustClearCount");
     }
-
+    @Override
+    public int finishChallenge(float CLEAR_PERCENT) {
+        return sqlSession.update("challengeUserMapper.challengeFinish",CLEAR_PERCENT);
+    }
+    @Override
+    public int startChallenge() {
+        return sqlSession.update("challengeUserMapper.challengeStart");
+    }
 }

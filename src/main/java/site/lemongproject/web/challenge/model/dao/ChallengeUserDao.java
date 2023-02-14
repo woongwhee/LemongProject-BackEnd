@@ -7,4 +7,7 @@ public interface ChallengeUserDao {
     int joinUser(ChallengeUserVo joinVo);
     int changeClear(ChallengeTodo todo);
     int adjustClearCount();
+    int finishChallenge(float clear_percent);
+    int startChallenge();
+
 }

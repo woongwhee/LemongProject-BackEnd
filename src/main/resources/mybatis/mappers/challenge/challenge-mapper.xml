@@ -2,53 +2,65 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="challengeMapper">
     <resultMap id="challengeMap" type="Challenge">
-        <id column="CHALLENGE_NO"  property="challengeNo" />
-        <result column="TEMPLATE_NO" property="templateNo" />
-        <result column="CHALLENGE_INFO"  property="challengeInfo" />
-        <result column="CHALLENGE_TITLE" property="challengeTitle" />
-        <result column="START_DATE"  property="startDate" />
-        <result column="END_DATE"  property="endDate" />
-        <result column="CREATE_AT"  property="createAt" />
-        <result column="CHALLENGE_OPTION"  property="challengeOption" />
-        <result column="STATUS" property="status" />
-        <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser" />
+        <id column="CHALLENGE_NO" property="challengeNo"/>
+        <result column="TEMPLATE_NO" property="templateNo"/>
+        <result column="CHALLENGE_INFO" property="challengeInfo"/>
+        <result column="CHALLENGE_TITLE" property="challengeTitle"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="END_DATE" property="endDate"/>
+        <result column="CREATE_AT" property="createAt"/>
+        <result column="CHALLENGE_OPTION" property="challengeOption"/>
+        <result column="STATUS" property="status"/>
+        <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser"/>
     </resultMap>
 
     <resultMap id="ReadyListMap" type="ChallengeListVo">
-        <result column="CHALLENGE_TITLE" property="title" />
-        <result column="START_DATE"  property="startDate" />
-        <result column="END_DATE"  property="endDate" />
-        <result column="userCount"  property="count" />
-        <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser" />
+        <result column="CHALLENGE_TITLE" property="title"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="END_DATE" property="endDate"/>
+        <result column="userCount" property="count"/>
+        <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser"/>
     </resultMap>
 
+    <resultMap id="DetailMap" type="ChallengeDetailVo">
+        <result column="CHALLENGE_NO" property="challengeNo"/>
+        <result column="CHALLENGE_TITLE" property="challengeTitle"/>
+        <result column="CHALLENGE_INFO" property="challengeInfo"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="END_DATE" property="endDate"/>
+        <result column="userCount" property="count"/>
+        <association column="CHALLENGE_NO" property="todoPreview" select="challengeTodoMapper.findPreview"/>
+        <collection column="CHALLENGE_NO" select="challengeUserMapper.findReadyList" property="readyUsers"/>
+    </resultMap>
 
     <insert id="insertSingle" parameterType="SingleStartVo">
         <selectKey keyProperty="challengeNo" resultType="int" order="BEFORE">
             select SEQ_CHALLENGE.nextval from dual
         </selectKey>
-        INSERT INTO CHALLENGE (CHALLENGE_NO, CREATE_USER, TEMPLATE_NO, START_DATE, CHALLENGE_OPTION,STATUS,CHALLENGE_TITLE) VALUES
+        INSERT INTO CHALLENGE (CHALLENGE_NO, CREATE_USER, TEMPLATE_NO, START_DATE,
+        CHALLENGE_OPTION,STATUS,CHALLENGE_TITLE) VALUES
         (#{challengeNo},#{userNo},#{templateNo},#{startDate},#{option},#{status},#{challengeTitle})
     </insert>
     <insert id="insertMulti" parameterType="MultiCreateVo">
         <selectKey keyProperty="challengeNo" resultType="int" order="BEFORE">
             select SEQ_CHALLENGE.nextval from dual
         </selectKey>
-        INSERT INTO CHALLENGE (CHALLENGE_NO, CREATE_USER, TEMPLATE_NO, START_DATE,STATUS,CHALLENGE_INFO,CHALLENGE_TITLE) VALUES
+        INSERT INTO CHALLENGE (CHALLENGE_NO, CREATE_USER, TEMPLATE_NO, START_DATE,STATUS,CHALLENGE_INFO,CHALLENGE_TITLE)
+        VALUES
         (#{challengeNo},#{userNo},#{templateNo},#{startDate},#{status},#{challengeInfo},#{challengeTitle})
     </insert>
-    <select id="findReady"  resultMap="ReadyListMap">
+    <select id="findReady" resultMap="ReadyListMap">
         SELECT *
         FROM CHALLENGE c
-                 JOIN USER_PROFILE up ON up.USER_NO=c.CREATE_USER
-                 LEFT JOIN PHOTO p ON p.PHOTO_NO=up.PHOTO_NO
+                 JOIN USER_PROFILE up ON up.USER_NO = c.CREATE_USER
+                 LEFT JOIN PHOTO p ON p.PHOTO_NO = up.PHOTO_NO
         WHERE STATUS = 'READY'
     </select>
 
     <update id="updateEndDate" parameterType="EndDateUpdateVo">
         update CHALLENGE
         SET END_DATE=#{endDate}
-        WHERE CHALLENGE_NO=#{challengeNo}
+        WHERE CHALLENGE_NO = #{challengeNo}
     </update>
     <!-- 테스트 챌린지No(3000)번에 해당하는 챌린지 정보 다가져오기  -->
     <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
@@ -62,13 +74,41 @@
         WHERE CHALLENGE_NO = #{challengeNo}
     </select>
     <select id="detailChallenge" parameterType="Challenge" resultMap="challengeMap">
-        SELECT * FROM CHALLENGE
+        SELECT *
+        FROM CHALLENGE
         WHERE CHALLENGE_NO LIKE '%' || #{challengeNo} || '%'
     </select>
     <!-- todo:필요없음   -->
     <insert id="challengeGo" parameterType="ChallengeUser">
-        INSERT INTO CHALLENGE_USER(CHALLENGE_NO , USER_NO , STATUS , CLEAR_COUNT)
-        VALUES(#{challengeNo} , #{userNo} , 'READY' , 0)
+        INSERT INTO CHALLENGE_USER(CHALLENGE_NO, USER_NO, STATUS, CLEAR_COUNT)
+        VALUES (#{challengeNo}, #{userNo}, 'READY', 0)
     </insert>
-
+    <select id="findDetail" parameterType="int" resultMap="DetailMap">
+        SELECT *
+        FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengNo}
+    </select>
+    <update id="startChallenge">
+        <![CDATA[
+        update CHALLENGE
+        SET STATUS='PLAY'
+        WHERE SYSDATE <= START_DATE
+          AND START_DATE <= SYSDATE + 1
+          AND STATUS = 'PLAY'
+        ]]>
+    </update>
+    <update id="finishChallenge">
+        <![CDATA[
+        update CHALLENGE
+        SET STATUS='FINISH'
+        WHERE SYSDATE <= END_DATE
+          AND END_DATE <= SYSDATE + 1
+          AND (STATUS = 'READY' OR STATUS = 'SINGLE')
+        ]]>
+    </update>
+    <update id="cancelChallenge" parameterType="_int">
+        update CHALLENGE
+        SET STATUS='CANCEL'
+        WHERE CHALLENGE_NO=#{challengeNo}
+    </update>\
 </mapper>
