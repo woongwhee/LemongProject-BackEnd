@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
+import site.lemongproject.common.type.ChallengeUserStatus;
 import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeUser;
 import site.lemongproject.web.challenge.model.vo.*;
@@ -51,7 +52,16 @@ public class ChallengeController {
             return ResponseBuilder.serverError();
         }
     }
+    @PutMapping("/join/{challengeNo}")
+    public ResponseBody<Challenge> startMulti(@SessionAttribute("loginUser") Profile loginUser, @PathVariable("challengeNo") int challengeNo) {
+        int result = challengeService.joinMulti(new ChallengeUserVo(loginUser.getUserNo(),challengeNo, ChallengeUserStatus.READY));
 
+        if (result > 0) {
+            return ResponseBuilder.success(result);
+        } else {
+            return ResponseBuilder.serverError();
+        }
+    }
     // challNo에 해당하는 챌린지 상세정보 가져오기.
     @GetMapping("/detailChallenge")
     public ResponseBody<Challenge> detailChallenge(@RequestParam(value = "challNo", required = false) int challNo) {
