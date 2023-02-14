@@ -74,9 +74,9 @@ public class ChallengeServiceImpl implements ChallengeService {
         //방장도 challengeUser에 넣는다.
         ChallengeUserVo userVo = new ChallengeUserVo(createVo.getUserNo(), createVo.getChallengeNo(), ChallengeUserStatus.READY);
         result *= challengeDao.joinUser(userVo);
-        System.out.println(userVo);
         updateVo.setChallengeNo(createVo.getChallengeNo());
         CGTodoInsertVo insertVo = makeTodo(createVo, updateVo);
+        System.out.println(updateVo);
         insertVo.setUserNo(-1);
         result *= todoDao.insertTodoList(insertVo);
         result *= todoDao.copyTodoList(userVo);
@@ -164,7 +164,6 @@ public class ChallengeServiceImpl implements ChallengeService {
         CGTodoInsertVo insertVo = new CGTodoInsertVo();
         updateVo.setEndDate(datePoint);
         updateVo.setChallengeNo(startVo.getChallengeNo());
-        updateVo.setChallengeNo(startVo.getUserNo());
         insertVo.setTodoList(challengeTodos);
         insertVo.setUserNo(startVo.getUserNo());
         insertVo.setChallengeNo(startVo.getChallengeNo());
@@ -196,6 +195,11 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     public List<ChallengeTodo> calChTodo(ChallengeTodo ct) {
         return todoDao.calChTodo(ct);
+    }
+
+    @Override
+    public List<ChallengeListVo> getList(int page) {
+        return challengeDao.findReady(page,8);
     }
 
 
