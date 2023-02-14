@@ -9,8 +9,10 @@ import site.lemongproject.web.challenge.model.dto.ChallengeUser;
 import site.lemongproject.web.challenge.model.vo.ChallengeListVo;
 import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
 import site.lemongproject.web.challenge.model.vo.SingleStartVo;
+import site.lemongproject.web.challenge.model.vo.TodoClearVo;
 import site.lemongproject.web.challenge.service.ChallengeService;
 import site.lemongproject.web.member.model.vo.Profile;
+import site.lemongproject.web.todo.model.vo.Todo;
 
 import java.util.List;
 
@@ -29,32 +31,33 @@ public class ChallengeController {
     }
 
     @PostMapping("/start/single")
-    public ResponseBody<Challenge> startSingle(@SessionAttribute("loginUser")Profile loginUser, @RequestBody SingleStartVo startVo) {
+    public ResponseBody<Challenge> startSingle(@SessionAttribute("loginUser") Profile loginUser, @RequestBody SingleStartVo startVo) {
         System.out.println(startVo);
         startVo.setUserNo(loginUser.getUserNo());
         int result = challengeService.startSingle(startVo);
-        if (result>0) {
+        if (result > 0) {
             return ResponseBuilder.success(result);
-        }else {
+        } else {
             return ResponseBuilder.serverError();
         }
 
     }
 
     @PostMapping("/start/multi")
-    public ResponseBody<Challenge> startMulti(@SessionAttribute("loginUser")Profile loginUser, @RequestBody MultiCreateVo createVo) {
+    public ResponseBody<Challenge> startMulti(@SessionAttribute("loginUser") Profile loginUser, @RequestBody MultiCreateVo createVo) {
         System.out.println(createVo);
         createVo.setUserNo(loginUser.getUserNo());
         int result = challengeService.createMulti(createVo);
-        if (result>0) {
+        if (result > 0) {
             return ResponseBuilder.success(result);
-        }else {
+        } else {
             return ResponseBuilder.serverError();
         }
     }
+
     // challNo에 해당하는 챌린지 상세정보 가져오기.
     @GetMapping("/detailChallenge")
-    public ResponseBody<Challenge> detailChallenge(@RequestParam(value = "challNo" , required = false)int challNo){
+    public ResponseBody<Challenge> detailChallenge(@RequestParam(value = "challNo", required = false) int challNo) {
         Challenge c = new Challenge();
         c.setChallengeNo(challNo);
 
@@ -66,22 +69,30 @@ public class ChallengeController {
     // ready상태에서도 채팅방 사용 가능.
 
     @GetMapping("/list/notice/{page}")
-    public ResponseBody<ChallengeListVo> noticeList(@PathVariable("page") int page){
+    public ResponseBody<ChallengeListVo> noticeList(@PathVariable("page") int page) {
         List<ChallengeListVo> list = challengeService.getList(page);
 
-        if(list==null||list.size()==0){
+        if (list == null || list.size() == 0) {
             return ResponseBuilder.findNothing();
-        }else{
+        } else {
             return ResponseBuilder.success(list);
         }
 
     }
 
-
+    @GetMapping("/clearTodo")
+    public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo", required = false) long todoNo, @RequestParam(value = "templateNo", required = false) int templateNo, @SessionAttribute("loginUser") Profile loginUser) {
+        int result = challengeService.clearTodo(new TodoClearVo(todoNo, templateNo, loginUser.getUserNo()));
+        if (result > 0) {
+            return ResponseBuilder.success(result);
+        } else {
+            return ResponseBuilder.upLoadFail();
+        }
+    }
 
     @GetMapping("/challengeGo")
-    public ResponseBody<ChallengeUser> challengeGo(@RequestParam(value = "challNo" , required = false) int challNo ,
-                                                   @RequestParam(value = "userNo" , required = false) int userNo){
+    public ResponseBody<ChallengeUser> challengeGo(@RequestParam(value = "challNo", required = false) int challNo,
+                                                   @RequestParam(value = "userNo", required = false) int userNo) {
 
         ChallengeUser u = new ChallengeUser();
         u.setChallengeNo(challNo);

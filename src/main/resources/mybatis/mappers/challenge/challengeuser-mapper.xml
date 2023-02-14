@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="challengeUserMapper">
+    <insert id="joinUser" parameterType="ChallengeUserVo">
+        INSERT INTO CHALLENGE_USER (CHALLENGE_NO, USER_NO, STATUS)
+        VALUES (#{challengeNo}, #{userNo}, #{status})
+    </insert>
+    <update id="changeClear" parameterType="ChallengeTodo">
+        UPDATE CHALLENGE_USER
+        <set>
+            <if test="clear">
+                SET CLEAR_COUNT=CLEAR_COUNT + 1
+            </if>
+            <if test="!clear">
+                SET CLEAR_COUNT=CLEAR_COUNT - 1
+            </if>
+        </set>
+        WHERE USER_NO = #{userNo}
+        AND CHALLENGE_NO = #{challengeNo}
+    </update>
+    <update id="adjustClearCount">
+        UPDATE CHALLENGE_USER cu
+        SET CLEAR_COUNT = (SELECT COUNT(*)
+                           FROM CHALLENGE_TODO ct
+                           WHERE ct.CHALLENGE_NO = cu.CHALLENGE_NO
+                             AND ct.USER_NO = cu.USER_NO
+                             and clear = 1)
+        WHERE NOT (CHALLENGE_NO, USER_NO, CLEAR_COUNT) IN
+                  (SELECT count(*) AS CLEAR_COUNT,
+                          ct.CHALLENGE_NO,
+                          ct.USER_NO
+                   FROM CHALLENGE_TODO ct
+                   WHERE CLEAR = 1
+                   GROUP BY CHALLENGE_NO, USER_NO);
+    </update>
+
+
+</mapper>
+

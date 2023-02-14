@@ -7,6 +7,7 @@ import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.vo.CGTodoInsertVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeTodoVo;
+import site.lemongproject.web.challenge.model.vo.TodoClearVo;
 import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.dto.MonthFindVo;
 
@@ -33,9 +34,14 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
     }
 
     @Override
-    public  int clearChallengeTodo(ChallengeTodo cTd){
-        return session.update("challengeTodoMapper.clearChTodo", cTd);
+    public int clearChallengeTodo(TodoClearVo clearVo) {
+        return session.update("challengeTodoMapper.clearChallengeTodo",clearVo) ;
     }
+
+//    @Override
+//    public  int clearChallengeTodo(ChallengeTodo cTd){
+//        return session.update("challengeTodoMapper.clearChTodo", cTd);
+//    }
 
     @Override
     public List<ChallengeTodo> calChTodo(ChallengeTodo ct){
@@ -45,5 +51,9 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
     public List<Integer> findByCal(MonthFindVo findVo) {
         return session.selectList("challengeTodoMapper.findByCal", findVo);
 
+    }
+    @Override
+    public ChallengeTodo findOne(long todoNo) {
+        return session.selectOne("challengeTodoMapper.findOne",todoNo);
     }
 }

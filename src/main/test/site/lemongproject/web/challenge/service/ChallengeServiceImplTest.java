@@ -9,11 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.common.type.ChallengeStatus;
 import site.lemongproject.common.type.ChallengeUserStatus;
 import site.lemongproject.config.Configure;
+import site.lemongproject.web.challenge.model.vo.ChallengeListVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
 import site.lemongproject.web.challenge.model.vo.SingleStartVo;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -61,5 +63,12 @@ public class ChallengeServiceImplTest extends Configure {
         ChallengeUserVo challengeUserVo=new ChallengeUserVo(TEST_USER_NO+1,TEST_CL_NO, ChallengeUserStatus.READY);
         int result=challengeService.joinMulti(challengeUserVo);
         assertThat(result).isNotZero();
+    }
+    @Test
+    public void challengeList(){
+        List<ChallengeListVo> list1 = challengeService.getList(0);
+        List<ChallengeListVo> list2 = challengeService.getList(1);
+        System.out.println(list1);
+        System.out.println(list2);
     }
 }

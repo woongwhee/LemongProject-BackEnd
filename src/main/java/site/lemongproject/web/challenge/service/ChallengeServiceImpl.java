@@ -2,6 +2,8 @@ package site.lemongproject.web.challenge.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import site.lemongproject.web.challenge.model.dao.ChallengeUserDao;
 import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.todo.model.dao.HolidayDao;
 import site.lemongproject.web.todo.model.dto.PeriodVo;
@@ -28,11 +30,13 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class ChallengeServiceImpl implements ChallengeService {
     final private ChallengeDao challengeDao;
     final private HolidayDao holidayDao;
     final private ChallengeChatDao chatDao;
     final private ChallengeTodoDao todoDao;
+    final private ChallengeUserDao userDao;
     final private TemplateDao templateDao;
     final private TemplateTodoDao templateTodoDao;
 
@@ -45,7 +49,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public int joinMulti(ChallengeUserVo joinVo) {
         joinVo.setStatus(ChallengeUserStatus.READY);
-        int result = challengeDao.joinUser(joinVo);
+        int result = userDao.joinUser(joinVo);
         result *= todoDao.copyTodoList(joinVo);
         return result;
     }
@@ -73,7 +77,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         EndDateUpdateVo updateVo = new EndDateUpdateVo();
         //방장도 challengeUser에 넣는다.
         ChallengeUserVo userVo = new ChallengeUserVo(createVo.getUserNo(), createVo.getChallengeNo(), ChallengeUserStatus.READY);
-        result *= challengeDao.joinUser(userVo);
+        result *= userDao.joinUser(userVo);
         updateVo.setChallengeNo(createVo.getChallengeNo());
         CGTodoInsertVo insertVo = makeTodo(createVo, updateVo);
         System.out.println(updateVo);
@@ -97,7 +101,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         if (result == 0) {
             return 0;
         }
-        result *= challengeDao.joinUser(new ChallengeUserVo(startVo.getUserNo(), startVo.getChallengeNo(), ChallengeUserStatus.READY));
+        result *= userDao.joinUser(new ChallengeUserVo(startVo.getUserNo(), startVo.getChallengeNo(), ChallengeUserStatus.READY));
         EndDateUpdateVo updateVo = new EndDateUpdateVo();
 
         CGTodoInsertVo insertVo = makeTodo(startVo, updateVo);
@@ -106,7 +110,6 @@ public class ChallengeServiceImpl implements ChallengeService {
         //종료일을 설정한다.
         return result;
     }
-
 
     private CGTodoInsertVo makeTodo(SingleStartVo startVo, EndDateUpdateVo updateVo) {
         int templateNo = startVo.getTemplateNo();
@@ -167,7 +170,6 @@ public class ChallengeServiceImpl implements ChallengeService {
         insertVo.setTodoList(challengeTodos);
         insertVo.setUserNo(startVo.getUserNo());
         insertVo.setChallengeNo(startVo.getChallengeNo());
-
         return insertVo;
     }
 
@@ -189,9 +191,6 @@ public class ChallengeServiceImpl implements ChallengeService {
         return chatDao.insertChatData(chatData);
     }
 
-    public int clearChallengeTodo(ChallengeTodo cTd) {
-        return todoDao.clearChallengeTodo(cTd);
-    }
 
     public List<ChallengeTodo> calChTodo(ChallengeTodo ct) {
         return todoDao.calChTodo(ct);
@@ -199,9 +198,16 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     @Override
     public List<ChallengeListVo> getList(int page) {
-        return challengeDao.findReady(page,8);
+        return challengeDao.findReady(page, 8);
     }
 
+    @Override
+    public int clearTodo(TodoClearVo clearVo) {
+        int result = todoDao.clearChallengeTodo(clearVo);
+        ChallengeTodo todo = todoDao.findOne(clearVo.getTodoNo());
+        result *= userDao.changeClear(todo);
+        return result;
+    }
 
     public List<Challenge> detailChallenge(Challenge c) {
         return challengeDao.detailChallenge(c);

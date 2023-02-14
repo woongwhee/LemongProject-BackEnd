@@ -72,8 +72,11 @@
         WHERE cu.USER_NO = #{userNo}
           AND cu.STATUS = 'PLAY'
     </select>
-
-
+    <select id="findOne" parameterType="_long" resultMap="ChallengeTodoMap">
+        SELECT *
+        FROM CHALLENGE_TODO
+        WHERE TODO_NO=#{todoNo}
+    </select>
     <update id="clearChTodo" parameterType="ChallengeTodo">
         UPDATE CHALLENGE_TODO
         SET CLEAR =
@@ -83,12 +86,8 @@
                     END
         WHERE TODO_NO = #{todoNo}
     </update>
-    <update id="addTodoCount" parameterType="ChallengeTodo">
-        UPDATE CHALLENGE_USER
-        SET CLEAR_COUNT=CLEAR_COUNT + 1
-        WHERE USER_NO = #{userNo}
-          AND CHALLENGE_NO = #{challengeNo}
-    </update>
+
+
     <select id="calChTodo" resultType="string">
         SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
         FROM CHALLENGE_TODO
