@@ -10,6 +10,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("TodoClearVo")
 public class TodoClearVo {
     long todoNo;
-    int templateNo;
+    int challengeNo;
     int userNo;
 }
