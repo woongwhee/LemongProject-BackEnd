@@ -30,10 +30,11 @@
             FOLLOWING ,
             FOLLOW_AT ,
             CHANGE_NAME ,
-            NICK_NAME
+            NICK_NAME ,
+            P.FILE_PATH
         FROM FOLLOW F
         LEFT JOIN PHOTO P ON(F.FOLLOWING = P.USER_NO)
-        LEFT JOIN USER_PROFILE U USING(PHOTO_NO)
+        LEFT JOIN USER_PROFILE U ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE FOLLOWER = #{follower}
     </select>
 
@@ -99,10 +100,11 @@
         SELECT
             U.USER_NO ,
             NICK_NAME ,
-            CHANGE_NAME
+            CHANGE_NAME ,
+            P.FILE_PATH
         FROM FOLLOW F
         JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
-        LEFT JOIN PHOTO P USING(PHOTO_NO)
+        LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE F.FOLLOWING = #{following}
     </select>
 
@@ -120,10 +122,11 @@
         SELECT
             U.USER_NO ,
             NICK_NAME ,
-            CHANGE_NAME
+            CHANGE_NAME ,
+            P.FILE_PATH
         FROM FOLLOW F
         JOIN USER_PROFILE U ON(F.FOLLOWING = U.USER_NO)
-        LEFT JOIN PHOTO P USING(PHOTO_NO)
+        LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE F.FOLLOWER = #{follower}
     </select>
 
@@ -132,10 +135,11 @@
         SELECT
             U.USER_NO ,
             NICK_NAME ,
-            CHANGE_NAME
+            CHANGE_NAME ,
+            P.FILE_PATH
         FROM FOLLOW F
         JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
-        LEFT JOIN PHOTO P USING(PHOTO_NO)
+        LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE F.FOLLOWING = #{following}
     </select>
 
@@ -143,10 +147,11 @@
         SELECT
             U.USER_NO ,
             NICK_NAME ,
-            CHANGE_NAME
+            CHANGE_NAME ,
+            P.FILE_PATH
         FROM FOLLOW F
         JOIN USER_PROFILE U ON(F.FOLLOWING = U.USER_NO)
-        LEFT JOIN PHOTO P USING(PHOTO_NO)
+        LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE F.FOLLOWER = #{follower}
     </select>
 
