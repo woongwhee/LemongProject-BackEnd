@@ -16,7 +16,6 @@ import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.dao.ProfileDao;
 import site.lemongproject.web.member.model.dto.MyProfileVo;
-import site.lemongproject.web.member.model.vo.KakaoToken;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
@@ -48,12 +47,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Profile loginMember(Member m) {
         Member loginUser = memberDao.loginMember(m);
-//        if(bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())){
-//
-//        }else{
-//            return null;
-//        }
+        if(bCryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())){
             return profileDao.findOne(loginUser.getUserNo());
+
+        }else{
+            return null;
+        }
     }
 
 
@@ -325,6 +324,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
 
+    @Override
+    public int updateToken(Member isSocial) {
+        return memberDao.updateToken(isSocial);
+    }
+
+
 
     @Override
     public int updateProfile(Profile profile) {
@@ -351,11 +356,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int insertUserPhoto(Photo newP) {
         Photo oldP = photoDao.findByUser(newP.getUserNo());
+        System.out.println(oldP);
         if (oldP != null) {
             fileUtil.deleteFile(oldP);
             photoDao.deletePhoto(oldP.getPhotoNo());
         }
+
         int result = photoDao.insertPhoto(newP);
+        System.out.println(newP);
+
         result *= profileDao.updateProfilePhoto(newP);
         return result;
     }
@@ -370,12 +379,143 @@ public class MemberServiceImpl implements MemberService {
 //        return memberDao.selectMember(userNo);
 //    }
 
+
+    // 일반 회원 탈퇴
     @Override
     public int deleteUser(int userNo) {
-        int result = memberDao.deleteUser(userNo);
-        result = profileDao.deleteProfile(userNo);
+        int result1 = memberDao.deleteUser(userNo);
+        int result2 = profileDao.deleteUser(userNo);
+
+        int result = result1 * result2;
         return result;
     }
+
+
+    // 탈퇴를 위한 Naver User 토큰 조회
+    @Override
+    public String selectAccessToken(int userNo) {
+        String token = memberDao.selectAccessToken(userNo);
+        System.out.println("서비스 token: "+token);
+        return token;
+    }
+
+
+    // Naver 유저 api 끊기 -> 회원 탈퇴
+    public int deleteNaver(Profile profile, String token) {
+
+        int result1 = memberDao.deleteUser(profile.getUserNo()); // 멤버에서 상태 0으로 변경
+        int result2 = profileDao.deleteUser(profile.getUserNo()); // 프로필에서 삭제
+        int result3 = deleteNaverToken(token); // 네이버 연동 해제
+
+        int result = result1 * result2 * result3;
+        return result;
+
+    }
+
+
+    // 네이버 연동 해제
+    public int deleteNaverToken(String token) {
+//        System.out.println("탈퇴 서비스 토큰: "+token);
+
+        String clientId = "gby5MZqE_2ShDpfOnFIS";
+        String clientSecret = "OyOjXUomy0";
+
+        String reqUrl = "https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id="+clientId+
+                "&client_secret="+clientSecret+"&access_token="+token+"&service_provider=NAVER";
+
+        try {
+            URL url = new URL(reqUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("GET");
+
+            int responseCode = conn.getResponseCode();
+//            System.out.println("탈퇴 응답코드: "+responseCode);
+
+            BufferedReader br;
+            if(responseCode == 200) {
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+
+            String brLine = "";
+            String result = "";
+            while ((brLine = br.readLine()) != null) {
+                result += brLine;
+            }
+
+            br.close();
+
+            if(responseCode == 200) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    // 카카오 유저 삭제
+    @Override
+    public int deleteKakao(Profile profile, String token) {
+
+        int result1 = memberDao.deleteUser(profile.getUserNo()); // 멤버에서 상태 0으로 변경
+        int result2 = profileDao.deleteUser(profile.getUserNo()); // 프로필에서 삭제
+        int result3 = deleteKakaoToken(token); // 카카오 api 연동 해제
+
+        int result = result1 * result2 * result3;
+        return result;
+    }
+
+
+    public int deleteKakaoToken(String token) {
+//        System.out.println(token);
+
+        String reqURL = "https://kapi.kakao.com/v1/user/unlink";
+
+        try {
+            URL url = new URL(reqURL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+            conn.setRequestMethod("POST");
+
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            conn.setRequestProperty("Authorization", "Bearer "+token);
+
+            int responseCode = conn.getResponseCode();
+//            System.out.println("카카오 회원탈퇴 응답코드: "+responseCode);
+
+            BufferedReader br;
+            if(responseCode == 200) {
+                br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            } else {
+                br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+            }
+
+            String brLine = "";
+            String result = "";
+            while ((brLine = br.readLine()) != null) {
+                result += brLine;
+            }
+
+            br.close();
+
+            if(responseCode == 200) {
+                return 1;
+            } else {
+                return 0;
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 
     public Profile selectMyProfile(int userNo) {
         return profileDao.findOne(userNo);
