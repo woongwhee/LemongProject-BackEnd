@@ -238,13 +238,13 @@ public class MemberController {
 //                System.out.println(token);
                 // 회원 삭제가 되었는지 체크
                 result = memberService.deleteNaver(profile, token);
-                System.out.println(result);
+//                System.out.println(result);
                 break;
             case KAKAO:
                 token = memberService.selectAccessToken(profile.getUserNo());
-                System.out.println(token);
+//                System.out.println(token);
                 result = memberService.deleteKakao(profile, token);
-                System.out.println(result);
+//                System.out.println(result);
                 break;
         }
 

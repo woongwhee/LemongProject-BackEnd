@@ -14,7 +14,6 @@ import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
-import site.lemongproject.web.member.model.vo.KakaoToken;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 
