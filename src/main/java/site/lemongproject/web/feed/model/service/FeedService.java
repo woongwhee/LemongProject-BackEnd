@@ -53,4 +53,17 @@ public interface FeedService  {
     List<FeedList> selectMyFeedList(FeedList f);
 
     List<FeedList> searchImg(FeedList f);
+
+    // 유저프로필사진
+    Map<String, Object> userProfile(Map<String,Object> userNo);
+
+    // 좋아요 누름
+    int heartClick(Map<String, Object> data);
+    // 좋아요 취소
+    int heartCancel(Map<String, Object> data);
+
+    // 좋아요 상태
+    int heartState(Map<String, Object> data);
+
+    int heartCount(Map<String, Object> data);
 }
