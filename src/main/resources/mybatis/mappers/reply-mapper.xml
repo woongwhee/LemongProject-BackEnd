@@ -16,7 +16,7 @@
     <!--  피드 댓글 작성  -->
     <insert id="insertFeedReply" parameterType="Map">
         INSERT INTO REPLY (REPLY_NO, USER_NO, FEED_NO, REPLY_CONTENT, REPLY_AT) VALUES
-        (SEQ_REPLY.nextval, #{userNo}, #{feedNo}, #{replyContent},SYSDATE)
+        (SEQ_REPLY.nextval, #{loginUserNo}, #{feedNo}, #{replyContent},SYSDATE)
     </insert>
 
 <!-- 피드 댓글 -->

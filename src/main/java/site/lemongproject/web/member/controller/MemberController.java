@@ -11,8 +11,8 @@ import site.lemongproject.common.util.FileUtil;
 import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.MyProfileVo;
 import site.lemongproject.web.member.model.service.MemberService;
-import site.lemongproject.web.member.model.vo.Member;
-import site.lemongproject.web.member.model.vo.Profile;
+import site.lemongproject.web.member.model.vo.*;
+//import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import javax.servlet.http.HttpSession;
@@ -166,12 +166,12 @@ public class MemberController {
     }
     //
 
-    @GetMapping("/selectMember")
-    public ResponseBody<Member> selectMembers(@RequestParam(value = "userNo") int userNo){
-
-        Member m = memberService.selectMembers(userNo);
-        return ResponseBuilder.success(m);
-    }
+//    @GetMapping("/selectMember")
+//    public ResponseBody<Member> selectMembers(@RequestParam(value = "userNo") int userNo){
+//
+//        Member m = memberService.selectMembers(userNo);
+//        return ResponseBuilder.success(m);
+//    }
 
     // userNo에 해당하는 user 프로필 정보 가져오기(changeName 포함).
     @GetMapping("/selectMyProfile")
