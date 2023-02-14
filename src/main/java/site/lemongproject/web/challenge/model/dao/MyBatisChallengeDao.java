@@ -56,4 +56,9 @@ public class MyBatisChallengeDao implements ChallengeDao{
     public int challengeGo(ChallengeUser u){
         return session.insert("challengeMapper.challengeGo" , u);
     }
+
+    @Override
+    public Challenge findOne(int challengeNo) {
+        return session.selectOne("challengeMapper.findOne" , challengeNo);
+    }
 }

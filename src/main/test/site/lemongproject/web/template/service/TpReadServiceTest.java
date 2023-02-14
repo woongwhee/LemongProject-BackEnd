@@ -1,27 +1,14 @@
 package site.lemongproject.web.template.service;
 
 
-import org.assertj.core.api.Assertions;
-import org.junit.Before;
 import org.junit.Test;
 
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.EnabledIf;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
-import org.springframework.test.context.web.AnnotationConfigWebContextLoader;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
-import site.lemongproject.common.config.ApplicationConfig;
 import site.lemongproject.config.Configure;
 import site.lemongproject.web.member.model.dao.MemberDao;
-import site.lemongproject.web.member.model.dto.ChangePwdVo;
-import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.template.model.dao.ReviewDao;
 import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
@@ -29,10 +16,9 @@ import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.ReviewDeleteVo;
 import site.lemongproject.web.template.model.vo.ReviewInsertVo;
+import site.lemongproject.web.template.model.vo.TPDayTodoVo;
 import site.lemongproject.web.template.model.vo.TemplateFindVo;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -74,7 +60,7 @@ public class TpReadServiceTest extends Configure{
     @Test
     @DisplayName("투두조회테스트")
     public void getTemplateTodo(){
-        List<TemplateTodo> todoList=readService.getTemplateTodo(TEST_TP_NO);
+        List<TemplateTodo> todoList=readService.getTodoByDay(new TPDayTodoVo(TEST_TP_NO,1));
         assertThat(todoList).isNotNull();
         assertThat(todoList.size()).isNotZero();
     };
@@ -125,4 +111,5 @@ public class TpReadServiceTest extends Configure{
         System.out.println(categoryList);
         assertThat(categoryList).isNotNull();
     }
+
 }

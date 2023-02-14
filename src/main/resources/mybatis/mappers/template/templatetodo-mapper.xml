@@ -35,6 +35,13 @@
         WHERE TEMPLATE_NO = #{templateNo}
         ORDER BY DAY, VALUE
     </select>
+    <select id="findByTemplateDay" parameterType="TPDayTodoVo" resultMap="templateTodoMap">
+        SELECT *
+        FROM TEMPLATE_TODO
+        WHERE TEMPLATE_NO = #{templateNo}
+        AND DAY=#{day}
+        ORDER BY VALUE
+    </select>
     <select id="findOne" parameterType="long" resultMap="templateTodoMap">
         SELECT *
         FROM TEMPLATE_TODO

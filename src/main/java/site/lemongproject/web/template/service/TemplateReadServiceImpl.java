@@ -2,6 +2,7 @@ package site.lemongproject.web.template.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.lemongproject.web.template.model.vo.*;
 import site.lemongproject.web.todo.model.dao.HolidayDao;
 import site.lemongproject.web.template.model.dao.ReviewDao;
 import site.lemongproject.web.template.model.dao.TemplateCategoryDao;
@@ -11,10 +12,6 @@ import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
-import site.lemongproject.web.template.model.vo.ReviewDeleteVo;
-import site.lemongproject.web.template.model.vo.ReviewInsertVo;
-import site.lemongproject.web.template.model.vo.TemplateFindVo;
-import site.lemongproject.web.template.model.vo.WriterCheckVo;
 
 import java.util.List;
 
@@ -44,8 +41,8 @@ public class TemplateReadServiceImpl implements TemplateReadService {
     }
 
     @Override
-    public List<TemplateTodo> getTemplateTodo(int templateNo) {
-        return templateTodoDao.findByTemplate(templateNo);
+    public List<TemplateTodo> getTodoByDay(TPDayTodoVo todoVo) {
+        return templateTodoDao.findByTemplateDay(todoVo);
     }
 
     @Override

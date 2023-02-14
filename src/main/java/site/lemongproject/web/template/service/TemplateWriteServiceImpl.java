@@ -9,7 +9,6 @@ import site.lemongproject.web.template.model.dao.TemplateTodoDao;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -98,7 +97,7 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
         TemplateTodo todo = templateTodoDao.findOne(tdv.getTpTodoNo());
         int result = templateTodoDao.deleteOne(tdv);
         if (result > 0) {
-            result = templateTodoDao.afterDelete(todo);
+            templateTodoDao.afterDelete(todo);
         }
         return result;
     }

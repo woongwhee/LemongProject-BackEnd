@@ -2,14 +2,15 @@ package site.lemongproject.web.challenge.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.challenge.model.dto.Challenge;
+import site.lemongproject.web.challenge.model.dto.ChallengeUser;
+import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
+import site.lemongproject.web.challenge.model.vo.SingleStartVo;
 import site.lemongproject.web.challenge.service.ChallengeService;
+import site.lemongproject.web.member.model.vo.Profile;
 
 import java.util.List;
 
@@ -22,17 +23,13 @@ public class ChallengeController {
     // 테스트 챌린지No(3000)번에 해당하는 정보 다가져오기.
     @GetMapping("/selectChallenge")
     public ResponseBody<Challenge> selectChallenge(@RequestParam(value = "challNo", required = false) int challNo) {
+        Challenge c = challengeService.selectChallenge(challNo);
 
-        Challenge cNo = new Challenge();
-        cNo.setChallengeNo(challNo);
-
-        Challenge c = challengeService.selectChallenge(cNo);
 
         return ResponseBuilder.success(c);
-
     }
     @PostMapping("/start/single")
-    public ResponseBody<Challenge> startSingle(@SessionAttribute("loginUser")Profile loginUser, @RequestBody SingleStartVo startVo) {
+    public ResponseBody<Challenge> startSingle(@SessionAttribute("loginUser") Profile loginUser, @RequestBody SingleStartVo startVo) {
         System.out.println(startVo);
         startVo.setUserNo(loginUser.getUserNo());
         int result = challengeService.startSingle(startVo);
