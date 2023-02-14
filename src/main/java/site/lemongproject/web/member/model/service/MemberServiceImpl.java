@@ -16,7 +16,6 @@ import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
 import site.lemongproject.web.member.model.dao.ProfileDao;
 import site.lemongproject.web.member.model.dto.MyProfileVo;
-import site.lemongproject.web.member.model.vo.KakaoToken;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
@@ -408,7 +407,7 @@ public class MemberServiceImpl implements MemberService {
 
     // 네이버 연동 해제
     public int deleteNaverToken(String token) {
-        System.out.println("탈퇴 서비스 토큰: "+token);
+//        System.out.println("탈퇴 서비스 토큰: "+token);
 
         String clientId = "gby5MZqE_2ShDpfOnFIS";
         String clientSecret = "OyOjXUomy0";
@@ -423,7 +422,7 @@ public class MemberServiceImpl implements MemberService {
             conn.setRequestMethod("GET");
 
             int responseCode = conn.getResponseCode();
-            System.out.println("탈퇴 응답코드: "+responseCode);
+//            System.out.println("탈퇴 응답코드: "+responseCode);
 
             BufferedReader br;
             if(responseCode == 200) {
@@ -466,7 +465,7 @@ public class MemberServiceImpl implements MemberService {
 
 
     public int deleteKakaoToken(String token) {
-        System.out.println(token);
+//        System.out.println(token);
 
         String reqURL = "https://kapi.kakao.com/v1/user/unlink";
 
@@ -480,7 +479,7 @@ public class MemberServiceImpl implements MemberService {
             conn.setRequestProperty("Authorization", "Bearer "+token);
 
             int responseCode = conn.getResponseCode();
-            System.out.println("카카오 회원탈퇴 응답코드: "+responseCode);
+//            System.out.println("카카오 회원탈퇴 응답코드: "+responseCode);
 
             BufferedReader br;
             if(responseCode == 200) {

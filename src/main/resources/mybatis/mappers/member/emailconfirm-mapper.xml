@@ -36,6 +36,13 @@
         where  EMAIl=#{email}
     </delete>
 
+    <!--  일주일 지난 이메일 자동으로 삭제  -->
+    <delete id="deleteEmail" parameterType="EmailConfirm">
+        DELETE
+        FROM EMAIL_CONFIRM
+        WHERE (CONFIRM_AT +7) &lt; SYSDATE
+    </delete>
+
 
 
 
