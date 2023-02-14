@@ -6,9 +6,9 @@ import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.ReviewDeleteVo;
 import site.lemongproject.web.template.model.vo.ReviewInsertVo;
+import site.lemongproject.web.template.model.vo.TPDayTodoVo;
 import site.lemongproject.web.template.model.vo.TemplateFindVo;
 
-import java.sql.Date;
 import java.util.List;
 
 public interface TemplateReadService {
@@ -17,7 +17,7 @@ public interface TemplateReadService {
     int getTemplateCount(int categoryNo);
 
     Template getTemplateDetail(TemplateFindVo findVo);
-    List<TemplateTodo> getTemplateTodo(int templateNo);
+    List<TemplateTodo> getTodoByDay(TPDayTodoVo todoVo);
     int insertReview(ReviewInsertVo riv);
     int deleteReview(ReviewDeleteVo rdv);
 

@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.challenge.model.dto.Challenge;
+import site.lemongproject.web.challenge.model.dto.ChallengeUser;
+import site.lemongproject.web.challenge.model.vo.ChallengeListVo;
 import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
 import site.lemongproject.web.challenge.model.vo.SingleStartVo;
 import site.lemongproject.web.challenge.service.ChallengeService;
@@ -21,12 +23,7 @@ public class ChallengeController {
     // 테스트 챌린지No(3000)번에 해당하는 정보 다가져오기.
     @GetMapping("/selectChallenge")
     public ResponseBody<Challenge> selectChallenge(@RequestParam(value = "challNo", required = false) int challNo) {
-
-        Challenge cNo = new Challenge();
-        cNo.setChallengeNo(challNo);
-
-        Challenge c = challengeService.selectChallenge(cNo);
-
+        Challenge c = challengeService.selectChallenge(challNo);
         return ResponseBuilder.success(c);
 
     }
@@ -54,8 +51,45 @@ public class ChallengeController {
         }else {
             return ResponseBuilder.serverError();
         }
+    }
+    // challNo에 해당하는 챌린지 상세정보 가져오기.
+    @GetMapping("/detailChallenge")
+    public ResponseBody<Challenge> detailChallenge(@RequestParam(value = "challNo" , required = false)int challNo){
+        Challenge c = new Challenge();
+        c.setChallengeNo(challNo);
+
+        List<Challenge> cOne = challengeService.detailChallenge(c);
+        return ResponseBuilder.success(cOne);
+    }
+
+    // 챌린지 참여하기 버튼 클릭 시 ready상태로 insert됨 -> 그 후 챌린지 시작하기 버튼 클릭 시 play상태로 변경.
+    // ready상태에서도 채팅방 사용 가능.
+
+    @GetMapping("/list/notice/{page}")
+    public ResponseBody<ChallengeListVo> noticeList(@PathVariable("page") int page){
+        List<ChallengeListVo> list = challengeService.getList(page);
+
+        if(list==null||list.size()==0){
+            return ResponseBuilder.findNothing();
+        }else{
+            return ResponseBuilder.success(list);
+        }
 
     }
 
+
+
+    @GetMapping("/challengeGo")
+    public ResponseBody<ChallengeUser> challengeGo(@RequestParam(value = "challNo" , required = false) int challNo ,
+                                                   @RequestParam(value = "userNo" , required = false) int userNo){
+
+        ChallengeUser u = new ChallengeUser();
+        u.setChallengeNo(challNo);
+        u.setUserNo(userNo);
+
+        int result = challengeService.challengeGo(u);
+
+        return ResponseBuilder.success(result);
+    }
 
 }

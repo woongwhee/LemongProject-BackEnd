@@ -14,6 +14,7 @@ import site.lemongproject.web.challenge.model.dao.ChallengeTodoDao;
 import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 import site.lemongproject.web.challenge.model.dto.ChallengeOption;
+import site.lemongproject.web.challenge.model.dto.*;
 import site.lemongproject.web.challenge.model.vo.*;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
@@ -55,11 +56,9 @@ public class ChallengeServiceImpl implements ChallengeService {
      * @param
      * @return
      */
-    //todo:투두도 지우게할것
     @Override
     public int leaveMulti(ChallengeUserVo userVo) {
         int result = challengeDao.deleteUser(userVo);
-//        result*=todoDao.copyTodoList(userVo);
         return result;
     }
 
@@ -75,9 +74,9 @@ public class ChallengeServiceImpl implements ChallengeService {
         //방장도 challengeUser에 넣는다.
         ChallengeUserVo userVo = new ChallengeUserVo(createVo.getUserNo(), createVo.getChallengeNo(), ChallengeUserStatus.READY);
         result *= challengeDao.joinUser(userVo);
-        System.out.println(userVo);
         updateVo.setChallengeNo(createVo.getChallengeNo());
         CGTodoInsertVo insertVo = makeTodo(createVo, updateVo);
+        System.out.println(updateVo);
         insertVo.setUserNo(-1);
         result *= todoDao.insertTodoList(insertVo);
         result *= todoDao.copyTodoList(userVo);
@@ -87,6 +86,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     /**
      * 챌린지 시작 메소드 중복시작할수 없음
+     *
      * @param startVo
      * @return
      */
@@ -118,8 +118,6 @@ public class ChallengeServiceImpl implements ChallengeService {
             holidayList = getOfficialHolidays(templateNo, startDate, co);
         }
         List<TemplateTodo> todoList = templateTodoDao.findByTemplate(templateNo);
-
-
         List<CGTodoItemVo> challengeTodos = new ArrayList<>(todoList.size());
         int dayPoint = 1;
         LocalDate datePoint = startDate;
@@ -166,7 +164,6 @@ public class ChallengeServiceImpl implements ChallengeService {
         CGTodoInsertVo insertVo = new CGTodoInsertVo();
         updateVo.setEndDate(datePoint);
         updateVo.setChallengeNo(startVo.getChallengeNo());
-        updateVo.setChallengeNo(startVo.getUserNo());
         insertVo.setTodoList(challengeTodos);
         insertVo.setUserNo(startVo.getUserNo());
         insertVo.setChallengeNo(startVo.getChallengeNo());
@@ -184,19 +181,33 @@ public class ChallengeServiceImpl implements ChallengeService {
         return holidayList;
     }
 
-    public Challenge selectChallenge(Challenge cNo){
-        return challengeDao.selectChallenge(cNo);
+    public Challenge selectChallenge(int challengeNo) {
+        return challengeDao.findOne(challengeNo);
     }
 
-    public int insertChatData(ChallengeChat chatData){
+    public int insertChatData(ChallengeChat chatData) {
         return chatDao.insertChatData(chatData);
     }
 
-    public int clearChallengeTodo(ChallengeTodo cTd){
+    public int clearChallengeTodo(ChallengeTodo cTd) {
         return todoDao.clearChallengeTodo(cTd);
     }
 
-    public List<ChallengeTodo> calChTodo(ChallengeTodo ct){return todoDao.calChTodo(ct);}
+    public List<ChallengeTodo> calChTodo(ChallengeTodo ct) {
+        return todoDao.calChTodo(ct);
+    }
+
+    @Override
+    public List<ChallengeListVo> getList(int page) {
+        return challengeDao.findReady(page,8);
+    }
 
 
+    public List<Challenge> detailChallenge(Challenge c) {
+        return challengeDao.detailChallenge(c);
+    }
+
+    public int challengeGo(ChallengeUser u) {
+        return challengeDao.challengeGo(u);
+    }
 }
