@@ -6,6 +6,7 @@ import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.member.model.vo.Profile;
+import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 
@@ -31,5 +32,6 @@ public class TemplateDetailVo {
     private TemplateCategory category;
     private Profile create;
     private List<TemplateTodo> todoList;
+    private List<Review> reviewList;
     private List<Challenge> challengeList;
 }

@@ -317,17 +317,14 @@ public class PublicController {
 
         String userPwd = String.valueOf(newPwd.get("userPwd"));
         System.out.println(userPwd);
-
         // update
         ChangePwdVo cpw = new ChangePwdVo(userNo, userPwd);
         int result = memberService.updatePassword(cpw);
-
         if(result > 0) {
             return ResponseBuilder.success(result);
         } else {
             return ResponseBuilder.upLoadFail();
         }
-
     }
 
 

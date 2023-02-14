@@ -118,8 +118,6 @@ public class ChallengeServiceImpl implements ChallengeService {
             holidayList = getOfficialHolidays(templateNo, startDate, co);
         }
         List<TemplateTodo> todoList = templateTodoDao.findByTemplate(templateNo);
-
-
         List<CGTodoItemVo> challengeTodos = new ArrayList<>(todoList.size());
         int dayPoint = 1;
         LocalDate datePoint = startDate;
@@ -184,8 +182,8 @@ public class ChallengeServiceImpl implements ChallengeService {
         return holidayList;
     }
 
-    public List<Challenge> selectChallenge() {
-        return challengeDao.selectChallenge();
+    public Challenge selectChallenge(int challengeNo) {
+        return challengeDao.findOne(challengeNo);
     }
 
     public int insertChatData(ChallengeChat chatData) {

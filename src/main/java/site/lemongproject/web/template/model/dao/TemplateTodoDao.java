@@ -1,15 +1,12 @@
 package site.lemongproject.web.template.model.dao;
 
-import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
-import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
-import site.lemongproject.web.template.model.vo.TemplateTodoInsertVo;
-import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
-import site.lemongproject.web.template.model.vo.WriterCheckVo;
+import site.lemongproject.web.template.model.vo.*;
 
 import java.util.List;
 
 public interface TemplateTodoDao {
+    List<TemplateTodo> findByTemplateDay(TPDayTodoVo todoVo);
     List<TemplateTodo> findByTemplate(int templateNo);
     TemplateTodo findOne(long tpTodoNo);
 

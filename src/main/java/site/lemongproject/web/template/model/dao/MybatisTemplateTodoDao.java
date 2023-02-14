@@ -5,10 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
-import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
-import site.lemongproject.web.template.model.vo.TemplateTodoInsertVo;
-import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
-import site.lemongproject.web.template.model.vo.WriterCheckVo;
+import site.lemongproject.web.template.model.vo.*;
 
 import java.util.List;
 
@@ -20,6 +17,10 @@ public class MybatisTemplateTodoDao implements TemplateTodoDao{
     @Override
     public int insertOne(TemplateTodo templateTodo){
         return session.insert("templateTodoMapper.insertOne",templateTodo);
+    }
+    @Override
+    public List<TemplateTodo> findByTemplateDay(TPDayTodoVo todoVo){
+        return session.selectList("templateTodoMapper.findByTemplateDay",todoVo);
     }
     @Override
     public List<TemplateTodo> findByTemplate(int templateNo){
