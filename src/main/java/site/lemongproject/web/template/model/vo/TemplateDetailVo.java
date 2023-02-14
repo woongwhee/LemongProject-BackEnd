@@ -1,19 +1,23 @@
-package site.lemongproject.web.template.model.dto;
+package site.lemongproject.web.template.model.vo;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.ibatis.type.Alias;
+import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.member.model.vo.Profile;
+import site.lemongproject.web.template.model.dto.Review;
+import site.lemongproject.web.template.model.dto.TemplateCategory;
+import site.lemongproject.web.template.model.dto.TemplateTodo;
 
 import java.sql.Date;
 import java.util.List;
+
 @Getter
 @Setter
 @ToString
-@Alias("Template")
-public class Template {
+@Alias("TemplateDetailVo")
+public class TemplateDetailVo {
     private int templateNo;
     private int categoryNo;
     private Integer range;
@@ -28,5 +32,6 @@ public class Template {
     private TemplateCategory category;
     private Profile create;
     private List<TemplateTodo> todoList;
-
+    private List<Review> reviewList;
+    private List<Challenge> challengeList;
 }

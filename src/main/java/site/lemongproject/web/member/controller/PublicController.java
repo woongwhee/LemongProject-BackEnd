@@ -14,7 +14,6 @@ import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.service.MemberService;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
-import site.lemongproject.web.member.model.vo.KakaoToken;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 
@@ -33,7 +32,7 @@ public class PublicController {
     final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 로그인
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
         System.out.println(m);
         m.setSocialType(SocialType.NONE);
@@ -59,9 +58,8 @@ public class PublicController {
     public ResponseBody<Map<String, Object>> insertMember(@RequestBody JoinVo joinVo) {
 
         // 비밀번호 암호화
-//        String encPwd = bCryptPasswordEncoder.encode(joinVo.getUserPwd());
-//        joinVo.setUserPwd(encPwd);
-        joinVo.setUserPwd(joinVo.getUserPwd());
+        String encPwd = bCryptPasswordEncoder.encode(joinVo.getUserPwd());
+        joinVo.setUserPwd(encPwd);
         joinVo.setSocialType(SocialType.NONE);
         // 암호화된 비밀번호 setting 해주기
         int result = memberService.insertMember(joinVo);
@@ -159,7 +157,6 @@ public class PublicController {
             return ResponseBuilder.success(loginUser);
         }
 
-
     }
 
 
@@ -172,7 +169,8 @@ public class PublicController {
         // 인가코드를 통해 access_token 발급
         String token = memberService.getAccessToken(authCode);
         System.out.println("acessToken: "+token);
-        session.setAttribute("accessToken",token);
+//        session.setAttribute("accessToken",token);
+
         // 접속자 정보 얻어오기
         Map<String, Object> kakaoUser = memberService.getKakaoUser(token);
         System.out.println("카카오 유저 정보: "+kakaoUser);
@@ -187,11 +185,17 @@ public class PublicController {
         isKakao.setEmail(email);
         isKakao.setSocialType(socialType);
         isKakao.setUserName(userName);
+        isKakao.setAccessToken(token);
+
 
         // 일치하는 회원이 있는지 확인
         Member result = memberService.isSocialUser(isKakao);
 
         if(result != null) { // 회원정보가 있는 경우 -> 로그인
+            // 토큰 업데이트
+            int updateToken = memberService.updateToken(isKakao);
+            System.out.println("카카오톡 토큰 업뎃: "+updateToken);
+            // 유저가 있을 때 profile 반환
             Profile oldKakao = memberService.socialProfile(isKakao);
 //            isKakao = memberService.isSocialUser(isKakao);
             session.setAttribute("loginUser", oldKakao);
@@ -224,6 +228,7 @@ public class PublicController {
     @RequestMapping(value = "naverLogin", method = RequestMethod.GET)
     public ResponseBody<Map<String, Object>> naverLogin(@RequestParam Map<String, Object> aToken, HttpSession session) {
 
+        // accessToken
         String token = String.valueOf(aToken.get("accessToken"));
         System.out.println("네이버 토큰: " + token);
 
@@ -239,11 +244,14 @@ public class PublicController {
         isNaver.setUserName(userName);
         isNaver.setEmail(email);
         isNaver.setSocialType(socialType);
+        isNaver.setAccessToken(token);
 
         // 일치하는 회원이 있는지 확인
         Member result = memberService.isSocialUser(isNaver);
 
         if(result != null) { // 회원정보가 있는 경우 -> 로그인
+            int updateToken = memberService.updateToken(isNaver); // access token 업데이트
+            System.out.println("토큰 업데이트 result: " + updateToken);
             Profile oldNaver = memberService.socialProfile(isNaver); // 유저가 있을 경우 프로필 반환
             session.setAttribute("loginUser",oldNaver);
             session.setAttribute("socialType",SocialType.NAVER);
@@ -320,17 +328,14 @@ public class PublicController {
 
         String userPwd = String.valueOf(newPwd.get("userPwd"));
         System.out.println(userPwd);
-
         // update
         ChangePwdVo cpw = new ChangePwdVo(userNo, userPwd);
         int result = memberService.updatePassword(cpw);
-
         if(result > 0) {
             return ResponseBuilder.success(result);
         } else {
             return ResponseBuilder.upLoadFail();
         }
-
     }
 
 

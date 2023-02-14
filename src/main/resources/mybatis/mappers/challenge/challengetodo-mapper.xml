@@ -21,7 +21,7 @@
         <id column="CHALLENGE_NO" property="challengeNo"/>
         <result column="CHALLENGE_TITLE" property="challengeName"/>
         <collection column="{todoDate=TODO_DATE,challengeNo=CHALLENGE_NO,userNo=USER_NO}"
-                     property="todoList"  select="findDailyTodo"/>
+                    property="todoList" select="findDailyTodo"/>
     </resultMap>
     <!--    <insert id="insertTodo" parameterType="ChallengeTodo">-->
     <!--        INSERT INTO CHALLENGE_TODO (TODO_NO,CHALLENGE_NO,USER_NO,TODO_DATE,TODO_CONTENT,VALUE,CLEAR)VALUES (SEQ_CHALLENGE_TODO.nextval,#{challengeNo},#{userNo},#{todoDate},#{todoContent},#{value},0)-->
@@ -60,8 +60,8 @@
         FROM CHALLENGE_TODO
         WHERE CHALLENGE_NO = #{challengeNo}
           AND USER_NO = #{userNo}
-          AND #{todoDate} <=TODO_DATE
-            AND TODO_DATE<#{todoDate}+1
+          AND #{todoDate} <= TODO_DATE
+          AND TODO_DATE < #{todoDate} + 1
         ORDER BY VALUE
         ]]>
     </select>
@@ -72,4 +72,41 @@
         WHERE cu.USER_NO = #{userNo}
           AND cu.STATUS = 'PLAY'
     </select>
+
+
+    <update id="clearChTodo" parameterType="ChallengeTodo">
+        UPDATE CHALLENGE_TODO
+        SET CLEAR =
+                CASE
+                    WHEN CLEAR = 0 THEN 1
+                    WHEN CLEAR = 1 THEN 0
+                    END
+        WHERE TODO_NO = #{todoNo}
+    </update>
+    <update id="addTodoCount" parameterType="ChallengeTodo">
+        UPDATE CHALLENGE_USER
+        SET CLEAR_COUNT=CLEAR_COUNT + 1
+        WHERE USER_NO = #{userNo}
+          AND CHALLENGE_NO = #{challengeNo}
+    </update>
+    <select id="calChTodo" resultType="string">
+        SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
+        FROM CHALLENGE_TODO
+        WHERE USER_NO = #{userNo}
+        ORDER BY TODO_DATE
+    </select>
+    <select id="findByCal" parameterType="MonthFindVo" resultType="int">
+    <![CDATA[
+        SELECT TO_CHAR(TODO_DATE, 'dd')
+        FROM (SELECT DISTINCT TODO_DATE
+              FROM CHALLENGE_TODO
+              WHERE USER_NO = #{userNo}
+                AND #{month} <= TODO_DATE
+                AND TODO_DATE < ADD_MONTHS(#{month}, 1)
+                AND CLEAR = 0
+              ORDER BY TODO_DATE)
+        ]]>
+    </select>
+
+
 </mapper>

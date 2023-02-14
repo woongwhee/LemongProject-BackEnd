@@ -8,15 +8,23 @@
     </resultMap>
 
     <insert id="insertMany" parameterType="Holiday">
-        insert into OFFICIAL_HOLIDAY VALUES (SEQ_HOLIDAY.NEXTVAL,#{holiday},#{holidayName})
+        insert into OFFICIAL_HOLIDAY
+        VALUES (SEQ_HOLIDAY.NEXTVAL, #{holiday}, #{holidayName})
     </insert>
 
     <select id="findByPeriod" parameterType="PeriodVo" resultMap="holidayMap">
-        SELECT * FROM OFFICIAL_HOLIDAY WHERE HOLIDAY BETWEEN #{startDate} AND #{endDate}
+        SELECT *
+        FROM OFFICIAL_HOLIDAY
+        WHERE HOLIDAY BETWEEN #{startDate} AND #{endDate}
     </select>
 
 
-    <select id="findByMonth" parameterType="map" resultMap="holidayMap">
-        SELECT * FROM OFFICIAL_HOLIDAY WHERE HOLIDAY &gt;= #{month} AND HOLIDAY &lt; ADD_MONTHS(#{month},1)
+    <select id="findByMonth" parameterType="MonthFindVo" resultMap="holidayMap">
+        <![CDATA[
+        SELECT *
+        FROM OFFICIAL_HOLIDAY
+        WHERE #{month} <= HOLIDAY
+          AND HOLIDAY < ADD_MONTHS(#{month}, 1)
+        ]]>
     </select>
 </mapper>

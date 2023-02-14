@@ -2,7 +2,9 @@ package site.lemongproject.web.challenge.service;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.common.type.ChallengeStatus;
 import site.lemongproject.common.type.ChallengeUserStatus;
@@ -23,8 +25,13 @@ public class ChallengeServiceImplTest extends Configure {
     final int TEST_CL_NO=3000;
 
 
-
-
+    @Autowired BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Test
+    @DisplayName("password")
+    public void login(){
+        String admin=bCryptPasswordEncoder.encode("admin");
+        System.out.println(admin);
+    }
     @Test
     public void createMulti() {
         MultiCreateVo createVo=new MultiCreateVo();

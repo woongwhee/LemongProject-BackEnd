@@ -20,6 +20,12 @@
         <result column="FILE_PATH" property="filePath"/>
     </resultMap>
 
+    <resultMap  type="feedInsertPhoto" id="feedInsertResultSet">
+        <result column="FEED_NO" property="feedNo"/>
+        <result column="PHOTO_NO" property="photoNo"/>
+        <result column="VALUE" property="value"/>
+    </resultMap>
+
     <resultMap  type="FeedList" id="feedListResultSet">
         <result column="FEED_NO" property="feedNo"/>
         <result column="USER_NO" property="userNo"/>
@@ -27,6 +33,8 @@
         <result column="FEED_CONTENT" property="feedContent"/>
         <result column="FEED_AT" property="feedAt"/>
         <result column="FILEPATH" property="filePath"/>
+        <result column="PHOTO_NO" property="photoNo"/>
+<!--        <association property="photo" resultMap="photoMapper.photoMap"/>-->
     </resultMap>
 
     <select id="userProfile" resultType="Map">
@@ -45,8 +53,8 @@
         UP.NICK_NAME,
         F.FEED_CONTENT,
         F.FEED_AT,
-        LISTAGG(P.FILE_PATH ||P.CHANGE_NAME,',')WITHIN GROUP(ORDER BY VALUE) AS filePath,
-        LISTAGG(FP.PHOTO_NO, ',') WITHIN GROUP ( ORDER BY VALUE) AS photoNo
+        LISTAGG(P.FILE_PATH ||P.CHANGE_NAME,',')WITHIN GROUP(ORDER BY VALUE) AS FILE_PATH,
+        LISTAGG(FP.PHOTO_NO, ',') WITHIN GROUP ( ORDER BY VALUE) AS PHOTO_NO
         FROM FEED F
         JOIN FEED_PHOTO FP on F.FEED_NO = FP.FEED_NO
         JOIN PHOTO P on FP.PHOTO_NO = P.PHOTO_NO
@@ -57,15 +65,32 @@
     </select>
 
 
-    <select id="selectMyFeed" resultMap="feedResultSet">
+    <select id="selectMyFeed" resultMap="feedListResultSet" parameterType="FeedList">
         SELECT
-            FEED_NO ,
-            USER_NO ,
-            FEED_CONTENT ,
-            FEED_AT
-        FROM FEED
-        WHERE USER_NO = 2
+            F.FEED_NO,
+            F.USER_NO,
+            FEED_CONTENT,
+            F.FEED_AT,
+            LISTAGG(P.FILE_PATH ||P.CHANGE_NAME,',')WITHIN GROUP(ORDER BY VALUE) AS FILE_PATH
+        FROM FEED F
+        JOIN FEED_PHOTO FP on F.FEED_NO = FP.FEED_NO
+        JOIN PHOTO P on FP.PHOTO_NO = P.PHOTO_NO
+        JOIN USER_PROFILE UP on P.USER_NO = UP.USER_NO
+        WHERE F.USER_NO= #{userNo}
+        GROUP BY F.FEED_NO, F.USER_NO, UP.NICK_NAME, F.FEED_CONTENT, F.FEED_AT
+        order by F.FEED_AT DESC
     </select>
+
+    <select id="searchImg" resultMap="feedListResultSet" parameterType="FeedList">
+        SELECT
+            FILE_PATH ,
+            CHANGE_NAME 
+        FROM PHOTO P
+        JOIN FEED_PHOTO FP ON (P.PHOTO_NO = FP.PHOTO_NO)
+        JOIN FEED F ON (F.FEED_NO = FP.FEED_NO)
+        WHERE FP.FEED_NO LIKE '%' || #{feedNo} || '%'
+    </select>
+
 <!-- 피드 게시물  -->
     <select id="selectFeed" resultMap="feedListResultSet">
         SELECT
