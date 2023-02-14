@@ -8,4 +8,5 @@ public interface EmailConfirmDao {
     int checkConfirm(EmailConfirm confirm);
     int insertConfirm(EmailConfirm confirm);
     int deleteAnother(EmailConfirm confirm);
+    int deleteEmail();
 }

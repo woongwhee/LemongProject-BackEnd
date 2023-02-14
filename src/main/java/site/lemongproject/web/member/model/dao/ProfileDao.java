@@ -17,7 +17,7 @@ public interface ProfileDao {
     int updateProfile(Profile profile);
     int updateProfilePhoto(Photo p);
 
-    int deleteProfile(int userNo);
+//    int deleteProfile(int userNo);
 
     List<Profile> searchUser(String userNick);
 
@@ -26,4 +26,6 @@ public interface ProfileDao {
     Profile updateMyNick(Profile pro);
 
     Profile updateMyContent(Profile p);
+
+    int deleteUser(int userNo);
 }

@@ -91,8 +91,8 @@
 
     <!--  카카오 회원 가입 -> 소셜 가입  -->
     <insert id="insertSocial" parameterType="Member">
-        INSERT INTO MEMBER (USER_NO, EMAIL, STATUS, USER_NAME, SOCIAL_TYPE)
-            VALUES (SEQ_MEMBER.NEXTVAL, #{email}, DEFAULT, #{userName}, #{socialType})
+        INSERT INTO MEMBER (USER_NO, EMAIL, STATUS, USER_NAME, SOCIAL_TYPE, ACCESS_TOKEN)
+            VALUES (SEQ_MEMBER.NEXTVAL, #{email}, DEFAULT, #{userName}, #{socialType}, #{accessToken})
     </insert>
 
     <select id="selectMember" parameterType="int" resultMap="memberResultSet">
@@ -110,6 +110,32 @@
         AND SOCIAL_TYPE = #{socialType}
         AND STATUS = 1
     </select>
+
+
+    <!--  access token 업데이트  -->
+    <update id="updateToken" parameterType="Member">
+        UPDATE MEMBER
+        SET ACCESS_TOKEN = #{accessToken}
+        WHERE EMAIL = #{email}
+            AND SOCIAL_TYPE = #{socialType}
+            AND STATUS = 1
+    </update>
+
+
+    <!--  네이버 accessToken 조회  -->
+    <select id="selectAccessToken" parameterType="int" resultType="string">
+        SELECT ACCESS_TOKEN
+        FROM MEMBER
+        WHERE USER_NO = #{userNo}
+    </select>
+
+<!--    &lt;!&ndash;  자체 서버 네이버 회원 상태 변경  &ndash;&gt;-->
+<!--    <update id="deleteNaver" parameterType="int">-->
+<!--        UPDATE MEMBER-->
+<!--        SET STATUS = 0-->
+<!--        WHERE USER_NO = #{userNo}-->
+<!--    </update>-->
+
 
 
 </mapper>

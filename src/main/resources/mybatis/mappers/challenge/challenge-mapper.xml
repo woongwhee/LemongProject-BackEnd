@@ -50,6 +50,16 @@
     <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
         SELECT *
         FROM CHALLENGE
-        WHERE CHALLENGE_NO = #{challengeNo}
     </select>
+
+    <select id="detailChallenge" parameterType="Challenge" resultMap="challengeMap">
+        SELECT * FROM CHALLENGE
+        WHERE CHALLENGE_NO LIKE '%' || #{challengeNo} || '%'
+    </select>
+
+    <insert id="challengeGo" parameterType="ChallengeUser">
+        INSERT INTO CHALLENGE_USER(CHALLENGE_NO , USER_NO , STATUS , CLEAR_COUNT)
+        VALUES(#{challengeNo} , #{userNo} , 'READY' , 0)
+    </insert>
+
 </mapper>
