@@ -1,14 +1,13 @@
 package site.lemongproject.web.challenge.model.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.common.type.ChallengeStatus;
 import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeUser;
-import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
-import site.lemongproject.web.challenge.model.vo.EndDateUpdateVo;
-import site.lemongproject.web.challenge.model.vo.MultiCreateVo;
-import site.lemongproject.web.challenge.model.vo.SingleStartVo;
+import site.lemongproject.web.challenge.model.vo.*;
 
 import java.util.List;
 
@@ -55,5 +54,17 @@ public class MyBatisChallengeDao implements ChallengeDao{
     @Override
     public int challengeGo(ChallengeUser u){
         return session.insert("challengeMapper.challengeGo" , u);
+    }
+
+    @Override
+    public Challenge findOne(int challengeNo) {
+        return session.selectOne("challengeMapper.findOne" , challengeNo);
+    }
+
+    @Override
+    public List<ChallengeListVo> findReady(int page, int limit) {
+        int offSet=page*limit;
+        RowBounds rowBounds=new RowBounds(offSet,limit);
+        return session.selectList("challengeMapper.findReady",null,rowBounds);
     }
 }

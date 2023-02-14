@@ -16,6 +16,4 @@ public class FeedList {
     private Date feedAt;
     private String filePath;
     private String photoNo;
-//    private int loginUserNo;
-
 }

@@ -3,28 +3,20 @@ package site.lemongproject.common.domain.dao;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
-import site.lemongproject.common.domain.vo.PeriodVo;
 import site.lemongproject.config.Configure;
-import site.lemongproject.common.domain.dto.OfficialHoliday;
+import site.lemongproject.web.todo.model.dto.PeriodVo;
+import site.lemongproject.web.todo.model.vo.OfficialHoliday;
+import site.lemongproject.web.todo.model.dao.HolidayDao;
 
-import javax.xml.stream.Location;
-import java.sql.Date;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
 public class MybatisHolidayDaoTest extends Configure {
-    @Autowired HolidayDao holidayDao;
+    @Autowired
+    HolidayDao holidayDao;
 
     @Test
     public void findByMonth() throws ParseException {

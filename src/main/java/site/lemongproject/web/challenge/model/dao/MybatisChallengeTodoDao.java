@@ -3,11 +3,14 @@ package site.lemongproject.web.challenge.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.vo.CGTodoInsertVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeTodoVo;
 import site.lemongproject.web.todo.model.dto.DailyFindVo;
+import site.lemongproject.web.todo.model.dto.MonthFindVo;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -29,5 +32,18 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
         return session.insert("challengeTodoMapper.copyTodo",joinVo);
     }
 
+    @Override
+    public  int clearChallengeTodo(ChallengeTodo cTd){
+        return session.update("challengeTodoMapper.clearChTodo", cTd);
+    }
 
+    @Override
+    public List<ChallengeTodo> calChTodo(ChallengeTodo ct){
+        return session.selectList("challengeTodoMapper.calChTodo", ct);
+    }
+    @Override
+    public List<Integer> findByCal(MonthFindVo findVo) {
+        return session.selectList("challengeTodoMapper.findByCal", findVo);
+
+    }
 }

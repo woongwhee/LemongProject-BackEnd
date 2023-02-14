@@ -5,13 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.dto.*;
-import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
-import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -141,6 +137,15 @@ public class FeedServiceImpl implements FeedService{
     @Override
     public int countReply(int feedNo){
         return feedDao.countReply(feedNo);
+    }
+
+    @Override
+    public List<FeedList> selectMyFeedList(FeedList f){
+        return feedDao.selectMyFeedList(f);
+    }
+
+    public List<FeedList> searchImg(FeedList f){
+        return feedDao.searchImg(f);
     }
 
     @Override

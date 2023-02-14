@@ -2,7 +2,8 @@ package site.lemongproject.web.template.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import site.lemongproject.common.domain.dao.HolidayDao;
+import site.lemongproject.web.template.model.vo.*;
+import site.lemongproject.web.todo.model.dao.HolidayDao;
 import site.lemongproject.web.template.model.dao.ReviewDao;
 import site.lemongproject.web.template.model.dao.TemplateCategoryDao;
 import site.lemongproject.web.template.model.dao.TemplateDao;
@@ -11,9 +12,6 @@ import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
-import site.lemongproject.web.template.model.vo.ReviewDeleteVo;
-import site.lemongproject.web.template.model.vo.ReviewInsertVo;
-import site.lemongproject.web.template.model.vo.WriterCheckVo;
 
 import java.util.List;
 
@@ -28,9 +26,9 @@ public class TemplateReadServiceImpl implements TemplateReadService {
     final private ReviewDao reviewDao;
 
     @Override
-    public List<Template> getTemplateList(int categoryNo, int page) {
+    public List<Template> getTemplateList(TemplateFindVo findVo) {
 
-        return templateDao.findList(categoryNo, page, 8);
+        return templateDao.findList(findVo, 8);
     }
     @Override
     public int getTemplateCount(int categoryNo){
@@ -38,13 +36,13 @@ public class TemplateReadServiceImpl implements TemplateReadService {
     }
 
     @Override
-    public Template getTemplateDetail(int templateNo) {
-        return templateDao.findDetail(templateNo);
+    public Template getTemplateDetail(TemplateFindVo findVo) {
+        return templateDao.findDetail(findVo);
     }
 
     @Override
-    public List<TemplateTodo> getTemplateTodo(int templateNo) {
-        return templateTodoDao.findByTemplate(templateNo);
+    public List<TemplateTodo> getTodoByDay(TPDayTodoVo todoVo) {
+        return templateTodoDao.findByTemplateDay(todoVo);
     }
 
     @Override
