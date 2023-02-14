@@ -6,24 +6,20 @@
         <result column="NICK_NAME" property="nickName"/>
         <result column="PHOTO_NO" property="photoNo"/>
         <result column="PROFILE_COMMENT" property="profileComment"/>
-        <association property="photo"  resultMap="photoMapper.photoMap"/>
+        <association property="photo" resultMap="photoMapper.photoMap"/>
     </resultMap>
 
     <select id="findOne" parameterType="int" resultMap="profileDetail">
-<!--        SELECT-->
-<!--            U.USER_NO ,-->
-<!--            NICK_NAME ,-->
-<!--            U.PHOTO_NO ,-->
-<!--            PROFILE_COMMENT ,-->
-<!--            CHANGE_NAME-->
-<!--        FROM USER_PROFILE U-->
-<!--        JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)-->
-<!--        WHERE U.USER_NO = #{userNo}-->
-<!--    <select id="findOne" parameterType="int" resultMap="profileDetail">-->
-        SELECT *
-        FROM USER_PROFILE pro
-        LEFT JOIN PHOTO pho USING (PHOTO_NO)
-        WHERE pro.USER_NO = #{userNo}
+        SELECT
+            U.USER_NO ,
+            NICK_NAME ,
+            U.PHOTO_NO ,
+            PROFILE_COMMENT ,
+            CHANGE_NAME ,
+            P.FILE_PATH
+        FROM USER_PROFILE U
+        JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
+        WHERE U.USER_NO = #{userNo}
     </select>
 
     <!--프로필 생성    -->
@@ -60,7 +56,8 @@
             U.PHOTO_NO ,
             NICK_NAME ,
             PROFILE_COMMENT ,
-            CHANGE_NAME
+            CHANGE_NAME ,
+            P.FILE_PATH
         FROM USER_PROFILE U
         LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE NICK_NAME LIKE '%' || #{userNick} || '%'

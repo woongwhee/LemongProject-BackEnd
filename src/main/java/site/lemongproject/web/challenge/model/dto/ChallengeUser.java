@@ -12,6 +12,7 @@ import site.lemongproject.web.member.model.vo.Profile;
 @Alias("ChallengeUser")
 public class ChallengeUser {
     private int challengeNo;
+    private int userNo;
     private Profile profile;
     private int clearCount;
     private ChallengeUserStatus status;

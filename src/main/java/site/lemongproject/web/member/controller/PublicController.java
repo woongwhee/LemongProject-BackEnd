@@ -32,7 +32,7 @@ public class PublicController {
     final private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     // 로그인
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseBody<Member> loginMember(@RequestBody Member m, HttpSession session) {
         System.out.println(m);
         m.setSocialType(SocialType.NONE);
@@ -156,7 +156,6 @@ public class PublicController {
         }else {
             return ResponseBuilder.success(loginUser);
         }
-
 
     }
 

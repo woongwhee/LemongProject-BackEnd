@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="replyMapper">
-
     <!-- REPLY 테이블  -->
     <resultMap type="Reply" id="replyResultSet">
         <result column="REPLY_NO" property="replyNo"></result>
@@ -9,29 +8,31 @@
         <result column="FEED_NO" property="feedNo"></result>
         <result column="REPLY_CONTENT" property="replyContent"></result>
         <result column="REPLY_AT" property="replyAt"></result>
+        <result column="NICK_NAME" property="nickName"></result>
     </resultMap>
-
-    <select id="selectFeedReply" resultMap="replyResultSet">
-        SELECT *
-        FROM REPLY
-        WHERE USER_NO = 2
-        AND FEED_NO = 11
-        AND REPLY_NO = 31
-    </select>
 
     <!--  피드 댓글 작성  -->
     <insert id="insertFeedReply" parameterType="Map">
         INSERT INTO REPLY (REPLY_NO, USER_NO, FEED_NO, REPLY_CONTENT, REPLY_AT) VALUES
         (SEQ_REPLY.nextval, #{userNo}, #{feedNo}, #{replyContent},SYSDATE)
     </insert>
-<!-- 피드 댓글 달기 -->
+
+<!-- 피드 댓글 -->
     <select id="listReply" resultMap="replyResultSet" parameterType="int">
-        SELECT REPLY_NO, USER_NO, REPLY_CONTENT, REPLY_AT FROM REPLY
+        SELECT REPLY_NO, REPLY.USER_NO, REPLY_CONTENT, REPLY_AT, NICK_NAME FROM REPLY
+        JOIN USER_PROFILE UP on REPLY.USER_NO = UP.USER_NO
         WHERE FEED_NO = #{feedNo}
+        order by REPLY_AT DESC
     </select>
+
 <!-- 피드 댓글 삭제 -->
     <delete id="deleteReply" parameterType="Map">
         DELETE FROM REPLY WHERE FEED_NO = #{feedNo} AND REPLY_NO=#{replyNo}
     </delete>
+
+<!-- 피드 댓글 갯수-->
+    <select id="countReply" parameterType="int" resultType="int">
+        SELECT count(*) FROM REPLY WHERE FEED_NO=#{feedNo}
+    </select>
 
 </mapper>

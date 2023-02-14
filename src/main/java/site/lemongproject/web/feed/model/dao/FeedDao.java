@@ -3,6 +3,7 @@ package site.lemongproject.web.feed.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.web.feed.model.dto.FeedDetail;
 import site.lemongproject.web.feed.model.dto.FeedInsertPhoto;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
@@ -30,11 +31,11 @@ public class FeedDao {
     public int insertFeedPhoto(FeedInsertPhoto feedPhoto) {
         return sqlSession.insert("feedMapper.insertFeedPhoto",feedPhoto);
     }
+
     // 피드 게시물 수정
     public int updateFeed(FeedInsert updatefeed){
         return sqlSession.update("feedMapper.updateFeed", updatefeed);
     }
-
     // 피드 게시물 삭제
     public int deleteFeed(Map<String,Object> deleteFeedNo){
         return sqlSession.delete("feedMapper.deleteFeed",deleteFeedNo);
@@ -97,5 +98,37 @@ public class FeedDao {
         return sqlSession.delete("feedMapper.deleteFeedPhoto",photoNo);
     }
 
+    // 현재 value
+    public int startValue(Map<String, Object> doublePhotoNo) {
+        return sqlSession.selectOne("feedMapper.startValue",doublePhotoNo);
+    }
 
+    public int finishValue(Map<String, Object> doublePhotoNo) {
+        return sqlSession.selectOne("feedMapper.finishValue",doublePhotoNo);
+    }
+    // value 바꾸기
+    public int updateStartValue(Map<String, Object> doublePhotoNo) {
+        return sqlSession.update("feedMapper.updateStartValue",doublePhotoNo);
+    }
+
+    public int updateFinishValue(Map<String, Object> doublePhotoNo) {
+        return sqlSession.update("feedMapper.updateFinishValue",doublePhotoNo);
+    }
+
+
+    public List<FeedList> FeedDetail(int feedNo) {
+        return sqlSession.selectList("feedMapper.detailFeed", feedNo);
+    }
+
+    public int countReply(int feedNo) {
+        return sqlSession.selectOne("replyMapper.countReply", feedNo);
+    }
+
+    public List<FeedList> selectMyFeedList(FeedList f) {
+        return sqlSession.selectList("feedMapper.selectMyFeed" , f);
+    }
+
+    public List<FeedList> searchImg(FeedList f) {
+        return sqlSession.selectList("feedMapper.searchImg" , f);
+    }
 }

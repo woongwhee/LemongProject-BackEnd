@@ -356,11 +356,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public int insertUserPhoto(Photo newP) {
         Photo oldP = photoDao.findByUser(newP.getUserNo());
+        System.out.println(oldP);
         if (oldP != null) {
             fileUtil.deleteFile(oldP);
             photoDao.deletePhoto(oldP.getPhotoNo());
         }
+
         int result = photoDao.insertPhoto(newP);
+        System.out.println(newP);
+
         result *= profileDao.updateProfilePhoto(newP);
         return result;
     }
