@@ -30,7 +30,7 @@ public class FeedController {
 
     @PostMapping("/feedProfile")
     public Map<String, Object> userProfilePhoto(@RequestBody Map<String,Object> userNo){
-        System.out.println(userNo);
+//        System.out.println(userNo);
         Map<String, Object> result = feedService.userProfile(userNo);
 //        Map<String, Object> result = new HashMap<>();
         return result;
@@ -46,10 +46,10 @@ public class FeedController {
     // 피드 사진 넣기PHOTO
     @RequestMapping(value = "/insert",method = RequestMethod.POST)
     public Map<String, Object> feedInsert(@RequestBody FeedInsert paramMap, @SessionAttribute("loginUser") Profile loginUser){
-        System.out.println(paramMap); //FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)Profile
-        System.out.println(loginUser);
+//        System.out.println(paramMap); //FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)Profile
+//        System.out.println(loginUser);
         paramMap.setUserNo(loginUser.getUserNo());
-        System.out.println("추가후"+ paramMap);
+//        System.out.println("추가후"+ paramMap);
         int check = feedService.insertFeed(paramMap);
 
         Map<String, Object> result = new HashMap<>();
@@ -120,8 +120,9 @@ public class FeedController {
 
     // 피드 댓글 달기
     @RequestMapping(value = "/insertReply", method = RequestMethod.POST)
-    public Map<String, Object> insertReply(@RequestBody Map<String, Object> paramMap){
+    public Map<String, Object> insertReply(@RequestBody Map<String, Object> paramMap,  @SessionAttribute("loginUser") Profile loginUser){
         System.out.println("reply insert"+paramMap);
+        paramMap.put("loginUserNo",loginUser.getUserNo());
         int check = feedService.insertFeedReply(paramMap);
 
         Map<String, Object> result = new HashMap<>();
