@@ -12,7 +12,7 @@ public interface TemplateWriteService {
     TPUnsaveVo loadInsertPage(int memberNo);
     int updateUnSaveTemplate(TemplateUpdateVo template);
 
-    List<TemplateTodo> insertTodo(TemplateTodoInsertVo tiv);
+    int insertTodo(TemplateTodoInsertVo tiv);
     TPUnsaveVo resetUnSave(int i);
 
     int deleteTodo(TPTodoDeleteVo tdv);

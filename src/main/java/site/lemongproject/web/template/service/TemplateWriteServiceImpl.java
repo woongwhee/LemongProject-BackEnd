@@ -9,7 +9,6 @@ import site.lemongproject.web.template.model.dao.TemplateTodoDao;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
 import site.lemongproject.web.template.model.vo.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -53,27 +52,13 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
      * @return
      */
     @Override
-    public List<TemplateTodo> insertTodo(TemplateTodoInsertVo tiv) {
-        boolean isWriter = checkTodoWriter(tiv.getUserNo(),tiv.getTemplateNo());
+    public int insertTodo(TemplateTodoInsertVo tiv) {
+        System.out.println(tiv);
+        boolean isWriter = checkTemplateWriter(tiv.getUserNo(),tiv.getTemplateNo());
         if (!isWriter) {
             throw new IsNotWriterException("잘못된접근");
         }
-        int result = 0;
-        List<TemplateTodo> todoList = new ArrayList<>();
-        for (int day : tiv.getDayList()) {
-            TemplateTodo t = new TemplateTodo();
-            t.setTemplateNo(tiv.getTemplateNo());
-            t.setDay(day);
-            t.setContent(tiv.getContent());
-            todoList.add(t);
-            result += templateTodoDao.insertOne(t);
-            System.out.println(t);
-        }
-        if (result > 0) {
-            return todoList;
-        } else {
-            return null;
-        }
+        return templateTodoDao.insertMany(tiv);
     }
 
     /**
@@ -112,7 +97,7 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
         TemplateTodo todo = templateTodoDao.findOne(tdv.getTpTodoNo());
         int result = templateTodoDao.deleteOne(tdv);
         if (result > 0) {
-            result = templateTodoDao.afterDelete(todo);
+            templateTodoDao.afterDelete(todo);
         }
         return result;
     }

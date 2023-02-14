@@ -4,8 +4,8 @@
     <resultMap id="challengeMap" type="Challenge">
         <id column="CHALLENGE_NO"  property="challengeNo" />
         <result column="TEMPLATE_NO" property="templateNo" />
-        <result column="CHALLENGE_TITLE" property="challengeTitle" />
         <result column="CHALLENGE_INFO"  property="challengeInfo" />
+        <result column="CHALLENGE_TITLE" property="challengeTitle" />
         <result column="START_DATE"  property="startDate" />
         <result column="END_DATE"  property="endDate" />
         <result column="CREATE_AT"  property="createAt" />
@@ -13,6 +13,29 @@
         <result column="STATUS" property="status" />
         <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser" />
     </resultMap>
+    <resultMap id="ReadyListMap" type="ChallengeListVo">
+        <result column="CHALLENGE_TITLE" property="challengeTitle" />
+        <result column="START_DATE"  property="startDate" />
+        <result column="END_DATE"  property="endDate" />
+        <result column="userCount"  property="categoryName" />
+        <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser" />
+    </resultMap>
+    <select id="findReady"  resultMap="ReadyListMap">
+        SELECT *
+        FROM CHALLENGE c
+        JOIN USER_PROFILE up ON up.USER_NO=c.CREATE_USER
+        WHERE STATUS = #{challengeNo}
+    </select>
+
+
+
+
+
+
+
+
+
+
     <insert id="insertSingle" parameterType="SingleStartVo">
         <selectKey keyProperty="challengeNo" resultType="int" order="BEFORE">
             select SEQ_CHALLENGE.nextval from dual
@@ -50,13 +73,18 @@
     <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
         SELECT *
         FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengeNo}
+    </select>
+    <select id="findByTemplate" parameterType="Challenge" resultMap="challengeMap">
+        SELECT *
+        FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengeNo}
     </select>
 
     <select id="detailChallenge" parameterType="Challenge" resultMap="challengeMap">
         SELECT * FROM CHALLENGE
         WHERE CHALLENGE_NO LIKE '%' || #{challengeNo} || '%'
     </select>
-
     <insert id="challengeGo" parameterType="ChallengeUser">
         INSERT INTO CHALLENGE_USER(CHALLENGE_NO , USER_NO , STATUS , CLEAR_COUNT)
         VALUES(#{challengeNo} , #{userNo} , 'READY' , 0)
