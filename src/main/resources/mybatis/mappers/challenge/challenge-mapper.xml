@@ -110,5 +110,5 @@
         update CHALLENGE
         SET STATUS='CANCEL'
         WHERE CHALLENGE_NO=#{challengeNo}
-    </update>\
+    </update>
 </mapper>
