@@ -47,7 +47,7 @@
             (SELECT COUNT(*)
              FROM CHALLENGE_USER CU1
                 Join CHALLENGE C USING(CHALLENGE_NO)
-             WHERE CU1.STATUS = 'PLAY'
+             WHERE CU1.STATUS IN( 'PLAY','SINGLE')
                AND C.TEMPLATE_NO=T.TEMPLATE_NO) as PLAY_COUNT,
             (SELECT COUNT(*)
              FROM CHALLENGE_USER CU2
