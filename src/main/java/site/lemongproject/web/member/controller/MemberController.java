@@ -179,7 +179,7 @@ public class MemberController {
 
 
 
-    @GetMapping("/byeUser")
+    @GetMapping("/deleteUser")
     public ResponseBody<Integer> byeUser(@SessionAttribute("loginUser") Profile profile, @SessionAttribute("socialType") SocialType socialType, HttpSession session) {
 
         int result = 0;

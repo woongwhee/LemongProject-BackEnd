@@ -379,10 +379,14 @@ public class MemberServiceImpl implements MemberService {
 //        return memberDao.selectMember(userNo);
 //    }
 
+
+    // 일반 회원 탈퇴
     @Override
     public int deleteUser(int userNo) {
-        int result = memberDao.deleteUser(userNo);
-        result = profileDao.deleteProfile(userNo);
+        int result1 = memberDao.deleteUser(userNo);
+        int result2 = profileDao.deleteUser(userNo);
+
+        int result = result1 * result2;
         return result;
     }
 
@@ -400,7 +404,7 @@ public class MemberServiceImpl implements MemberService {
     public int deleteNaver(Profile profile, String token) {
 
         int result1 = memberDao.deleteUser(profile.getUserNo()); // 멤버에서 상태 0으로 변경
-        int result2 = profileDao.deleteNaver(profile.getUserNo()); // 프로필에서 삭제
+        int result2 = profileDao.deleteUser(profile.getUserNo()); // 프로필에서 삭제
         int result3 = deleteNaverToken(token); // 네이버 연동 해제
 
         int result = result1 * result2 * result3;
@@ -460,7 +464,7 @@ public class MemberServiceImpl implements MemberService {
     public int deleteKakao(Profile profile, String token) {
 
         int result1 = memberDao.deleteUser(profile.getUserNo()); // 멤버에서 상태 0으로 변경
-        int result2 = profileDao.deleteNaver(profile.getUserNo()); // 프로필에서 삭제
+        int result2 = profileDao.deleteUser(profile.getUserNo()); // 프로필에서 삭제
         int result3 = deleteKakaoToken(token); // 카카오 api 연동 해제
 
         int result = result1 * result2 * result3;

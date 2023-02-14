@@ -18,7 +18,7 @@
             CHANGE_NAME ,
             P.FILE_PATH
         FROM USER_PROFILE U
-        JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
+        LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE U.USER_NO = #{userNo}
     </select>
 
@@ -83,7 +83,7 @@
     </update>
 
     <!--  회원탈퇴 -> 프로필 삭제  -->
-    <delete id="deleteNaver" parameterType="int">
+    <delete id="deleteUser" parameterType="int">
         DELETE
         FROM USER_PROFILE
         WHERE USER_NO = #{userNo}

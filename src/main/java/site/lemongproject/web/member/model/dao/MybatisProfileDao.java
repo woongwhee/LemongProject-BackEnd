@@ -43,10 +43,10 @@ public class MybatisProfileDao implements ProfileDao {
         return sqlSession.update("profileMapper.updateProfilePhoto",p);
     }
 
-    @Override
-    public int deleteProfile(int userNo) {
-        return sqlSession.delete("profileMapper.deleteProfile",userNo);
-    }
+//    @Override
+//    public int deleteProfile(int userNo) {
+//        return sqlSession.delete("profileMapper.deleteProfile",userNo);
+//    }
     @Override
     public List<Profile> searchUser(String userNick) {
         return sqlSession.selectList("profileMapper.searchUser", userNick);
@@ -67,8 +67,8 @@ public class MybatisProfileDao implements ProfileDao {
     }
 
     @Override
-    public int deleteNaver(int userNo) {
-        return sqlSession.delete("profileMapper.deleteNaver", userNo);
+    public int deleteUser(int userNo) {
+        return sqlSession.delete("profileMapper.deleteUser", userNo);
     }
 
 
