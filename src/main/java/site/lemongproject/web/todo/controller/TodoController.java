@@ -59,7 +59,7 @@ public class TodoController {
         dailyFind.setUserNo(member.getUserNo());
         DailyTodoVo daily = todoService.getDaily(dailyFind);
 
-       // System.out.println(daily.getChallengeList());
+       //System.out.println(daily);
         if (daily.getNormalList().size() == 0 && daily.getChallengeList().size() == 0) {
             return ResponseBuilder.findNothing();
         } else if (daily.getChallengeList() != null && daily.getNormalList() != null) {
