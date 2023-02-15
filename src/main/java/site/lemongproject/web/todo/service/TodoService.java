@@ -28,9 +28,8 @@ public interface TodoService {
 
     List<Todo> calTodo(Todo t);
 
-    //int dndTodo(List<Todo> t);
+    int dndTodo(List<Todo> tList);
 
-    int dndTodo(Map<String, Object> todoNo);
 
     MonthMarkVo getMonthMark(MonthFindVo findVo);
 }
