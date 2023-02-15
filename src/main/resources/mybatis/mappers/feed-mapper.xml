@@ -27,6 +27,7 @@
         <result column="FEED_CONTENT" property="feedContent"/>
         <result column="FEED_AT" property="feedAt"/>
         <result column="FILEPATH" property="filePath"/>
+        <result column="PAGENO" property="pageNo"/>
     </resultMap>
 
     <select id="userProfile" resultType="Map">
@@ -69,6 +70,7 @@
 <!-- 피드 게시물  -->
     <select id="selectFeed" resultMap="feedListResultSet">
         SELECT
+        ROW_NUMBER() over (ORDER BY F.FEED_AT DESC ) AS PAGENO,
         F.FEED_NO,
         F.USER_NO,
         UP.NICK_NAME,
