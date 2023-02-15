@@ -40,6 +40,7 @@ public class FeedController {
     @RequestMapping("/main")
     public ResponseBody<List<FeedList>> feedSelect(){
         List<FeedList> list = feedService.selectFeed();
+//        System.out.println(list);
         return ResponseBuilder.success(list);
     }
 
