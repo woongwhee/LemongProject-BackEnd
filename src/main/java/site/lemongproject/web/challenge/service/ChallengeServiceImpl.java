@@ -3,6 +3,7 @@ package site.lemongproject.web.challenge.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.lemongproject.common.exception.IsNotWriterException;
 import site.lemongproject.web.challenge.model.dao.ChallengeUserDao;
 import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.todo.model.dao.HolidayDao;
@@ -56,13 +57,28 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     /**
      * 시작한 첼린지를 중도포기
+     * 해당하는 challengeTodo를 전부 지우고,만약 챌린지에 남은 유저가 없다면
      *
      * @param
      * @return
      */
     @Override
-    public int leaveMulti(ChallengeUserVo userVo) {
-        int result = challengeDao.deleteUser(userVo);
+    public int cancelMulti(ChallengeUserVo userVo) {
+        Challenge challenge = challengeDao.findOne(userVo.getChallengeNo());
+        int result = todoDao.deletePlay(userVo);
+        int userCount = 0;
+        if (challenge.getStatus() == ChallengeStatus.READY||challenge.getStatus() == ChallengeStatus.SINGLE) {
+            result *= userDao.deleteUser(userVo);
+            userCount=userDao.countPlayer(userVo.getChallengeNo());
+        } else if (challenge.getStatus() == ChallengeStatus.PLAY) {
+            result *= userDao.cancelUser(userVo);
+        }
+        if (result == 0) {
+            return 0;
+        }
+        if (userCount == 0) {
+            result *= challengeDao.cancelChallenge(userVo.getChallengeNo());
+        }
         return result;
     }
 
@@ -90,7 +106,6 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     /**
      * 챌린지 시작 메소드 중복시작할수 없음
-     *
      * @param startVo
      * @return
      */
@@ -200,10 +215,27 @@ public class ChallengeServiceImpl implements ChallengeService {
     public List<ChallengeListVo> getList(int page) {
         return challengeDao.findReady(page, 8);
     }
+
     @Override
-    public ChallengeDetailVo getDetail(int challengeNo){
+    public ChallengeDetailVo getDetail(int challengeNo) {
         return challengeDao.findDetail(challengeNo);
     }
+
+    @Override
+    public ChallengeRoomVo getRoomDetail(ChallengeUserVo userVo) {
+        boolean inChallenge = userDao.inChallenge(userVo);
+        if(!inChallenge){
+            throw new IsNotWriterException();
+        }
+        return challengeDao.findRoom(userVo);
+    }
+
+    /**
+     * ChallengeTodo 상태를 반대로 바꾼다.
+     * ChallengeUser의 ClearCount를 변경시킨다.
+     * @param clearVo
+     * @return
+     */
     @Override
     public int clearTodo(TodoClearVo clearVo) {
         int result = todoDao.clearChallengeTodo(clearVo);

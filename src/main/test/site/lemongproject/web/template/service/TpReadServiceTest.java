@@ -14,10 +14,7 @@ import site.lemongproject.web.template.model.dto.Review;
 import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateCategory;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
-import site.lemongproject.web.template.model.vo.ReviewDeleteVo;
-import site.lemongproject.web.template.model.vo.ReviewInsertVo;
-import site.lemongproject.web.template.model.vo.TPDayTodoVo;
-import site.lemongproject.web.template.model.vo.TemplateFindVo;
+import site.lemongproject.web.template.model.vo.*;
 
 import java.util.List;
 
@@ -51,7 +48,7 @@ public class TpReadServiceTest extends Configure{
     @DisplayName("상세조회 테스트")
     public void selectDetail(){
 
-        Template t=readService.getTemplateDetail(new TemplateFindVo(TEST_TP_NO,TEST_USER_NO));
+        TemplateDetailVo t=readService.getTemplateDetail(new TemplateFindVo(TEST_TP_NO,TEST_USER_NO));
         System.out.println(t);
         assertThat(t).isNotNull();
         assertThat(t.getCreate()).isNotNull();

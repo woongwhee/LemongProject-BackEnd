@@ -25,19 +25,25 @@ public class TemplateReadServiceImpl implements TemplateReadService {
     final private TemplateCategoryDao templateCategoryDao;
     final private HolidayDao holidayDao;
     final private ReviewDao reviewDao;
-
+    final static int PAGE_LIMIT=8;
     @Override
     public List<Template> getTemplateList(TemplateFindVo findVo) {
 
-        return templateDao.findList(findVo, 8);
+        return templateDao.findList(findVo, PAGE_LIMIT);
     }
     @Override
     public int getTemplateCount(int categoryNo){
-     return templateDao.countTemplate(categoryNo);
+        int count = templateDao.countTemplate(categoryNo);
+        if(count%PAGE_LIMIT==0){
+            return count/PAGE_LIMIT-1;
+        }else{
+            return count/PAGE_LIMIT;
+        }
+
     }
 
     @Override
-    public Template getTemplateDetail(TemplateFindVo findVo) {
+    public TemplateDetailVo getTemplateDetail(TemplateFindVo findVo) {
         return templateDao.findDetail(findVo);
     }
 
