@@ -74,7 +74,7 @@ public class TodoController {
     public ResponseBody<Todo> insertTodo(@RequestBody Todo t,
                                          @SessionAttribute("loginUser") Profile p) {
 
-        //System.out.println("Profile : "+ p);
+        //System.out.println("Profile : "+ pㅔㅔ);
         //System.out.println("t : "+ t);
         t.setUserNo(p.getUserNo());
         todoService.insertTodo(t);
