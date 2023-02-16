@@ -9,11 +9,11 @@
         <result property="clearCount" column="CLEAR_COUNT"/>
         <result property="playCount" column="PLAY_COUNT"/>
         <result property="isClear" column="IS_CLEAR"/>
-        <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
         <association property="create" javaType="site.lemongproject.web.member.model.vo.Profile"
                      resultMap="profileMapper.profileDetail"/>
+        <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
     </resultMap>
-    <resultMap id="templateDetail" type="Template">
+    <resultMap id="templateDetail" type="TemplateDetailVo">
         <id column="TEMPLATE_NO" property="templateNo"/>
         <result column="CATEGORY_NO" property="categoryNo"/>
         <result column="RANGE" property="range"/>
@@ -24,8 +24,9 @@
         <result property="isClear" column="IS_CLEAR"/>
         <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
         <association property="create" resultMap="profileMapper.profileDetail"/>
-        <collection property="todoList" select="templateTodoMapper.findByTemplate" javaType="List"
-                    column="TEMPLATE_NO"/>
+        <collection property="todoList" select="templateTodoMapper.findByTemplate" column="TEMPLATE_NO"/>
+        <collection property="challengeList" select="challengeMapper.findByTemplate" column="TEMPLATE_NO"/>
+        <collection property="reviewList" select="reviewMapper.findByTemplate" column="TEMPLATE_NO"/>
     </resultMap>
     <resultMap id="templateUnSave" type="TPUnsaveVo">
         <id column="TEMPLATE_NO" property="templateNo"/>

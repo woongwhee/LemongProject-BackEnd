@@ -11,7 +11,8 @@
   <select id="findOne" parameterType="Integer" resultMap="reviewMap">
     select * from review r join USER_PROFILE  u using (USER_NO) left join PHOTO p using (PHOTO_NO) where REVIEW_NO=#{reviewNo}
   </select>
-  <select id="findByTp" parameterType="Integer" resultMap="reviewMap">
+
+  <select id="findByTemplate" parameterType="Integer" resultMap="reviewMap">
         select * from review r
         join USER_PROFILE  u using (USER_NO)
         left join PHOTO p using (PHOTO_NO)
