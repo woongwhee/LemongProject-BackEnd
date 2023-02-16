@@ -37,7 +37,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     final private ChallengeChatDao chatDao;
     final private ChallengeTodoDao todoDao;
     final private ChallengeUserDao userDao;
-    final private TemplateDao templateDao;s
+    final private TemplateDao templateDao;
     final private TemplateTodoDao templateTodoDao;
 
     /**
