@@ -12,10 +12,9 @@ import java.util.List;
 @Getter
 @Setter
 public class ChallengeRoomVo {
-    int challengeNo;
-    int challengeTitle;
-    int todoCount;
-    int myPercent;
-    List<ChatProfileVo> playerList;
-    List<ChallengeChat> chatList;
+    private int challengeNo;
+    private String challengeTitle;
+    private int todoCount;
+    private List<ChatProfileVo> playerList;
+    private List<ChallengeChat> chatList;
 }

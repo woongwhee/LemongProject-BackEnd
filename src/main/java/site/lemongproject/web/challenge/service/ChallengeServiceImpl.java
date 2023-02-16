@@ -227,7 +227,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         if(!inChallenge){
             throw new IsNotWriterException();
         }
-        return challengeDao.findRoom(userVo);
+        return challengeDao.findRoom(userVo.getChallengeNo());
     }
 
     /**

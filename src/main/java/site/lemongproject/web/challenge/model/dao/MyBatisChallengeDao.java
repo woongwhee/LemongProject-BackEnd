@@ -76,8 +76,8 @@ public class MyBatisChallengeDao implements ChallengeDao{
     }
 
     @Override
-    public ChallengeRoomVo findRoom(ChallengeUserVo userVo) {
-        return session.selectOne("challengeMapper.findRoom");
+    public ChallengeRoomVo findRoom(int challengeNo) {
+        return session.selectOne("challengeMapper.findRoom",challengeNo);
     }
 
     @Override

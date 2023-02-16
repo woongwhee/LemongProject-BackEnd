@@ -107,7 +107,7 @@ public class ChallengeController {
     public ResponseBody<ChallengeRoomVo> roomDetail(@PathVariable("challengeNo") int challengeNo,@SessionAttribute("loginUser") Profile loginUser) {
         ChallengeUserVo userVo = new ChallengeUserVo();
         userVo.setChallengeNo(challengeNo);
-        userVo.setUserNo(userVo.getUserNo());
+        userVo.setUserNo(loginUser.getUserNo());
         ChallengeRoomVo room = challengeService.getRoomDetail(userVo);
         if (room==null) {
             return ResponseBuilder.findNothing();

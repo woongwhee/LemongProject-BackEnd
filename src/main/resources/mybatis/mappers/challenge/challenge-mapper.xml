@@ -20,7 +20,6 @@
         <result column="USER_COUNT" property="userCount"/>
         <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser"/>
     </resultMap>
-
     <resultMap id="DetailMap" type="ChallengeDetailVo">
         <result column="CHALLENGE_NO" property="challengeNo"/>
         <result column="CHALLENGE_TITLE" property="challengeTitle"/>
@@ -30,13 +29,12 @@
         <association column="CHALLENGE_NO" property="todoPreview" select="challengeTodoMapper.findPreview"/>
         <collection column="CHALLENGE_NO" select="challengeUserMapper.findReadyList" property="readyUsers"/>
     </resultMap>
-
     <resultMap id="RoomMap" type="ChallengeRoomVo">
-        <result column="CHALLENGE_NO" property="challengeNo"/>
+        <id column="CHALLENGE_NO" property="challengeNo"/>
         <result column="CHALLENGE_TITLE" property="challengeTitle"/>
         <result column="TODO_COUNT" property="todoCount"/>
-        <association column="{CHALLENGE_NO=challengeNo,TODO_COUNT=todoNo}" property="todoPreview" select="challengeTodoMapper.findPreview"/>
-        <collection column="CHALLENGE_NO" select="challengeUserMapper.findReadyList" property="readyUsers"/>
+        <collection column="{challengeNo=CHALLENGE_NO,todoCount=TODO_COUNT}" select="challengeUserMapper.findPlayer" property="playerList"/>
+        <collection column="CHALLENGE_NO" select="challengeChatMapper.findByChallenge" property="chatList"/>
     </resultMap>
     <insert id="insertSingle" parameterType="SingleStartVo">
         <selectKey keyProperty="challengeNo" resultType="int" order="BEFORE">
@@ -69,10 +67,12 @@
         WHERE STATUS = 'READY'
         ORDER BY START_DATE DESC
     </select>
-    <select id="findRoom" resultMap="RoomMap">
-        SELECT *
+    <select id="findRoom" parameterType="int" resultMap="RoomMap">
+        SELECT c.*,t.TODO_COUNT
         FROM CHALLENGE c
-        WHERE STATUS = 'READY'
+        JOIN TEMPLATE T on c.TEMPLATE_NO=t.TEMPLATE_NO
+        WHERE  c.STATUS = 'PLAY'
+        AND CHALLENGE_NO=#{challengeNo}
     </select>
     <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
         SELECT *

@@ -24,10 +24,10 @@ public interface ChallengeDao {
 
     List<ChallengeListVo> findReady(int page, int limit);
     ChallengeDetailVo findDetail(int challengeNo);
+    ChallengeRoomVo findRoom(int challengeNo);
     int cancelChallenge(int challengeNo);
 
     int startChallenge();
     int finishChallenge();
 
-    ChallengeRoomVo findRoom(ChallengeUserVo userVo);
 }
