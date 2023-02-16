@@ -165,12 +165,13 @@
         SELECT VALUE FROM FEED_PHOTO
         WHERE
         FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
-        AND
-        PHOTO_NO= #{photoNo}
+        AND PHOTO_NO= #{photoNo}
     </select>
 
     <update id="updateValueFirst" parameterType="Map">
-        UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) AND (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) = 1
+        UPDATE FEED_PHOTO SET VALUE = VALUE-1
+        WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
+        AND (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo}) = 1
     </update>
     <update id="updateValueMiddle" parameterType="Map">
         UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE
@@ -179,8 +180,11 @@
         FEED_NO=(SELECT FEED_NO FROM FEED_PHOTO WHERE  PHOTO_NO= #{photoNo}))
     </update>
     <update id="updateValueLast" parameterType="Map">
-        UPDATE FEED_PHOTO SET VALUE = VALUE-1 WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE  PHOTO_NO= #{photoNo}) AND
-        (SELECT Max(VALUE) from FEED_PHOTO where FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})) = (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
+        UPDATE FEED_PHOTO SET VALUE = VALUE-1
+        WHERE FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE  PHOTO_NO= #{photoNo}) AND
+        (SELECT Max(VALUE)
+        from FEED_PHOTO
+        where FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})) = (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
     </update>
     <delete id="deleteFeedPhoto" parameterType="Map">
         DELETE FROM FEED_PHOTO where PHOTO_NO = #{photoNo}

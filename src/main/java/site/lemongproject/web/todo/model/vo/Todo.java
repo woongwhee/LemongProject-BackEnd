@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 //시/분/초 값을 가져오려면 java.util.Date로
 
 @Data
@@ -16,5 +17,7 @@ public class Todo {
     private String todoContent; //작성내용
     private boolean clear; //완료여부
     private int value; //순서가중치
+
+    private List<Todo> dndTodoList;
 
 }
