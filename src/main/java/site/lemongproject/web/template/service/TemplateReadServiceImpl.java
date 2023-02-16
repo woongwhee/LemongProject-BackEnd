@@ -2,6 +2,7 @@ package site.lemongproject.web.template.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import site.lemongproject.common.exception.IsNotWriterException;
 import site.lemongproject.web.template.model.vo.*;
 import site.lemongproject.web.todo.model.dao.HolidayDao;
 import site.lemongproject.web.template.model.dao.ReviewDao;
@@ -70,7 +71,7 @@ public class TemplateReadServiceImpl implements TemplateReadService {
     public int deleteTemplate(int userNo, int templateNo) {
         boolean isWriter = templateDao.isWriter(new WriterCheckVo(userNo, templateNo));
         if (!isWriter) {
-            return 0;
+            throw new IsNotWriterException();
         }
         int result = templateTodoDao.deleteTemplate(templateNo);
         result *= reviewDao.deleteByTemplate(templateNo);
