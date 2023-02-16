@@ -16,7 +16,7 @@ public interface ChallengeService {
 
     int joinMulti(ChallengeUserVo msv);
 
-    int leaveMulti(ChallengeUserVo userVo);
+    int cancelMulti(ChallengeUserVo userVo);
 
     int createMulti(MultiCreateVo msv);
 
@@ -35,4 +35,6 @@ public interface ChallengeService {
     int clearTodo(TodoClearVo clearVo);
 
     ChallengeDetailVo getDetail(int challengeNo);
+
+    ChallengeRoomVo getRoomDetail(ChallengeUserVo challengeNo);
 }

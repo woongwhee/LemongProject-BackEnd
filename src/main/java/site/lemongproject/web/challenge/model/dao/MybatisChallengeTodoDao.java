@@ -56,6 +56,10 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
         return session.selectOne("challengeTodoMapper.findOne",todoNo);
     }
 
+    @Override
+    public int deletePlay(ChallengeUserVo userVo) {
+        return session.selectOne("challengeTodoMapper.deletePlay",userVo);
+    }
 
 
 }
