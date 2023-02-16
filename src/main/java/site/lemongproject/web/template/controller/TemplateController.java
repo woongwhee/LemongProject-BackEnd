@@ -32,7 +32,7 @@ public class TemplateController {
         int page = p.orElse(0);//없는 경우 0페이지
         TemplateFindVo findVo=new TemplateFindVo(page,categoryNo, loginUser.getUserNo());
         List<Template> templateList = tpReadService.getTemplateList(findVo);
-        if (templateList != null && templateList.size() > 0) {
+        if (templateList != null) {
             return ResponseBuilder.success(templateList);
         } else {
             return ResponseBuilder.findNothing();
@@ -42,12 +42,12 @@ public class TemplateController {
     public ResponseBody<Integer> count(@PathVariable(value = "categoryNo", required = false) Optional<Integer> cno) {
         int categoryNo = cno.orElse(0);//없는 경우 모든 카테고리
         int count = tpReadService.getTemplateCount(categoryNo);
+        System.out.println(count);
         return ResponseBuilder.success(count);
-
     }
     @GetMapping(value = {"/one/{templateNo}"})
-    public ResponseBody<List<Template>> list(@PathVariable(value = "templateNo") int templateNo,@SessionAttribute("loginUser")Profile loginUser) {
-        Template template = tpReadService.getTemplateDetail(new TemplateFindVo(templateNo,loginUser.getUserNo()));
+    public ResponseBody<List<TemplateDetailVo>> list(@PathVariable(value = "templateNo") int templateNo,@SessionAttribute("loginUser")Profile loginUser) {
+        TemplateDetailVo template = tpReadService.getTemplateDetail(new TemplateFindVo(templateNo,loginUser.getUserNo()));
         if (template != null) {
             return ResponseBuilder.success(template);
         } else {

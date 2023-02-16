@@ -1,17 +1,17 @@
 package site.lemongproject.web.challenge.model.vo;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 import site.lemongproject.common.type.ChallengeUserStatus;
-
+import site.lemongproject.web.photo.model.vo.Photo;
+@Alias("ChatProfileVo")
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-@Alias("ChallengeUserVo")
-public class ChallengeUserVo {
+public class ChatProfileVo {
     private int userNo;
-    private int challengeNo;
+    private String nickName;
+    private Photo photo;
+    private int percent;
     private ChallengeUserStatus status;
 }

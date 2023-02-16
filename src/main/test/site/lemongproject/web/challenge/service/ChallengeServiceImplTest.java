@@ -70,7 +70,7 @@ public class ChallengeServiceImplTest extends Configure {
     }
     @Test
     public void clear(){
-        int result=challengeService.clearTodo(new TodoClearVo(1212,TEST_CL_NO,TEST_USER_NO));
+        int result=challengeService.clearTodo(new TodoClearVo(1212,TEST_CL_NO));
         assertThat(result).isEqualTo(1);
     }
 
