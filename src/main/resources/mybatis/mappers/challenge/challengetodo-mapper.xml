@@ -53,10 +53,11 @@
         WHERE CHALLENGE_NO = #{challengeNo}
           AND USER_NO = '-1'
     </insert>
+
     <select id="findPreview" parameterType="_int" resultMap="previewMap">
         SELECT *
         FROM CHALLENGE_TODO
-        WHERE CHALLENGE_NO = #{challenge_no}
+        WHERE CHALLENGE_NO = #{challengeNo}
           AND USER_NO = -1
     </select>
 
@@ -102,6 +103,7 @@
         WHERE USER_NO = #{userNo}
         ORDER BY TODO_DATE
     </select>
+
     <select id="findByCal" parameterType="MonthFindVo" resultType="int">
     <![CDATA[
         SELECT TO_CHAR(TODO_DATE, 'dd')
