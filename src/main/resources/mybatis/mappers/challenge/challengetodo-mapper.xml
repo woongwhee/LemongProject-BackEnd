@@ -5,10 +5,16 @@
     <resultMap type="ChallengeTodo" id="ChallengeTodoMap">
         <result column="TODO_NO" property="todoNo"/>
         <result column="CHALLENGE_NO" property="challengeNo"/>
+        <result column="USER_NO" property="userNo"/>
         <result column="TODO_DATE" property="todoDate"/>
         <result column="TODO_CONTENT" property="todoContent"/>
         <result column="CLEAR" property="clear"/>
         <result column="VALUE" property="value"/>
+    </resultMap>
+    <resultMap type="ChallengeTodoVo" id="previewMap">
+        <id column="CHALLENGE_NO" property="challengeNo"/>
+        <result column="CHALLENGE_TITLE" property="challengeName"/>
+        <collection  property="todoList" resultMap="todoMap"/>
     </resultMap>
     <resultMap type="Todo" id="todoMap">
         <result column="TODO_NO" property="todoNo"/>
@@ -47,13 +53,14 @@
         WHERE CHALLENGE_NO = #{challengeNo}
           AND USER_NO = '-1'
     </insert>
-    <!-- 미리보기  -->
-    <select id="findPreview" parameterType="_int" resultMap="ChallengeTodoMap">
+
+    <select id="findPreview" parameterType="_int" resultMap="previewMap">
         SELECT *
         FROM CHALLENGE_TODO
-        WHERE CHALLENGE_NO = #{challenge_no}
+        WHERE CHALLENGE_NO = #{challengeNo}
           AND USER_NO = -1
     </select>
+
     <select id="findDailyTodo" parameterType="Map" resultMap="todoMap">
         <![CDATA[
         SELECT *
@@ -65,16 +72,22 @@
         ORDER BY VALUE
         ]]>
     </select>
+
     <select id="findDaily" parameterType="DailyFindVo" resultMap="dailyMap">
         SELECT CHALLENGE_NO, CHALLENGE_TITLE, #{todoDate} as TODO_DATE, #{userNo} as USER_NO
         FROM CHALLENGE
                  JOIN CHALLENGE_USER cu USING (CHALLENGE_NO)
         WHERE cu.USER_NO = #{userNo}
-          AND cu.STATUS = 'PLAY'
+          AND cu.STATUS = 'PLAY' OR cu.STATUS='SINGLE'
     </select>
 
+    <select id="findOne" parameterType="_long" resultMap="ChallengeTodoMap">
+        SELECT *
+        FROM CHALLENGE_TODO
+        WHERE TODO_NO=#{todoNo}
+    </select>
 
-    <update id="clearChTodo" parameterType="ChallengeTodo">
+    <update id="clearChallengeTodo" parameterType="TodoClearVo">
         UPDATE CHALLENGE_TODO
         SET CLEAR =
                 CASE
@@ -83,30 +96,32 @@
                     END
         WHERE TODO_NO = #{todoNo}
     </update>
-    <update id="addTodoCount" parameterType="ChallengeTodo">
-        UPDATE CHALLENGE_USER
-        SET CLEAR_COUNT=CLEAR_COUNT + 1
-        WHERE USER_NO = #{userNo}
-          AND CHALLENGE_NO = #{challengeNo}
-    </update>
+
     <select id="calChTodo" resultType="string">
         SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
         FROM CHALLENGE_TODO
         WHERE USER_NO = #{userNo}
         ORDER BY TODO_DATE
     </select>
+
     <select id="findByCal" parameterType="MonthFindVo" resultType="int">
     <![CDATA[
         SELECT TO_CHAR(TODO_DATE, 'dd')
         FROM (SELECT DISTINCT TODO_DATE
-              FROM CHALLENGE_TODO
-              WHERE USER_NO = #{userNo}
+              FROM (SELECT CHALLENGE_NO FROM CHALLENGE_USER WHERE USER_NO=#{userNo} AND STATUS='PLAY')
+              JOIN CHALLENGE_TODO USING (CHALLENGE_NO)
+              WHERE
+                  USER_NO = #{userNo}
                 AND #{month} <= TODO_DATE
                 AND TODO_DATE < ADD_MONTHS(#{month}, 1)
                 AND CLEAR = 0
               ORDER BY TODO_DATE)
         ]]>
     </select>
-
+    <delete id="deletePlay" parameterType="ChallengeUserVo">
+        DELETE CHALLENGE_TODO
+        WHERE CHALLENGE_NO=#{challengeNo}
+        AND USER_NO=#{userNo}
+    </delete>
 
 </mapper>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="challengeUserMapper">
+
+
+    <resultMap id="ProfileMap" type="ChatProfileVo">
+        <result column="USER_NO" property="userNo"/>
+        <result column="NICK_NAME" property="nickName"/>
+        <result column="PERCENT" property="percent"/>
+        <result column="STATUS" property="status"/>
+        <association property="photo" resultMap="photoMapper.photoMap"/>
+    </resultMap>
+    <select id="findPlayer" parameterType="Map" resultMap="ProfileMap">
+        SELECT cu.USER_NO,NICK_NAME, ceil(CLEAR_COUNT/#{todoCount}*100) AS "PERCENT",cu.STATUS as STATUS,p.*
+        FROM CHALLENGE_USER cu
+                 JOIN USER_PROFILE UP on cu.USER_NO = UP.USER_NO
+                 LEFT JOIN PHOTO P on UP.PHOTO_NO = P.PHOTO_NO
+        WHERE CHALLENGE_NO=#{challengeNo} AND
+              STATUS IN('PLAY','CANCEL')
+    </select>
+
+    <select id="countPlayer" parameterType="ChallengeUserVo" resultType="_int">
+        SELECT count(*)
+        FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengNo}
+          AND STATUS IN ('PLAY','SINGLE')
+    </select>
+    <select id="inChallenge" parameterType="ChallengeUserVo" resultType="boolean">
+        SELECT COUNT(*)
+        FROM CHALLENGE_USER
+        WHERE CHALLENGE_NO = #{challengeNo}
+          AND USER_NO = #{userNo}
+        AND STATUS='PLAY'
+    </select>
+
+    <insert id="joinUser" parameterType="ChallengeUserVo">
+        INSERT INTO CHALLENGE_USER (CHALLENGE_NO, USER_NO, STATUS)
+        VALUES (#{challengeNo}, #{userNo}, #{status})
+    </insert>
+
+    <update id="changeClear" parameterType="ChallengeTodo">
+        UPDATE CHALLENGE_USER
+        <if test="clear">
+            SET CLEAR_COUNT=CLEAR_COUNT + 1
+        </if>
+        <if test="!clear">
+            SET CLEAR_COUNT=CLEAR_COUNT - 1
+        </if>
+        WHERE USER_NO = #{userNo}
+        AND CHALLENGE_NO = (SELECT CHALLENGE_NO FROM CHALLENGE_TODO WHERE TODO_NO=#{todoNo})
+    </update>
+
+    <update id="adjustClearCount">
+        UPDATE CHALLENGE_USER cu
+        SET CLEAR_COUNT = (SELECT COUNT(*)
+                           FROM CHALLENGE_TODO ct
+                           WHERE ct.CHALLENGE_NO = cu.CHALLENGE_NO
+                             AND ct.USER_NO = cu.USER_NO
+                             and clear = 1)
+        WHERE NOT (CHALLENGE_NO, USER_NO, CLEAR_COUNT) IN
+                  (SELECT count(*) AS CLEAR_COUNT,
+                          ct.CHALLENGE_NO,
+                          ct.USER_NO
+                   FROM CHALLENGE_TODO ct
+                   WHERE CLEAR = 1
+                   GROUP BY CHALLENGE_NO, USER_NO);
+    </update>
+
+    <select id="findReadyList" parameterType="_int" resultMap="profileMapper.profileDetail">
+        SELECT cu.STATUS as"STATUS",up.*, p.*
+        FROM CHALLENGE_USER cu
+                 JOIN USER_PROFILE UP on cu.USER_NO = UP.USER_NO
+                 LEFT JOIN PHOTO P on UP.PHOTO_NO = P.PHOTO_NO
+        WHERE CHALLENGE_NO = #{challengeNo}
+    </select>
+
+    <update id="challengeStart">
+        <![CDATA[
+        UPDATE CHALLENGE_USER
+        SET STATUS = 'PLAY'
+        WHERE STATUS = 'READY'
+          AND CHALLENGE_NO = (SELECT CHALLENGE_NO
+                              FROM CHALLENGE
+                              WHERE SYSDATE <= START_DATE
+                                AND START_DATE < SYSDATE + 1)
+        ]]>
+    </update>
+
+    <update id="challengeFinish" parameterType="_float">
+        <![CDATA[
+        UPDATE CHALLENGE_USER cu
+        SET
+            STATUS = (
+                SELECT
+                    CASE WHEN cu.CLEAR_COUNT/TODO_COUNT>#{CLEAR_PERCENT} THEN 'CLEAR'
+                         ELSE 'FAIL'
+                        END AS STATUS
+                FROM CHALLENGE c
+                         JOIN TEMPLATE USING (TEMPLATE_NO)
+                WHERE c.CHALLENGE_NO=cu.CHALLENGE_NO
+            )
+
+        WHERE STATUS = 'PLAY'
+          AND CHALLENGE_NO = (SELECT CHALLENGE_NO
+                              FROM CHALLENGE
+                              WHERE SYSDATE <= END_DATE
+                                AND END_DATE <SYSDATE+1
+                                AND (STATUS = 'PLAY' OR STATUS='SINGLE')
+        )
+        ]]>
+    </update>
+
+</mapper>
+

@@ -1,12 +1,13 @@
 package site.lemongproject.web.challenge.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 
 import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,6 +18,6 @@ public class ChallengeChat {
     private int challengeNo;
     private int userNo;
     private String chatMessage;
-    private Timestamp sendAt;
+    private LocalDateTime sendAt;
 }
 

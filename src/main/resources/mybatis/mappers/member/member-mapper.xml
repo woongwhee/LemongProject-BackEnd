@@ -34,8 +34,6 @@
         <result column="CONFIRM_NO" property="confirmNo" />
         <result column="CODE" property="code" />
         <result column="EMAIL" property="email" />
-        <result column="CONFIRM_AT" property="confirmDate" />
-        <result column="STATUS" property="status" />
     </resultMap>
 
 

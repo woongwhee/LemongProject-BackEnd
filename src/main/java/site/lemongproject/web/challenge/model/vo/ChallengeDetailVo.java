@@ -7,15 +7,18 @@ import org.apache.ibatis.type.Alias;
 import site.lemongproject.web.member.model.vo.Profile;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
+@Alias("ChallengeDetailVo")
 @ToString
-@Alias("ChallengeListVo")
-public class ChallengeListVo {
-    private String title;
+public class ChallengeDetailVo {
+    private int challengeNo;
+    private String challengeTitle;
+    private String challengeInfo;
     private LocalDate startDate;
     private LocalDate endDate;
-    private int userCount;
-    private Profile createUser;
+    private ChallengeTodoVo todoPreview;
+    List<Profile> readyUsers;
 }
