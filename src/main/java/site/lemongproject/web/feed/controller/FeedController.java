@@ -177,11 +177,11 @@ public class FeedController {
     @GetMapping("/selectMyFeedList")
     public ResponseBody<List<FeedList>> selectMyFeedList(@RequestParam(value = "userNo" , required = false)int userNo){
         System.out.println(userNo + "myfeed");
-
         FeedList f = new FeedList();
         f.setUserNo(userNo);
 
         List<FeedList> fList = feedService.selectMyFeedList(f);
+//        System.out.println(fList);
         return ResponseBuilder.success(fList);
     }
 
