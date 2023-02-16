@@ -8,24 +8,26 @@ import site.lemongproject.web.feed.model.dto.*;
 import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.photo.model.vo.Photo;
+
 import java.util.List;
 import java.util.Map;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+
 public class FeedServiceImpl implements FeedService{
     final private FeedDao feedDao;
     final private PhotoDao photoDao;
-
+    final static int PAGE_LIMIT=2;
     @Override
     public Map<String, Object> userProfile(Map<String,Object> userNo){
         return feedDao.userProfile(userNo);
     };
 
     @Override
-    public List<FeedList> selectFeed() {
-        return feedDao.selectFeed();
+    public List<FeedList> selectFeed(int page) {
+        return feedDao.selectFeed(page,PAGE_LIMIT);
     }
 
     // 피드 게시물 등록
@@ -159,4 +161,14 @@ public class FeedServiceImpl implements FeedService{
 
     @Override
     public int heartCount(Map<String, Object> data){return feedDao.heartCount(data);}
+
+    @Override
+    public int countFeed() {
+       int feedCount=feedDao.countFeed();
+       if(feedCount%PAGE_LIMIT==0){
+           return feedCount/PAGE_LIMIT-1;
+       }else{
+           return feedCount/PAGE_LIMIT;
+       }
+    }
 }

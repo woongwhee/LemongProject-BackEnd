@@ -37,10 +37,16 @@ public class FeedController {
     }
 
     // feed 전체 불러오기
-    @RequestMapping("/main")
-    public ResponseBody<List<FeedList>> feedSelect(){
-        List<FeedList> list = feedService.selectFeed();
+    @RequestMapping("/main/{page}")
+    public ResponseBody<List<FeedList>> feedSelect(@PathVariable(value = "page")int page){
+        List<FeedList> list = feedService.selectFeed(page);
+//        System.out.println(list);
         return ResponseBuilder.success(list);
+    }
+    @RequestMapping("/feedCount")
+    public ResponseBody<Integer> feedCount(){
+        int result = feedService.countFeed();
+        return ResponseBuilder.success(result);
     }
 
     // 피드 사진 넣기PHOTO
@@ -171,11 +177,11 @@ public class FeedController {
     @GetMapping("/selectMyFeedList")
     public ResponseBody<List<FeedList>> selectMyFeedList(@RequestParam(value = "userNo" , required = false)int userNo){
         System.out.println(userNo + "myfeed");
-
         FeedList f = new FeedList();
         f.setUserNo(userNo);
 
         List<FeedList> fList = feedService.selectMyFeedList(f);
+//        System.out.println(fList);
         return ResponseBuilder.success(fList);
     }
 

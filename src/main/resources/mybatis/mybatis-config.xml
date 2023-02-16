@@ -51,6 +51,6 @@
         <mapper resource="mybatis/mappers/challenge/challenge-mapper.xml"/>
         <mapper resource="mybatis/mappers/challenge/challengechat-mapper.xml"/>
         <mapper resource="mybatis/mappers/challenge/challengetodo-mapper.xml"/>
-        <mapper resource="mybatis/mappers/challenge/challengeuser-mapper.xml"/>
+<!--        <mapper resource="mybatis/mappers/emailconfirm-mapper.xml" />-->
     </mappers>
 </configuration>
