@@ -12,7 +12,7 @@ import java.util.Map;
 @Transactional
 public interface FeedService  {
     // feed 게시글 가져오기
-    List<FeedList> selectFeed();
+    List<FeedList> selectFeed(int page);
 
     // feed 게시글 쓰기
     int insertFeed(FeedInsert paramMap);

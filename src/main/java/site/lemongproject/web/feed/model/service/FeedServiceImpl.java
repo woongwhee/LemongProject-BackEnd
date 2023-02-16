@@ -5,13 +5,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.dto.*;
-import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
-import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.photo.model.vo.Photo;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,15 +18,15 @@ import java.util.Map;
 public class FeedServiceImpl implements FeedService{
     final private FeedDao feedDao;
     final private PhotoDao photoDao;
-
+    final static int PAGE_LIMIT=4;
     @Override
     public Map<String, Object> userProfile(Map<String,Object> userNo){
         return feedDao.userProfile(userNo);
     };
 
     @Override
-    public List<FeedList> selectFeed() {
-        return feedDao.selectFeed();
+    public List<FeedList> selectFeed(int page) {
+        return feedDao.selectFeed(page,PAGE_LIMIT);
     }
 
     // 피드 게시물 등록
