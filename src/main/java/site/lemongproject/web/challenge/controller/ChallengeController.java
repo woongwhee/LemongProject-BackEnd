@@ -53,8 +53,18 @@ public class ChallengeController {
         }
     }
     @PutMapping("/join/{challengeNo}")
-    public ResponseBody<Challenge> startMulti(@SessionAttribute("loginUser") Profile loginUser, @PathVariable("challengeNo") int challengeNo) {
+    public ResponseBody<Challenge> joinMulti(@SessionAttribute("loginUser") Profile loginUser, @PathVariable("challengeNo") int challengeNo) {
         int result = challengeService.joinMulti(new ChallengeUserVo(loginUser.getUserNo(),challengeNo, ChallengeUserStatus.READY));
+
+        if (result > 0) {
+            return ResponseBuilder.success(result);
+        } else {
+            return ResponseBuilder.serverError();
+        }
+    }
+    @DeleteMapping("/cancel/{challengeNo}")
+    public ResponseBody<Challenge> cancelChallenge(@SessionAttribute("loginUser") Profile loginUser, @PathVariable("challengeNo") int challengeNo) {
+        int result = challengeService.cancelMulti(new ChallengeUserVo(loginUser.getUserNo(),challengeNo,ChallengeUserStatus.CANCEL));
 
         if (result > 0) {
             return ResponseBuilder.success(result);
@@ -67,7 +77,6 @@ public class ChallengeController {
     public ResponseBody<Challenge> detailChallenge(@RequestParam(value = "challNo", required = false) int challNo) {
         Challenge c = new Challenge();
         c.setChallengeNo(challNo);
-
         List<Challenge> cOne = challengeService.detailChallenge(c);
         return ResponseBuilder.success(cOne);
     }
@@ -92,14 +101,22 @@ public class ChallengeController {
         if (detail==null) {
             return ResponseBuilder.findNothing();
         }
-
         return ResponseBuilder.success(detail);
-
-
+    }
+    @GetMapping("/detail/room/{challengeNo}")
+    public ResponseBody<ChallengeRoomVo> roomDetail(@PathVariable("challengeNo") int challengeNo,@SessionAttribute("loginUser") Profile loginUser) {
+        ChallengeUserVo userVo = new ChallengeUserVo();
+        userVo.setChallengeNo(challengeNo);
+        userVo.setUserNo(loginUser.getUserNo());
+        ChallengeRoomVo room = challengeService.getRoomDetail(userVo);
+        if (room==null) {
+            return ResponseBuilder.findNothing();
+        }
+        return ResponseBuilder.success(room);
     }
     @GetMapping("/clearTodo")
-    public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo", required = false) long todoNo, @RequestParam(value = "challengeNo", required = false) int challengeNo, @SessionAttribute("loginUser") Profile loginUser) {
-        int result = challengeService.clearTodo(new TodoClearVo(todoNo, challengeNo, loginUser.getUserNo()));
+    public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo", required = false) long todoNo ,@SessionAttribute("loginUser") Profile loginUser) {
+        int result = challengeService.clearTodo(new TodoClearVo(todoNo, loginUser.getUserNo()));
         if (result > 0) {
             return ResponseBuilder.success(result);
         } else {
