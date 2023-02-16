@@ -5,10 +5,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.template.model.dto.Template;
-import site.lemongproject.web.template.model.vo.TPUnsaveVo;
-import site.lemongproject.web.template.model.vo.TemplateFindVo;
-import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
-import site.lemongproject.web.template.model.vo.WriterCheckVo;
+import site.lemongproject.web.template.model.vo.*;
 
 import java.util.List;
 
@@ -28,7 +25,7 @@ public class MybatisTemplateDao implements TemplateDao {
     }
 
     @Override
-    public Template findDetail(TemplateFindVo findVo) {
+    public TemplateDetailVo findDetail(TemplateFindVo findVo) {
         return sqlSession.selectOne("templateMapper.findDetail",findVo);
     }
     @Override
