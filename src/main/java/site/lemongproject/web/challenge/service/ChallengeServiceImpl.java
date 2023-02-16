@@ -37,7 +37,7 @@ public class ChallengeServiceImpl implements ChallengeService {
     final private ChallengeChatDao chatDao;
     final private ChallengeTodoDao todoDao;
     final private ChallengeUserDao userDao;
-    final private TemplateDao templateDao;
+    final private TemplateDao templateDao;s
     final private TemplateTodoDao templateTodoDao;
 
     /**
@@ -220,5 +220,10 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     public int challengeGo(ChallengeUser u) {
         return challengeDao.challengeGo(u);
+    }
+
+    @Override
+    public int clearChallengeTodo(ChallengeTodo cTd) {
+        return 0;
     }
 }

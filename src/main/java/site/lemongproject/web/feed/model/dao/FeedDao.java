@@ -1,6 +1,7 @@
 package site.lemongproject.web.feed.model.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.feed.model.dto.*;
@@ -17,8 +18,8 @@ public class FeedDao {
     final private SqlSession sqlSession;
 
     // 피드 메인
-    public List<FeedList> selectFeed(){
-        return  sqlSession.selectList("feedMapper.selectFeed");
+    public List<FeedList> selectFeed(int page, int pageLimit){
+        return  sqlSession.selectList("feedMapper.selectFeed",null,new RowBounds(page*pageLimit,pageLimit));
     }
     // 피드 게시물 작성
     public int insertFeed(FeedInsert paramMap){
@@ -146,5 +147,8 @@ public class FeedDao {
 
     public int heartCount(Map<String, Object> data) {
         return sqlSession.selectOne("feedMapper.heartCount", data);
+    }
+
+    public int countFeed() {return sqlSession.selectOne("feedMapper.countFeed");
     }
 }
