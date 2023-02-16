@@ -141,6 +141,15 @@ public class FeedServiceImpl implements FeedService{
     }
 
     @Override
+    public List<FeedList> selectMyFeedList(FeedList f){
+        return feedDao.selectMyFeedList(f);
+    }
+
+    public List<FeedList> searchImg(FeedList f){
+        return feedDao.searchImg(f);
+    }
+
+    @Override
     public int heartClick(Map<String, Object> data){return feedDao.heartClick(data);}
 
     @Override

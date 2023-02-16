@@ -3,93 +3,143 @@
 <mapper namespace="todoMapper">
 
     <resultMap type="Todo" id="todoResultSet">
-        <result column="TODO_NO" property="todoNo" />
-        <result column="TODO_DATE" property="todoDate" />
-        <result column="USER_NO" property="userNo" />
-        <result column="TODO_CONTENT" property="todoContent" />
-        <result column="CLEAR" property="clear" />
-        <result column="VALUE" property="value" />
+        <result column="TODO_NO" property="todoNo"/>
+        <result column="TODO_DATE" property="todoDate"/>
+        <result column="USER_NO" property="userNo"/>
+        <result column="TODO_CONTENT" property="todoContent"/>
+        <result column="CLEAR" property="clear"/>
+        <result column="VALUE" property="value"/>
     </resultMap>
-    
 
 
     <select id="selectTodo" resultMap="todoResultSet" parameterType="Todo">
         <![CDATA[
-
         SELECT TODO_NO,
                TODO_DATE,
                TODO_CONTENT,
-                USER_NO,
-                CLEAR,
-                VALUE
+               USER_NO,
+               CLEAR,
+               VALUE
         FROM TODO
         WHERE USER_NO = #{userNo}
-                AND  #{todoDate}<=TODO_DATE
-                AND TODO_DATE<#{todoDate}+1
-                AND STATUS = 'N'
-        ORDER BY TODO_NO
+          AND #{todoDate} <= TODO_DATE
+          AND TODO_DATE < #{todoDate} + 1
+        ORDER BY VALUE
         ]]>
     </select>
 
-    <insert id="insertTodo" parameterType="Todo" >
+    <insert id="insertTodo" parameterType="Todo">
         <selectKey order="BEFORE" resultType="Integer" keyProperty="value">
             SELECT NVL(MAX(VALUE), 0) +1
             FROM TODO
             WHERE USER_NO = #{userNo} AND TO_CHAR(TODO_DATE,'YYMMDD') = #{todoDate}
         </selectKey>
         INSERT INTO TODO(
-                        TODO_NO,
-                        TODO_DATE,
-                        USER_NO,
-                        TODO_CONTENT,
-                        CLEAR,
-                        VALUE
-                        )
+        TODO_NO,
+        TODO_DATE,
+        USER_NO,
+        TODO_CONTENT,
+        CLEAR,
+        VALUE
+        )
         VALUES (
-                SEQ_TODO.NEXTVAL,
-                #{todoDate},
-                #{userNo},
-                #{todoContent},
-                #{clear},
-                #{value}
+        SEQ_TODO.NEXTVAL,
+        #{todoDate},
+        #{userNo},
+        #{todoContent},
+        #{clear},
+        #{value}
         )
     </insert>
 
     <update id="deleteTodo" parameterType="Todo">
-        UPDATE TODO
-        SET STATUS = 'Y'
+        DELETE TODO
         WHERE TODO_NO = #{todoNo}
     </update>
 
     <update id="clearTodo" parameterType="Todo">
         UPDATE TODO
         SET CLEAR =
-        CASE WHEN CLEAR = 0 THEN 1
-             WHEN CLEAR = 1 THEN 0
-        END
+                CASE
+                    WHEN CLEAR = 0 THEN 1
+                    WHEN CLEAR = 1 THEN 0
+                    END
         WHERE TODO_NO = #{todoNo}
     </update>
-    
+
     <update id="updateTodo" parameterType="Todo">
         UPDATE TODO
         SET TODO_CONTENT = #{todoContent}
         WHERE TODO_NO = #{todoNo}
     </update>
 
+    <!--    <update id="delayTodo" parameterType="Todo">-->
+    <!--        UPDATE TODO-->
+    <!--        SET TODO_DATE = TODO_DATE + 1,-->
+    <!--            VALUE = (SELECT-->
+    <!--                        MAX(VALUE) + 1-->
+    <!--                    FROM TODO-->
+    <!--                    WHERE USER_NO = 1 AND-->
+    <!--                          TODO_DATE = ( SELECT-->
+    <!--                                        TODO_DATE + 1-->
+    <!--                                        FROM TODO-->
+    <!--                                        WHERE TODO_NO = #{todoNo}-->
+    <!--        ))-->
+    <!--        WHERE TODO_NO = #{todoNo}-->
+    <!--    </update>-->
+
     <update id="delayTodo" parameterType="Todo">
         UPDATE TODO
         SET TODO_DATE = TODO_DATE + 1,
-            VALUE = ( SELECT
-                        MAX(VALUE) + 1
-                        FROM TODO
-                        WHERE USER_NO = 1 AND
-                        TODO_DATE = ( SELECT
-                                        TODO_DATE + 1
-                                        FROM TODO
-                                        WHERE TODO_NO = #{todoNo}
-        ))
+            VALUE     =
+                CASE
+                    WHEN (SELECT COUNT(TODO_NO)
+                          FROM TODO
+                          WHERE TODO_DATE = (SELECT TODO_DATE + 1
+                                             FROM TODO
+                                             WHERE TODO_NO = #{todoNo})) > 0
+                        THEN (SELECT MAX(VALUE) + 1
+                              FROM TODO
+                              WHERE USER_NO = 1
+                                AND TODO_DATE = (SELECT TODO_DATE + 1
+                                                 FROM TODO
+                                                 WHERE TODO_NO = #{todoNo}))
+                    WHEN (SELECT COUNT(TODO_NO)
+                          FROM TODO
+                          WHERE TODO_DATE = (SELECT TODO_DATE + 1
+                                             FROM TODO
+                                             WHERE TODO_NO = #{todoNo})) = 0
+                        THEN 1
+                    END
         WHERE TODO_NO = #{todoNo}
     </update>
+
+    <select id="calTodo" resultType="string">
+        SELECT TO_CHAR(TODO_DATE, 'YYMMDD')
+        FROM TODO
+        WHERE USER_NO = #{userNo}
+          AND CLEAR = 0
+        ORDER BY TODO_DATE
+    </select>
+    <select id="findByCal" parameterType="MonthFindVo" resultType="_int">
+    <![CDATA[
+        SELECT TO_CHAR(TODO_DATE, 'dd')
+        FROM (SELECT DISTINCT TODO_DATE
+              FROM TODO
+              WHERE USER_NO = #{userNo}
+                AND #{month} <= TODO_DATE
+                AND TODO_DATE < ADD_MONTHS(#{month}, 1)
+                AND CLEAR = 0
+              ORDER BY TODO_DATE)
+        ]]>
+    </select>
+
+    <!--    <update id="dndTodo" parameterType="Todo">-->
+    <!--        UPDATE TODO-->
+    <!--        SET VALUE = #{value}-->
+    <!--        WHERE TODO_NO = #{todoNo}-->
+    <!--    </update>-->
+
     <select id="findDaily" resultMap="todoResultSet" parameterType="DailyFindVo">
         <![CDATA[
         SELECT TODO_NO,
@@ -100,22 +150,36 @@
                VALUE
         FROM TODO
         WHERE USER_NO = #{userNo}
-          AND  #{todoDate} <= TODO_DATE
-          AND  #{todoDate}+1 > TODO_DATE
-          AND STATUS = 'N'
-        ORDER BY TODO_NO
+          AND #{todoDate} <= TODO_DATE
+          AND #{todoDate} + 1 > TODO_DATE
+        ORDER BY VALUE
         ]]>
     </select>
 
+    <!--    <update id="dndTodo" parameterType="">-->
+    <!--        UPDATE VALUE FROM TODO WHERE-->
+    <!--    </update>-->
 
-
-
-
-
-
-
-
-
+    <select id="startValue" parameterType="Map" resultType="int">
+        SELECT VALUE
+        FROM TODO
+        WHERE TODO_NO = #{originArr}
+    </select>
+    <select id="finishValue" parameterType="Map" resultType="int">
+        SELECT VALUE
+        FROM TODO
+        WHERE TODO_NO = #{changeArr}
+    </select>
+    <update id="updateStartValue" parameterType="Map">
+        update TODO
+        SET VALUE=#{finishValue}
+        WHERE TODO_NO = #{originArr}
+    </update>
+    <update id="updateFinishValue" parameterType="Map">
+        update TODO
+        SET VALUE=#{startValue}
+        WHERE TODO_NO = #{changeArr}
+    </update>
 
 
 </mapper>

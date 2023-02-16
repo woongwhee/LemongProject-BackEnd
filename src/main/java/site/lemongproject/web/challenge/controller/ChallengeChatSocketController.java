@@ -2,6 +2,7 @@ package site.lemongproject.web.challenge.controller;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import site.lemongproject.web.challenge.model.dto.ChallengeChat;
@@ -27,8 +28,8 @@ public class ChallengeChatSocketController {
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
 
     private static ChallengeService challengeService;
-//
-    @Inject
+    //
+    @Autowired
     public void setChallengeService(ChallengeService challengeService){
         ChallengeChatSocketController.challengeService = challengeService;
     }
@@ -82,7 +83,7 @@ public class ChallengeChatSocketController {
             System.out.println("send data : {}" + message); // 리액트에서 넘어오는 채팅 데이터
 
             challengeService.insertChatData(c);
-            
+
             s.getBasicRemote().sendText(message);
 
         }
@@ -94,41 +95,6 @@ public class ChallengeChatSocketController {
         clients.remove(session);
     }
 
-//    @GetMapping("/insertChallengeChat")
-//    public ResponseBody<ChallengeChat> insertChallengeChatData(String message){
-//        JsonParser parse = new JsonParser();
-//        Object obj = parse.parse(message);
 //
-//        JsonObject jsonObj = (JsonObject)obj;
-//
-//        // 이름(보낸사람)
-//        int name = Integer.parseInt(jsonObj.get("name").getAsString());
-//        System.out.println(name + " =======> [success]");
-//
-//        // 챌린지 번호
-//        int challengeNo = Integer.parseInt(jsonObj.get("challengeNo").getAsString());
-//        System.out.println(challengeNo + " =======> [success]");
-//
-//        // 보낸 메세지
-//        String msg = jsonObj.get("msg").getAsString();
-//        System.out.println(msg + " =======> [success]");
-//
-//        ChallengeChat c = new ChallengeChat();
-//        c.setChallengeNo(challengeNo);
-//
-//        System.out.println("챌린지 넘버: "+c.getChallengeNo());
-//
-//        c.setChatMessage(msg);
-//
-//        System.out.println("챌린지 넘버: "+c.getChatMessage());
-//
-//        c.setUserNo(name);
-//
-//        System.out.println("챌린지 넘버: "+c.getUserNo());
-//
-//        int result = 1;
-//
-//        return ResponseBuilder.success(result);
-//    }
 
 }

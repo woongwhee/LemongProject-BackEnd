@@ -3,16 +3,12 @@ package site.lemongproject.web.template.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import site.lemongproject.common.exception.IsNotWriterException;
 import site.lemongproject.web.template.model.dao.TemplateDao;
 import site.lemongproject.web.template.model.dao.TemplateTodoDao;
-import site.lemongproject.web.template.model.dto.Template;
 import site.lemongproject.web.template.model.dto.TemplateTodo;
-import site.lemongproject.web.template.model.vo.TPTodoDeleteVo;
-import site.lemongproject.web.template.model.vo.TempalteTodoInsertVo;
-import site.lemongproject.web.template.model.vo.TemplateUpdateVo;
-import site.lemongproject.web.template.model.vo.WriterCheckVo;
+import site.lemongproject.web.template.model.vo.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,82 +17,87 @@ import java.util.List;
 public class TemplateWriteServiceImpl implements TemplateWriteService {
     final private TemplateDao templateDao;
     final private TemplateTodoDao templateTodoDao;
+
     @Override
-    public Template loadInsertPage(int userNo) {
-        Template template= templateDao.findUnSave(userNo);
-        if(template==null){
-            templateDao.createTemp(userNo);
-            template=templateDao.findUnSave(userNo);
+    public TPUnsaveVo loadInsertPage(int userNo) {
+        TPUnsaveVo template = templateDao.findUnSave(userNo);
+        if (template != null) {
+            List<TemplateTodo> todoList = templateTodoDao.findByTemplate(template.getTemplateNo());
+            template.setTodoList(todoList);
+            return template;
         }
-        List<TemplateTodo> todoList=templateTodoDao.findByTemplate(template.getTemplateNo());
-        template.setTodoList(todoList);
+        templateDao.createTemp(userNo);
+        template = templateDao.findUnSave(userNo);
         return template;
     }
 
     @Override
     public int updateUnSaveTemplate(TemplateUpdateVo templateVo) {
-        if(templateDao.isWriter(new WriterCheckVo(templateVo.getUserNo(),templateVo.getTemplateNo()))){
-            return templateDao.updateUnSave(templateVo);}
-        else return 0;
-    }
-
-    /**
-     * 투두를 입력함
-     * @param tiv
-     * @return
-     */
-    @Override
-    public int insertTodo(TempalteTodoInsertVo tiv) {
-        int result=0;
-        boolean isWriter=templateDao.isWriter(new WriterCheckVo(tiv.getUserNo(),tiv.getTemplateNo()));
+        boolean isWriter = checkTemplateWriter(templateVo.getUserNo(),templateVo.getTemplateNo());
         if(!isWriter){
-            return 0;
+            throw new IsNotWriterException();
         }
-        List<TemplateTodo> todoList = new ArrayList<>();
-        for (int day : tiv.getDayList()) {
-            TemplateTodo t = new TemplateTodo();
-            t.setTemplateNo(tiv.getTemplateNo());
-            t.setDay(day);
-            t.setContent(tiv.getContent());
-            todoList.add(t);
-            result+=templateTodoDao.insertOne(t);
-            System.out.println(t);
+        int result=templateDao.updateUnSave(templateVo);
+        System.out.println(result);
+        if(result>0&&templateVo.getRange()!=null){
+            templateTodoDao.deleteRangeOver(templateVo);
         }
         return result;
     }
 
     /**
+     * 투두를 입력함
+     *
+     * @param tiv
+     * @return
+     */
+    @Override
+    public int insertTodo(TemplateTodoInsertVo tiv) {
+        System.out.println(tiv);
+        boolean isWriter = checkTemplateWriter(tiv.getUserNo(),tiv.getTemplateNo());
+        if (!isWriter) {
+            throw new IsNotWriterException("잘못된접근");
+        }
+        return templateTodoDao.insertMany(tiv);
+    }
+
+    /**
      * 임시저장된 템플릿을 초기화함(삭제후 재생성)
+     *
      * @param userNo
      * @return
      */
     @Override
-    public Template resetUnSave(int userNo) {
+    public TPUnsaveVo resetUnSave(int userNo) {
 
-        Template t=templateDao.findUnSave(userNo);
-        if(t!=null){
-            int result=templateTodoDao.deleteUnSave(userNo);
-            result*=templateDao.deleteUnSave(userNo);
-            if(result==0){
+        TPUnsaveVo t = templateDao.findUnSave(userNo);
+        if (t != null) {
+            int result = templateTodoDao.deleteUnSave(userNo);
+            result *= templateDao.deleteUnSave(userNo);
+            if (result == 0) {
                 return null;
             }
         }
-        int result=templateDao.createTemp(userNo);
+        int result = templateDao.createTemp(userNo);
         return templateDao.findUnSave(userNo);
     }
 
     /**
      * 요청이 작성자인경우 삭제하고 가중치를 제조정함
+     *
      * @param tdv
      * @return
      */
     @Override
     public int deleteTodo(TPTodoDeleteVo tdv) {
-        boolean isWriter=templateTodoDao.isWriter(new WriterCheckVo(tdv.getUserNo(), (int) tdv.getTpTodoNo()));
-        TemplateTodo todo=templateTodoDao.findOne(tdv.getTpTodoNo());
-        int result=templateTodoDao.deleteOne(tdv);
-        if(result>0){
-            result=templateTodoDao.afterDelete(todo);
+        boolean isWriter = checkTodoWriter(tdv.getUserNo(), (int) tdv.getTpTodoNo());
+        if (!isWriter) {
+            throw new IsNotWriterException();
+        }
+        TemplateTodo todo = templateTodoDao.findOne(tdv.getTpTodoNo());
+        int result = templateTodoDao.deleteOne(tdv);
+        if (result > 0) {
+            templateTodoDao.afterDelete(todo);
         }
         return result;
     }
@@ -113,12 +114,19 @@ public class TemplateWriteServiceImpl implements TemplateWriteService {
 
     /**
      * 임시저장된 템플릿을저장
+     *
      * @param userNo
      * @return
      */
     @Override
     public int uploadUnSave(int userNo) {
         return templateDao.uploadUnSave(userNo);
+    }
+    private boolean checkTemplateWriter(int userNo,int templateNo){
+        return templateDao.isWriter(new WriterCheckVo(userNo, templateNo));
+    }
+    private boolean checkTodoWriter(int userNo,int todoNo){
+        return templateTodoDao.isWriter(new WriterCheckVo(userNo, todoNo));
     }
 
 

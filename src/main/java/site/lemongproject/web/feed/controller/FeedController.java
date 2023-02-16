@@ -168,6 +168,31 @@ public class FeedController {
         return check;
     }
 
+    // USER_NO에 해당하는 내가 작성한 피드정보 리스트 가져오기(마이페이지용)
+    @GetMapping("/selectMyFeedList")
+    public ResponseBody<List<FeedList>> selectMyFeedList(@RequestParam(value = "userNo" , required = false)int userNo){
+        System.out.println(userNo + "myfeed");
+
+        FeedList f = new FeedList();
+        f.setUserNo(userNo);
+
+        List<FeedList> fList = feedService.selectMyFeedList(f);
+        return ResponseBuilder.success(fList);
+    }
+
+    // FEED_NO에 해당하는 이미지 경로포함해서 다가져오기
+    @GetMapping("/searchImg")
+    public ResponseBody<List<FeedList>> searchImg(@RequestParam(value = "feedNo" , required = false)int feedNo){
+
+        System.out.println(feedNo + "success");
+
+        FeedList f = new FeedList();
+        f.setFeedNo(feedNo);
+
+        List<FeedList> sList = feedService.searchImg(f);
+
+        return ResponseBuilder.success(sList);
+    }
 
 
 //    -- 좋아요 수

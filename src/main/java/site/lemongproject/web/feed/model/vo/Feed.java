@@ -3,6 +3,7 @@ package site.lemongproject.web.feed.model.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.sql.Date;
 
