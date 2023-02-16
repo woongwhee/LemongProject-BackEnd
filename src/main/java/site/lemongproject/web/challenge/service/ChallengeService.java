@@ -36,4 +36,6 @@ public interface ChallengeService {
     List<ChallengeTodo> calChTodo(ChallengeTodo ct);
 
     List<ChallengeListVo> getList(int page);
+
+    List<ChallengeUser> myChallengeList(ChallengeUser u);
 }

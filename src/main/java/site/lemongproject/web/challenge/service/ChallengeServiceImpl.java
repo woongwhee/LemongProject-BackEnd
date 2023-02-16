@@ -210,4 +210,8 @@ public class ChallengeServiceImpl implements ChallengeService {
     public int challengeGo(ChallengeUser u) {
         return challengeDao.challengeGo(u);
     }
+
+    public List<ChallengeUser> myChallengeList(ChallengeUser u){
+        return challengeDao.myChallengeList(u);
+    }
 }

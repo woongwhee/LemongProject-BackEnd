@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
     <context-param>
         <param-name>contextClass</param-name>
         <param-value>
@@ -21,7 +22,7 @@
     <filter>
         <filter-name>encodingFilter</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-
+        <async-supported>true</async-supported>
         <init-param>
             <param-name>encoding</param-name>
             <param-value>UTF-8</param-value>
@@ -30,13 +31,22 @@
             <param-name>forceEncoding</param-name>
             <param-value>true</param-value>
         </init-param>
-
     </filter>
 
+    <!--
+		* 필터
+		모든 요청 처리 전 공통적으로 필요로 하는 기능들을
+		클라이언트의 요청을 controller가 받기전에 먼저 수행하게함.
+
+		* 스프링에서 제공해주는 인코딩 필터 등록
+		- org.springframework.web.filter.CharacterEncodingFilter
+		- 필터 등록시 filter태그와 filter-mapping태그를 같이 사용
+		- filter-name태그로 filter명을 지정
+	 -->
     <filter-mapping>
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
-
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 
 
@@ -49,10 +59,13 @@
             <param-value>/WEB-INF/springconfig/servlet-context.xml</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
+        <async-supported>true</async-supported>
     </servlet>
     <servlet-mapping>
         <servlet-name>appServlet</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
+
 
 </web-app>

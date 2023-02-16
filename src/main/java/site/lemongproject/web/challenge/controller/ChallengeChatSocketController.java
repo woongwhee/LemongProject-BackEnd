@@ -8,7 +8,6 @@ import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 import site.lemongproject.web.challenge.service.ChallengeService;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpSession;
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
@@ -60,8 +59,8 @@ public class ChallengeChatSocketController {
         JsonObject jsonObj = (JsonObject)obj;
 
         // 이름(보낸사람)
-        int name = Integer.parseInt(jsonObj.get("userNos").getAsString());
-        System.out.println(name + " =======> [success]");
+//        int name = Integer.parseInt(jsonObj.get("userNo").getAsString());
+//        System.out.println(name + " =======> [success]");
 
         // 챌린지 번호
         int challengeNo = Integer.parseInt(jsonObj.get("chatRoomNo").getAsString());
@@ -79,19 +78,20 @@ public class ChallengeChatSocketController {
         c.setChatMessage(msg);
         System.out.println("chatMsg : " + c.getChatMessage());
 
-        c.setUserNo(name);
-        System.out.println("userNo : " + c.getUserNo());
-
-
+//        c.setUserNo(name);
+//        System.out.println("userNo : " + c.getUserNo());
 
         for (Session s : clients) {
+
             System.out.println("send data : {}" + message); // 리액트에서 넘어오는 채팅 데이터
 
             if(chatRoomNo == challengeNo){
-                if(!s.equals(session)) {
+                System.out.println(challengeNo + "TEST");
+                System.out.println(chatRoomNo + "TEST");
+//                if(!s.equals(session)) {
                     challengeService.insertChatData(c);
                     s.getBasicRemote().sendText(message);
-                }
+//                }
             }
 
         }
