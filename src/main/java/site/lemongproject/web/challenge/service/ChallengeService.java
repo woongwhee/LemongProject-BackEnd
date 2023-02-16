@@ -28,6 +28,8 @@ public interface ChallengeService {
 
     int challengeGo(ChallengeUser u);
 
+    int clearChallengeTodo(ChallengeTodo cTd);
+
     List<ChallengeTodo> calChTodo(ChallengeTodo ct);
 
     List<ChallengeListVo> getList(int page);
@@ -35,4 +37,6 @@ public interface ChallengeService {
     int clearTodo(TodoClearVo clearVo);
 
     ChallengeDetailVo getDetail(int challengeNo);
+
+    List<ChallengeUser> myChallengeList(ChallengeUser u);
 }
