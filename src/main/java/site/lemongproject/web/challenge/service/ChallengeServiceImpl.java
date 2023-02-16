@@ -254,8 +254,4 @@ public class ChallengeServiceImpl implements ChallengeService {
         return challengeDao.challengeGo(u);
     }
 
-    @Override
-    public int clearChallengeTodo(ChallengeTodo cTd) {
-        return 0;
-    }
 }
