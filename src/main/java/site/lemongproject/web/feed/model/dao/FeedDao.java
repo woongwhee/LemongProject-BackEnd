@@ -148,4 +148,7 @@ public class FeedDao {
     public int heartCount(Map<String, Object> data) {
         return sqlSession.selectOne("feedMapper.heartCount", data);
     }
+
+    public int countFeed() {return sqlSession.selectOne("feedMapper.countFeed");
+    }
 }

@@ -66,4 +66,6 @@ public interface FeedService  {
     int heartState(Map<String, Object> data);
 
     int heartCount(Map<String, Object> data);
+
+    int countFeed();
 }

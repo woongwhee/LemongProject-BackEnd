@@ -15,10 +15,11 @@ import java.util.Map;
 @Service
 @Transactional
 @RequiredArgsConstructor
+
 public class FeedServiceImpl implements FeedService{
     final private FeedDao feedDao;
     final private PhotoDao photoDao;
-    final static int PAGE_LIMIT=4;
+    final static int PAGE_LIMIT=2;
     @Override
     public Map<String, Object> userProfile(Map<String,Object> userNo){
         return feedDao.userProfile(userNo);
@@ -160,4 +161,14 @@ public class FeedServiceImpl implements FeedService{
 
     @Override
     public int heartCount(Map<String, Object> data){return feedDao.heartCount(data);}
+
+    @Override
+    public int countFeed() {
+       int feedCount=feedDao.countFeed();
+       if(feedCount%PAGE_LIMIT==0){
+           return feedCount/PAGE_LIMIT-1;
+       }else{
+           return feedCount/PAGE_LIMIT;
+       }
+    }
 }

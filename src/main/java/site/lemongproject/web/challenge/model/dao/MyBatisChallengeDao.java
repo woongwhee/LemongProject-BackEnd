@@ -80,4 +80,9 @@ public class MyBatisChallengeDao implements ChallengeDao{
     public int cancelChallenge(int challengeNo){
         return session.update("challnegeMapper.cancelChallenge",challengeNo);
     }
+
+    @Override
+    public List<ChallengeUser> myChallengeList(ChallengeUser u){
+        return session.selectList("challengeUserMapper.myChallengeList" , u);
+    }
 }

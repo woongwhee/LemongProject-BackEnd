@@ -43,6 +43,11 @@ public class FeedController {
 //        System.out.println(list);
         return ResponseBuilder.success(list);
     }
+    @RequestMapping("/feedCount")
+    public ResponseBody<Integer> feedCount(){
+        int result = feedService.countFeed();
+        return ResponseBuilder.success(result);
+    }
 
     // 피드 사진 넣기PHOTO
     @RequestMapping(value = "/insert",method = RequestMethod.POST)

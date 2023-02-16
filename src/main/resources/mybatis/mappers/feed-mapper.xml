@@ -216,4 +216,8 @@
     <select id="heartCount" parameterType="Map" resultType="int">
         SELECT COUNT(*) FROM HEART WHERE REF_NO=#{refNo} AND REF_TYPE=1
     </select>
+    <select id="countFeed" resultType="int">
+        SELECT COUNT(*) FROM FEED
+    </select>
+
 </mapper>
