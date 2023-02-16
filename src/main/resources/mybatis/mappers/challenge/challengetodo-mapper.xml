@@ -76,7 +76,7 @@
         FROM CHALLENGE
                  JOIN CHALLENGE_USER cu USING (CHALLENGE_NO)
         WHERE cu.USER_NO = #{userNo}
-          AND cu.STATUS = 'PLAY'
+          AND cu.STATUS = 'PLAY' OR cu.STATUS='SINGLE'
     </select>
     <select id="findOne" parameterType="_long" resultMap="ChallengeTodoMap">
         SELECT *
@@ -103,8 +103,10 @@
     <![CDATA[
         SELECT TO_CHAR(TODO_DATE, 'dd')
         FROM (SELECT DISTINCT TODO_DATE
-              FROM CHALLENGE_TODO
-              WHERE USER_NO = #{userNo}
+              FROM (SELECT CHALLENGE_NO FROM CHALLENGE_USER WHERE USER_NO=#{userNo} AND STATUS='PLAY')
+              JOIN CHALLENGE_TODO USING (CHALLENGE_NO)
+              WHERE
+                  USER_NO = #{userNo}
                 AND #{month} <= TODO_DATE
                 AND TODO_DATE < ADD_MONTHS(#{month}, 1)
                 AND CLEAR = 0
