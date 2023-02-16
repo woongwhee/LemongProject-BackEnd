@@ -59,6 +59,19 @@ public class MemberDao {
         return sqlSession.selectOne("memberMapper.loginMember", email);
     }
 
+    public int updateToken(Member isSocial) {
+        return sqlSession.update("memberMapper.updateToken", isSocial);
+    }
+
+    public String selectAccessToken(int userNo) {
+        return sqlSession.selectOne("memberMapper.selectAccessToken", userNo);
+    }
+
+
+//    public int deleteNaver(int userNo) {
+//        return sqlSession.update("memberMapper.deleteNaver", userNo);
+//    }
+
 
 
     public Member selectMembers(int userNo) {

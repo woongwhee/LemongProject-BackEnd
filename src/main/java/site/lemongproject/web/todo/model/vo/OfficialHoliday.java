@@ -1,4 +1,4 @@
-package site.lemongproject.common.domain.dto;
+package site.lemongproject.web.todo.model.vo;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Getter;

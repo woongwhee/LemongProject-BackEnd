@@ -4,7 +4,6 @@ import site.lemongproject.web.member.model.dto.ChangePwdVo;
 import site.lemongproject.web.member.model.dto.JoinVo;
 import site.lemongproject.web.member.model.dto.MyProfileVo;
 import site.lemongproject.web.member.model.vo.EmailConfirm;
-import site.lemongproject.web.member.model.vo.KakaoToken;
 import site.lemongproject.web.member.model.vo.Member;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
@@ -70,5 +69,12 @@ public interface MemberService {
 
     Member findUserNo(String email);
 
+    int updateToken(Member isSocial);
+
+    String selectAccessToken(int userNo);
+
+    int deleteNaver(Profile profile, String token);
+
+    int deleteKakao(Profile profile, String token);
 
 }
