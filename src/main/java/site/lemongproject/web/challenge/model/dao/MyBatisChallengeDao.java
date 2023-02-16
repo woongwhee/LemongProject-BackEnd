@@ -26,20 +26,13 @@ public class MyBatisChallengeDao implements ChallengeDao{
         return session.insert("challengeMapper.insertMulti",createVo);
     }
 
-    @Override
-    public int joinUser(ChallengeUserVo challengeUserVo) {
-        return session.insert("challengeMapper.joinUser",challengeUserVo);
-    }
 
     @Override
     public int updateEndDate(EndDateUpdateVo endDateUpdateVo) {
         return session.update("challengeMapper.updateEndDate",endDateUpdateVo);
     }
 
-    @Override
-    public int deleteUser(ChallengeUserVo userVo) {
-        return 0;
-    }
+
 
     @Override
     public List<Challenge> selectChallenge(){
@@ -71,5 +64,30 @@ public class MyBatisChallengeDao implements ChallengeDao{
     @Override
     public List<ChallengeUser> myChallengeList(ChallengeUser u){
         return session.selectList("challengeUserMapper.myChallengeList" , u);
+    }
+
+    @Override
+    public ChallengeDetailVo findDetail(int challengeNo) {
+        return session.selectOne("challengeMapper.findDetail",challengeNo);
+    }
+
+    @Override
+    public int startChallenge() {
+        return session.update("challengeMapper.challengeStart");
+    }
+
+    @Override
+    public int finishChallenge() {
+        return session.update("challengeMapper.challengeFinish");
+    }
+
+    @Override
+    public ChallengeRoomVo findRoom(int challengeNo) {
+        return session.selectOne("challengeMapper.findRoom",challengeNo);
+    }
+
+    @Override
+    public int cancelChallenge(int challengeNo){
+        return session.update("challengeMapper.cancelChallenge",challengeNo);
     }
 }

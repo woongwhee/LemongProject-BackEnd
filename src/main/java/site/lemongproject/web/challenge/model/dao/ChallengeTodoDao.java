@@ -4,6 +4,7 @@ import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.vo.CGTodoInsertVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeTodoVo;
+import site.lemongproject.web.challenge.model.vo.TodoClearVo;
 import site.lemongproject.web.todo.model.dto.DailyFindVo;
 import site.lemongproject.web.todo.model.dto.MonthFindVo;
 
@@ -15,11 +16,10 @@ public interface ChallengeTodoDao {
     List<ChallengeTodoVo> findDaily(DailyFindVo dailyFind);
     int copyTodoList(ChallengeUserVo joinVo);
 
-    int clearChallengeTodo(ChallengeTodo cTd);
+    int clearChallengeTodo(TodoClearVo clearVo);
 
     List<ChallengeTodo> calChTodo(ChallengeTodo ct);
     List<Integer> findByCal(MonthFindVo findVo);
-
-
-
+    ChallengeTodo findOne(long todoNo);
+    int deletePlay(ChallengeUserVo userVo);
 }

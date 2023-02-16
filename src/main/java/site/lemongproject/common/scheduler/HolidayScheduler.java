@@ -2,6 +2,7 @@ package site.lemongproject.common.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +29,10 @@ import javax.xml.parsers.ParserConfigurationException;
 @Component
 @RequiredArgsConstructor
 public class HolidayScheduler {
-    final private HolidayDao holidayDao;
+    @Autowired
+    private HolidayDao holidayDao;
 //    매년 1월1일 한국천문연구원 특일 정보 api를 이용해 다음해의 공유일을 얻어온다.
-    @Scheduled(cron = "0 0 1 1 1 ?",zone = "Asia/Seoul")
+    // @Scheduled(cron = "0 0 1 1 1 ?",zone = "Asia/Seoul")
     @Transactional
     public int updateHoliday() {
         Properties prop = getHolidayProp();

@@ -19,7 +19,7 @@ public interface ChallengeService {
 
     int joinMulti(ChallengeUserVo msv);
 
-    int leaveMulti(ChallengeUserVo userVo);
+    int cancelMulti(ChallengeUserVo userVo);
 
     int createMulti(MultiCreateVo msv);
 
@@ -31,11 +31,15 @@ public interface ChallengeService {
 
     int challengeGo(ChallengeUser u);
 
-    int clearChallengeTodo(ChallengeTodo cTd);
-
     List<ChallengeTodo> calChTodo(ChallengeTodo ct);
 
     List<ChallengeListVo> getList(int page);
 
     List<ChallengeUser> myChallengeList(ChallengeUser u);
+
+    int clearTodo(TodoClearVo clearVo);
+
+    ChallengeDetailVo getDetail(int challengeNo);
+
+    ChallengeRoomVo getRoomDetail(ChallengeUserVo challengeNo);
 }
