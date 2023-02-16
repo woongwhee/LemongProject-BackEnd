@@ -115,8 +115,8 @@ public class ChallengeController {
         return ResponseBuilder.success(room);
     }
     @GetMapping("/clearTodo")
-    public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo", required = false) long todoNo, @RequestParam(value = "challengeNo", required = false) int challengeNo, @SessionAttribute("loginUser") Profile loginUser) {
-        int result = challengeService.clearTodo(new TodoClearVo(todoNo, challengeNo, loginUser.getUserNo()));
+    public ResponseBody<Todo> clearTodo(@RequestParam(value = "todoNo", required = false) long todoNo ,@SessionAttribute("loginUser") Profile loginUser) {
+        int result = challengeService.clearTodo(new TodoClearVo(todoNo, loginUser.getUserNo()));
         if (result > 0) {
             return ResponseBuilder.success(result);
         } else {

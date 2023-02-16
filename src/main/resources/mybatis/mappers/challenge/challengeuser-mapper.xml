@@ -47,7 +47,7 @@
             SET CLEAR_COUNT=CLEAR_COUNT - 1
         </if>
         WHERE USER_NO = #{userNo}
-        AND CHALLENGE_NO = #{challengeNo}
+        AND CHALLENGE_NO = (SELECT CHALLENGE_NO FROM CHALLENGE_TODO WHERE TODO_NO=#{todoNo})
     </update>
 
     <update id="adjustClearCount">
