@@ -13,7 +13,6 @@ public interface ChallengeDao {
 
     int updateEndDate(EndDateUpdateVo endDateUpdateVo);
 
-    int deleteUser(ChallengeUserVo userVo);
 
     List<Challenge> selectChallenge();
 
@@ -25,8 +24,10 @@ public interface ChallengeDao {
 
     List<ChallengeListVo> findReady(int page, int limit);
     ChallengeDetailVo findDetail(int challengeNo);
+    int cancelChallenge(int challengeNo);
 
     int startChallenge();
     int finishChallenge();
-    int cancelChallenge(int challengeNo);
+
+    ChallengeRoomVo findRoom(ChallengeUserVo userVo);
 }

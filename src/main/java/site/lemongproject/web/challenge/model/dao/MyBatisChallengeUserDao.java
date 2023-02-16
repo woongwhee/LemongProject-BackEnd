@@ -30,4 +30,27 @@ public class MyBatisChallengeUserDao implements ChallengeUserDao{
     public int startChallenge() {
         return sqlSession.update("challengeUserMapper.challengeStart");
     }
+
+    @Override
+    public int cancelUser(ChallengeUserVo userVo) {
+            return sqlSession.update("challengeUserMapper.cancelUser");
+
+    }
+
+    @Override
+    public int deleteUser(ChallengeUserVo userVo) {
+        return sqlSession.update("challengeUserMapper.deleteUser");
+    }
+
+
+
+    @Override
+    public int countPlayer(int challengeNo) {
+        return sqlSession.selectOne("challengeUserMapper.countPlayer",challengeNo);
+    }
+
+    @Override
+    public boolean inChallenge(ChallengeUserVo userVo) {
+        return sqlSession.selectOne("challengeUserMapper.inChallenge",userVo) ;
+    }
 }

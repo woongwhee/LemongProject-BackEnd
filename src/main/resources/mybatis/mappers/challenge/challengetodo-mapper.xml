@@ -53,13 +53,13 @@
         WHERE CHALLENGE_NO = #{challengeNo}
           AND USER_NO = '-1'
     </insert>
-    <!-- 미리보기  -->
     <select id="findPreview" parameterType="_int" resultMap="previewMap">
         SELECT *
         FROM CHALLENGE_TODO
         WHERE CHALLENGE_NO = #{challenge_no}
           AND USER_NO = -1
     </select>
+
     <select id="findDailyTodo" parameterType="Map" resultMap="todoMap">
         <![CDATA[
         SELECT *
@@ -71,6 +71,7 @@
         ORDER BY VALUE
         ]]>
     </select>
+
     <select id="findDaily" parameterType="DailyFindVo" resultMap="dailyMap">
         SELECT CHALLENGE_NO, CHALLENGE_TITLE, #{todoDate} as TODO_DATE, #{userNo} as USER_NO
         FROM CHALLENGE
@@ -78,11 +79,13 @@
         WHERE cu.USER_NO = #{userNo}
           AND cu.STATUS = 'PLAY' OR cu.STATUS='SINGLE'
     </select>
+
     <select id="findOne" parameterType="_long" resultMap="ChallengeTodoMap">
         SELECT *
         FROM CHALLENGE_TODO
         WHERE TODO_NO=#{todoNo}
     </select>
+
     <update id="clearChallengeTodo" parameterType="TodoClearVo">
         UPDATE CHALLENGE_TODO
         SET CLEAR =
@@ -113,6 +116,10 @@
               ORDER BY TODO_DATE)
         ]]>
     </select>
-
+    <delete id="deletePlay" parameterType="ChallengeUserVo">
+        DELETE CHALLENGE_TODO
+        WHERE CHALLENGE_NO=#{challengeNo}
+        AND USER_NO=#{userNo}
+    </delete>
 
 </mapper>
