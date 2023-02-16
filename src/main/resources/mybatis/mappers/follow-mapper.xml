@@ -30,7 +30,8 @@
             FOLLOWING ,
             FOLLOW_AT ,
             CHANGE_NAME ,
-            NICK_NAME
+            NICK_NAME ,
+            FILE_PATH
         FROM FOLLOW F
         LEFT JOIN PHOTO P ON(F.FOLLOWING = P.USER_NO)
         LEFT JOIN USER_PROFILE U USING(PHOTO_NO)
@@ -99,7 +100,8 @@
         SELECT
             U.USER_NO ,
             NICK_NAME ,
-            CHANGE_NAME
+            CHANGE_NAME ,
+            FILE_PATH
         FROM FOLLOW F
         JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
         LEFT JOIN PHOTO P USING(PHOTO_NO)
@@ -109,10 +111,9 @@
     <!-- 나의 입장에서 팔로우 신청의 수락여부에 상관없이 나의 팔로잉이 증가해야함  -->
     <select id="myFollowingCount" parameterType="Follow" resultType="Follow">
         SELECT
-            FOLLOWING ,
             COUNT(*) as count
         FROM FOLLOW
-        GROUP BY FOLLOWING , FOLLOWER
+        GROUP BY FOLLOWER
         HAVING FOLLOWER = #{follower}
     </select>
 

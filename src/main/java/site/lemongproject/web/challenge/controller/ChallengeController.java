@@ -92,4 +92,15 @@ public class ChallengeController {
         return ResponseBuilder.success(result);
     }
 
+    // 현재 내가 참여하고있는 챌린지 리스트
+    @GetMapping("/myChallengeList")
+    public ResponseBody<ChallengeUser> myChallengeList(@RequestParam(value = "userNo" , required = false) int userNo) {
+        ChallengeUser u = new ChallengeUser();
+        u.setUserNo(userNo);
+
+        List<ChallengeUser> cList = challengeService.myChallengeList(u);
+
+        return ResponseBuilder.success(cList);
+    }
+
 }

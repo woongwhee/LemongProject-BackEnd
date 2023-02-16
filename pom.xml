@@ -269,13 +269,24 @@
         </dependency>
 
         <!-- 소켓통신 -->
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.springframework/spring-websocket &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework</groupId>-->
+<!--            <artifactId>spring-websocket</artifactId>-->
+<!--            <version>${org.springframework-version}</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-websocket -->
+
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-websocket</artifactId>
             <version>${org.springframework-version}</version>
         </dependency>
-
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-websocket</artifactId>-->
+<!--        </dependency>-->
         <!--
             웹소켓 편하게 사용할 수 있게 도와주는 설정.
             ex) @ServerEndpoint("/리액트 프론트 서버와 소켓 통신할 주소 경로")
@@ -285,7 +296,7 @@
             <artifactId>javax.websocket-api</artifactId>
             <version>1.1</version>
         </dependency>
-
+<!---->
     </dependencies>
 
 

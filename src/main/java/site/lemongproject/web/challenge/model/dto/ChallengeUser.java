@@ -16,4 +16,5 @@ public class ChallengeUser {
     private Profile profile;
     private int clearCount;
     private ChallengeUserStatus status;
+    private Challenge challenge;
 }

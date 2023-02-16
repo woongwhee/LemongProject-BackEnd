@@ -22,4 +22,5 @@ public interface ChallengeDao {
 
     List<ChallengeListVo> findReady(int page, int limit);
 
+    List<ChallengeUser> myChallengeList(ChallengeUser u);
 }

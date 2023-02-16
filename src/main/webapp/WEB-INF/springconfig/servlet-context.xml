@@ -5,7 +5,8 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:task="http://www.springframework.org/schema/task"
        xmlns:beans="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
@@ -31,6 +32,27 @@
     <mvc:resources mapping="/resources/**" location="/resources/" />
     <!-- http://localhost:8081/api/images/이미지명.jpg 로 이미지를 불러와서 사용할것이다.-->
     <!-- IMAGE VIEW -->
-    <mvc:resources mapping="/images/**" location="file:///C:/LemongProject/src/main/webapp/resources/images/userProfile/" />
+<!--    <mvc:resources mapping="/images/**" location="file:///C:/LemongProject/src/main/webapp/resources/images/userProfile/" />-->
+
+    <!-- webSocket 요청시 핸들러 클래스와 연결하기. -->
+<!--    <beans:bean id="chatHandler" class="site.lemongproject.web.challenge.websocket.ChallengeChatWebsocketHandler"/>-->
+
+<!--    <websocket:handlers>-->
+
+<!--        &lt;!&ndash; 웹소켓 요청(주소)를 처리한 bean 지정 &ndash;&gt;-->
+<!--        <websocket:mapping handler="chatHandler" path="/chat/"/>-->
+<!--        <websocket:handshake-interceptors>-->
+<!--            &lt;!&ndash;-->
+<!--                interceptor : http통신에서 request와 response를 가로채는 역활.-->
+<!--                handshake-interceptors :-->
+<!--                    요청 관련 데이터중 httpSession(로그인정보, 채팅방번호)을 가로채서-->
+<!--                    webSocketSession에게 넣어줌.-->
+<!--             &ndash;&gt;-->
+<!--            <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>-->
+<!--        </websocket:handshake-interceptors>-->
+<!--        &lt;!&ndash; SockJS라이브러리를 이용해서 만들어진 웹소켓 객체임을 의미. &ndash;&gt;-->
+<!--        <websocket:sockjs/>-->
+
+<!--    </websocket:handlers>-->
 
 </beans>

@@ -67,4 +67,9 @@ public class MyBatisChallengeDao implements ChallengeDao{
         RowBounds rowBounds=new RowBounds(offSet,limit);
         return session.selectList("challengeMapper.findReady",null,rowBounds);
     }
+
+    @Override
+    public List<ChallengeUser> myChallengeList(ChallengeUser u){
+        return session.selectList("challengeUserMapper.myChallengeList" , u);
+    }
 }
