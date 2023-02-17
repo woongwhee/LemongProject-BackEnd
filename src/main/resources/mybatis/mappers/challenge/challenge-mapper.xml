@@ -14,6 +14,7 @@
         <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser"/>
     </resultMap>
     <resultMap id="ReadyListMap" type="ChallengeListVo">
+        <id column="CHALLENGE_NO" property="challengeNo"/>
         <result column="CHALLENGE_TITLE" property="title"/>
         <result column="START_DATE" property="startDate"/>
         <result column="END_DATE" property="endDate"/>
@@ -52,7 +53,6 @@
         VALUES
         (#{challengeNo},#{userNo},#{templateNo},#{startDate},#{status},#{challengeInfo},#{challengeTitle})
     </insert>
-
     <select id="findDetail" parameterType="int" resultMap="DetailMap">
         SELECT *
         FROM CHALLENGE
@@ -74,11 +74,24 @@
         WHERE  c.STATUS = 'PLAY'
         AND CHALLENGE_NO=#{challengeNo}
     </select>
+    <select id="findRoomList" parameterType="int" resultMap="RoomMap">
+        SELECT c.*,t.TODO_COUNT
+        FROM CHALLENGE c
+                 JOIN TEMPLATE T on c.TEMPLATE_NO=t.TEMPLATE_NO
+        WHERE  c.STATUS = 'PLAY' and c.STATUS
+          AND CHALLENGE_NO=#{challengeNo}
+    </select>
     <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
         SELECT *
         FROM CHALLENGE
         WHERE CHALLENGE_NO = #{challengeNo}
     </select>
+    <select id="findOne" parameterType="Challenge" resultMap="challengeMap">
+        SELECT *
+        FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengeNo}
+    </select>
+
     <select id="findByTemplate" parameterType="_int" resultMap="ReadyListMap">
         SELECT *
         FROM CHALLENGE c

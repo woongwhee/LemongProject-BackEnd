@@ -65,7 +65,6 @@ public class ChallengeController {
     @DeleteMapping("/cancel/{challengeNo}")
     public ResponseBody<Challenge> cancelChallenge(@SessionAttribute("loginUser") Profile loginUser, @PathVariable("challengeNo") int challengeNo) {
         int result = challengeService.cancelMulti(new ChallengeUserVo(loginUser.getUserNo(),challengeNo,ChallengeUserStatus.CANCEL));
-
         if (result > 0) {
             return ResponseBuilder.success(result);
         } else {
@@ -80,7 +79,6 @@ public class ChallengeController {
         List<Challenge> cOne = challengeService.detailChallenge(c);
         return ResponseBuilder.success(cOne);
     }
-
     // 챌린지 참여하기 버튼 클릭 시 ready상태로 insert됨 -> 그 후 챌린지 시작하기 버튼 클릭 시 play상태로 변경.
     // ready상태에서도 채팅방 사용 가능.
 
@@ -93,7 +91,6 @@ public class ChallengeController {
         } else {
             return ResponseBuilder.success(list);
         }
-
     }
     @GetMapping("/detail/ready/{challengeNo}")
     public ResponseBody<ChallengeDetailVo> readyDetail(@PathVariable("challengeNo") int challengeNo) {
@@ -124,17 +121,16 @@ public class ChallengeController {
         }
     }
 
-    @GetMapping("/challengeGo")
-    public ResponseBody<ChallengeUser> challengeGo(@RequestParam(value = "challNo", required = false) int challNo,
-                                                   @RequestParam(value = "userNo", required = false) int userNo) {
 
-        ChallengeUser u = new ChallengeUser();
-        u.setChallengeNo(challNo);
-        u.setUserNo(userNo);
+    @GetMapping("/list/room/{userNo}")
+    public ResponseBody<ChallengeListVo> mypageChallenge(@RequestParam("userNo") int userNo){
 
-        int result = challengeService.challengeGo(u);
-
-        return ResponseBuilder.success(result);
+        List<ChallengeListVo> challengeList = challengeService.profileChallengeList(userNo);
+        if(challengeList!=null) {
+            return ResponseBuilder.success(challengeList);
+        }else{
+            return ResponseBuilder.findNothing();
+        }
     }
 
 }

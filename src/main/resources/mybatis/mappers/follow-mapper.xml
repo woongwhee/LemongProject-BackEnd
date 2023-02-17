@@ -49,8 +49,8 @@
     <delete id="followDelete" parameterType="Follow">
         DELETE
         FROM FOLLOW
-        WHERE FOLLOWER = #{follower}
-        AND FOLLOWING = #{following}
+        WHERE FOLLOWER = #{following}
+        AND FOLLOWING = #{follower}
     </delete>
 
     <!--
