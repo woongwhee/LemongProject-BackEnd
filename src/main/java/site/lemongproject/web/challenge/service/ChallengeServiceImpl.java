@@ -72,10 +72,7 @@ public class ChallengeServiceImpl implements ChallengeService {
             result *= userDao.deleteUser(userVo);
             userCount=userDao.countPlayer(userVo.getChallengeNo());
         } else if (challenge.getStatus() == ChallengeStatus.PLAY) {
-            System.out.println(result+"sdfnkds33nf");
-            System.out.println(userVo+"sdfnkds22nf");
             result *= userDao.cancelUser(userVo);
-            System.out.println(result+"sdfnkd11snf");
         }
         if (result == 0) {
             return 0;
@@ -256,5 +253,9 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     public int challengeGo(ChallengeUser u) {
         return challengeDao.challengeGo(u);
+    }
+
+    public List<ChallengeUser> myChallengeList(ChallengeUser u){
+        return userDao.myChallengeList(u);
     }
 }

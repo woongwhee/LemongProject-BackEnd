@@ -30,6 +30,7 @@
     <typeHandlers>
         <typeHandler handler="site.lemongproject.common.type.handler.NameEnumTypeHandler"/>
         <typeHandler handler="site.lemongproject.common.type.handler.LocalDateTypeHandler"/>
+        <typeHandler handler="site.lemongproject.common.type.handler.LocalDateTimeTypeHandler"/>
         <typeHandler handler="site.lemongproject.common.type.handler.ChallengeOptionTypeHandler"/>
     </typeHandlers>
     <mappers>
@@ -40,7 +41,6 @@
         <mapper resource="mybatis/mappers/reply-mapper.xml"/>
         <mapper resource="mybatis/mappers/feed-mapper.xml"/>
         <mapper resource="mybatis/mappers/holiday-mapper.xml"/>
-
         <mapper resource="mybatis/mappers/template/template-mapper.xml"/>
         <mapper resource="mybatis/mappers/template/templatetodo-mapper.xml"/>
         <mapper resource="mybatis/mappers/template/templatecategory-mapper.xml"/>
@@ -51,6 +51,6 @@
         <mapper resource="mybatis/mappers/challenge/challenge-mapper.xml"/>
         <mapper resource="mybatis/mappers/challenge/challengechat-mapper.xml"/>
         <mapper resource="mybatis/mappers/challenge/challengetodo-mapper.xml"/>
-<!--        <mapper resource="mybatis/mappers/emailconfirm-mapper.xml" />-->
+        <mapper resource="mybatis/mappers/challenge/challengeuser-mapper.xml"/>
     </mappers>
 </configuration>
