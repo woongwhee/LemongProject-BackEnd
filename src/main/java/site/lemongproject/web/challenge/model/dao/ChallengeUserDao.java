@@ -1,7 +1,9 @@
 package site.lemongproject.web.challenge.model.dao;
 
+import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.dto.ChallengeUser;
+import site.lemongproject.web.challenge.model.vo.ChallengeListVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 
 import java.util.List;
@@ -62,6 +64,6 @@ public interface ChallengeUserDao {
     int countPlayer(int challengeNo);
 
     boolean inChallenge(ChallengeUserVo userVo);
-    List<ChallengeUser> myChallengeList(ChallengeUser u);
+    List<ChallengeListVo> profileChallengeList(int userNo);
 
 }

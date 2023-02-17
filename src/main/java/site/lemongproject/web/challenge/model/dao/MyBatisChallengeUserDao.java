@@ -3,8 +3,10 @@ package site.lemongproject.web.challenge.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeTodo;
 import site.lemongproject.web.challenge.model.dto.ChallengeUser;
+import site.lemongproject.web.challenge.model.vo.ChallengeListVo;
 import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 
 import java.util.List;
@@ -44,9 +46,8 @@ public class MyBatisChallengeUserDao implements ChallengeUserDao {
     public boolean inChallenge(ChallengeUserVo userVo) {
         return sqlSession.selectOne("challengeUserMapper.inChallenge", userVo);
     }
-    @Override
-    public List<ChallengeUser> myChallengeList(ChallengeUser u){
-        return sqlSession.selectList("challengeUserMapper.myChallengeList" , u);
+    public List<ChallengeListVo> profileChallengeList(int userNo){
+        return sqlSession.selectList("challengeUserMapper.profileChallengeList" , userNo);
     }
 
 

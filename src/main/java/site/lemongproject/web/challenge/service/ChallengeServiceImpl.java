@@ -251,11 +251,8 @@ public class ChallengeServiceImpl implements ChallengeService {
         return challengeDao.detailChallenge(c);
     }
 
-    public int challengeGo(ChallengeUser u) {
-        return challengeDao.challengeGo(u);
-    }
 
-    public List<ChallengeUser> myChallengeList(ChallengeUser u){
-        return userDao.myChallengeList(u);
+    public List<ChallengeListVo> profileChallengeList(int userNo){
+        return userDao.profileChallengeList(userNo);
     }
 }
