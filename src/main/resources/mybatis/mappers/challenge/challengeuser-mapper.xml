@@ -10,6 +10,30 @@
         <result column="STATUS" property="status"/>
         <association property="photo" resultMap="photoMapper.photoMap"/>
     </resultMap>
+    <resultMap id="challengeUserMap" type="ChallengeUser">
+        <result column="CHALLENGE_NO" property="challengeNo" />
+        <result column="USER_NO" property="userNo" />
+        <result column="STATUS"  property="status" />
+        <result column="CLEAR_COUNT" property="clearCount" />
+        <association property="challenge" resultMap="challengeMapper.challengeMap"/>
+    </resultMap>
+
+    <select id="myChallengeList" parameterType="ChallengeUser" resultMap="challengeUserMap">
+        SELECT
+            CU.CHALLENGE_NO ,
+            CU.USER_NO ,
+            CU.STATUS ,
+            CLEAR_COUNT ,
+            CHALLENGE_TITLE ,
+            CHALLENGE_INFO ,
+            START_DATE ,
+            END_DATE ,
+            CREATE_AT
+        FROM CHALLENGE_USER CU
+                 LEFT JOIN CHALLENGE C ON(CU.CHALLENGE_NO = C.CHALLENGE_NO)
+        WHERE CU.STATUS = 'PLAY'
+          AND CU.USER_NO = #{userNo}
+    </select>
     <select id="findPlayer" parameterType="Map" resultMap="ProfileMap">
         SELECT cu.USER_NO,NICK_NAME, ceil(CLEAR_COUNT/#{todoCount}*100) AS "PERCENT",cu.STATUS as STATUS,p.*
         FROM CHALLENGE_USER cu

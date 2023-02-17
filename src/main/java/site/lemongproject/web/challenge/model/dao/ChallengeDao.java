@@ -30,5 +30,4 @@ public interface ChallengeDao {
     int startChallenge();
     int finishChallenge();
 
-    List<ChallengeUser> myChallengeList(ChallengeUser u);
 }
