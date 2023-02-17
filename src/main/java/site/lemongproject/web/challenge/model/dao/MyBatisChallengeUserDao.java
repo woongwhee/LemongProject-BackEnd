@@ -8,49 +8,53 @@ import site.lemongproject.web.challenge.model.vo.ChallengeUserVo;
 
 @Repository
 @RequiredArgsConstructor
-public class MyBatisChallengeUserDao implements ChallengeUserDao{
+public class MyBatisChallengeUserDao implements ChallengeUserDao {
     final private SqlSession sqlSession;
+
     @Override
     public int joinUser(ChallengeUserVo joinVo) {
-        return sqlSession.insert("challengeUserMapper.joinUser",joinVo);
+        return sqlSession.insert("challengeUserMapper.joinUser", joinVo);
     }
+
     @Override
     public int changeClear(ChallengeTodo todo) {
-        return sqlSession.update("challengeUserMapper.changeClear",todo);
+        return sqlSession.update("challengeUserMapper.changeClear", todo);
     }
+
+
     @Override
-    public int adjustClearCount(){
-        return sqlSession.update("challengeUserMapper.adjustClearCount");
+    public int cancelUser(ChallengeUserVo userVo) {
+        return sqlSession.update("challengeUserMapper.cancelUser", userVo);
     }
+
+    @Override
+    public int deleteUser(ChallengeUserVo userVo) {
+        return sqlSession.update("challengeUserMapper.deleteUser", userVo);
+    }
+
+    @Override
+    public int countPlayer(int challengeNo) {
+        return sqlSession.selectOne("challengeUserMapper.countPlayer", challengeNo);
+    }
+
+    @Override
+    public boolean inChallenge(ChallengeUserVo userVo) {
+        return sqlSession.selectOne("challengeUserMapper.inChallenge", userVo);
+    }
+
     @Override
     public int finishChallenge(float CLEAR_PERCENT) {
-        return sqlSession.update("challengeUserMapper.challengeFinish",CLEAR_PERCENT);
+        return sqlSession.update("challengeUserMapper.challengeFinish", CLEAR_PERCENT);
     }
+
+    @Override
+    public int adjustClearCount() {
+        return sqlSession.update("challengeUserMapper.adjustClearCount");
+    }
+
     @Override
     public int startChallenge() {
         return sqlSession.update("challengeUserMapper.challengeStart");
     }
 
-    @Override
-    public int cancelUser(ChallengeUserVo userVo) {
-            return sqlSession.update("challengeUserMapper.cancelUser");
-
-    }
-
-    @Override
-    public int deleteUser(ChallengeUserVo userVo) {
-        return sqlSession.update("challengeUserMapper.deleteUser");
-    }
-
-
-
-    @Override
-    public int countPlayer(int challengeNo) {
-        return sqlSession.selectOne("challengeUserMapper.countPlayer",challengeNo);
-    }
-
-    @Override
-    public boolean inChallenge(ChallengeUserVo userVo) {
-        return sqlSession.selectOne("challengeUserMapper.inChallenge",userVo) ;
-    }
 }

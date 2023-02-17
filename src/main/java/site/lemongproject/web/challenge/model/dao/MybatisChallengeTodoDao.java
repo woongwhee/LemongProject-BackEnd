@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MybatisChallengeTodoDao implements ChallengeTodoDao{
     final private SqlSession session;
-
     @Override
     public int insertTodoList(CGTodoInsertVo insertVo) {
         return session.insert("challengeTodoMapper.insertTodo",insertVo);
@@ -38,11 +37,6 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
         return session.update("challengeTodoMapper.clearChallengeTodo",clearVo) ;
     }
 
-//    @Override
-//    public  int clearChallengeTodo(ChallengeTodo cTd){
-//        return session.update("challengeTodoMapper.clearChTodo", cTd);
-//    }
-
     @Override
     public List<ChallengeTodo> calChTodo(ChallengeTodo ct){
         return session.selectList("challengeTodoMapper.calChTodo", ct);
@@ -58,7 +52,7 @@ public class MybatisChallengeTodoDao implements ChallengeTodoDao{
 
     @Override
     public int deletePlay(ChallengeUserVo userVo) {
-        return session.selectOne("challengeTodoMapper.deletePlay",userVo);
+        return session.delete("challengeTodoMapper.deletePlay",userVo);
     }
 
 

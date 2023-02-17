@@ -152,8 +152,9 @@ public class TemplateController {
 
 
     @PostMapping("/review/insert")
-    public ResponseBody<Integer> reviewInsert(@SessionAttribute("loginUser")Profile loginUser, ReviewInsertVo riv){
+    public ResponseBody<Integer> reviewInsert(@SessionAttribute("loginUser")Profile loginUser, @RequestBody ReviewInsertVo riv){
         riv.setUserNo(loginUser.getUserNo());
+        System.out.println(riv);
         int result= tpReadService.insertReview(riv);
         if(result>0){
             return ResponseBuilder.success(result);

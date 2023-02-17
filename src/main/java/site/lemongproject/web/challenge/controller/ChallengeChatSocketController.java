@@ -27,7 +27,6 @@ import java.util.Set;
 public class ChallengeChatSocketController {
 
     private static Set<Session> clients = Collections.synchronizedSet(new HashSet<Session>());
-
     private static ChallengeService challengeService;
     //
     @Inject
@@ -96,11 +95,9 @@ public class ChallengeChatSocketController {
 
         }
     }
-
     @OnClose
     public void onClose(Session session) {
         System.out.println("session close : {}" + session);
         clients.remove(session);
     }
-
 }

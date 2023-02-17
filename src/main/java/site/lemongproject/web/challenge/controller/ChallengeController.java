@@ -65,7 +65,6 @@ public class ChallengeController {
     @DeleteMapping("/cancel/{challengeNo}")
     public ResponseBody<Challenge> cancelChallenge(@SessionAttribute("loginUser") Profile loginUser, @PathVariable("challengeNo") int challengeNo) {
         int result = challengeService.cancelMulti(new ChallengeUserVo(loginUser.getUserNo(),challengeNo,ChallengeUserStatus.CANCEL));
-
         if (result > 0) {
             return ResponseBuilder.success(result);
         } else {
@@ -80,7 +79,6 @@ public class ChallengeController {
         List<Challenge> cOne = challengeService.detailChallenge(c);
         return ResponseBuilder.success(cOne);
     }
-
     // 챌린지 참여하기 버튼 클릭 시 ready상태로 insert됨 -> 그 후 챌린지 시작하기 버튼 클릭 시 play상태로 변경.
     // ready상태에서도 채팅방 사용 가능.
 

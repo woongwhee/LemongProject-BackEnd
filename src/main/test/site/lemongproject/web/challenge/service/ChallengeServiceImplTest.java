@@ -79,4 +79,11 @@ public class ChallengeServiceImplTest extends Configure {
         ChallengeDetailVo detail = challengeService.getDetail(3000);
         System.out.println(detail);
     }
+    @Test
+    public void cancel(){
+        ChallengeUserVo cuv=new ChallengeUserVo(134,3000,ChallengeUserStatus.PLAY);
+
+        int i = challengeService.cancelMulti(cuv);
+        System.out.println(i);
+    }
 }
