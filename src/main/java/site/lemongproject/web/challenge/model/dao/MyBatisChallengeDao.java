@@ -3,8 +3,8 @@ package site.lemongproject.web.challenge.model.dao;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import site.lemongproject.common.type.ChallengeStatus;
 import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeUser;
 import site.lemongproject.web.challenge.model.vo.*;
@@ -44,10 +44,6 @@ public class MyBatisChallengeDao implements ChallengeDao{
         return session.selectList("challengeMapper.detailChallenge" , c);
     }
 
-    @Override
-    public int challengeGo(ChallengeUser u){
-        return session.insert("challengeMapper.challengeGo" , u);
-    }
 
     @Override
     public Challenge findOne(int challengeNo) {
@@ -60,6 +56,7 @@ public class MyBatisChallengeDao implements ChallengeDao{
         RowBounds rowBounds=new RowBounds(offSet,limit);
         return session.selectList("challengeMapper.findReady",null,rowBounds);
     }
+
 
     @Override
     public ChallengeDetailVo findDetail(int challengeNo) {

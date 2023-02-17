@@ -119,9 +119,7 @@
         ]]>
     </select>
     <delete id="deletePlay" parameterType="ChallengeUserVo">
-        DELETE CHALLENGE_TODO
-        WHERE CHALLENGE_NO=#{challengeNo}
-        AND USER_NO=#{userNo}
+        DELETE CHALLENGE_TODO WHERE CHALLENGE_NO=#{challengeNo} AND USER_NO=#{userNo}
     </delete>
 
 </mapper>

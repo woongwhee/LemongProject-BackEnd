@@ -68,7 +68,7 @@ public class TpReadServiceTest extends Configure{
         ReviewInsertVo riv=new ReviewInsertVo();
         riv.setUserNo(TEST_USER_NO);
         riv.setTemplateNo(TEST_TP_NO);
-        riv.setReviewDetail("리뷰테스트");
+        riv.setContent("리뷰테스트");
         int result=readService.insertReview(riv);
         assertThat(result).isEqualTo(1);
     }
