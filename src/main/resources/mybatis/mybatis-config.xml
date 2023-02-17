@@ -30,6 +30,7 @@
     <typeHandlers>
         <typeHandler handler="site.lemongproject.common.type.handler.NameEnumTypeHandler"/>
         <typeHandler handler="site.lemongproject.common.type.handler.LocalDateTypeHandler"/>
+        <typeHandler handler="site.lemongproject.common.type.handler.LocalDateTimeTypeHandler"/>
         <typeHandler handler="site.lemongproject.common.type.handler.ChallengeOptionTypeHandler"/>
     </typeHandlers>
     <mappers>

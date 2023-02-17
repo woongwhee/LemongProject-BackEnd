@@ -61,10 +61,6 @@ public class MyBatisChallengeDao implements ChallengeDao{
         return session.selectList("challengeMapper.findReady",null,rowBounds);
     }
 
-    @Override
-    public List<ChallengeUser> myChallengeList(ChallengeUser u){
-        return session.selectList("challengeUserMapper.myChallengeList" , u);
-    }
 
     @Override
     public ChallengeDetailVo findDetail(int challengeNo) {

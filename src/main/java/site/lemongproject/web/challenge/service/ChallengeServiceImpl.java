@@ -255,6 +255,6 @@ public class ChallengeServiceImpl implements ChallengeService {
     }
 
     public List<ChallengeUser> myChallengeList(ChallengeUser u){
-        return challengeDao.myChallengeList(u);
+        return userDao.myChallengeList(u);
     }
 }
