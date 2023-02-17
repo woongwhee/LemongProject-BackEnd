@@ -59,7 +59,7 @@
         WHERE CHALLENGE_NO = #{challengNo}
     </select>
     <select id="findReady" resultMap="ReadyListMap">
-        SELECT c.*,
+        SELECT c.*, up.*,p.*,
             (select count(*) from CHALLENGE_USER cu where CHALLENGE_NO=c.CHALLENGE_NO AND cu.STATUS='READY')as USER_COUNT
         FROM CHALLENGE c
              JOIN USER_PROFILE up ON up.USER_NO = c.CREATE_USER

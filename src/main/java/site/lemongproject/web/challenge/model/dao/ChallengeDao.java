@@ -18,7 +18,6 @@ public interface ChallengeDao {
 
     List<Challenge> detailChallenge(Challenge c);
 
-    int challengeGo(ChallengeUser u);
 
     Challenge findOne(int challengeNo);
 
