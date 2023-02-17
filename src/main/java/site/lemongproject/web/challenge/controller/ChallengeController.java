@@ -91,7 +91,6 @@ public class ChallengeController {
         } else {
             return ResponseBuilder.success(list);
         }
-
     }
     @GetMapping("/detail/ready/{challengeNo}")
     public ResponseBody<ChallengeDetailVo> readyDetail(@PathVariable("challengeNo") int challengeNo) {
@@ -122,17 +121,16 @@ public class ChallengeController {
         }
     }
 
-    @GetMapping("/challengeGo")
-    public ResponseBody<ChallengeUser> challengeGo(@RequestParam(value = "challNo", required = false) int challNo,
-                                                   @RequestParam(value = "userNo", required = false) int userNo) {
 
-        ChallengeUser u = new ChallengeUser();
-        u.setChallengeNo(challNo);
-        u.setUserNo(userNo);
+    @GetMapping("/list/room/{userNo}")
+    public ResponseBody<ChallengeListVo> mypageChallenge(@RequestParam("userNo") int userNo){
 
-        int result = challengeService.challengeGo(u);
-
-        return ResponseBuilder.success(result);
+        List<ChallengeListVo> challengeList = challengeService.profileChallengeList(userNo);
+        if(challengeList!=null) {
+            return ResponseBuilder.success(challengeList);
+        }else{
+            return ResponseBuilder.findNothing();
+        }
     }
 
 }

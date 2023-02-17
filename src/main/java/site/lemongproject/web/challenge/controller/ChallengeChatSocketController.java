@@ -1,5 +1,6 @@
 package site.lemongproject.web.challenge.controller;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.stereotype.Component;
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.socket.WebSocketSession;
-import site.lemongproject.common.config.ChatConfigurator;
+//import site.lemongproject.common.config.ChatConfigurator;
 import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 import site.lemongproject.web.challenge.service.ChallengeService;
 import site.lemongproject.web.member.model.vo.Profile;
@@ -24,7 +25,8 @@ import java.util.Set;
 
 //@Component
 @Service
-@ServerEndpoint(value = "/socket/chatt/{chatRoomNo}" , configurator = ChatConfigurator.class)
+@ServerEndpoint(value = "/socket/chatt/{chatRoomNo}" )
+//@ServerEndpoint(value = "/socket/chatt/{chatRoomNo}" , configurator = ChatConfigurator.class)
 //@RequiredArgsConstructor // 이거 있으면 오류뜨기 때문에 직접 this. ... 해서 생성자 만들어 줄 것.
 public class ChallengeChatSocketController {
 
@@ -68,7 +70,9 @@ public class ChallengeChatSocketController {
 
         JsonParser parse = new JsonParser();
         Object obj = parse.parse(message);
-
+        Gson gson=new Gson();
+        ChallengeChat challengeChat = gson.fromJson(message, ChallengeChat.class);
+        System.out.println(challengeChat+"팻이에요");
         JsonObject jsonObj = (JsonObject)obj;
 
         // 이름(보낸사람)
@@ -102,14 +106,10 @@ public class ChallengeChatSocketController {
             if (chatRoomsNo == (int) s.getUserProperties().get("chatRoomNo")) {
                 System.out.println("send data : {}" + message); // 리액트에서 넘어오는 채팅 데이터
 
-            if (!s.equals(session)) {
-
-                }
-                challengeService.insertChatData(c);
-                    s.getBasicRemote().sendText(message);
+            challengeService.insertChatData(c);
+            s.getBasicRemote().sendText(message);
             }
         }
-
     }
 
     @OnClose

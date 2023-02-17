@@ -17,9 +17,6 @@ public interface ChallengeDao {
     List<Challenge> selectChallenge();
 
     List<Challenge> detailChallenge(Challenge c);
-
-    int challengeGo(ChallengeUser u);
-
     Challenge findOne(int challengeNo);
 
     List<ChallengeListVo> findReady(int page, int limit);
