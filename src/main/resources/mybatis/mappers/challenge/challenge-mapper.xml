@@ -14,6 +14,7 @@
         <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser"/>
     </resultMap>
     <resultMap id="ReadyListMap" type="ChallengeListVo">
+        <id column="CHALLENGE_NO" property="challengeNo"/>
         <result column="CHALLENGE_TITLE" property="title"/>
         <result column="START_DATE" property="startDate"/>
         <result column="END_DATE" property="endDate"/>
@@ -75,6 +76,11 @@
         AND CHALLENGE_NO=#{challengeNo}
     </select>
     <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
+        SELECT *
+        FROM CHALLENGE
+        WHERE CHALLENGE_NO = #{challengeNo}
+    </select>
+    <select id="findOne" parameterType="Challenge" resultMap="challengeMap">
         SELECT *
         FROM CHALLENGE
         WHERE CHALLENGE_NO = #{challengeNo}

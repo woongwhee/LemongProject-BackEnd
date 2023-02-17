@@ -32,7 +32,7 @@
 
   <insert id="insertOne" parameterType="ReviewInsertVo">
     insert into REVIEW (REVIEW_NO, TEMPLATE_NO, USER_NO, REVIEW_DETAIL, REVIEW_AT)
-    values (SEQ_REVIEW.nextval, #{templateNo}, #{userNo}, #{reviewDetail}, SYSDATE)
+    values (SEQ_REVIEW.nextval, #{templateNo}, #{userNo}, #{content}, SYSDATE)
   </insert>
 
 </mapper>

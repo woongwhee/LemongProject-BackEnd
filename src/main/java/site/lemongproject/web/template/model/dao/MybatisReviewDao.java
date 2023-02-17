@@ -12,6 +12,9 @@ import java.util.List;
 @Repository
 public class MybatisReviewDao implements ReviewDao{
     final private SqlSession session;
+
+
+
     @Override
     public int insertOne(ReviewInsertVo riv) {
         return session.insert("reviewMapper.insertOne",riv);
@@ -22,7 +25,7 @@ public class MybatisReviewDao implements ReviewDao{
     }
     @Override
     public List<Review> findByTp(int templateNo) {
-        return session.selectList("reviewMapper.findByTp",templateNo);
+        return session.selectList("reviewMapper.findByTemplate",templateNo);
     }
     @Override
     public int deleteOne(ReviewDeleteVo reviewDeleteVo) {

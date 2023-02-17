@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @ToString
 @Alias("ChallengeListVo")
 public class ChallengeListVo {
+    private int challengeNo;
     private String title;
     private LocalDate startDate;
     private LocalDate endDate;

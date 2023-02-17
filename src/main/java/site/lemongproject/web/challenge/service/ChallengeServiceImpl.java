@@ -67,11 +67,15 @@ public class ChallengeServiceImpl implements ChallengeService {
         Challenge challenge = challengeDao.findOne(userVo.getChallengeNo());
         int result = todoDao.deletePlay(userVo);
         int userCount = 0;
+        System.out.println(challenge);
         if (challenge.getStatus() == ChallengeStatus.READY||challenge.getStatus() == ChallengeStatus.SINGLE) {
             result *= userDao.deleteUser(userVo);
             userCount=userDao.countPlayer(userVo.getChallengeNo());
         } else if (challenge.getStatus() == ChallengeStatus.PLAY) {
+            System.out.println(result+"sdfnkds33nf");
+            System.out.println(userVo+"sdfnkds22nf");
             result *= userDao.cancelUser(userVo);
+            System.out.println(result+"sdfnkd11snf");
         }
         if (result == 0) {
             return 0;
