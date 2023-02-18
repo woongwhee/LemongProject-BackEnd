@@ -13,9 +13,11 @@
             <beans:bean id="loginInterceptor" class="site.lemongproject.common.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
     <context:component-scan base-package="site.lemongproject"/>
     <mvc:annotation-driven />
     <task:annotation-driven />
+
     <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <beans:property name="prefix" value="/WEB-INF/views/" />
         <beans:property name="suffix" value=".jsp" />
