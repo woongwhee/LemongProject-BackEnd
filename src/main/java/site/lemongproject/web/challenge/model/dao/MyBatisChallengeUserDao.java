@@ -46,9 +46,6 @@ public class MyBatisChallengeUserDao implements ChallengeUserDao {
     public boolean inChallenge(ChallengeUserVo userVo) {
         return sqlSession.selectOne("challengeUserMapper.inChallenge", userVo);
     }
-    public List<ChallengeListVo> profileChallengeList(int userNo){
-        return sqlSession.selectList("challengeUserMapper.profileChallengeList" , userNo);
-    }
 
 
     @Override

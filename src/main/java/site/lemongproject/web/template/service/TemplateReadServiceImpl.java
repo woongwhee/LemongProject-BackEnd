@@ -89,5 +89,10 @@ public class TemplateReadServiceImpl implements TemplateReadService {
         return templateCategoryDao.findList();
     }
 
+    @Override
+    public List<TemplateListVo> getUserTemplateList(int userNo) {
+        return templateDao.findByUser(userNo);
+    }
+
 
 }

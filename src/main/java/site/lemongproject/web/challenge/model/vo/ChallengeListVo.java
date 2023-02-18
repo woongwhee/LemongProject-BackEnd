@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.apache.ibatis.type.Alias;
+import site.lemongproject.common.type.ChallengeUserStatus;
 import site.lemongproject.web.member.model.vo.Profile;
+import site.lemongproject.web.template.model.dto.TemplateCategory;
 
 import java.time.LocalDate;
 
@@ -18,5 +20,8 @@ public class ChallengeListVo {
     private LocalDate startDate;
     private LocalDate endDate;
     private int userCount;
+    private ChallengeUserStatus status;
     private Profile createUser;
+    private TemplateCategory category;
+
 }
