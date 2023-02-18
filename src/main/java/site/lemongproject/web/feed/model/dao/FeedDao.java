@@ -5,6 +5,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.feed.model.dto.*;
+import site.lemongproject.web.feed.model.vo.ReplyAlarm;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
 
@@ -151,4 +152,15 @@ public class FeedDao {
 
     public int countFeed() {return sqlSession.selectOne("feedMapper.countFeed");
     }
+
+    public ReplyAlarm selectReplyNo(Map<String,Object> paramMap) {
+        return sqlSession.selectOne("replyMapper.selectReplyNo", paramMap);
+    }
+//    public ReplyAlarm selectReplyNo(Map<String,Object> paramMap) {
+//        return sqlSession.selectOne("replyMapper.selectReplyNo", paramMap);
+//    }
+
+//    public ReplyAlarm selectReciver(Map<String, Object> paramMap) {
+//        return sqlSession.selectMap("replyMapper.selectReply",paramMap);
+//    }
 }

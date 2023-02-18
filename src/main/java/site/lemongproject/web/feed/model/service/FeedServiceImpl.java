@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.dto.*;
 import site.lemongproject.web.feed.model.vo.Reply;
+import site.lemongproject.web.feed.model.vo.ReplyAlarm;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.photo.model.vo.Photo;
 
@@ -72,8 +73,21 @@ public class FeedServiceImpl implements FeedService{
     // 피드 댓글 등록
     @Override
     public int insertFeedReply(Map<String, Object> paramMap){
-        return feedDao.insertFeedReply(paramMap);
+        // param = 로그인NO(보낸사람)(loginUserNo), feedNo, replyContent
+        int result = feedDao.insertFeedReply(paramMap);
+        // 댓글번호
+//        paramMap.put("replyNo",feedDao.selectReplyNo(paramMap));
+        System.out.println(feedDao.selectReplyNo(paramMap));
+        // 댓글시간
+//        paramMap.put("replyAt",feedDao.selectReplyNo(paramMap));
+        // 받은사람
+//        paramMap.put("replyNo",feedDao.selectReplyNo(paramMap));
+
+//        int alarmReply = feedDao.insertReplyAlarm(paramMap);
+        return result;
     }
+
+
     // 피드 댓글 불러오기
     @Override
     public List<Reply> listReply(int feedNo) {return feedDao.listReply(feedNo);}
