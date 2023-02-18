@@ -27,9 +27,7 @@
         <beans:property name="defaultEncoding" value="UTF-8" />
     </beans:bean>
 
-    <mvc:resources mapping="/resources/**" location="/resources/" />
     <!-- http://localhost:8081/api/images/이미지명.jpg 로 이미지를 불러와서 사용할것이다.-->
     <!-- IMAGE VIEW -->
-    <mvc:resources mapping="/images/**" location="file:///C:/LemongProject/src/main/webapp/resources/images/userProfile/" />
 
 </beans>
