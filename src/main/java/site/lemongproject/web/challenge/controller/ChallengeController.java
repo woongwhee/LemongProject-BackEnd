@@ -120,11 +120,8 @@ public class ChallengeController {
             return ResponseBuilder.upLoadFail();
         }
     }
-
-
     @GetMapping("/list/room/{userNo}")
-    public ResponseBody<ChallengeListVo> mypageChallenge(@RequestParam("userNo") int userNo){
-
+    public ResponseBody<ChallengeListVo> mypageChallenge(@PathVariable("userNo") int userNo){
         List<ChallengeListVo> challengeList = challengeService.profileChallengeList(userNo);
         if(challengeList!=null) {
             return ResponseBuilder.success(challengeList);
@@ -132,5 +129,4 @@ public class ChallengeController {
             return ResponseBuilder.findNothing();
         }
     }
-
 }

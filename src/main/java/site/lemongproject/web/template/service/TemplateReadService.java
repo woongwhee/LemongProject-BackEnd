@@ -24,4 +24,6 @@ public interface TemplateReadService {
     Review getReviewOne(int reviewNo);
 
     List<TemplateCategory> getTemplateCategory();
+
+    List<TemplateListVo> getUserTemplateList(int userNo);
 }

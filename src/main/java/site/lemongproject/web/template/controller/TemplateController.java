@@ -45,6 +45,15 @@ public class TemplateController {
         System.out.println(count);
         return ResponseBuilder.success(count);
     }
+    @GetMapping(value = {"/profile/list/{userNo}"})
+    public ResponseBody<List<TemplateListVo>> list(@PathVariable(value="userNo")int userNo) {
+        List<TemplateListVo> templateList = tpReadService.getUserTemplateList(userNo);
+        if (templateList != null) {
+            return ResponseBuilder.success(templateList);
+        } else {
+            return ResponseBuilder.findNothing();
+        }
+    }
     @GetMapping(value = {"/one/{templateNo}"})
     public ResponseBody<List<TemplateDetailVo>> list(@PathVariable(value = "templateNo") int templateNo,@SessionAttribute("loginUser")Profile loginUser) {
         TemplateDetailVo template = tpReadService.getTemplateDetail(new TemplateFindVo(templateNo,loginUser.getUserNo()));
@@ -91,13 +100,10 @@ public class TemplateController {
 
     @PutMapping("/unsave/update")
     public ResponseBody<Integer> updateUnSave(@SessionAttribute("loginUser") Profile loginUser, @RequestBody TemplateUpdateVo tuv) {
-        System.out.println(tuv);
         if ((tuv == null || tuv.getTemplateNo() == null) ||
                 (tuv.getRange() == null && tuv.getTitle() == null && tuv.getCategoryNo() == null && tuv.getContent() == null)) {
             return ResponseBuilder.upLoadFail();
         }
-        System.out.println(tuv);
-
         tuv.setUserNo(loginUser.getUserNo());
         int result = tpWriteService.updateUnSaveTemplate(tuv);
         if (result > 0) {
@@ -109,7 +115,6 @@ public class TemplateController {
 
     @PutMapping("/unsave/reset")
     public ResponseBody<TPUnsaveVo> resetUnSave(@SessionAttribute("loginUser") Profile loginUser) {
-
         TPUnsaveVo t = tpWriteService.resetUnSave(loginUser.getUserNo());
         if (t != null) {
             return ResponseBuilder.success(t);

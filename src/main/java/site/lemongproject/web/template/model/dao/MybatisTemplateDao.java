@@ -65,4 +65,9 @@ public class MybatisTemplateDao implements TemplateDao {
         return sqlSession.selectOne("templateMapper.findRange",templateNo);
     }
 
+    @Override
+    public List<TemplateListVo> findByUser(int userNo) {
+        return sqlSession.selectList("templateMapper.findByUser",userNo);
+    }
+
 }

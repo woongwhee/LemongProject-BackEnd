@@ -28,4 +28,5 @@ public interface TemplateDao {
 
     int findRange(int templateNo);
 
+    List<TemplateListVo> findByUser(int userNo);
 }

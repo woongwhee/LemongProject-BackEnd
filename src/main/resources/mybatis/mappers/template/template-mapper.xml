@@ -28,6 +28,13 @@
         <collection property="challengeList" select="challengeMapper.findByTemplate" column="TEMPLATE_NO"/>
         <collection property="reviewList" select="reviewMapper.findByTemplate" column="TEMPLATE_NO"/>
     </resultMap>
+    <resultMap id="profileTemplate" type="TemplateListVo">
+        <id column="TEMPLATE_NO" property="templateNo"/>
+        <result column="TITLE" property="title"/>
+        <result column="CONTENT" property="content"/>
+        <result column="RANGE" property="range"/>
+        <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
+    </resultMap>
     <resultMap id="templateUnSave" type="TPUnsaveVo">
         <id column="TEMPLATE_NO" property="templateNo"/>
         <result column="CATEGORY_NO" property="categoryNo"/>
@@ -43,34 +50,51 @@
     </select>
 
     <select id="findDetail" parameterType="TemplateFindVo" resultMap="templateDetail">
-        SELECT
-            T.*,
-            (SELECT COUNT(*)
-             FROM CHALLENGE_USER CU1
-                Join CHALLENGE C USING(CHALLENGE_NO)
-             WHERE CU1.STATUS IN( 'PLAY','SINGLE')
-               AND C.TEMPLATE_NO=T.TEMPLATE_NO) as PLAY_COUNT,
-            (SELECT COUNT(*)
-             FROM CHALLENGE_USER CU2
-                Join CHALLENGE C USING(CHALLENGE_NO)
-             WHERE CU2.STATUS = 'CLEAR'
-               AND C.TEMPLATE_NO=T.TEMPLATE_NO) as CLEAR_COUNT,
-            (SELECT NVL2(CU2.USER_NO,1,0)
-             FROM CHALLENGE_USER CU2
-                      Join CHALLENGE C USING(CHALLENGE_NO)
-             WHERE CU2.STATUS = 'CLEAR'
-               AND C.TEMPLATE_NO=T.TEMPLATE_NO
-                AND CU2.USER_NO=#{userNo}
-            ) as IS_CLEAR,
-            P.*,
-            up.*,
-            tc.*
+        SELECT T.*,
+               (SELECT COUNT(*)
+                FROM CHALLENGE_USER CU1
+                         Join CHALLENGE C USING (CHALLENGE_NO)
+                WHERE CU1.STATUS IN ('PLAY', 'SINGLE')
+                  AND C.TEMPLATE_NO = T.TEMPLATE_NO) as PLAY_COUNT,
+               (SELECT COUNT(*)
+                FROM CHALLENGE_USER CU2
+                         Join CHALLENGE C USING (CHALLENGE_NO)
+                WHERE CU2.STATUS = 'CLEAR'
+                  AND C.TEMPLATE_NO = T.TEMPLATE_NO) as CLEAR_COUNT,
+               (SELECT NVL2(CU2.USER_NO, 1, 0)
+                FROM CHALLENGE_USER CU2
+                         Join CHALLENGE C USING (CHALLENGE_NO)
+                WHERE CU2.STATUS = 'CLEAR'
+                  AND C.TEMPLATE_NO = T.TEMPLATE_NO
+                  AND CU2.USER_NO = #{userNo})       as IS_CLEAR,
+               P.*,
+               up.*,
+               tc.*
         FROM TEMPLATE T
                  LEFT JOIN USER_PROFILE up ON T.TP_CREATER = up.USER_NO
                  LEFT JOIN PHOTO P ON UP.PHOTO_NO = P.PHOTO_NO
-                 JOIN TEMPLATE_CATEGORY tc on T.CATEGORY_NO=tc.CATEGORY_NO
+                 JOIN TEMPLATE_CATEGORY tc on T.CATEGORY_NO = tc.CATEGORY_NO
         WHERE T.SAVE_STATUS = 1
           AND T.TEMPLATE_NO = #{templateNo}
+        ORDER BY T.CREATED_AT DESC
+    </select>
+    <select id="findByUser" parameterType="_int" resultMap="profileTemplate">
+        SELECT T.*,
+               (SELECT COUNT(*)
+                FROM CHALLENGE_USER CU1
+                         Join CHALLENGE C USING (CHALLENGE_NO)
+                WHERE CU1.STATUS IN ('PLAY', 'SINGLE')
+                  AND C.TEMPLATE_NO = T.TEMPLATE_NO) as PLAY_COUNT,
+               (SELECT COUNT(*)
+                FROM CHALLENGE_USER CU2
+                         Join CHALLENGE C USING (CHALLENGE_NO)
+                WHERE CU2.STATUS = 'CLEAR'
+                  AND C.TEMPLATE_NO = T.TEMPLATE_NO) as CLEAR_COUNT,
+               tc.*
+        FROM TEMPLATE T
+        JOIN TEMPLATE_CATEGORY tc on T.CATEGORY_NO = tc.CATEGORY_NO
+        WHERE T.SAVE_STATUS = 1
+          AND T.TP_CREATER = #{userNo}
         ORDER BY T.CREATED_AT DESC
     </select>
 
@@ -118,15 +142,16 @@
           AND SAVE_STATUS = 0
     </delete>
     <insert id="createTemp" parameterType="integer">
-        INSERT INTO TEMPLATE (TEMPLATE_NO, TP_CREATER,RANGE)
-        VALUES (SEQ_TEMPLATE.NEXTVAL, #{userNo},30)
+        INSERT INTO TEMPLATE (TEMPLATE_NO, TP_CREATER, RANGE)
+        VALUES (SEQ_TEMPLATE.NEXTVAL, #{userNo}, 30)
     </insert>
     <update id="uploadUnSave" parameterType="int">
-        update template
+        update template t
         set todo_count  = (select count(*)
-                           from template_todo
+                           from template_todo tt
                            where save_status = 0
-                             and TP_CREATER = #{userNo}),
+                             and TP_CREATER = #{userNo}
+                             and tt.TEMPLATE_NO = t.TEMPLATE_NO),
             SAVE_STATUS = 1,
             CREATED_AT  = SYSDATE
         where save_status = 0
@@ -167,6 +192,6 @@
     <select id="findRange" parameterType="int" resultType="int">
         SELECT RANGE
         FROM TEMPLATE
-        WHERE TEMPLATE_NO=#{templateNo}
+        WHERE TEMPLATE_NO = #{templateNo}
     </select>
 </mapper>
