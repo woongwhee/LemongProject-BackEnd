@@ -9,6 +9,8 @@ import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.service.FeedService;
 import site.lemongproject.web.feed.model.vo.ReplyAlarm;
+
+import site.lemongproject.web.feed.model.vo.ReplyAlarmList;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
@@ -31,9 +33,7 @@ public class FeedController {
 
     @PostMapping("/feedProfile")
     public Map<String, Object> userProfilePhoto(@RequestBody Map<String,Object> userNo){
-//        System.out.println(userNo);
         Map<String, Object> result = feedService.userProfile(userNo);
-//        Map<String, Object> result = new HashMap<>();
         return result;
     }
 
@@ -273,8 +273,22 @@ public class FeedController {
     }
 
     @PostMapping("/replyAlarmList")
-    public List<ReplyAlarm> replyAlarmList(@RequestBody int userNo){
-        List<ReplyAlarm> list = feedService.replyAlarmList(userNo);
-        return list;
+    public ResponseBody<List<ReplyAlarmList>> replyAlarmList(@RequestBody Map<String,Object> userNo,
+                                                             @SessionAttribute("loginUser") Profile loginUser){
+//        System.out.println(userNo.values());
+        List<ReplyAlarmList> list = feedService.replyAlarmList(userNo);
+
+//        System.out.println("123123"+list);
+        return ResponseBuilder.success(list);
     }
+
+    @PostMapping("/replyAlarmRead")
+    public int replyAlarmRead(@RequestBody Map<String, Object> data){
+        int result = 0;
+//        System.out.println("Gdgd" + data);
+        result += feedService.replyAlarmRead(data);
+        return result;
+    }
+
+
 }

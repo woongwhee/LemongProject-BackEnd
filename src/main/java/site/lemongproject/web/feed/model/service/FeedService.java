@@ -5,6 +5,8 @@ import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.vo.Feed;
 import site.lemongproject.web.feed.model.vo.Reply;
+import site.lemongproject.web.feed.model.vo.ReplyAlarm;
+import site.lemongproject.web.feed.model.vo.ReplyAlarmList;
 import site.lemongproject.web.photo.model.vo.Photo;
 
 import java.util.List;
@@ -69,4 +71,8 @@ public interface FeedService  {
     int heartCount(Map<String, Object> data);
 
     int countFeed();
+
+    List<ReplyAlarmList> replyAlarmList(Map<String,Object> userNo);
+
+    int replyAlarmRead(Map<String, Object> data);
 }

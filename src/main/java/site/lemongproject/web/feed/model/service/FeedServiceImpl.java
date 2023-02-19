@@ -8,6 +8,8 @@ import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.dto.*;
 import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.feed.model.vo.ReplyAlarm;
+
+import site.lemongproject.web.feed.model.vo.ReplyAlarmList;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.photo.model.vo.Photo;
 
@@ -184,5 +186,15 @@ public class FeedServiceImpl implements FeedService{
        }else{
            return feedCount/PAGE_LIMIT;
        }
+    }
+
+    @Override
+    public List<ReplyAlarmList> replyAlarmList(Map<String,Object> userNo) {
+        return feedDao.replyAlarmList(userNo);
+    }
+
+    @Override
+    public int replyAlarmRead(Map<String, Object> data) {
+        return feedDao.replyAlarmRead(data);
     }
 }
