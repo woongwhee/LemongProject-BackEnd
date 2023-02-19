@@ -64,6 +64,5 @@ public interface ChallengeUserDao {
     int countPlayer(int challengeNo);
 
     boolean inChallenge(ChallengeUserVo userVo);
-    List<ChallengeListVo> profileChallengeList(int userNo);
 
 }

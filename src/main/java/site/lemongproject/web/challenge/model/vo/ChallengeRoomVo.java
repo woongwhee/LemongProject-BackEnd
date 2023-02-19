@@ -6,6 +6,7 @@ import org.apache.ibatis.type.Alias;
 import site.lemongproject.web.challenge.model.dto.Challenge;
 import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Alias("ChallengeRoomVo")
@@ -14,6 +15,8 @@ import java.util.List;
 public class ChallengeRoomVo {
     private int challengeNo;
     private String challengeTitle;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int todoCount;
     private List<ChatProfileVo> playerList;
     private List<ChallengeChat> chatList;

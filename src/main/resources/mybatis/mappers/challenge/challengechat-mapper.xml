@@ -4,7 +4,6 @@
 
     <resultMap id="challengeChatMap" type="ChallengeChat">
         <result column="CHAT_NO" property="chatNo"/>
-        <result column="CHALLENGE_NO" property="challengeNo"/>
         <result column="USER_NO" property="userNo"/>
         <result column="CHAT_MESSAGE" property="chatMessage"/>
         <result column="SEND_AT" property="sendAt"/>
@@ -18,7 +17,10 @@
     <select id="findByChallenge" parameterType="int" resultMap="challengeChatMap">
         <![CDATA[
         SELECT *
-        FROM (SELECT * FROM CHALLENGE_CHAT WHERE CHALLENGE_NO = #{challengeNo} ORDER BY SEND_AT DESC)
+        FROM (SELECT *
+              FROM CHALLENGE_CHAT cc
+              WHERE CHALLENGE_NO = #{challengeNo}
+              ORDER BY SEND_AT DESC)
         WHERE ROWNUM < 50
         ]]>
     </select>

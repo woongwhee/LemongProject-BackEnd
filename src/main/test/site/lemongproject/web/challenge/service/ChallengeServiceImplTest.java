@@ -73,12 +73,7 @@ public class ChallengeServiceImplTest extends Configure {
         int result=challengeService.clearTodo(new TodoClearVo(1212,TEST_CL_NO));
         assertThat(result).isEqualTo(1);
     }
-    @Test
-    public void 암호화해줘(){
-        String min1 = bCryptPasswordEncoder.encode("min1");
-        System.out.println(min1);
 
-    }
     @Test
     public void detail(){
         ChallengeDetailVo detail = challengeService.getDetail(3000);

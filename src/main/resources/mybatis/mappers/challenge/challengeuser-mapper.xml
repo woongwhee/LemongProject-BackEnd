@@ -41,6 +41,7 @@
                  LEFT JOIN PHOTO P on UP.PHOTO_NO = P.PHOTO_NO
         WHERE CHALLENGE_NO = #{challengeNo}
           AND STATUS IN ('PLAY', 'CANCEL')
+        ORDER BY CLEAR_COUNT
     </select>
 
     <select id="countPlayer" parameterType="ChallengeUserVo" resultType="_int">

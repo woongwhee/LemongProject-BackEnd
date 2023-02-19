@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>site.lemongproject</groupId>
-    <artifactId>tresure</artifactId>
+    <artifactId>LemongProject</artifactId>
     <name>LemongProject</name>
     <packaging>war</packaging>
     <version>0.0.1-BUILD-SNAPSHOT</version>
