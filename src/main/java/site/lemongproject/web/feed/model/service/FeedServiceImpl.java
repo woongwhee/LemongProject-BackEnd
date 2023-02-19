@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import site.lemongproject.web.feed.model.dao.FeedDao;
 import site.lemongproject.web.feed.model.dto.*;
+import site.lemongproject.web.feed.model.vo.HeartAlarm;
 import site.lemongproject.web.feed.model.vo.Reply;
 import site.lemongproject.web.feed.model.vo.ReplyAlarm;
 
@@ -77,19 +78,19 @@ public class FeedServiceImpl implements FeedService{
     @Override
     public int insertFeedReply(Map<String, Object> paramMap){
         // param = 로그인NO(보낸사람)(loginUserNo), feedNo, replyContent
-        int result = feedDao.insertFeedReply(paramMap);
+        int result = feedDao.insertFeedReply(paramMap); // 댓글 등록
         ReplyAlarm ra = feedDao.selectReplyAlarm(paramMap);
-//        System.out.println(ra);
+
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> map = objectMapper.convertValue(ra, Map.class);
-//        System.out.println("gdgd" + map);
-        int raInsert = feedDao.insertReplyAlarm(map);
-        System.out.println("ra"+raInsert);
 
-        return result;
+        if(ra.getUserNo() != ra.getRecNo()){
+            result += feedDao.insertReplyAlarm(map);
+            return result;
+        }else{
+            return result;
+        }
     }
-
-
     // 피드 댓글 불러오기
     @Override
     public List<Reply> listReply(int feedNo) {return feedDao.listReply(feedNo);}
@@ -99,6 +100,8 @@ public class FeedServiceImpl implements FeedService{
     public int deleteReply(Map<String,Object> data){
         return feedDao.deleteReply(data);
     }
+
+
 
     // 사진 넣기
     @Override
@@ -167,10 +170,36 @@ public class FeedServiceImpl implements FeedService{
     }
 
     @Override
-    public int heartClick(Map<String, Object> data){return feedDao.heartClick(data);}
+    public int heartClick(Map<String, Object> data){
+        int result = feedDao.heartClick(data);
+        HeartAlarm ha = new HeartAlarm();
+
+
+        ha.setRecNo(feedDao.heartAlarmReceiver(data));
+        int userNo = (int)data.get("userNo");
+        int feedNo = (int)data.get("refNo");
+        ha.setUserNo(userNo);
+        ha.setFeedNo(feedNo);
+        System.out.println("fdfdf" + ha);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> map = objectMapper.convertValue(ha, Map.class);
+
+        if(ha.getUserNo() != ha.getRecNo()){
+            result += feedDao.heartAlarmInsert(map);
+            System.out.println("ekfoeofke" + result);
+            return result;
+        }else{
+            return result;
+        }
+    }
 
     @Override
-    public int heartCancel(Map<String, Object> data){return feedDao.heartCancel(data);}
+    public int heartCancel(Map<String, Object> data){
+        int result = feedDao.heartCancel(data);
+        result += feedDao.heartAlarmCancel(data);
+        return result;
+    }
 
     @Override
     public int heartState(Map<String, Object> data) {return feedDao.heartState(data);}
@@ -192,9 +221,26 @@ public class FeedServiceImpl implements FeedService{
     public List<ReplyAlarmList> replyAlarmList(Map<String,Object> userNo) {
         return feedDao.replyAlarmList(userNo);
     }
-
     @Override
     public int replyAlarmRead(Map<String, Object> data) {
         return feedDao.replyAlarmRead(data);
+    }
+    @Override
+    public int replyAlarmCount(Map<String, Object> userNo) {
+        return feedDao.replyAlarmCount(userNo);
+    }
+    @Override
+    public List<ReplyAlarmList> heartAlarmList(Map<String, Object> userNo) {
+        return feedDao.heartAlarmList(userNo);
+    }
+
+    @Override
+    public int heartAlarmRead(Map<String, Object> data) {
+        return feedDao.heartAlarmRead(data);
+    }
+
+    @Override
+    public int clearAlarm(Map<String, Object> data) {
+        return feedDao.clearAlarm(data);
     }
 }

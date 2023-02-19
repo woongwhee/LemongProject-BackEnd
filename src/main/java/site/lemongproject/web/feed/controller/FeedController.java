@@ -1,5 +1,6 @@
 package site.lemongproject.web.feed.controller;
 import lombok.RequiredArgsConstructor;
+import oracle.jdbc.proxy.annotation.Post;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import site.lemongproject.common.response.ResponseBody;
@@ -127,9 +128,7 @@ public class FeedController {
 //        System.out.println("reply insert"+paramMap);
         paramMap.put("loginUserNo",loginUser.getUserNo());
         int check = feedService.insertFeedReply(paramMap);
-
         Map<String, Object> result = new HashMap<>();
-
         if(check > 0){
             result.put("Java","success");
         }else{
@@ -182,9 +181,6 @@ public class FeedController {
     // FEED_NO에 해당하는 이미지 경로포함해서 다가져오기
     @GetMapping("/searchImg")
     public ResponseBody<List<FeedList>> searchImg(@RequestParam(value = "feedNo" , required = false)int feedNo){
-
-//        System.out.println(feedNo + "success");
-
         FeedList f = new FeedList();
         f.setFeedNo(feedNo);
 
@@ -273,22 +269,47 @@ public class FeedController {
     }
 
     @PostMapping("/replyAlarmList")
-    public ResponseBody<List<ReplyAlarmList>> replyAlarmList(@RequestBody Map<String,Object> userNo,
-                                                             @SessionAttribute("loginUser") Profile loginUser){
-//        System.out.println(userNo.values());
+    public ResponseBody<List<ReplyAlarmList>> replyAlarmList(@RequestBody Map<String,Object> userNo){
         List<ReplyAlarmList> list = feedService.replyAlarmList(userNo);
-
-//        System.out.println("123123"+list);
         return ResponseBuilder.success(list);
     }
+
 
     @PostMapping("/replyAlarmRead")
     public int replyAlarmRead(@RequestBody Map<String, Object> data){
         int result = 0;
-//        System.out.println("Gdgd" + data);
+        System.out.println("Gdgd" + data);
         result += feedService.replyAlarmRead(data);
+        System.out.println(result+"awefawefawef");
         return result;
     }
+
+    @PostMapping("/replyAlarmCount")
+    public int replyAlarmCount(@RequestBody Map<String, Object> userNo){
+//        System.out.println(userNo);
+        int result = feedService.replyAlarmCount(userNo);
+        return result;
+    }
+
+    @PostMapping("/heartAlarmList")
+    public ResponseBody<List<ReplyAlarmList>> heartAlarmList(@RequestBody Map<String, Object> userNo){
+        List<ReplyAlarmList> list = feedService.heartAlarmList(userNo);
+        return ResponseBuilder.success(list);
+    }
+    @PostMapping("/heartAlarmRead")
+    public int heartAlarmRead(@RequestBody Map<String, Object> data){
+        int result = 0;
+        result += feedService.heartAlarmRead(data);
+        return result;
+    }
+
+    @PostMapping("/clearAlarm")
+    public int clearAlarm(@RequestBody Map<String, Object> data){
+        int result = 0;
+        result += feedService.clearAlarm(data);
+        return result;
+    }
+
 
 
 }
