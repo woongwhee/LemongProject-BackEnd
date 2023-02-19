@@ -20,10 +20,10 @@ public interface ChallengeDao {
 
 
     Challenge findOne(int challengeNo);
-
     List<ChallengeListVo> findReady(int page, int limit);
     ChallengeDetailVo findDetail(int challengeNo);
     ChallengeRoomVo findRoom(int challengeNo);
+    List<ChallengeListVo> findRoomList(int userNo);
     int cancelChallenge(int challengeNo);
 
     int startChallenge();

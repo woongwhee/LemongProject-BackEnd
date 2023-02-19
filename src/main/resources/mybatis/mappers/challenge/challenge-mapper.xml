@@ -19,7 +19,17 @@
         <result column="START_DATE" property="startDate"/>
         <result column="END_DATE" property="endDate"/>
         <result column="USER_COUNT" property="userCount"/>
+        <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
         <association column="CREATE_USER" resultMap="profileMapper.profileDetail" property="createUser"/>
+    </resultMap>
+    <resultMap id="RoomListMap" type="ChallengeListVo">
+        <id column="CHALLENGE_NO" property="challengeNo"/>
+        <result column="CHALLENGE_TITLE" property="title"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="END_DATE" property="endDate"/>
+        <result column="STATUS" property="status"/>
+        <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
+
     </resultMap>
     <resultMap id="DetailMap" type="ChallengeDetailVo">
         <result column="CHALLENGE_NO" property="challengeNo"/>
@@ -33,10 +43,13 @@
     <resultMap id="RoomMap" type="ChallengeRoomVo">
         <id column="CHALLENGE_NO" property="challengeNo"/>
         <result column="CHALLENGE_TITLE" property="challengeTitle"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="END_DATE" property="endDate"/>
         <result column="TODO_COUNT" property="todoCount"/>
         <collection column="{challengeNo=CHALLENGE_NO,todoCount=TODO_COUNT}" select="challengeUserMapper.findPlayer" property="playerList"/>
         <collection column="CHALLENGE_NO" select="challengeChatMapper.findByChallenge" property="chatList"/>
     </resultMap>
+
     <insert id="insertSingle" parameterType="SingleStartVo">
         <selectKey keyProperty="challengeNo" resultType="int" order="BEFORE">
             select SEQ_CHALLENGE.nextval from dual
@@ -59,11 +72,13 @@
         WHERE CHALLENGE_NO = #{challengNo}
     </select>
     <select id="findReady" resultMap="ReadyListMap">
-        SELECT c.*, up.*,p.*,
+        SELECT c.*,up.*,p.*,tc.*,
             (select count(*) from CHALLENGE_USER cu where CHALLENGE_NO=c.CHALLENGE_NO AND cu.STATUS='READY')as USER_COUNT
         FROM CHALLENGE c
              JOIN USER_PROFILE up ON up.USER_NO = c.CREATE_USER
              LEFT JOIN PHOTO p ON p.PHOTO_NO = up.PHOTO_NO
+             JOIN TEMPLATE T on C.TEMPLATE_NO = T.TEMPLATE_NO
+             JOIN TEMPLATE_CATEGORY TC on T.CATEGORY_NO = TC.CATEGORY_NO
         WHERE STATUS = 'READY'
         ORDER BY START_DATE DESC
     </select>
@@ -74,12 +89,15 @@
         WHERE  c.STATUS = 'PLAY'
         AND CHALLENGE_NO=#{challengeNo}
     </select>
-    <select id="findRoomList" parameterType="int" resultMap="RoomMap">
-        SELECT c.*,t.TODO_COUNT
-        FROM CHALLENGE c
-                 JOIN TEMPLATE T on c.TEMPLATE_NO=t.TEMPLATE_NO
-        WHERE  c.STATUS = 'PLAY' and c.STATUS
-          AND CHALLENGE_NO=#{challengeNo}
+    <select id="findRoomList" parameterType="_int" resultMap="RoomListMap">
+        SELECT c.CHALLENGE_NO,c.CHALLENGE_TITLE,c.START_DATE,c.END_DATE,cu.STATUS as "STATUS",
+        tc.*
+        FROM CHALLENGE C
+        JOIN CHALLENGE_USER CU on C.CHALLENGE_NO = CU.CHALLENGE_NO
+        JOIN TEMPLATE T on C.TEMPLATE_NO = T.TEMPLATE_NO
+        JOIN TEMPLATE_CATEGORY TC on T.CATEGORY_NO = TC.CATEGORY_NO
+        WHERE  NOT CU.STATUS IN ('CANCEL', 'FAIL')
+          AND CU.USER_NO=#{userNo}
     </select>
     <select id="selectChallenge" parameterType="Challenge" resultMap="challengeMap">
         SELECT *
@@ -91,9 +109,8 @@
         FROM CHALLENGE
         WHERE CHALLENGE_NO = #{challengeNo}
     </select>
-
     <select id="findByTemplate" parameterType="_int" resultMap="ReadyListMap">
-        SELECT *
+        SELECT c.*
         FROM CHALLENGE c
                  JOIN USER_PROFILE up on up.USER_NO = c.CREATE_USER
                  LEFT JOIN PHOTO P on up.PHOTO_NO = P.PHOTO_NO
@@ -111,13 +128,6 @@
         WHERE CHALLENGE_NO = #{challengeNo}
     </update>
     <!-- 테스트 챌린지No(3000)번에 해당하는 챌린지 정보 다가져오기  -->
-
-
-    <!-- todo:필요없음   -->
-    <insert id="challengeGo" parameterType="ChallengeUser">
-        INSERT INTO CHALLENGE_USER(CHALLENGE_NO, USER_NO, STATUS, CLEAR_COUNT)
-        VALUES (#{challengeNo}, #{userNo}, 'READY', 0)
-    </insert>
 
     <update id="startChallenge">
         <![CDATA[

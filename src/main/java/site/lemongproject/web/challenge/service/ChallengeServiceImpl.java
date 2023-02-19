@@ -228,6 +228,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         if(!inChallenge){
             throw new IsNotWriterException();
         }
+        System.out.println(userVo.getChallengeNo());
         return challengeDao.findRoom(userVo.getChallengeNo());
     }
 
@@ -246,13 +247,13 @@ public class ChallengeServiceImpl implements ChallengeService {
         result *= userDao.changeClear(todo);
         return result;
     }
-
+    @Override
     public List<Challenge> detailChallenge(Challenge c) {
         return challengeDao.detailChallenge(c);
     }
 
-
+    @Override
     public List<ChallengeListVo> profileChallengeList(int userNo){
-        return userDao.profileChallengeList(userNo);
+        return challengeDao.findRoomList(userNo);
     }
 }

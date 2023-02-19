@@ -17,6 +17,7 @@ public class ChallengeChat {
     private int chatNo;
     private int challengeNo;
     private int userNo;
+    private String nickName;
     private String chatMessage;
     private LocalDateTime sendAt;
 }
