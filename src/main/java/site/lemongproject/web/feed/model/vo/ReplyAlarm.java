@@ -5,13 +5,14 @@ import lombok.Data;
 
 import java.sql.Date;
 
+
 @Data
-public class Reply {
+public class ReplyAlarm {
     private int replyNo;
-    private int userNo;
+    private int userNo; // 보낸사람
     private int feedNo;
     private String replyContent;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date replyAt;
-    private String nickName;
+    private int recNo; // 받은사람
 }

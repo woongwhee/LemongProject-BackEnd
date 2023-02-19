@@ -5,6 +5,10 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.feed.model.dto.*;
+import site.lemongproject.web.feed.model.vo.HeartAlarm;
+import site.lemongproject.web.feed.model.vo.ReplyAlarm;
+
+import site.lemongproject.web.feed.model.vo.ReplyAlarmList;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
 
@@ -149,6 +153,49 @@ public class FeedDao {
         return sqlSession.selectOne("feedMapper.heartCount", data);
     }
 
-    public int countFeed() {return sqlSession.selectOne("feedMapper.countFeed");
+    public int countFeed() {return sqlSession.selectOne("feedMapper.countFeed");}
+
+    public ReplyAlarm selectReplyAlarm(Map<String,Object> paramMap) {
+        return sqlSession.selectOne("replyMapper.selectReplyAlarm", paramMap);
+    }
+
+    public int insertReplyAlarm(Map<String, Object> map) {
+        return sqlSession.insert("replyMapper.insertReplyAlarm", map);
+    }
+
+    public List<ReplyAlarmList> replyAlarmList(Map<String,Object> userNo) {
+        return sqlSession.selectList("replyMapper.replyAlarmList", userNo);
+    }
+
+    public int replyAlarmRead(Map<String, Object> data) {
+        return sqlSession.update("replyMapper.replyAlarmRead", data);
+    }
+
+    public int replyAlarmCount(Map<String, Object> userNo) {
+        return sqlSession.selectOne("replyMapper.replyAlarmCount", userNo);
+    }
+
+    public int heartAlarmReceiver(Map<String, Object> data) {
+        return sqlSession.selectOne("feedMapper.heartAlarmReceiver", data);
+    }
+
+    public int heartAlarmInsert(Map<String , Object> ha) {
+        return sqlSession.insert("feedMapper.heartAlarmInsert",ha);
+    }
+
+    public int heartAlarmCancel(Map<String, Object> data) {
+        return sqlSession.delete("feedMapper.heartAlarmDelete",data);
+    }
+
+    public List<ReplyAlarmList> heartAlarmList(Map<String, Object> userNo) {
+        return sqlSession.selectList("replyMapper.heartAlarmList",userNo);
+    }
+
+    public int heartAlarmRead(Map<String, Object> data) {
+        return sqlSession.update("feedMapper.heartAlarmRead", data);
+    }
+
+    public int clearAlarm(Map<String, Object> data) {
+        return sqlSession.update("feedMapper.clearAlarm", data);
     }
 }
