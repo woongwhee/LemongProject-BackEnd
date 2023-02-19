@@ -234,9 +234,7 @@ public class MemberController {
             Profile p = new Profile();
             p.setProfileComment(updateCont);
             p.setUserNo(userNo);
-
             Profile content = memberService.updateMyContent(p);
-
             return ResponseBuilder.success(content);
         }
 

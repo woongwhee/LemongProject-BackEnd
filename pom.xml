@@ -6,7 +6,7 @@
     <artifactId>LemongProject</artifactId>
     <name>LemongProject</name>
     <packaging>war</packaging>
-    <version>0.0.1-BUILD-SNAPSHOT</version>
+    <version>1.0.0</version>
     <properties>
         <java-version>11</java-version>
         <org.springframework-version>5.1.5.RELEASE</org.springframework-version>
