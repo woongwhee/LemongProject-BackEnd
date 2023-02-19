@@ -150,7 +150,7 @@ public class PublicController {
     }
     @GetMapping("checkLogin")
     public ResponseBody<Profile> checkLogin(@SessionAttribute(value = "loginUser",required = false) Profile loginUser){
-
+        System.out.println(loginUser);
         if(loginUser==null){
             return ResponseBuilder.unLogin(null);
         }else {
@@ -186,7 +186,6 @@ public class PublicController {
         isKakao.setSocialType(socialType);
         isKakao.setUserName(userName);
         isKakao.setAccessToken(token);
-
 
         // 일치하는 회원이 있는지 확인
         Member result = memberService.isSocialUser(isKakao);

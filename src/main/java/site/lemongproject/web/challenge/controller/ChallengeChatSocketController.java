@@ -51,9 +51,6 @@ public class ChallengeChatSocketController {
             clients.add(session);
             System.out.println("[LEMONG] 새로운 세션입니다. > " + session);
         }
-        this.cSession = (HttpSession)config.getUserProperties().get("cSession"); // 넣어놨던 HTTP Session을 꺼낸다.
-//      clients.add(session);
-        cSession.setAttribute("chatRoomNo",chatRoomNo);
         session.getUserProperties().put("chatRoomNo",chatRoomNo);
         System.out.println("open session : {}, clients={}" + session.toString() + clients);
         if(!clients.contains(session)) {
@@ -66,47 +63,14 @@ public class ChallengeChatSocketController {
 
     @OnMessage
     public void onMessage(String message, Session session ) throws IOException {
-//        System.out.println("receive message : {}" + message);
-
-        JsonParser parse = new JsonParser();
-        Object obj = parse.parse(message);
         Gson gson=new Gson();
         ChallengeChat challengeChat = gson.fromJson(message, ChallengeChat.class);
         System.out.println(challengeChat+"팻이에요");
-        JsonObject jsonObj = (JsonObject)obj;
-
-        // 이름(보낸사람)
-        int name = Integer.parseInt(jsonObj.get("userNo").getAsString());
-        System.out.println(name + " =======> [success]");
-
-        // 챌린지 번호
-        int challengeNo = Integer.parseInt(jsonObj.get("chatRoomNo").getAsString());
-        System.out.println(challengeNo + " =======> [success]");
-
-        // 보낸 메세지
-        String msg = jsonObj.get("msg").getAsString();
-        System.out.println(msg + " =======> [success]");
-
-        ChallengeChat c = new ChallengeChat();
-
-        c.setChallengeNo(challengeNo);
-        System.out.println("challengeNo : " + c.getChallengeNo());
-
-        c.setChatMessage(msg);
-        System.out.println("chatMsg : " + c.getChatMessage());
-
-        c.setUserNo(name);
-        System.out.println("userNo : " + c.getUserNo());
-
-        System.out.println(cSession.getAttribute("chatRoomNo") + " : success !7!6!5 "); // 세션 안의 키를 통해 값을 꺼낸다.
-
         int chatRoomsNo = (Integer) cSession.getAttribute("chatRoomNo");
-
+        challengeService.insertChatData(challengeChat);
         for (Session s : clients) {
             if (chatRoomsNo == (int) s.getUserProperties().get("chatRoomNo")) {
                 System.out.println("send data : {}" + message); // 리액트에서 넘어오는 채팅 데이터
-
-            challengeService.insertChatData(c);
             s.getBasicRemote().sendText(message);
             }
         }
@@ -115,7 +79,7 @@ public class ChallengeChatSocketController {
     @OnClose
     public void onClose(Session session) {
         System.out.println("session close : {}" + session);
-//        cSession.removeAttribute("chatRoomNo");
+        cSession.removeAttribute("chatRoomNo");
         clients.remove(session);
     }
 
