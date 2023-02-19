@@ -162,7 +162,6 @@ public class MemberController {
                 session.invalidate();
                 break;
             case KAKAO:
-                type = "KAKAO";
                 session.invalidate();
 //                memberService.kakaoLogout();
                 System.out.println("카카오 자체 로그아웃 완료");
@@ -192,16 +191,12 @@ public class MemberController {
             case NAVER:
                 // 토큰을 서비스로 넘겨주기
                 token = memberService.selectAccessToken(profile.getUserNo()); // 토큰값 얻어옴 <- 여기까지 된다
-//                System.out.println(token);
                 // 회원 삭제가 되었는지 체크
                 result = memberService.deleteNaver(profile, token);
-//                System.out.println(result);
                 break;
             case KAKAO:
                 token = memberService.selectAccessToken(profile.getUserNo());
-//                System.out.println(token);
                 result = memberService.deleteKakao(profile, token);
-//                System.out.println(result);
                 break;
         }
 
