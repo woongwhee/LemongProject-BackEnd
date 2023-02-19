@@ -64,7 +64,7 @@
     <select id="myFollowCount" parameterType="Follow" resultType="Follow">
         SELECT
             FOLLOWING ,
-            COUNT(*) as count
+            NVL(COUNT(*),0) as count
         FROM FOLLOW
         GROUP BY FOLLOWING
         HAVING FOLLOWING = #{following}
@@ -76,7 +76,7 @@
      -->
     <select id="acceptFollowCount" parameterType="Follow" resultType="Follow">
         SELECT
-        COUNT(*) as count
+        NVL(COUNT(*),0) as count
         FROM FOLLOW
         GROUP BY FOLLOWING
         HAVING FOLLOWING = #{following}
