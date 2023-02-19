@@ -1,5 +1,6 @@
 package site.lemongproject.web.feed.model.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,15 +76,14 @@ public class FeedServiceImpl implements FeedService{
     public int insertFeedReply(Map<String, Object> paramMap){
         // param = 로그인NO(보낸사람)(loginUserNo), feedNo, replyContent
         int result = feedDao.insertFeedReply(paramMap);
-        // 댓글번호
-//        paramMap.put("replyNo",feedDao.selectReplyNo(paramMap));
-        System.out.println(feedDao.selectReplyNo(paramMap));
-        // 댓글시간
-//        paramMap.put("replyAt",feedDao.selectReplyNo(paramMap));
-        // 받은사람
-//        paramMap.put("replyNo",feedDao.selectReplyNo(paramMap));
+        ReplyAlarm ra = feedDao.selectReplyAlarm(paramMap);
+//        System.out.println(ra);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, Object> map = objectMapper.convertValue(ra, Map.class);
+//        System.out.println("gdgd" + map);
+        int raInsert = feedDao.insertReplyAlarm(map);
+        System.out.println("ra"+raInsert);
 
-//        int alarmReply = feedDao.insertReplyAlarm(paramMap);
         return result;
     }
 

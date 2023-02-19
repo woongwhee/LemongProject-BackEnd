@@ -8,6 +8,7 @@ import site.lemongproject.common.util.FileUtil;
 import site.lemongproject.web.feed.model.dto.FeedInsert;
 import site.lemongproject.web.feed.model.dto.FeedList;
 import site.lemongproject.web.feed.model.service.FeedService;
+import site.lemongproject.web.feed.model.vo.ReplyAlarm;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
@@ -268,7 +269,12 @@ public class FeedController {
     @RequestMapping("/detailFeed")
     public List<FeedList> detailFeed(@RequestParam int feedNo){
         List<FeedList> list = feedService.detailFeed(feedNo);
-//        System.out.println(list);
+        return list;
+    }
+
+    @PostMapping("/replyAlarmList")
+    public List<ReplyAlarm> replyAlarmList(@RequestBody int userNo){
+        List<ReplyAlarm> list = feedService.replyAlarmList(userNo);
         return list;
     }
 }

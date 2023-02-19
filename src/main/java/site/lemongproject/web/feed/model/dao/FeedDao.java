@@ -150,17 +150,13 @@ public class FeedDao {
         return sqlSession.selectOne("feedMapper.heartCount", data);
     }
 
-    public int countFeed() {return sqlSession.selectOne("feedMapper.countFeed");
+    public int countFeed() {return sqlSession.selectOne("feedMapper.countFeed");}
+
+    public ReplyAlarm selectReplyAlarm(Map<String,Object> paramMap) {
+        return sqlSession.selectOne("replyMapper.selectReplyAlarm", paramMap);
     }
 
-    public ReplyAlarm selectReplyNo(Map<String,Object> paramMap) {
-        return sqlSession.selectOne("replyMapper.selectReplyNo", paramMap);
+    public int insertReplyAlarm(Map<String, Object> map) {
+        return sqlSession.insert("replyMapper.insertReplyAlarm", map);
     }
-//    public ReplyAlarm selectReplyNo(Map<String,Object> paramMap) {
-//        return sqlSession.selectOne("replyMapper.selectReplyNo", paramMap);
-//    }
-
-//    public ReplyAlarm selectReciver(Map<String, Object> paramMap) {
-//        return sqlSession.selectMap("replyMapper.selectReply",paramMap);
-//    }
 }

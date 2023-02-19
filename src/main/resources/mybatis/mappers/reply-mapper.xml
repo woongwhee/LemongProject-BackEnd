@@ -22,9 +22,23 @@
         <result column="REC_NO" property="recNo"/>
     </resultMap>
 
-    <select id="selectReplyNo" parameterType="map" resultMap="replyAlarmResult">
-        select * from reply
-        where FEED_NO = #{feedNo} AND USER_NO = #{loginUserNo} AND REPLY_AT=(SELECT MAX(REPLY_AT) FROM REPLY)
+    <insert id="insertReplyAlarm" parameterType="map">
+        INSERT INTO ALARM (ALR_NO, USER_NO, REF_TYPE, REF_NO, SEND_USER, ALR_MESSAGE) VALUES
+            (SEQ_ALARM.nextval,#{userNo}, 3, #{replyNo},#{recNo},#{replyContent})
+    </insert>
+
+    <select id="selectReplyAlarm" parameterType="map" resultMap="replyAlarmResult">
+        select
+            REPLY_NO,
+            R.USER_NO,
+            R.FEED_NO,
+            REPLY_CONTENT,
+            REPLY_AT,
+            F.USER_NO AS REC_NO
+        from reply R
+                 JOIN FEED F on R.FEED_NO = F.FEED_NO
+        where R.FEED_NO =#{feedNo} AND R.USER_NO = #{loginUserNo}
+          AND REPLY_AT=(SELECT MAX(REPLY_AT) FROM REPLY)
         ORDER BY REPLY_AT DESC
     </select>
 
