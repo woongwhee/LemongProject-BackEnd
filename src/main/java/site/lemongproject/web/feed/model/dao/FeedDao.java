@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import site.lemongproject.web.feed.model.dto.*;
 import site.lemongproject.web.feed.model.vo.ReplyAlarm;
+
+import site.lemongproject.web.feed.model.vo.ReplyAlarmList;
 import site.lemongproject.web.photo.model.vo.Photo;
 import site.lemongproject.web.feed.model.vo.Reply;
 
@@ -158,5 +160,12 @@ public class FeedDao {
 
     public int insertReplyAlarm(Map<String, Object> map) {
         return sqlSession.insert("replyMapper.insertReplyAlarm", map);
+    }
+    public List<ReplyAlarmList> replyAlarmList(Map<String,Object> userNo) {
+        return sqlSession.selectList("replyMapper.replyAlarmList", userNo);
+    }
+
+    public int replyAlarmRead(Map<String, Object> data) {
+        return sqlSession.update("replyMapper.replyAlarmRead", data);
     }
 }

@@ -39,6 +39,7 @@
 
     <select id="userProfile" resultType="Map">
         SELECT
+        NICK_NAME,
         P.PHOTO_NO,
         P.FILE_PATH || P.CHANGE_NAME AS FILEPATH
         FROM USER_PROFILE

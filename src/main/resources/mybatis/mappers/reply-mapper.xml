@@ -22,19 +22,51 @@
         <result column="REC_NO" property="recNo"/>
     </resultMap>
 
+    <resultMap type="ReplyAlarmList" id="replyAlarmListResult">
+        <result column="ALR_NO" property="alrNo"/>
+        <result column="USER_NO" property="userNo"/>
+        <result column="REF_TYPE" property="refType"/>
+        <result column="REF_NO" property="refNo"/>
+        <result column="SEND_USER" property="sendUser"/>
+        <result column="ALR_MESSAGE" property="message"/>
+        <result column="ALR_AT" property="alrAt"/>
+        <result column="READ" property="read"/>
+    </resultMap>
+
+    <update id="replyAlarmRead" parameterType="map">
+        UPDATE ALARM SET READ = 1
+        WHERE USER_NO = #{userNo} AND REF_TYPE=3 AND REF_NO=#{replyNo}
+    </update>
+
+    <select id="replyAlarmList" parameterType="map" resultMap="replyAlarmListResult">
+        SELECT
+            ALR_NO,
+            USER_NO,
+            REF_TYPE,
+            REF_NO,
+            SEND_USER,
+            ALR_MESSAGE,
+            ALR_AT,
+            READ
+        FROM ALARM
+        WHERE USER_NO= #{userNo} AND REF_TYPE = 3 AND READ=0
+        ORDER BY ALR_AT DESC
+    </select>
+
     <insert id="insertReplyAlarm" parameterType="map">
         INSERT INTO ALARM (ALR_NO, USER_NO, REF_TYPE, REF_NO, SEND_USER, ALR_MESSAGE) VALUES
-            (SEQ_ALARM.nextval,#{userNo}, 3, #{replyNo},#{recNo},#{replyContent})
+            (SEQ_ALARM.nextval,#{recNo}, 3, #{replyNo},#{userNo}, #{replyContent})
+        <!--                    받은 사람                    보낸사람                 -->
     </insert>
 
     <select id="selectReplyAlarm" parameterType="map" resultMap="replyAlarmResult">
         select
             REPLY_NO,
-            R.USER_NO,
+            R.USER_NO,      <!--보낸 사람-->
             R.FEED_NO,
             REPLY_CONTENT,
             REPLY_AT,
-            F.USER_NO AS REC_NO
+            F.USER_NO AS REC_NO <!--받은 사람-->
         from reply R
                  JOIN FEED F on R.FEED_NO = F.FEED_NO
         where R.FEED_NO =#{feedNo} AND R.USER_NO = #{loginUserNo}
