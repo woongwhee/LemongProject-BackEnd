@@ -22,6 +22,7 @@
         <typeAlias type="site.lemongproject.web.challenge.model.dto.ChallengeChat" alias="ChallengeChat"/>
         <typeAlias type="site.lemongproject.web.feed.model.vo.ReplyAlarm" alias="ReplyAlarm"/>
         <typeAlias type="site.lemongproject.web.feed.model.vo.ReplyAlarmList" alias="ReplyAlarmList"/>
+        <typeAlias type="site.lemongproject.web.feed.model.vo.HeartAlarm" alias="HeartAlarm"/>
         <package name="site.lemongproject.web.template.model.vo"/>
         <package name="site.lemongproject.web.challenge.model.dto"/>
         <package name="site.lemongproject.web.template.model.dto"/>

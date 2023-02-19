@@ -33,6 +33,10 @@
         <result column="READ" property="read"/>
     </resultMap>
 
+    <select id="replyAlarmCount" parameterType="map" resultType="int">
+        select count(*) from ALARM WHERE USER_NO=#{userNo} AND REF_TYPE = 3 AND READ = 0 OR
+            USER_NO=#{userNo} AND REF_TYPE = 4 AND READ = 0
+    </select>
     <update id="replyAlarmRead" parameterType="map">
         UPDATE ALARM SET READ = 1
         WHERE USER_NO = #{userNo} AND REF_TYPE=3 AND REF_NO=#{replyNo}
@@ -50,6 +54,21 @@
             READ
         FROM ALARM
         WHERE USER_NO= #{userNo} AND REF_TYPE = 3 AND READ=0
+        ORDER BY ALR_AT DESC
+    </select>
+
+    <select id="heartAlarmList" parameterType="map" resultMap="replyAlarmListResult">
+        SELECT
+            ALR_NO,
+            USER_NO,
+            REF_TYPE,
+            REF_NO,
+            SEND_USER,
+            ALR_MESSAGE,
+            ALR_AT,
+            READ
+        FROM ALARM
+        WHERE USER_NO= #{userNo} AND REF_TYPE = 4 AND READ=0
         ORDER BY ALR_AT DESC
     </select>
 

@@ -37,6 +37,33 @@
         <result column="PAGENO" property="pageNo"/>
     </resultMap>
 
+    <resultMap id="HaertAlarm" type="HeartAlarm">
+        <result column="USER_NO" property="userNo"/>
+        <result column="FEED_NO" property="feedNo"/>
+        <result column="REC_NO" property="recNo"/>
+    </resultMap>
+
+    <select id="heartAlarmReceiver" resultType="int" parameterType="map">
+        select USER_NO from feed where FEED_NO = #{refNo}
+    </select>
+    <insert id="heartAlarmInsert" parameterType="map">
+        INSERT INTO ALARM (ALR_NO, USER_NO, REF_TYPE, REF_NO, SEND_USER, ALR_MESSAGE)  VALUES
+        (SEQ_ALARM.nextval,#{recNo},4,#{feedNo},#{userNo},'좋아요를 눌렀습니다.')
+    </insert>
+    <delete id="heartAlarmDelete" parameterType="map">
+        DELETE ALARM WHERE REF_NO = #{refNo} AND REF_TYPE=4
+    </delete>
+    <update id="heartAlarmRead" parameterType="map">
+        UPDATE ALARM SET READ = 1
+        WHERE USER_NO = #{userNo} AND REF_TYPE=4 AND REF_NO=#{feedNo}
+    </update>
+    <update id="clearAlarm" parameterType="map">
+        UPDATE ALARM SET READ = 1
+        WHERE USER_NO = #{userNo} AND REF_TYPE=4 OR USER_NO = #{userNo} AND REF_TYPE=3
+    </update>
+
+
+
     <select id="userProfile" resultType="Map">
         SELECT
         NICK_NAME,
