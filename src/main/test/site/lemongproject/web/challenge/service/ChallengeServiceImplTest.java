@@ -28,7 +28,7 @@ public class ChallengeServiceImplTest extends Configure {
     @Test
     @DisplayName("password")
     public void login(){
-        String admin=bCryptPasswordEncoder.encode("admin");
+        String admin=bCryptPasswordEncoder.encode("min1");
         System.out.println(admin);
     }
     @Test
