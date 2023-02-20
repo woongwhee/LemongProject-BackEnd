@@ -11,7 +11,6 @@
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/p/**"/>
-            <mvc:exclude-mapping path="/chat/**"/>
             <beans:bean id="loginInterceptor" class="site.lemongproject.common.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
