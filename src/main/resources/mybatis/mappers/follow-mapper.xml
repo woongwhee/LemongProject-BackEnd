@@ -1,6 +1,5 @@
-<!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="followMapper">
 
     <resultMap id="followResultSet" type="Follow">
@@ -15,8 +14,8 @@
     <!-- 팔로우 신청  -->
     <insert id="insertFollow" parameterType="Follow">
         INSERT INTO FOLLOW(
-            FOLLOWER ,
             FOLLOWING ,
+            FOLLOWER ,
             FOLLOW_AT ,
             ACCEPT
         )
@@ -61,9 +60,8 @@
         올라가야함. 팔로워 신청을 수락 할 경우 나의 팔로워의 숫자가 올라가야함.
     -->
     <!-- 팔로잉에 해당하는 팔로워 숫자 -->
-    <select id="myFollowCount" parameterType="Follow" resultType="Follow">
+    <select id="myFollowCount" parameterType="Follow" resultType="int">
         SELECT
-            FOLLOWING ,
             NVL(COUNT(*),0) as count
         FROM FOLLOW
         GROUP BY FOLLOWING
@@ -94,26 +92,12 @@
         HAVING FOLLOWER = #{follower}
     </select>
 
-    <!-- 내가 팔로우하고있는 사용자들 리스트 띄우기  -->
-    <select id="selectMyFollowersdList" parameterType="Follow" resultMap="followResultSet">
-        SELECT
-            U.USER_NO ,
-            NICK_NAME ,
-            CHANGE_NAME
-        FROM FOLLOW F
-        JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
-        LEFT JOIN PHOTO P USING(PHOTO_NO)
-        WHERE F.FOLLOWING = #{following}
-    </select>
-
     <!-- 나의 입장에서 팔로우 신청의 수락여부에 상관없이 나의 팔로잉이 증가해야함  -->
-    <select id="myFollowingCount" parameterType="Follow" resultType="Follow">
+    <select id="myFollowingCount" parameterType="Follow" resultType="int">
         SELECT
-            FOLLOWING ,
-            COUNT(*) as count
+            NVL(COUNT(*),0) as count
         FROM FOLLOW
-        GROUP BY FOLLOWING , FOLLOWER
-        HAVING FOLLOWER = #{follower}
+        WHERE FOLLOWER = #{follower}
     </select>
 
     <select id="selectAcceptFollowingList" parameterType="Follow" resultMap="followResultSet">
@@ -124,7 +108,7 @@
         FROM FOLLOW F
         JOIN USER_PROFILE U ON(F.FOLLOWING = U.USER_NO)
         LEFT JOIN PHOTO P USING(PHOTO_NO)
-        WHERE F.FOLLOWER = #{follower}
+        WHERE F.FOLLOWING = #{following}
     </select>
 
     <!-- 상대방의 입장에서 팔로우 신청 허용 시 'Y'에 해당하는 리스트 불러오기 -->
@@ -151,7 +135,17 @@
         LEFT JOIN PHOTO P ON(U.PHOTO_NO = P.PHOTO_NO)
         WHERE F.FOLLOWER = #{follower}
     </select>
-
+    <!-- 내가 팔로우하고있는 사용자들 리스트 띄우기  -->
+    <select id="selectMyFollowerList" parameterType="Follow" resultMap="followResultSet">
+        SELECT
+            U.USER_NO ,
+            NICK_NAME ,
+            CHANGE_NAME
+        FROM FOLLOW F
+                 JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
+                 LEFT JOIN PHOTO P USING(PHOTO_NO)
+        WHERE F.FOLLOWING = #{following}
+    </select>
 
 </mapper>
 

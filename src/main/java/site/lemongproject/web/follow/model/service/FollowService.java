@@ -13,7 +13,7 @@ public interface FollowService {
 
     int followDelete(Follow f);
 
-    Follow MyFollowCount(Follow f);
+    int MyFollowCount(Follow f);
 
     Follow AcceptFollowCount(Follow f);
 
@@ -21,7 +21,7 @@ public interface FollowService {
 
     List<Follow> selectMyFollowersdList(Follow f);
 
-    Follow MyFollowingCount(Follow f);
+    int MyFollowingCount(Follow f);
 
     List<Follow> selectAcceptFollowingList(Follow f);
 

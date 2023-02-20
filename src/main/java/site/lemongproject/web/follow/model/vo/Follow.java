@@ -8,14 +8,11 @@ import java.sql.Date;
 
 @Data
 public class Follow {
-
     private int follower;
     private int following;
     private Date followAt;
     private String accept;
-
     private int count;
-
     private Photo photo;
     private Profile profile;
 

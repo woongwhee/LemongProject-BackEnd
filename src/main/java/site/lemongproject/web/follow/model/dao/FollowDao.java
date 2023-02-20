@@ -30,7 +30,7 @@ public class FollowDao {
         return sqlSession.delete("followMapper.followDelete" , f);
     }
 
-    public Follow MyFollowCount(Follow f) {
+    public int MyFollowCount(Follow f) {
         return sqlSession.selectOne("followMapper.myFollowCount" , f);
     }
 
@@ -43,10 +43,10 @@ public class FollowDao {
     }
 
     public List<Follow> selectMyFollowersdList(Follow f) {
-        return sqlSession.selectList("followMapper.selectMyFollowersdList" , f);
+        return sqlSession.selectList("followMapper.selectMyFollowerList" , f);
     }
 
-    public Follow MyFollowingCount(Follow f) {
+    public int MyFollowingCount(Follow f) {
         return sqlSession.selectOne("followMapper.myFollowingCount" , f);
     }
 

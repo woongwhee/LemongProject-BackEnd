@@ -6,6 +6,7 @@ import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.follow.model.service.FollowService;
 import site.lemongproject.web.follow.model.vo.Follow;
+import site.lemongproject.web.member.model.vo.Profile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,7 +25,7 @@ public class FollowController {
     @GetMapping("/followGo/{follow}/{followIng}")
     public ResponseBody<Follow> insertFollow(
             @PathVariable(value = "follow" , required = false) int follow ,
-            @RequestParam(value = "followIng" , required = false) int followIng){
+            @PathVariable(value = "followIng" , required = false) int followIng){
         Follow f = new Follow();
         f.setFollower(follow);
         f.setFollowing(followIng);
@@ -35,10 +36,9 @@ public class FollowController {
     }
 
     // 나한테 온 팔로워 리스트 보여주기.
-    @GetMapping("/MyfollowerList")
+    @GetMapping("/MyfollowerList/{userNo}")
     public ResponseBody<Follow> selectMyFollowerAlertList(
-            @RequestParam(value = "follower" , required = false) int follower){
-        System.out.println(follower + "List success");
+            @RequestParam(value = "userNo" , required = false) int follower){
         Follow f = new Follow();
         f.setFollower(follower);
         List<Follow> fList = followService.selectMyFollowerAlertList(f);
@@ -79,14 +79,12 @@ public class FollowController {
     }
 
     // 로그인한 유저 입장에서 팔로우 신청 시 상대방 수락여부에 상관없이 팔로워 카운트 올라가야함.
-    @GetMapping("/MyFollowCount")
-    public ResponseBody<Follow> MyFollowCount(
-            @RequestParam(value = "followerIng" , required = false) int followerIng){
-
+    @GetMapping("/MyFollowCount/{followerIng}")
+    public ResponseBody<Integer> MyFollowCount(
+            @PathVariable(value = "followerIng" , required = false) int followerIng){
         Follow f = new Follow();
         f.setFollowing(followerIng);
-
-        Follow fcount = followService.MyFollowCount(f);
+        int fcount = followService.MyFollowCount(f);
 
         return ResponseBuilder.success(fcount);
 
@@ -119,27 +117,33 @@ public class FollowController {
         return ResponseBuilder.success(fingCount);
     }
 
-    // 내가 팔로우 하고 있는 팔로우리스트 띄우기.
-    @GetMapping("/selectMyFollowerList")
-    public ResponseBody<Follow> selectMyFollowerList(
-            @RequestParam(value = "followerIng" , required = false) int followerIng){
+    @GetMapping("/selectMyFollowingList/{follower}")
+    public ResponseBody<Follow> selectMyFollowingList(
+            @PathVariable(value = "follower" , required = false) int follower){
 
         Follow f = new Follow();
-        f.setFollowing(followerIng);
+        f.setFollower(follower);
+        List<Follow> fmyList = followService.selectMyFollowingList(f);
 
+        return ResponseBuilder.success(fmyList);
+    }
+    // 내가 팔로우 하고 있는 팔로우리스트 띄우기.
+    @GetMapping("/selectMyFollowerList/{userNo}")
+    public ResponseBody<Follow> selectMyFollowerList(
+            @PathVariable("userNo") int userNo){
+        Follow f = new Follow();
+        f.setFollowing(userNo);
         List<Follow> fmyList = followService.selectMyFollowersdList(f);
-
         return ResponseBuilder.success(fmyList);
     }
 
     // 로그인한 유저 입장에서 나의 수락 여부에 상관없이 팔로잉이 늘어나야함.
     @GetMapping("/MyFollowingCount")
-    public ResponseBody<Follow> MyFollowingCount(@RequestParam(value = "follower") int follower){
+    public ResponseBody<Integer> MyFollowingCount(@RequestParam(value = "follower") int follower){
 
         Follow f = new Follow();
         f.setFollower(follower);
-
-        Follow fcount = followService.MyFollowingCount(f);
+        int fcount = followService.MyFollowingCount(f);
 
         return ResponseBuilder.success(fcount);
     }
@@ -171,16 +175,4 @@ public class FollowController {
     }
 
     // 나를 팔로우 하고 있는 팔로우리스트 띄우기.
-    @GetMapping("/selectMyFollowingList")
-    public ResponseBody<Follow> selectMyFollowingList(
-            @RequestParam(value = "follower" , required = false) int follower){
-
-        Follow f = new Follow();
-        f.setFollower(follower);
-
-        List<Follow> fmyList = followService.selectMyFollowingList(f);
-
-        return ResponseBuilder.success(fmyList);
-    }
-
 }
