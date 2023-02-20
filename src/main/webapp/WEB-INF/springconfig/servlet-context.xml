@@ -5,16 +5,29 @@
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:task="http://www.springframework.org/schema/task"
        xmlns:beans="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/p/**"/>
+            <mvc:exclude-mapping path="/chat/**"/>
             <beans:bean id="loginInterceptor" class="site.lemongproject.common.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 
     <context:component-scan base-package="site.lemongproject"/>
+    <beans:bean id="chatHandler" class="site.lemongproject.web.challenge.controller.ChallengeChatHandler"/>
+
+<!--    <websocket:handlers allowed-origins="http://lemongproject.site">-->
+    <websocket:handlers allowed-origins="http://localhost:3000">
+        <websocket:mapping handler="chatHandler" path="/chat"/>
+        <websocket:handshake-interceptors>
+            <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
+        </websocket:handshake-interceptors>
+        <websocket:sockjs />
+    </websocket:handlers>
+
     <mvc:annotation-driven />
     <task:annotation-driven />
 

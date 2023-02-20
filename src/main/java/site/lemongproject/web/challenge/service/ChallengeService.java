@@ -22,10 +22,9 @@ public interface ChallengeService {
 
     Challenge selectChallenge(int challengeNo);
 
-    int insertChatData(ChallengeChat chatData);
+    ChallengeChat insertChatData(ChallengeChat chatData);
 
     List<Challenge> detailChallenge(Challenge c);
-
 
     List<ChallengeTodo> calChTodo(ChallengeTodo ct);
 

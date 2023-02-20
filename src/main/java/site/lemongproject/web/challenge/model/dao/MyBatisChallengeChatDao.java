@@ -13,5 +13,7 @@ public class MyBatisChallengeChatDao implements ChallengeChatDao{
     public int insertChatData(ChallengeChat chatData){
         return session.insert("challengeChatMapper.insertChatData" , chatData);
     }
-
+    public ChallengeChat findOne(int chatNo){
+        return session.selectOne("challengeChatMapper.findOne",chatNo);
+    }
 }

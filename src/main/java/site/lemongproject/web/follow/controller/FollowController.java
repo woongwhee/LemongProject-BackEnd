@@ -47,14 +47,10 @@ public class FollowController {
     @GetMapping("/MyfollowerList")
     public ResponseBody<Follow> selectMyFollowerAlertList(
             @RequestParam(value = "follower" , required = false) int follower){
-
         System.out.println(follower + "List success");
-
         Follow f = new Follow();
         f.setFollower(follower);
-
         List<Follow> fList = followService.selectMyFollowerAlertList(f);
-
         return ResponseBuilder.success(fList);
     }
 

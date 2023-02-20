@@ -68,9 +68,9 @@ public class ChallengeServiceImpl implements ChallengeService {
         int result = todoDao.deletePlay(userVo);
         int userCount = 0;
         System.out.println(challenge);
-        if (challenge.getStatus() == ChallengeStatus.READY||challenge.getStatus() == ChallengeStatus.SINGLE) {
+        if (challenge.getStatus() == ChallengeStatus.READY || challenge.getStatus() == ChallengeStatus.SINGLE) {
             result *= userDao.deleteUser(userVo);
-            userCount=userDao.countPlayer(userVo.getChallengeNo());
+            userCount = userDao.countPlayer(userVo.getChallengeNo());
         } else if (challenge.getStatus() == ChallengeStatus.PLAY) {
             result *= userDao.cancelUser(userVo);
         }
@@ -107,6 +107,7 @@ public class ChallengeServiceImpl implements ChallengeService {
 
     /**
      * 챌린지 시작 메소드 중복시작할수 없음
+     *
      * @param startVo
      * @return
      */
@@ -203,8 +204,12 @@ public class ChallengeServiceImpl implements ChallengeService {
         return challengeDao.findOne(challengeNo);
     }
 
-    public int insertChatData(ChallengeChat chatData) {
-        return chatDao.insertChatData(chatData);
+    public ChallengeChat insertChatData(ChallengeChat chatData) {
+        int result = chatDao.insertChatData(chatData);
+        if (result == 0) {
+            return null;
+        }
+        return chatDao.findOne(chatData.getChatNo());
     }
 
 
@@ -225,16 +230,16 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public ChallengeRoomVo getRoomDetail(ChallengeUserVo userVo) {
         boolean inChallenge = userDao.inChallenge(userVo);
-        if(!inChallenge){
+        if (!inChallenge) {
             throw new IsNotWriterException();
         }
-        System.out.println(userVo.getChallengeNo());
         return challengeDao.findRoom(userVo.getChallengeNo());
     }
 
     /**
      * ChallengeTodo 상태를 반대로 바꾼다.
      * ChallengeUser의 ClearCount를 변경시킨다.
+     *
      * @param clearVo
      * @return
      */
@@ -247,13 +252,14 @@ public class ChallengeServiceImpl implements ChallengeService {
         result *= userDao.changeClear(todo);
         return result;
     }
+
     @Override
     public List<Challenge> detailChallenge(Challenge c) {
         return challengeDao.detailChallenge(c);
     }
 
     @Override
-    public List<ChallengeListVo> profileChallengeList(int userNo){
+    public List<ChallengeListVo> profileChallengeList(int userNo) {
         return challengeDao.findRoomList(userNo);
     }
 }

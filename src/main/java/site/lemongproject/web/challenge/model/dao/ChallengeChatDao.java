@@ -6,4 +6,5 @@ import site.lemongproject.web.challenge.model.dto.ChallengeChat;
 public interface ChallengeChatDao {
     int insertChatData(ChallengeChat chatData);
 
+    ChallengeChat findOne(int chatNo);
 }

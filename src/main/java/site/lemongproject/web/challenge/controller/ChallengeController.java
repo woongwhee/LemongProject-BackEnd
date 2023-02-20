@@ -12,6 +12,7 @@ import site.lemongproject.web.challenge.service.ChallengeService;
 import site.lemongproject.web.member.model.vo.Profile;
 import site.lemongproject.web.todo.model.vo.Todo;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -101,7 +102,7 @@ public class ChallengeController {
         return ResponseBuilder.success(detail);
     }
     @GetMapping("/detail/room/{challengeNo}")
-    public ResponseBody<ChallengeRoomVo> roomDetail(@PathVariable("challengeNo") int challengeNo,@SessionAttribute("loginUser") Profile loginUser) {
+    public ResponseBody<ChallengeRoomVo> roomDetail(@PathVariable("challengeNo") int challengeNo,@SessionAttribute("loginUser") Profile loginUser, HttpSession session) {
         ChallengeUserVo userVo = new ChallengeUserVo();
         userVo.setChallengeNo(challengeNo);
         userVo.setUserNo(loginUser.getUserNo());
@@ -109,6 +110,7 @@ public class ChallengeController {
         if (room==null) {
             return ResponseBuilder.findNothing();
         }
+        session.setAttribute("challengeNo",challengeNo);
         return ResponseBuilder.success(room);
     }
     @GetMapping("/clearTodo")

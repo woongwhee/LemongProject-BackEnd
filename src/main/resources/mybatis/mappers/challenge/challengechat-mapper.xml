@@ -4,6 +4,7 @@
 
     <resultMap id="challengeChatMap" type="ChallengeChat">
         <result column="CHAT_NO" property="chatNo"/>
+        <result column="CHALLENGE_NO" property="challengeNo"/>
         <result column="USER_NO" property="userNo"/>
         <result column="CHAT_MESSAGE" property="chatMessage"/>
         <result column="SEND_AT" property="sendAt"/>
@@ -11,8 +12,12 @@
     </resultMap>
 
     <insert id="insertChatData" parameterType="ChallengeChat">
+        <selectKey order="BEFORE" resultType="int" keyProperty="chatNo"  >
+            SELECT SEQ_CHAT.nextval FROM DUAL
+        </selectKey>
         INSERT INTO CHALLENGE_CHAT(CHAT_NO, CHALLENGE_NO, USER_NO, CHAT_MESSAGE, SEND_AT)
-        VALUES (SEQ_CHAT.NEXTVAL, #{challengeNo}, #{userNo}, #{chatMessage}, TO_DATE(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
+        VALUES (#{chatNo}, #{challengeNo}, #{userNo}, #{chatMessage}, SYSDATE)
+
     </insert>
     <select id="findByChallenge" parameterType="int" resultMap="challengeChatMap">
         <![CDATA[
@@ -23,6 +28,13 @@
               ORDER BY SEND_AT DESC)
         WHERE ROWNUM < 50
         ]]>
+    </select>
+    <select id="findOne" parameterType="int" resultMap="challengeChatMap">
+        SELECT  *
+        FROM CHALLENGE_CHAT
+        WHERE CHAT_NO=#{chatNo}
+
+
     </select>
 </mapper>
 
