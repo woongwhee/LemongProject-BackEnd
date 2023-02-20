@@ -60,9 +60,8 @@ public class TodoController {
         DailyTodoVo daily = todoService.getDaily(dailyFind);
 
        //System.out.println(daily);
-        if (daily.getNormalList().size() == 0 && daily.getChallengeList().size() == 0) {
-            return ResponseBuilder.findNothing();
-        } else if (daily.getChallengeList() != null && daily.getNormalList() != null) {
+
+        if (daily.getChallengeList() != null && daily.getNormalList() != null) {
             return ResponseBuilder.success(daily);
         } else {
             return ResponseBuilder.serverError();
