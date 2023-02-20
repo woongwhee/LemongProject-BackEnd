@@ -140,7 +140,6 @@ public class FollowController {
     // 로그인한 유저 입장에서 나의 수락 여부에 상관없이 팔로잉이 늘어나야함.
     @GetMapping("/MyFollowingCount")
     public ResponseBody<Integer> MyFollowingCount(@RequestParam(value = "follower") int follower){
-
         Follow f = new Follow();
         f.setFollower(follower);
         int fcount = followService.MyFollowingCount(f);

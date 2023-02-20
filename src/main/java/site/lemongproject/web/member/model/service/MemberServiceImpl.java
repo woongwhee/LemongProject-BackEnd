@@ -372,7 +372,6 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public int updatePassword(ChangePwdVo cpw) {
-        cpw.setPassword(bCryptPasswordEncoder.encode(cpw.getPassword()));
         return memberDao.updatePassword(cpw);
     }
 

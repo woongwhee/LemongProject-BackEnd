@@ -63,15 +63,13 @@ public class MemberController {
     }
 
     @GetMapping("/myPwdUpdate")
-    public int myupdatePwd(@SessionAttribute("loginUser") Member loginUser , @RequestParam(value = "updatePwd" , required = false)String updatePwd){
+    public int myupdatePwd(@SessionAttribute("loginUser") Profile loginUser , @RequestParam(value = "updatePwd" , required = false)String updatePwd){
         String pwd = bCryptPasswordEncoder.encode(updatePwd);
         int userNo = loginUser.getUserNo();
 
         System.out.println(updatePwd + " === success === ");
-
         ChangePwdVo cpw = new ChangePwdVo(userNo,pwd);
         int result = memberService.updatePassword(cpw);
-
         return result;
     }
 
