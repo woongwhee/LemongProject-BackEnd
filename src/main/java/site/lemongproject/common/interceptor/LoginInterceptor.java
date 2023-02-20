@@ -2,15 +2,14 @@ package site.lemongproject.common.interceptor;
 
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import site.lemongproject.common.response.ResponseBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 public class LoginInterceptor extends HandlerInterceptorAdapter {
-
     private Gson gson;
     @Autowired
     public void setGson(Gson gson) {

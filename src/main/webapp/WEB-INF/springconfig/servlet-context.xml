@@ -7,18 +7,15 @@
        xmlns:beans="http://www.springframework.org/schema/beans"
        xmlns:websocket="http://www.springframework.org/schema/websocket"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+    <context:component-scan base-package="site.lemongproject"/>
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <mvc:exclude-mapping path="/p/**"/>
-            <mvc:exclude-mapping path="/chat/**"/>
             <beans:bean id="loginInterceptor" class="site.lemongproject.common.interceptor.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
-
-    <context:component-scan base-package="site.lemongproject"/>
     <beans:bean id="chatHandler" class="site.lemongproject.web.challenge.controller.ChallengeChatHandler"/>
-
 <!--    <websocket:handlers allowed-origins="http://lemongproject.site">-->
     <websocket:handlers allowed-origins="http://localhost:3000">
         <websocket:mapping handler="chatHandler" path="/chat"/>
@@ -27,21 +24,8 @@
         </websocket:handshake-interceptors>
         <websocket:sockjs />
     </websocket:handlers>
-
     <mvc:annotation-driven />
     <task:annotation-driven />
-
-    <beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <beans:property name="prefix" value="/WEB-INF/views/" />
-        <beans:property name="suffix" value=".jsp" />
-    </beans:bean>
-
-    <!-- 파일 업로드를 위한 multipartResolver 빈 등록 -->
-    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <beans:property name="maxUploadSize" value="2000000000" />
-        <beans:property name="defaultEncoding" value="UTF-8" />
-    </beans:bean>
-
     <!-- http://localhost:8081/api/images/이미지명.jpg 로 이미지를 불러와서 사용할것이다.-->
     <!-- IMAGE VIEW -->
 

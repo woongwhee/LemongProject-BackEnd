@@ -1,10 +1,7 @@
 package site.lemongproject.web.follow.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import site.lemongproject.common.response.ResponseBody;
 import site.lemongproject.common.response.ResponseBuilder;
 import site.lemongproject.web.follow.model.service.FollowService;
@@ -24,19 +21,13 @@ public class FollowController {
     // 팔로워 신청
     // 팔로우 당하는사람(팔로워) => follower (params에서 뽑아온 userNo)
     // 팔로우 하는사람(팔로잉) => followerIng (sessiong에서 뽑아온 userNo)
-    @GetMapping("/followGo")
+    @GetMapping("/followGo/{follow}/{followIng}")
     public ResponseBody<Follow> insertFollow(
-            @RequestParam(value = "follower" , required = false) int follower ,
-            @RequestParam(value = "followerIng" , required = false) int followerIng){
-
-        System.out.println(follower);
-        System.out.println(followerIng);
-
+            @PathVariable(value = "follow" , required = false) int follow ,
+            @RequestParam(value = "followIng" , required = false) int followIng){
         Follow f = new Follow();
-
-        f.setFollower(follower);
-        f.setFollowing(followerIng);
-
+        f.setFollower(follow);
+        f.setFollowing(followIng);
         int result = followService.insertFollow(f);
 
         return ResponseBuilder.success(result);
