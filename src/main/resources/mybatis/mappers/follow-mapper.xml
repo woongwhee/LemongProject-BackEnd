@@ -28,12 +28,13 @@
             FOLLOWER ,
             FOLLOWING ,
             FOLLOW_AT ,
-            CHANGE_NAME ,
-            NICK_NAME
+            P.*,
+            U.*
         FROM FOLLOW F
+        LEFT JOIN USER_PROFILE U ON FOLLOWING=USER_NO
         LEFT JOIN PHOTO P ON(F.FOLLOWING = P.USER_NO)
-        LEFT JOIN USER_PROFILE U USING(PHOTO_NO)
         WHERE FOLLOWER = #{follower}
+        AND ACCEPT='N'
     </select>
 
     <!-- 팔로우 신청 수락 시 accept 'n'에서 'y'로 업데이트  -->
@@ -64,8 +65,7 @@
         SELECT
             NVL(COUNT(*),0) as count
         FROM FOLLOW
-        GROUP BY FOLLOWING
-        HAVING FOLLOWING = #{following}
+        WHERE FOLLOWING = #{following}
     </select>
 
     <!--
@@ -138,12 +138,12 @@
     <!-- 내가 팔로우하고있는 사용자들 리스트 띄우기  -->
     <select id="selectMyFollowerList" parameterType="Follow" resultMap="followResultSet">
         SELECT
-            U.USER_NO ,
-            NICK_NAME ,
-            CHANGE_NAME
+            F.*,
+            U.*,
+            P.*
         FROM FOLLOW F
                  JOIN USER_PROFILE U ON(F.FOLLOWER = U.USER_NO)
-                 LEFT JOIN PHOTO P USING(PHOTO_NO)
+                 LEFT JOIN PHOTO P ON U.PHOTO_NO =P.PHOTO_NO
         WHERE F.FOLLOWING = #{following}
     </select>
 

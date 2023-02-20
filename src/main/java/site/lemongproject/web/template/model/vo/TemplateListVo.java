@@ -11,6 +11,7 @@ public class TemplateListVo {
     private int templateNo;
     private String title;
     private String content;
+    private int range;
     private int todoCount;
     private int clearCount;
     private int playCount;

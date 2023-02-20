@@ -238,9 +238,8 @@ public class MemberController {
 
         return ResponseBuilder.success(p);
     }
-
-
-
-
-
+    @GetMapping("/getSocialType")
+    public ResponseBody<SocialType> getSocialType(@SessionAttribute("socialType") SocialType socialType){
+        return ResponseBuilder.success(socialType);
+    }
 }
