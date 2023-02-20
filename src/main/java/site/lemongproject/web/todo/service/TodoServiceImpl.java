@@ -28,7 +28,6 @@ public class TodoServiceImpl implements TodoService {
     }
 
     public int insertTodo(Todo t){
-
         return todoDao.insertTodo(t);
     }
 

@@ -26,6 +26,10 @@
     </websocket:handlers>
     <mvc:annotation-driven />
     <task:annotation-driven />
+    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <beans:property name="maxUploadSize" value="2000000000" />
+        <beans:property name="defaultEncoding" value="UTF-8" />
+    </beans:bean>
     <!-- http://localhost:8081/api/images/이미지명.jpg 로 이미지를 불러와서 사용할것이다.-->
     <!-- IMAGE VIEW -->
 
