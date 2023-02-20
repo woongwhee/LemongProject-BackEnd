@@ -32,7 +32,7 @@
         <selectKey order="BEFORE" resultType="Integer" keyProperty="value">
             SELECT NVL(MAX(VALUE), 1) +1
             FROM TODO
-            WHERE USER_NO = #{userNo} AND TO_CHAR(TODO_DATE,'YYMMDD') = #{todoDate}
+            WHERE USER_NO = #{userNo} AND TO_CHAR(TODO_DATE,'YYMMDD') = TO_CHAR(#{todoDate},'YYMMDD')
         </selectKey>
         INSERT INTO TODO(
         TODO_NO,
