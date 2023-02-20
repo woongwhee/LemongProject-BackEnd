@@ -181,6 +181,14 @@
         DELETE FROM PHOTO WHERE PHOTO_NO=#{photoNo}
     </delete>
 
+    <insert id="insertPhoto" parameterType="Photo">
+        <selectKey keyProperty="photoNo" resultType="int" order="BEFORE">
+            SELECT SEQ_PHOTO.nextval from dual
+        </selectKey>
+        INSERT INTO PHOTO (PHOTO_NO, USER_NO, ORIGIN_NAME, CHANGE_NAME, FILE_PATH) VALUES
+        (#{photoNo},#{userNo}, #{originName},#{changeName},#{filePath})
+    </insert>
+
 <!--  피드 사진 넣기  -->
     <insert id="insertFeedPhoto" parameterType="site.lemongproject.web.feed.model.dto.FeedInsertPhoto">
         INSERT INTO FEED_PHOTO (FEED_NO, PHOTO_NO, VALUE) VALUES (#{feedNo},#{photoNo},#{value})
@@ -218,6 +226,8 @@
         from FEED_PHOTO
         where FEED_NO = (SELECT FEED_NO FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})) = (SELECT VALUE FROM FEED_PHOTO WHERE PHOTO_NO = #{photoNo})
     </update>
+
+
     <delete id="deleteFeedPhoto" parameterType="Map">
         DELETE FROM FEED_PHOTO where PHOTO_NO = #{photoNo}
     </delete>
