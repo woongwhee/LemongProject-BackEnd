@@ -9,7 +9,6 @@ import java.sql.Date;
 public class HeartAlarm {
         private int userNo; // 보낸사람
         private int feedNo;
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private int recNo; // 받은사람
 }
 
