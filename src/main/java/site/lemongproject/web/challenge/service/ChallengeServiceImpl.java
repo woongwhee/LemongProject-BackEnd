@@ -67,7 +67,6 @@ public class ChallengeServiceImpl implements ChallengeService {
         Challenge challenge = challengeDao.findOne(userVo.getChallengeNo());
         int result = todoDao.deletePlay(userVo);
         int userCount = 0;
-        System.out.println(challenge);
         if (challenge.getStatus() == ChallengeStatus.READY || challenge.getStatus() == ChallengeStatus.SINGLE) {
             result *= userDao.deleteUser(userVo);
             userCount = userDao.countPlayer(userVo.getChallengeNo());

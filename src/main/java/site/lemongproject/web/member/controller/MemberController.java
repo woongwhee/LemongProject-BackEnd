@@ -81,11 +81,6 @@ public class MemberController {
     public ResponseBody<Photo> insertProfilePhoto(
             @RequestParam(value="file", required=false) MultipartFile[] files,
             @SessionAttribute("loginUser") Profile loginUser) {
-
-        System.out.println(files + " =============> [success]");
-        System.out.println(loginUser.getUserNo() + " =============> [success]");
-        System.out.println(files[0].getOriginalFilename() + " =============> [success]");
-
         Photo p = new Photo();
         p.setUserNo(loginUser.getUserNo());
         fileUtil.saveFile(files[0], p);
@@ -123,12 +118,11 @@ public class MemberController {
     }
     //
 
-//    @GetMapping("/selectMember")
-//    public ResponseBody<Member> selectMembers(@RequestParam(value = "userNo") int userNo){
-//
-//        Member m = memberService.selectMembers(userNo);
-//        return ResponseBuilder.success(m);
-//    }
+    @GetMapping("/selectMember")
+    public ResponseBody<Member> selectMember(@SessionAttribute(value = "loginUser") Profile loginUser){
+        Member m = memberService.selectMembers(loginUser.getUserNo());
+        return ResponseBuilder.success(m);
+    }
 
     // userNo에 해당하는 user 프로필 정보 가져오기(changeName 포함).
     @GetMapping("/selectMyProfile")
