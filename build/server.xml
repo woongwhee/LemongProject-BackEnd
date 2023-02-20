@@ -150,8 +150,8 @@
 
       <Host name="localhost"  appBase="webapps"
             unpackWARs="true" autoDeploy="true">
-        <Context docBase="webapps/lemong" path="/api" reloadable="true"></Context>
-        <Context docBase="webapps/file" path="/file" reloadable="true"></Context>
+        <Context docBase="/usr/local/tomcat/webapps/LemongProject-0.9.3" path="/api" reloadable="true"></Context>
+        <Context docBase="/usr/local/tomcat/webapps/file" path="/file" reloadable="true"></Context>
         <!-- SingleSignOn valve, share authentication between web applications
              Documentation at: /docs/config/valve.html -->
         <!--
