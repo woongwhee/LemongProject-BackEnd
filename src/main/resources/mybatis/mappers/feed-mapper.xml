@@ -167,8 +167,8 @@
     <delete id="deleteFeedPhotoFeedNo">
         DELETE FROM FEED_PHOTO WHERE FEED_NO = #{feedNo}
     </delete>
-<!-- 사진 등록 -->
 
+<!-- 사진 등록 -->
     <insert id="insertPhoto" parameterType="Photo">
         <selectKey keyProperty="photoNo" resultType="int" order="BEFORE">
             SELECT SEQ_PHOTO.nextval from dual

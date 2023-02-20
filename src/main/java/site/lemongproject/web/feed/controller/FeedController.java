@@ -53,12 +53,11 @@ public class FeedController {
         return ResponseBuilder.success(result);
     }
 
-    // 피드 사진 넣기PHOTO
+    // 피드 사진 넣기 PHOTO
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public Map<String, Object> feedInsert(@RequestBody FeedInsert paramMap, @SessionAttribute("loginUser") Profile loginUser) {
         paramMap.setUserNo(loginUser.getUserNo());
         int check = feedService.insertFeed(paramMap);
-
         Map<String, Object> result = new HashMap<>();
 
         if (check > 0) {

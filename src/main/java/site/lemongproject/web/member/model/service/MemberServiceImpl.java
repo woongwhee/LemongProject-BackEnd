@@ -112,8 +112,8 @@ public class MemberServiceImpl implements MemberService {
 
         // access token을 받기 위한 중요 코드 -> 나중에 따로 빼기
         String restApi = "6c1bbd8efca92b427aff16845e3336d1";
-//        String redirectUri = "http://localhost:3000/kakao";
-        String redirectUri = "http://lemongproject.site/kakao";
+        String redirectUri = "http://localhost:3000/kakao";
+//        String redirectUri = "http://lemongproject.site/kakao";
 
         try {
             URL url = new URL(reqURL);

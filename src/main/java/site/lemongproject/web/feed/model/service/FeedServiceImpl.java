@@ -146,8 +146,6 @@ public class FeedServiceImpl implements FeedService{
         result += feedDao.updateStartValue(doublePhotoNo);
         result += feedDao.updateFinishValue(doublePhotoNo);
         return result;
-
-//        int updateValue = feedDao.chagneValue(doublePhotoNo)
     }
 
     @Override
@@ -173,7 +171,6 @@ public class FeedServiceImpl implements FeedService{
     public int heartClick(Map<String, Object> data){
         int result = feedDao.heartClick(data);
         HeartAlarm ha = new HeartAlarm();
-
 
         ha.setRecNo(feedDao.heartAlarmReceiver(data));
         int userNo = (int)data.get("userNo");
