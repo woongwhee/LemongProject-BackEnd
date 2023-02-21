@@ -1,13 +1,15 @@
 package site.lemongproject.common.type;
 
 public enum SocialType implements NameEnum {
-    NAVER,KAKAO,NONE;
+    NAVER("NAVER"),KAKAO("KAKAO"),NONE("NONE");
+    private String name;
 
-    SocialType() {
+    SocialType(String name) {
+        this.name = name;
     }
 
     @Override
     public String getName() {
-        return this.name().toUpperCase();
+        return this.name;
     }
 }

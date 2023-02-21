@@ -143,10 +143,10 @@ public class MemberController {
     }
 
     @GetMapping("/logout")
-    public ResponseBody<Integer> logout(@SessionAttribute("loginUser") Profile profile, @SessionAttribute("socialType") SocialType socialType, HttpSession session) {
+    public ResponseBody<String> logout(@SessionAttribute("loginUser") Profile profile, @SessionAttribute("socialType") SocialType socialType, HttpSession session) {
+            String social=socialType.getName();
             session.invalidate();
-            return ResponseBuilder.success(socialType);
-
+            return ResponseBuilder.success(social);
     }
 
 
