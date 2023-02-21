@@ -119,7 +119,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         if (result == 0) {
             return 0;
         }
-        result *= userDao.joinUser(new ChallengeUserVo(startVo.getUserNo(), startVo.getChallengeNo(), ChallengeUserStatus.READY));
+        result *= userDao.joinUser(new ChallengeUserVo(startVo.getUserNo(), startVo.getChallengeNo(), ChallengeUserStatus.PLAY));
         EndDateUpdateVo updateVo = new EndDateUpdateVo();
 
         CGTodoInsertVo insertVo = makeTodo(startVo, updateVo);
