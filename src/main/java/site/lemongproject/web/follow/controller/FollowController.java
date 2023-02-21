@@ -38,7 +38,7 @@ public class FollowController {
     // 나한테 온 팔로워 리스트 보여주기.
     @GetMapping("/MyfollowerList/{userNo}")
     public ResponseBody<Follow> selectMyFollowerAlertList(
-            @RequestParam(value = "userNo" , required = false) int follower){
+            @PathVariable(value = "userNo" , required = false) int follower){
         Follow f = new Follow();
         f.setFollower(follower);
         List<Follow> fList = followService.selectMyFollowerAlertList(f);
@@ -48,16 +48,15 @@ public class FollowController {
     // 팔로우 신청 수락.
     @GetMapping("/followOk")
     public ResponseBody<Follow> updateFollowOk(
-            @RequestParam(value="followerIng" , required = false) int followerIng ,
-            @RequestParam(value="follower" , required = false) int follower){
+            @RequestParam(value="follower" , required = false) int followerIng ,
+            @SessionAttribute(value="loginUser" , required = false) Profile loginUser){
 
         System.out.println(followerIng + " : ok");
-        System.out.println(follower + " : ok");
+        System.out.println(loginUser.getUserNo()+ " : ok");
 
         Follow f = new Follow();
         f.setFollowing(followerIng);
-        f.setFollower(follower);
-
+        f.setFollower(loginUser.getUserNo());
         int result = followService.updateFollowOk(f);
 
         return ResponseBuilder.success(result);
@@ -140,7 +139,6 @@ public class FollowController {
     // 로그인한 유저 입장에서 나의 수락 여부에 상관없이 팔로잉이 늘어나야함.
     @GetMapping("/MyFollowingCount")
     public ResponseBody<Integer> MyFollowingCount(@RequestParam(value = "follower") int follower){
-
         Follow f = new Follow();
         f.setFollower(follower);
         int fcount = followService.MyFollowingCount(f);

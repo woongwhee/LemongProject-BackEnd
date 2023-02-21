@@ -87,10 +87,10 @@ public class FeedDao {
     public int updateValueFirst(Map<String,Object>photoNo){
         return sqlSession.update("feedMapper.updateValueFirst",photoNo);
     }
-
     public int updateValueMiddle(Map<String,Object>photoNo) {
         return sqlSession.update("feedMapper.updateValueMiddle",photoNo);
     }
+
 
     public int updateValueLast(Map<String,Object>photoNo){
         return sqlSession.update("feedMapper.updateValueLast",photoNo);

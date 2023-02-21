@@ -37,15 +37,18 @@ public class FeedServiceImpl implements FeedService{
     }
 
     // 피드 게시물 등록
+    // FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)
+    // 피드에 정보 넣기(feedNo, userNo, feedContent, photoNo)
+
     @Override
     public int insertFeed(FeedInsert paramMap){
-        int result = feedDao.insertFeed(paramMap); // 피드에 정보 넣기(feedNo, userNo, feedContent, photoNo)
-                                                    // FeedInsert(userNo=3, feedContent=마지막테스트, photoNo=[98, 99], feedNo=0)
+        int result = feedDao.insertFeed(paramMap);
         for (int i =0; i<paramMap.getPhotoNo().size(); i++){
             result *= feedDao.insertFeedPhoto(new FeedInsertPhoto(paramMap.getFeedNo(), paramMap.getPhotoNo().get(i),i+1));
         }
         return result;
     }
+
     // 피드 업데이트
     @Override
     public int updateFeed(FeedInsert updatefeed){
@@ -121,8 +124,6 @@ public class FeedServiceImpl implements FeedService{
     public int modifyPhoto(Map<String,Object> photoNo){
         int maxValue = feedDao.maxValue(photoNo);  // 4
         int nowValue = feedDao.nowValue(photoNo);  // 2
-        System.out.println("maxValue : " + maxValue);
-        System.out.println("nowValue : "+nowValue);
 
         int result = 0;
 
@@ -133,8 +134,8 @@ public class FeedServiceImpl implements FeedService{
         }
         result*=feedDao.modifyPhoto(photoNo);
             return result;
-
     }
+
     // 사진 value 수정하기
     @Override
     public int changeValue(Map<String, Object> doublePhotoNo){
@@ -147,8 +148,6 @@ public class FeedServiceImpl implements FeedService{
         result += feedDao.updateStartValue(doublePhotoNo);
         result += feedDao.updateFinishValue(doublePhotoNo);
         return result;
-
-//        int updateValue = feedDao.chagneValue(doublePhotoNo)
     }
 
     @Override
@@ -174,7 +173,6 @@ public class FeedServiceImpl implements FeedService{
     public int heartClick(Map<String, Object> data){
         int result = feedDao.heartClick(data);
         HeartAlarm ha = new HeartAlarm();
-
 
         ha.setRecNo(feedDao.heartAlarmReceiver(data));
         int userNo = (int)data.get("userNo");

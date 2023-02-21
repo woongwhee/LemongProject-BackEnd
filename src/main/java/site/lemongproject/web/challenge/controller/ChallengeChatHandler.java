@@ -1,6 +1,7 @@
 package site.lemongproject.web.challenge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,22 +25,19 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 public class ChallengeChatHandler extends TextWebSocketHandler {
     private ChallengeService challengeService;
-    private ObjectMapper objectMapper;
     @Autowired
     public void setChallengeService(ChallengeService challengeService) {
         this.challengeService = challengeService;
     }
-    @Autowired
-    public void setObjectMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
     private Map<Integer, ArrayList<WebSocketSession>> RoomList = new ConcurrentHashMap<Integer, ArrayList<WebSocketSession>>();
     private Set<WebSocketSession> clients=Collections.synchronizedSet(new HashSet<>());
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         Integer challengeNo=(Integer) session.getAttributes().get("challengeNo");
+        if(challengeNo==null){
+            session.close(); return;
+        }
         Integer userNo=((Profile)session.getAttributes().get("loginUser")).getUserNo();
         for (WebSocketSession client : clients) {
             if(((Profile)client.getAttributes().get("loginUser")).getUserNo()==userNo){
@@ -50,6 +48,8 @@ public class ChallengeChatHandler extends TextWebSocketHandler {
             for (WebSocketSession webSocketSession : value) {
                 if(((Profile)webSocketSession.getAttributes().get("loginUser")).getUserNo()==userNo){
                     value.remove(webSocketSession);
+                    webSocketSession.close();
+                    //한사람당 한세션만 유지
                 };
             }
         }
@@ -74,6 +74,8 @@ public class ChallengeChatHandler extends TextWebSocketHandler {
         if(result!=null){
             ArrayList<WebSocketSession> sessions = RoomList.get(challengeNo);
             System.out.println(sessions);
+            ObjectMapper objectMapper=new ObjectMapper();
+            objectMapper.registerModule(new JavaTimeModule());
             String chatString = objectMapper.writeValueAsString(result);
             TextMessage textMessage=new TextMessage(chatString);
             for (WebSocketSession websession : sessions) {

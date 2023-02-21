@@ -33,6 +33,8 @@
         <result column="TITLE" property="title"/>
         <result column="CONTENT" property="content"/>
         <result column="RANGE" property="range"/>
+        <result property="clearCount" column="CLEAR_COUNT"/>
+        <result property="playCount" column="PLAY_COUNT"/>
         <association property="category" javaType="TemplateCategory" resultMap="templateCategoryMapper.categoryMap"/>
     </resultMap>
     <resultMap id="templateUnSave" type="TPUnsaveVo">

@@ -138,7 +138,6 @@ public class TemplateController {
     @DeleteMapping("/todo/deleteUnSave/{tpTodoNo}")
     public ResponseBody<Integer> deleteTodo(@SessionAttribute("loginUser") Profile loginUser, @PathVariable("tpTodoNo") int tpTodoNo) {
         int result = tpWriteService.deleteTodo(new TPTodoDeleteVo(loginUser.getUserNo(), tpTodoNo));
-
         if (result > 0) {
             return ResponseBuilder.success(result);
         } else {

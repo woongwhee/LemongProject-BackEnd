@@ -30,6 +30,7 @@ public class ChallengeServiceImplTest extends Configure {
     public void login(){
         String admin=bCryptPasswordEncoder.encode("min1");
         System.out.println(admin);
+
     }
     @Test
     public void createMulti() {
