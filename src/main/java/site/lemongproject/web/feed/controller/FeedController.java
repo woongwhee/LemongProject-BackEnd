@@ -268,12 +268,12 @@ public class FeedController {
         List<FeedList> list = feedService.detailFeed(feedNo);
         return list;
     }
-
-    @PostMapping("/replyAlarmList")
-    public ResponseBody<List<ReplyAlarmList>> replyAlarmList(@RequestBody Map<String,Object> userNo){
-        List<ReplyAlarmList> list = feedService.replyAlarmList(userNo);
-        return ResponseBuilder.success(list);
-    }
+//
+//    @PostMapping("/replyAlarmList")
+//    public ResponseBody<List<ReplyAlarmList>> replyAlarmList(@RequestBody Map<String,Object> userNo){
+//        List<ReplyAlarmList> list = feedService.replyAlarmList(userNo);
+//        return ResponseBuilder.success(list);
+//    }
 
 
     @PostMapping("/replyAlarmRead")
@@ -284,7 +284,12 @@ public class FeedController {
         System.out.println(result+"awefawefawef");
         return result;
     }
-
+    @GetMapping("/alarm/list")
+    public ResponseBody<List<ReplyAlarmList>> alarmList(@SessionAttribute("loginUser")Profile loginUser){
+        List<ReplyAlarmList> list=feedService.replyAlarmList(loginUser.getUserNo());
+        if (list==null){return ResponseBuilder.findNothing();}
+        return ResponseBuilder.success(list);
+    }
     @PostMapping("/replyAlarmCount")
     public int replyAlarmCount(@RequestBody Map<String, Object> userNo){
 //        System.out.println(userNo);
@@ -293,8 +298,9 @@ public class FeedController {
     }
 
     @PostMapping("/heartAlarmList")
-    public ResponseBody<List<ReplyAlarmList>> heartAlarmList(@RequestBody Map<String, Object> userNo){
-        List<ReplyAlarmList> list = feedService.heartAlarmList(userNo);
+    public ResponseBody<List<ReplyAlarmList>> heartAlarmList(@SessionAttribute("loginUser")Profile loginUser){
+        List<ReplyAlarmList> list = feedService.heartAlarmList(loginUser.getUserNo());
+        if (list==null){return ResponseBuilder.findNothing();}
         return ResponseBuilder.success(list);
     }
     @PostMapping("/heartAlarmRead")

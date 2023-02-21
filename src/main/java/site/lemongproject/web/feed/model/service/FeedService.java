@@ -72,13 +72,13 @@ public interface FeedService  {
 
     int countFeed();
 
-    List<ReplyAlarmList> replyAlarmList(Map<String,Object> userNo);
+    List<ReplyAlarmList> replyAlarmList(int userNo);
 
     int replyAlarmRead(Map<String, Object> data);
 
     int replyAlarmCount(Map<String, Object> userNo);
 
-    List<ReplyAlarmList> heartAlarmList(Map<String, Object> userNo);
+    List<ReplyAlarmList> heartAlarmList(int userNo);
 
     int heartAlarmRead(Map<String, Object> data);
 

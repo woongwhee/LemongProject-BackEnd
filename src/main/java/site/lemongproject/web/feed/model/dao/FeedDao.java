@@ -163,7 +163,7 @@ public class FeedDao {
         return sqlSession.insert("replyMapper.insertReplyAlarm", map);
     }
 
-    public List<ReplyAlarmList> replyAlarmList(Map<String,Object> userNo) {
+    public List<ReplyAlarmList> replyAlarmList(int userNo) {
         return sqlSession.selectList("replyMapper.replyAlarmList", userNo);
     }
 
@@ -187,7 +187,7 @@ public class FeedDao {
         return sqlSession.delete("feedMapper.heartAlarmDelete",data);
     }
 
-    public List<ReplyAlarmList> heartAlarmList(Map<String, Object> userNo) {
+    public List<ReplyAlarmList> heartAlarmList(int userNo) {
         return sqlSession.selectList("replyMapper.heartAlarmList",userNo);
     }
 

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.Data;
+import site.lemongproject.web.member.model.vo.Profile;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -21,8 +22,7 @@ public class ReplyAlarmList {
     private int refNo;
     private int sendUser; // 보낸사람
     private String message;
-
-
+    private Profile sender;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm:ss", timezone = "GMT+9")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

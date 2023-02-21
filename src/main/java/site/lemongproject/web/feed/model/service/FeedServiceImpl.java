@@ -14,6 +14,7 @@ import site.lemongproject.web.feed.model.vo.ReplyAlarmList;
 import site.lemongproject.web.photo.model.dao.PhotoDao;
 import site.lemongproject.web.photo.model.vo.Photo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -218,9 +219,15 @@ public class FeedServiceImpl implements FeedService{
     }
 
     @Override
-    public List<ReplyAlarmList> replyAlarmList(Map<String,Object> userNo) {
-        return feedDao.replyAlarmList(userNo);
+    public List<ReplyAlarmList> replyAlarmList(int userNo) {
+        List<ReplyAlarmList> list = feedDao.replyAlarmList(userNo);
+//        List arr = new ArrayList<>();
+//        for (int i = 0; i<list.size(); i++){
+//            arr.add(list.get(i).getSendUser());
+//        }
+        return list;
     }
+
     @Override
     public int replyAlarmRead(Map<String, Object> data) {
         return feedDao.replyAlarmRead(data);
@@ -229,8 +236,9 @@ public class FeedServiceImpl implements FeedService{
     public int replyAlarmCount(Map<String, Object> userNo) {
         return feedDao.replyAlarmCount(userNo);
     }
+
     @Override
-    public List<ReplyAlarmList> heartAlarmList(Map<String, Object> userNo) {
+    public List<ReplyAlarmList> heartAlarmList(int userNo) {
         return feedDao.heartAlarmList(userNo);
     }
 

@@ -31,6 +31,8 @@
         <result column="ALR_MESSAGE" property="message"/>
         <result column="ALR_AT" property="alrAt"/>
         <result column="READ" property="read"/>
+        <association resultMap="profileMapper.profileDetail" property="sender"/>
+
     </resultMap>
 
     <select id="replyAlarmCount" parameterType="map" resultType="int">
@@ -42,33 +44,27 @@
         WHERE USER_NO = #{userNo} AND REF_TYPE=3 AND REF_NO=#{replyNo}
     </update>
 
-    <select id="replyAlarmList" parameterType="map" resultMap="replyAlarmListResult">
+    <select id="replyAlarmList" parameterType="int" resultMap="replyAlarmListResult">
         SELECT
-            ALR_NO,
-            USER_NO,
-            REF_TYPE,
-            REF_NO,
-            SEND_USER,
-            ALR_MESSAGE,
-            ALR_AT,
-            READ
-        FROM ALARM
-        WHERE USER_NO= #{userNo} AND REF_TYPE = 3 AND READ=0
+           a.*,
+            up.*,
+            p.*
+        FROM ALARM a
+            JOIN USER_PROFILE up ON a.SEND_USER =up.USER_NO
+            LEFT JOIN PHOTO p ON up.PHOTO_NO = p.PHOTO_NO
+        WHERE a.USER_NO= #{userNo} AND REF_TYPE = 3 AND READ=0
         ORDER BY ALR_AT DESC
     </select>
 
-    <select id="heartAlarmList" parameterType="map" resultMap="replyAlarmListResult">
+    <select id="heartAlarmList" parameterType="int" resultMap="replyAlarmListResult">
         SELECT
-            ALR_NO,
-            USER_NO,
-            REF_TYPE,
-            REF_NO,
-            SEND_USER,
-            ALR_MESSAGE,
-            ALR_AT,
-            READ
-        FROM ALARM
-        WHERE USER_NO= #{userNo} AND REF_TYPE = 4 AND READ=0
+            a.*,
+            up.*,
+            p.*
+        FROM ALARM a
+                 JOIN USER_PROFILE up ON a.SEND_USER =up.USER_NO
+                 LEFT JOIN PHOTO p ON up.PHOTO_NO = p.PHOTO_NO
+        WHERE a.USER_NO= #{userNo} AND REF_TYPE = 4 AND READ=0
         ORDER BY ALR_AT DESC
     </select>
 
