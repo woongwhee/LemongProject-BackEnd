@@ -86,17 +86,19 @@ public class ChallengeServiceImpl implements ChallengeService {
     @Override
     public int createMulti(MultiCreateVo createVo) {
         createVo.setStatus(ChallengeStatus.READY);
+        //첼린지의 기본적인 정보를 제목,옵션,시작일 등 Database에 넣는다 .
         int result = challengeDao.insertMulti(createVo);
         if (result == 0) {
             return 0;
         }
         EndDateUpdateVo updateVo = new EndDateUpdateVo();
-        //방장도 challengeUser에 넣는다.
         ChallengeUserVo userVo = new ChallengeUserVo(createVo.getUserNo(), createVo.getChallengeNo(), ChallengeUserStatus.READY);
+        //작성자를 참여중인 유저에 넣는다.
         result *= userDao.joinUser(userVo);
         updateVo.setChallengeNo(createVo.getChallengeNo());
         CGTodoInsertVo insertVo = makeTodo(createVo, updateVo);
         System.out.println(updateVo);
+        //임시저장용 Todo
         insertVo.setUserNo(-1);
         result *= todoDao.insertTodoList(insertVo);
         result *= todoDao.copyTodoList(userVo);
@@ -132,7 +134,6 @@ public class ChallengeServiceImpl implements ChallengeService {
         LocalDate startDate = startVo.getStartDate();
         ChallengeOption co = startVo.getOption();
         List<OfficialHoliday> holidayList = new ArrayList<>();
-        //공휴일 제외인경우
         if (co.isOfficialHoliday()) {
             holidayList = getOfficialHolidays(templateNo, startDate, co);
         }
@@ -145,20 +146,18 @@ public class ChallengeServiceImpl implements ChallengeService {
         Iterator<OfficialHoliday> iter = holidayList.iterator();
         for (TemplateTodo templateTodo : todoList) {
             if (templateTodo.getDay() != dayPoint) {
-                //해당일이 수행일인지 확인
                 int period = templateTodo.getDay() - dayPoint;
                 dayPoint = templateTodo.getDay();
                 datePoint = datePoint.plusDays(period);
                 weekIndex = weekIndex + period % 7 > 6 ? weekIndex + period % 7 - 7 : weekIndex + period % 7;
                 loop:
                 while (true) {
-                    //해당 요일이 수행일인지 확인
                     if (!optionArr[weekIndex]) {
                         weekIndex = weekIndex < 6 ? weekIndex + 1 : 0;
                         datePoint = datePoint.plusDays(1);
                         continue;
                     }
-                    //해당일이 공휴일인지;(공휴일제외를 하지 않았을시 iter의 값이 비어있음)
+
                     while (iter.hasNext()) {
                         LocalDate holiyDate = iter.next().getHoliday();
                         if (holiyDate.equals(datePoint)) {

@@ -12,5 +12,4 @@ public class ExceptionHandlers {
         return ResponseBuilder.authError();
     }
 
-
 }
