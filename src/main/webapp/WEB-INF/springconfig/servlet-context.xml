@@ -17,7 +17,6 @@
         </mvc:interceptor>
     </mvc:interceptors>
     <beans:bean id="chatHandler" class="site.lemongproject.web.challenge.controller.ChallengeChatHandler"/>
-<!--    <websocket:handlers allowed-origins="http://localhost:3000">-->
     <websocket:handlers allowed-origins="http://lemongproject.site">
         <websocket:mapping handler="chatHandler" path="/chat"/>
         <websocket:handshake-interceptors>

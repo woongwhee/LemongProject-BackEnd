@@ -52,7 +52,7 @@ public class ChallengeServiceImplTest extends Configure {
         startVo.setStartDate(LocalDate.now());
         startVo.setTemplateNo(TEST_TP_NO);
         startVo.setStatus(ChallengeStatus.READY);
-        startVo.setOption("11011011");
+        startVo.setOption("11111111");
         int result=challengeService.startSingle(startVo);
         assertThat(result).isNotZero();
     }

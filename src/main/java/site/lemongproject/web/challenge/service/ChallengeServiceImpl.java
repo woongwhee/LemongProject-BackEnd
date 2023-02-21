@@ -136,6 +136,7 @@ public class ChallengeServiceImpl implements ChallengeService {
         List<OfficialHoliday> holidayList = new ArrayList<>();
         if (co.isOfficialHoliday()) {
             holidayList = getOfficialHolidays(templateNo, startDate, co);
+            System.out.println(holidayList);
         }
         List<TemplateTodo> todoList = templateTodoDao.findByTemplate(templateNo);
         List<CGTodoItemVo> challengeTodos = new ArrayList<>(todoList.size());
@@ -143,35 +144,31 @@ public class ChallengeServiceImpl implements ChallengeService {
         LocalDate datePoint = startDate;
         int weekIndex = datePoint.getDayOfWeek().getValue() - 1;
         boolean[] optionArr = co.getOptionArray();
-        Iterator<OfficialHoliday> iter = holidayList.iterator();
         for (TemplateTodo templateTodo : todoList) {
-            if (templateTodo.getDay() != dayPoint) {
-                int period = templateTodo.getDay() - dayPoint;
-                dayPoint = templateTodo.getDay();
-                datePoint = datePoint.plusDays(period);
-                weekIndex = weekIndex + period % 7 > 6 ? weekIndex + period % 7 - 7 : weekIndex + period % 7;
-                loop:
-                while (true) {
+            loop:
+            while (true) {
+                if (templateTodo.getDay() != dayPoint) {
+                    int period = templateTodo.getDay() - dayPoint;
+                    dayPoint = templateTodo.getDay();
+                    datePoint = datePoint.plusDays(period);
+                    weekIndex = weekIndex + period % 7 > 6 ? weekIndex + period % 7 - 7 : weekIndex + period % 7;
                     if (!optionArr[weekIndex]) {
                         weekIndex = weekIndex < 6 ? weekIndex + 1 : 0;
                         datePoint = datePoint.plusDays(1);
                         continue;
                     }
-
-                    while (iter.hasNext()) {
-                        LocalDate holiyDate = iter.next().getHoliday();
-                        if (holiyDate.equals(datePoint)) {
+                    for (OfficialHoliday officialHoliday : holidayList) {
+                        LocalDate holiyDate = officialHoliday.getHoliday();
+                        if (officialHoliday.getHoliday().isEqual(datePoint)) {
+                        System.out.println(holiyDate.isEqual(datePoint) + "date" + datePoint);
                             weekIndex = weekIndex < 6 ? weekIndex + 1 : 0;
                             datePoint = datePoint.plusDays(1);
                             continue loop;
                         }
-                        if (holiyDate.isBefore(datePoint)) {
-                            iter.remove();
-                        }
                     }
-
-                    break;
                 }
+
+                break;
             }
             CGTodoItemVo todo = new CGTodoItemVo();
             todo.setTodoDate(datePoint);
